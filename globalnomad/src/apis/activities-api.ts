@@ -26,8 +26,8 @@ export const getActivities = async (
 
 // 체험 상세조회
 export async function getDatas(activityId: number): Promise<DataType> {
-  const response = await fetch(`${BASE_URL}/activities/${activityId}`);
-  return await response.json();
+  const { data } = await instance.get(`/activities/${activityId}`);
+  return data;
 }
 
 export const getActivityDetails = async (activityId: number) => {
@@ -42,10 +42,10 @@ export async function getAvailableSchedule(
   month: number,
   activityId: number
 ): Promise<AvailableSchedule> {
-  const response = await fetch(
-    `${BASE_URL}/activities/${activityId}/available-schedule`
+  const { data } = await instance.get(
+    `/activities/${activityId}/available-schedule`
   );
-  return await response.json();
+  return data;
 }
 
 export const getSchedule = async (
@@ -53,17 +53,16 @@ export const getSchedule = async (
   month: string,
   activityId: number
 ): Promise<AvailableSchedule[]> => {
-  const response = await requestor.get(
+  const { data } = await instance.get(
     `/activities/${activityId}/available-schedule`,
     {
       params: {
-        year: year,
-        month: month,
+        year,
+        month,
       },
     }
   );
-  const schedule = response.data;
-  return schedule;
+  return data;
 };
 
 //체험 리뷰 조회
@@ -72,13 +71,12 @@ export async function getReviews(
   page: number,
   size: number
 ): Promise<ReviewData> {
-  const params = new URLSearchParams({
-    activityId: activityId.toString(),
-    page: page.toString(),
-    size: size.toString(),
+  const { data } = await instance.get(`/activities/${activityId}/reviews`, {
+    params: {
+      activityId,
+      page,
+      size,
+    },
   });
-  const response = await fetch(
-    `${BASE_URL}/activities/${activityId}/reviews?${params}`
-  );
-  return await response.json();
+  return data;
 }
