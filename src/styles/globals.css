@@ -526,6 +526,7 @@ template {
   body {
     /* 1rem = html의 폰트 사이즈, 10px = 1rem */
     font-size: 1rem;
+    @apply bg-gray-100;
   }
 
   button {
