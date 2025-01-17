@@ -1,30 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ButtonSizes } from "../types/button-type";
 
 interface ButtonProps {
   type: keyof typeof ButtonSizes; // 버튼 역할
-  size: "lg" | "md" | "sm"; // 크기 선택
   label: string; // 버튼 텍스트
-  onClick: () => void; // 클릭 이벤트
+  onClick?: () => void; // 클릭 이벤트
   variant?: "default" | "outlined"; // 스타일
   disabled?: boolean; // 비활성화
+  className?: string; // 추가 클래스
 }
 
 const Button: React.FC<ButtonProps> = ({
   type,
-  size,
   label,
   onClick,
   variant = "default",
   disabled = false,
+  className,
 }) => {
-  const buttonSize = ButtonSizes[type]?.[size];
+  const [currentSize, setCurrentSize] = useState<"lg" | "md" | "sm">("lg");
+
+  // 화면 크기에 따라 버튼 크기 변경
+  useEffect(() => {
+    const updateSize = () => {
+      const width = window.innerWidth;
+      if (width >= 1440) {
+        setCurrentSize("lg");
+      } else if (width >= 744 && width <= 1439) {
+        setCurrentSize("md");
+      } else {
+        setCurrentSize("sm");
+      }
+    };
+
+    updateSize(); // 초기 화면 크기 설정
+    window.addEventListener("resize", updateSize); // 화면 크기 변경 감지
+    return () => window.removeEventListener("resize", updateSize); // 이벤트 제거
+  }, []);
+
+  const buttonSize = ButtonSizes[type]?.[currentSize];
+
   if (!buttonSize) {
     console.error("Invalid size or type for Button");
     return null;
   }
 
-  const { width = 100, height = 40, radius = 4 } = buttonSize;
+  const { width, height, radius } = buttonSize;
 
   const baseStyle: React.CSSProperties = {
     display: "inline-flex",
@@ -59,7 +80,9 @@ const Button: React.FC<ButtonProps> = ({
     <button
       style={styles[variant]}
       onClick={disabled ? undefined : onClick}
+      className={className}
       disabled={disabled}
+      aria-disabled={disabled}
     >
       {label}
     </button>
