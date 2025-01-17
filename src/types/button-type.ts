@@ -57,7 +57,7 @@ const ButtonSizes: Record<
     md: { width: 120, height: 48, radius: 4 },
     sm: { width: 120, height: 48, radius: 4 },
   },
-  reviewCancel: {
+  review: {
     // 후기 작성 / 예약 취소
     lg: { width: 144, height: 43, radius: 6 },
     md: { width: 112, height: 40, radius: 6 },
