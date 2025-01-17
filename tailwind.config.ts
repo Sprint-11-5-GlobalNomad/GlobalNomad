@@ -25,12 +25,12 @@ export default {
         green: {
           DEFAULT: "#00A007",
           light: "#CEDB05",
-          dark: "#00AC07",
+          dark: "#0B3B2D",
         },
         red: {
           DEFAULT: "#FF472E",
-          light: "#FFEEED",
-          dark: "#F7C2BA",
+          light: "#FFC2BA",
+          dark: "#FFE4E0",
         },
         orange: {
           DEFAULT: "#FF7C1D",
