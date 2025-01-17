@@ -32,7 +32,7 @@ const ButtonSizes: Record<
     // 검색하기
     lg: { width: 136, height: 56, radius: 4 },
     md: { width: 136, height: 56, radius: 4 },
-    sm: { width: 56, height: 26, radius: 4 },
+    sm: { width: 96, height: 56, radius: 4 },
   },
   availableTime: {
     // 예약 가능 시간
