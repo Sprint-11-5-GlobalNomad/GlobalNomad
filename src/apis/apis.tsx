@@ -2,10 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  }
+  baseURL: "https://sp-globalnomad-api.vercel.app/11-5",
 });
 
 instance.interceptors.request.use((config) => {
