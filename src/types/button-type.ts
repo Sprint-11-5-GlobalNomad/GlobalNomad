@@ -20,7 +20,7 @@ const ButtonSizes: Record<
     lg: { width: 120, height: 48, radius: 8 },
     md: { width: 138, height: 42, radius: 8 },
   },
-  modalTwoButtons: {
+  modalDoubleButtons: {
     // 모달 2버튼
     lg: { width: 80, height: 38, radius: 6 },
   },
