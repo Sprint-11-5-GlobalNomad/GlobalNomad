@@ -61,7 +61,7 @@ export function MyReservationCard(ReservationProps: ReservationCardProps) {
             ₩{ReservationProps.totalPrice.toLocaleString()}
           </div>
 
-          {ReservationProps.status === "confirmed" && (
+          {ReservationProps.status === "pending" && (
             <button className="text-[1.6rem] text-red-500 font-medium hover:underline">
               예약 취소
             </button>
