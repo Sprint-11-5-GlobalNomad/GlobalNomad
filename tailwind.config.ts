@@ -7,7 +7,7 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
+    extend: 
       screens: {
         desktop: "1024px",
         // => @media (min-width: 1024px) { ... }
