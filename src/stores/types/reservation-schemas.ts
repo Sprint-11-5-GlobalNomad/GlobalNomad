@@ -3,7 +3,11 @@ export interface ReservationResponseDto {
   id: number;
   teamId: string;
   userId: number;
-  activityId: number;
+  activity: {
+    bannerImageUrl: "string";
+    title: "string";
+    id: 0;
+  };
   scheduleId: number;
   status: "pending" | "confirmed" | "declined" | "canceled" | "completed";
   reviewSubmitted: boolean;
