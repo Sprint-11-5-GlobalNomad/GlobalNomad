@@ -1,9 +1,8 @@
-//점3개 드롭다운
-
 "use client";
 import { ReactNode } from "react";
+
 interface DropDownMenuProps {
- children: ReactNode;
+ children?: ReactNode;
  first?: string;
  second?: string;
 }
@@ -24,16 +23,31 @@ export default function DropDownMenu({
             <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
           </div>
       </button>
-      <div className="absolute right-0 mt-2 w-40 border border-solid border-gray-200 bg-white shadow-lg overflow-hidden rounded-xl">
-        <div className="flex flex-col">
+      <div 
+        className="absolute right-0 mt-2 bg-white shadow-lg overflow-hidden rounded-xl"
+        style={{ 
+          width: '160px', 
+          height: '114px', 
+          border: '1px solid var(--color-gray-200)' 
+        }}
+      >
+        <div className="flex flex-col h-full">
             <button
-              style={{ borderBottom: '1px solid var(--color-gray-200)' }}
-              className="w-full px-4 py-3 text-lg font-medium text-gray-900 hover:bg-gray-100"
+              style={{ 
+                borderBottom: '1px solid var(--color-gray-200)',
+                height: '57px',
+                padding: '0 16px'
+              }}
+              className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center"
             >
               {first}
             </button>
             <button
-              className="w-full px-4 py-3 text-lg font-medium text-gray-900 hover:bg-gray-100"
+              style={{ 
+                height: '57px',
+                padding: '0 16px'
+              }}
+              className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center"
             >
               {second}
             </button>

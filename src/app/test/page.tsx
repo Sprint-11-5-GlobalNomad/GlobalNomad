@@ -4,31 +4,25 @@ import DropDownMenu from "@/app/more-menu";
 import DropdownUse from "../card-drop-down";
 
 export default function TestPage() {
-  const handleEdit = () => {
-    alert("수정 버튼이 클릭되었습니다.");
-  };
-
-  const handleDelete = () => {
-    alert("삭제 버튼이 클릭되었습니다.");
-  };
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <div className="w-full max-w-2xl p-8 bg-white rounded-2xl shadow-lg">
-        <h1 className="text-2xl font-bold text-center mb-12">드롭다운 메뉴 테스트</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-4xl p-8 bg-white rounded-2xl shadow-lg space-y-8">
+        <h1 className="text-2xl font-bold text-center">드롭다운 메뉴 테스트</h1>
         
-
-          <div className="flex flex-col items-center">
-            <h2 className="text-xl font-semibold mb-4">아이콘 드롭다운</h2>
-
-            <div>
-            <DropdownUse></DropdownUse>
+        <div className="grid grid-cols-2 gap-16">
+          <div className="flex flex-col items-center space-y-4">
+            <h2 className="text-xl font-semibold">DropdownUse 컴포넌트</h2>
+            <DropdownUse />
+          </div>
+          
+          <div className="flex flex-col items-center space-y-4 justify-start">
+            <h2 className="text-xl font-semibold">DropDownMenu 컴포넌트</h2>
+            <div className="flex w-full justify-end">
+              <DropDownMenu first="수정하기" second="삭제하기" />
             </div>
           </div>
         </div>
       </div>
+    </div>
   );
 }
-
-
-
