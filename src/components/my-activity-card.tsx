@@ -29,7 +29,7 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
           <div className="flex items-center gap-[0.4rem] text-[1.4rem] sm:text-[1.4rem] md:text-[1.4rem] lg:text-[1.6rem] leading-[2rem] sm:leading-[2.4rem] lg:leading-[2.6rem] font-pretendard-regular text-gray-800">
             <Image
               src="/image/rating-star.svg"
-              alt="레이팅 이미지"
+              alt="평균 별점"
               width={16}
               height={16}
             />
