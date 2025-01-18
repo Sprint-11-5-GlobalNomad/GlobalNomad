@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
+import Navbar from "@/components/layout/navbar";
 
 export const metadata: Metadata = {
   title: "GlobalNomad",
@@ -15,7 +16,10 @@ export default function RootLayout({
   return (
     <>
       <html lang='ko'>
-        <body>{children}</body>
+        <body>
+          <Navbar />
+          {children}
+        </body>
       </html>
     </>
   );
