@@ -7,7 +7,12 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {
+    extend: 
+      screens: {
+        desktop: { min: "1024px" },
+        tablet: { min: "744px", max: "1023px" },
+        mobile: { min: "344px", max: "743px" },
+      },
       colors: {
         black: "var(--color-black)",
         "nomad-black": "var(--color-nomad-black)",
@@ -47,20 +52,21 @@ export default {
         pretendard: ["Pretendard", "sans-serif"],
       },
       fontSize: {
-        "3xl": ["32px", "42px"],
-        "2xl": ["24px", "32px"],
-        xl: ["20px", "32px"],
-        lg: ["16px", "26px"],
-        md: ["14px", "24px"],
-        sm: ["13px", "22px"],
-        xs: ["12px", "18px"],
+        "3xl": ["3.2rem", { lineHeight: "4.2rem" }],
+        "2xl": ["2.4rem", { lineHeight: "3.2rem" }],
+        xl: ["2.0rem", { lineHeight: "3.2rem" }],
+        lg: ["1.6rem", { lineHeight: "2.6rem" }],
+        "2lg": ["1.8rem", { lineHeight: "2.6rem" }],
+        md: ["1.4rem", { lineHeight: "2.4rem" }],
+        sm: ["1.3rem", { lineHeight: "2.2rem" }],
+        xs: ["1.2rem", { lineHeight: "1.8rem" }],
       },
 
       fontWeight: {
-        bold: "700",
-        semibold: "600",
-        medium: "500",
-        regular: "400",
+        regular: "var(--regular)",
+        medium: "var(--medium)",
+        semiBold: "var(--semi-bold)",
+        bold: "var(--bold)",
       },
       screens: {
         sm: "375px",
