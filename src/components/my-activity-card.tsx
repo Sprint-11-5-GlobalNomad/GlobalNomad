@@ -1,18 +1,24 @@
 import Image from "next/image";
+import { ActivityBasicDto } from "@/stores/types/activity-schemas";
+import { ReservationResponseDto } from "@/stores/types/reservation-schemas";
 
-export function myActivityCard() {
+export function myActivityCard(
+  ActivityProps: ActivityBasicDto,
+  ReservationProps: ReservationResponseDto
+) {
   return (
     <div>
-      <Image src={} alt={"체험 이미지"} />
+      <Image src={ActivityProps.bannerImageUrl} alt={"체험 이미지"} />
       <div>
         <div>
-          {/*내 체험 관리일 때 <div>레이팅</div> */}
-          {/* 예약 내역일 때 <div>예약 상태</div> */}
-          <div>타이틀</div>
-          {/*예약 내역일 때 <div>날짜 · 시각 · 인원 수</div> */}
+          {ReservationProps.headCount}
+          {/*내 체험 관리일 때 <div>{ActivityProps.rating} ({ActivityProps.reviewCount})</div> */}
+          {/* 예약 내역일 때 <div>{ReservationProps.status}</div> */}
+          <div>{ActivityProps.title}</div>
+          {/*예약 내역일 때 <div>{ReservationProps.date} · {ReservationProps.startTime} ~ {ReservationProps.endTime} · {ReservationProps.headCount}</div> */}
         </div>
         <div>
-          <div>가격</div>
+          <div>{ActivityProps.price}</div>
           {/* 내 체험 관리일 때
           <div>
             <button>···</button>
