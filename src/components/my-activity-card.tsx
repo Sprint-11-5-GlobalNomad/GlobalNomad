@@ -14,7 +14,7 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <div className="flex flex-col md:flex-row w-full lg:w-[80rem] lg:h-[20.4rem] md:w-[42.9rem] md:h-[15.6rem] sm:w-full rounded-[2.4rem] md:rounded-[2.4rem_0_0_0] bg-white border border-gray-200 shadow-md lg:gap-[1rem] md:gap-0 p-[0.4rem]">
+    <div className="flex flex-col md:flex-row w-full lg:w-[80rem] lg:h-[20.4rem] md:w-[42.9rem] md:h-[15.6rem] sm:w-full rounded-[2.4rem] bg-white border border-gray-200 shadow-md lg:gap-[1rem] md:gap-0 p-[0.4rem]">
       <div className="flex-shrink-0 w-full lg:w-[20.4rem] lg:h-[20.4rem] md:w-[15.6rem] md:h-[15.6rem] sm:w-full sm:h-full rounded-[2.4rem] overflow-hidden">
         <Image
           src={ActivityProps.bannerImageUrl}
@@ -35,7 +35,8 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
               height={19}
             />
             <span>
-              {ActivityProps.rating} ({ActivityProps.reviewCount})
+              {ActivityProps.rating} (
+              {ActivityProps.reviewCount.toLocaleString()})
             </span>
           </div>
           <div className="text-[1.4rem] lg:text-[2rem] md:text-[1.8rem] leading-[2.4rem] lg:leading-[3.2rem] md:leading-[2.6rem] font-bold">
