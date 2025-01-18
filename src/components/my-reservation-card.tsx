@@ -60,8 +60,17 @@ export function MyReservationCard(ReservationProps: ReservationCardProps) {
           <div className="text-[1.6rem] lg:text-[2rem] md:text-[2rem] leading-[2.6rem] lg:leading-[3.2rem] font-medium text-right">
             ₩{ReservationProps.totalPrice.toLocaleString()}
           </div>
-          {/* 예약내역이고 예약상태가 confirmed일 때 <div>예약 취소</div> 나중에 버튼 태그로 바꿔야함 */}
-          {/* 예약내역이고 예약상태가 completed일 때 <div>후기 작성</div> 나중에 버튼 태그로 바꿔야 함 */}
+
+          {ReservationProps.status === "confirmed" && (
+            <button className="text-[1.6rem] text-red-500 font-medium hover:underline">
+              예약 취소
+            </button>
+          )}
+          {ReservationProps.status === "completed" && (
+            <button className="text-[1.6rem] text-blue-500 font-medium hover:underline">
+              후기 작성
+            </button>
+          )}
         </div>
       </div>
     </div>
