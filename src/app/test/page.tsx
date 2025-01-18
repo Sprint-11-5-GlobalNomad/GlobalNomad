@@ -19,7 +19,7 @@ export default function TestPage() {
 
           <div className="flex flex-col items-center">
             <h2 className="text-xl font-semibold mb-4">아이콘 드롭다운</h2>
-            <DropDownMenu onEdit={handleEdit} onDelete={handleDelete}>
+            <DropDownMenu>
               <button className="p-2 hover:bg-gray-100 rounded-full text-2xl">
                 ⋮
               </button>
