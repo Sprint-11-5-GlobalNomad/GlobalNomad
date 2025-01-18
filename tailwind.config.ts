@@ -62,11 +62,6 @@ export default {
         medium: "500",
         regular: "400",
       },
-      screens: {
-        sm: "375px",
-        md: "744px",
-        lg: "1024px",
-      },
     },
   },
   plugins: [],
