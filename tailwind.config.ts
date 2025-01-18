@@ -55,11 +55,17 @@ export default {
         sm: ["13px", "22px"],
         xs: ["12px", "18px"],
       },
+
       fontWeight: {
         bold: "700",
         semibold: "600",
         medium: "500",
         regular: "400",
+      },
+      screens: {
+        sm: "375px",
+        md: "744px",
+        lg: "1024px",
       },
     },
   },
