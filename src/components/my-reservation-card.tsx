@@ -18,7 +18,7 @@ export function MyReservationCard(ReservationProps: ReservationCardProps) {
       <div className="flex-shrink-0 w-full h-[12.8rem] sm:w-[15.6rem] sm:h-[15.6rem] lg:w-[20.4rem] lg:h-[20.4rem] rounded-[2.4rem] overflow-hidden">
         <Image
           src={ReservationProps.activity.bannerImageUrl}
-          alt={"체험 이미지"}
+          alt="체험 이미지"
           width={204}
           height={204}
           className="object-cover w-full h-full"
