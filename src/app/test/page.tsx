@@ -1,6 +1,7 @@
 "use client";
 
-import DropDownMenu from "@/app/edit-or-delete"; 
+import DropDownMenu from "@/app/more-menu"; 
+import DropdownUse from "../card-drop-down";
 
 export default function TestPage() {
   const handleEdit = () => {
@@ -19,11 +20,10 @@ export default function TestPage() {
 
           <div className="flex flex-col items-center">
             <h2 className="text-xl font-semibold mb-4">아이콘 드롭다운</h2>
-            <DropDownMenu>
-              <button className="p-2 hover:bg-gray-100 rounded-full text-2xl">
-                ⋮
-              </button>
-            </DropDownMenu>
+
+            <div>
+            <DropdownUse></DropdownUse>
+            </div>
           </div>
         </div>
       </div>
