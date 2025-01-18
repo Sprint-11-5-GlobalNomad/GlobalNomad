@@ -4,8 +4,8 @@ export interface ReservationResponseDto {
   teamId: string;
   userId: number;
   activity: {
-    bannerImageUrl: "string";
-    title: "string";
+    bannerImageUrl: string;
+    title: string;
     id: 0;
   };
   scheduleId: number;
