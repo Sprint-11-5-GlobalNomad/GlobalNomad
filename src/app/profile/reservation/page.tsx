@@ -55,7 +55,6 @@ export default function MyReservation() {
     setUserReservations(mockData);
   };
 
-  // 컴포넌트 마운트 시 데이터 가져오기
   useEffect(() => {
     fetchReservations();
   }, []);
@@ -72,7 +71,9 @@ export default function MyReservation() {
           <div>
             {userReservations.length > 0 ? (
               userReservations.map((reservation) => (
-                <div>예약 카드 컴포넌트 추가</div>
+                <div key={reservation.id}>
+                  <div>예약 카드 컴포넌트 추가</div>
+                </div>
               ))
             ) : (
               <p>EmptyActivity 컴포넌트 추가</p>
