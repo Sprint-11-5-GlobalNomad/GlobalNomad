@@ -211,7 +211,7 @@ pre {
  */
 a {
   background-color: transparent;
-  color: #000;
+  color: inherit;
   text-decoration: none;
   cursor: pointer;
 }
