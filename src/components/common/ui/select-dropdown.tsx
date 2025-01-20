@@ -7,7 +7,7 @@ interface CategoryDropdownProps {
   description: string;
 }
 
-export default function CategoryDropdown({
+export default function SelectDropdown({
   options,
   description,
 }: CategoryDropdownProps) {
