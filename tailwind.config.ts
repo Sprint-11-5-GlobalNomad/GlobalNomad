@@ -7,7 +7,7 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: 
+    extend: {
       screens: {
         desktop: { min: "1024px" },
         tablet: { min: "744px", max: "1023px" },
