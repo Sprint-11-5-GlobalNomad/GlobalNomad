@@ -9,14 +9,9 @@ export default {
   theme: {
     extend: {
       screens: {
-        desktop: "1024px",
-        // => @media (min-width: 1024px) { ... }
-
-        tablet: "744px",
-        // => @media (min-width: 744px) { ... }
-
-        mobile: "344px",
-        //  => @media (min-width: 344px) { ... }
+        desktop: { min: "1024px" },
+        tablet: { min: "744px", max: "1023px" },
+        mobile: { min: "344px", max: "743px" },
       },
       colors: {
         black: "var(--color-black)",
@@ -66,6 +61,7 @@ export default {
         sm: ["1.3rem", { lineHeight: "2.2rem" }],
         xs: ["1.2rem", { lineHeight: "1.8rem" }],
       },
+
       fontWeight: {
         regular: "var(--regular)",
         medium: "var(--medium)",
