@@ -61,6 +61,7 @@ export default {
         sm: ["1.3rem", { lineHeight: "2.2rem" }],
         xs: ["1.2rem", { lineHeight: "1.8rem" }],
       },
+
       fontWeight: {
         regular: "var(--regular)",
         medium: "var(--medium)",
