@@ -1,9 +1,8 @@
-import axios, { Axios, AxiosError, ResponseType } from "axios";
-import { instance } from "@/apis/apis";
+import { instance } from "@/app/api/api";
 import { DataType } from "@/types/activities-type";
 import { ReviewData } from "@/types/activities-type";
 import { AvailableSchedule } from "@/types/activities-type";
-import { requestor } from "@/apis/config/requestor";
+import { requestor } from "@/app/api/config/requestor";
 import { ActivityListResponse } from "@/types/activities-type";
 
 const BASE_URL = "https://sp-globalnomad-api.vercel.app/4-17";
