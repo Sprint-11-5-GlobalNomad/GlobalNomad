@@ -2,17 +2,15 @@
 
 import { useUserStore } from "@/stores/user-store";
 import Link from "next/link";
-import UserNotifications from "./user-notifications";
+import UserNotifications from "@/components/common/layout/navigation/user-notifications";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function UserMenu() {
-  const { isAuthenticated, logout, currentUser } = useUserStore((state) => ({
-    isAuthenticated: true,
-    // state.isAuthenticated
-    logout: state.logout,
-    currentUser: state.currentUser,
-  }));
+  const { isAuthenticated, logout, currentUser } = useUserStore(
+    (state) => state
+  );
+  // useUserStore(state) 가 아닌 이유: useUserStore 는 기본적으로 선택자 함수를 인수로 받도록 설계되어 있기 때문
 
   const [isOpen, setIsOpen] = useState(false);
   const handleToggleDropdown = () => {
@@ -26,8 +24,7 @@ export default function UserMenu() {
           <UserNotifications />
           <div
             onClick={handleToggleDropdown}
-            className="flex-between gap-[1rem] border-l-[2.2rem] border-gray-300"
-            // border 제대로 지정 안 됨. 수정 필요
+            className="flex-between gap-[1rem] border-solid border-l-[0.1rem] border-gray-300 pl-[2rem]"
           >
             <Image
               src={currentUser?.profileImageUrl || "/image/profile_default.svg"}
@@ -35,8 +32,7 @@ export default function UserMenu() {
               width={32}
               height={32}
             />
-            <p className="text-md">{currentUser?.nickname || "호날두"}</p>
-            {/*test 끝나면 호날두 지워야 함. 닉네임 값 무조건 있음. */}
+            <p className="text-md">{currentUser?.nickname || "닉네임"}</p>
             {isOpen && (
               <div>
                 <Link href="/profile">마이 페이지</Link>
