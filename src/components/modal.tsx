@@ -1,6 +1,6 @@
 import React from "react";
 
-//로그인 모달달
+//로그인 모달
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -49,7 +49,25 @@ export function reservationModal({
       <div
         className="bg-white w-[29rem] h-[18rem] rounded-[1.2rem] flex flex-col justify-between"
         onClick={(e) => e.stopPropagation()}
-      ></div>
+      >
+        <div className="flex justify-center items-center text-center">
+          {children}
+          <div className="flex justify-between gap-8">
+            <button
+              className="w-[5rem] h-[2.3rem] px-[1.25rem] py-[0.625rem] border border-black text-black rounded-[0.375rem]"
+              onClick={onClose}
+            >
+              아니요
+            </button>
+            <button
+              className="w-[5rem] h-[2.3rem] px-[1.25rem] py-[0.625rem] border bg-nomad-black text-white rounded-[0.375rem]"
+              onClick={onConfirm}
+            >
+              취소하기
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
