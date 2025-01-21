@@ -12,7 +12,10 @@ export default function Footer() {
 
   return (
     <footer className="h-[16rem]">
-      <div className="flex-between mx-[36rem] pt-[3.2rem]">
+      <div
+        className="flex-between mx-[36rem] pt-[3.2rem] tablet:mx-[11rem]
+      mobile:mx-[3.8rem] mobile:flex-wrap mobile:justify-center mobile:gap-[1.2rem]"
+      >
         <span className="text-lg font-regular">©codeit - 2025</span>
         <div className="flex gap-[3rem]">
           <span className="text-lg font-regular">Privacy Policy</span>
@@ -26,7 +29,8 @@ export default function Footer() {
             FAQ
           </Link>
         </div>
-        <div className="flex gap-[1.2rem]">
+
+        <div className="flex gap-[1.2rem] mobile:mt-[1.2rem]">
           <Link
             href="https://www.facebook.com/codeit.kr/"
             target="_blank"
