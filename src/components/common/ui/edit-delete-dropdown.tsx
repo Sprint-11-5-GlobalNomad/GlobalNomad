@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 export default function EditDeleteDropdown({}) {
@@ -8,16 +9,17 @@ export default function EditDeleteDropdown({}) {
   return (
     <div className="relative inline-block" onClick={() => setIsOpen(!isOpen)}>
       <button className="p-2 hover:bg-gray-100 rounded-full">
-        <div className="flex flex-col gap-1">
-          <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-          <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-          <div className="w-1 h-1 bg-gray-600 rounded-full"></div>
-        </div>
+        <Image
+          src="/image/meatball.svg"
+          alt="수정하기 삭제하기 드롭다운"
+          width={40}
+          height={40}
+        />
       </button>
       {isOpen && (
         <div
           className="absolute right-0 mt-2 bg-white shadow-lg overflow-hidden rounded-xl
-          w-[16rem] h-[11.4rem] border-solid border-[0.1rem] border-gray-200"
+          w-[16rem] h-[11.4rem] border-solid border-[0.1rem] border-gray-200 z-50"
         >
           <ul className="flex flex-col h-full">
             <li
