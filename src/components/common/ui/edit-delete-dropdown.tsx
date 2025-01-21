@@ -3,7 +3,15 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function EditDeleteDropdown({}) {
+interface EditDeleteDropdown {
+  onEdit?: () => void;
+  onDelete?: () => void;
+}
+
+export default function EditDeleteDropdown({
+  onEdit,
+  onDelete,
+}: EditDeleteDropdown) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -18,19 +26,21 @@ export default function EditDeleteDropdown({}) {
       </button>
       {isOpen && (
         <div
-          className="absolute right-0 mt-2 bg-white shadow-lg overflow-hidden rounded-xl
-          w-[16rem] h-[11.4rem] border-solid border-[0.1rem] border-gray-200 z-50"
+          className="absolute right-0 mt-[0.5rem] bg-white shadow-lg overflow-hidden rounded-[0.6rem]
+          w-[16rem] border-solid border-[0.1rem] border-gray-200 z-50"
         >
-          <ul className="flex flex-col h-full">
+          <ul className="flex flex-col">
             <li
+              onClick={onEdit}
               className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
-              border-b-[0.1rem] border-solid border-gray-200 h-[5.7rem] px-[1.6rem]"
+              border-b-[0.1rem] border-solid border-gray-200 py-[1.8rem]"
             >
               수정하기
             </li>
             <li
-              className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
-              h-[5.7rem] px-[1.6rem]"
+              onClick={onDelete}
+              className="w-full text-lg text-center font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
+              py-[1.8rem]"
             >
               삭제하기
             </li>
