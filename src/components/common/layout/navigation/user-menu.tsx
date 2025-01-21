@@ -5,6 +5,7 @@ import Link from "next/link";
 import UserNotifications from "@/components/common/layout/navigation/user-notifications";
 import Image from "next/image";
 import { useState } from "react";
+import UseOutsideClick from "@/hooks/use-outside-click";
 
 export default function UserMenu() {
   const { isAuthenticated, logout, currentUser } = useUserStore(
@@ -13,6 +14,7 @@ export default function UserMenu() {
   // useUserStore(state) 가 아닌 이유: useUserStore 는 기본적으로 선택자 함수를 인수로 받도록 설계되어 있기 때문
 
   const [isOpen, setIsOpen] = useState(false);
+  const ref = UseOutsideClick(() => setIsOpen(false));
 
   return (
     <>
@@ -32,6 +34,7 @@ export default function UserMenu() {
             <span className="text-md">{currentUser?.nickname || "닉네임"}</span>
             {isOpen && (
               <div
+                ref={ref}
                 className="absolute top-full left-[5rem] mt-[2rem] bg-white shadow-lg overflow-hidden rounded-[0.6rem]
             border-solid border-[0.1rem] border-gray-200 z-50 w-[12.7rem] tablet:left-[4rem] mobile:left-[3.2rem]"
               >
