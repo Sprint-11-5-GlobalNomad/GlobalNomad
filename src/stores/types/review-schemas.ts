@@ -13,6 +13,18 @@ export interface ReviewServiceResponseDto {
   updatedAt: string;
 }
 
+export interface ReviewPostDto {
+  deletedAt: string;
+  updatedAt: string;
+  createdAt: string;
+  content: string;
+  rating: number;
+  userId: number;
+  activityId: number;
+  teamId: string;
+  id: number;
+}
+
 export interface FindReviewsQueryDto {
   page?: number;
   size?: number;
