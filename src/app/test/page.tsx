@@ -1,7 +1,7 @@
 "use client";
 
 import FilterDropdown from "@/components/common/ui/filter-dropdown";
-import CategoryDropdown from "../../components/common/ui/category-dropdown";
+import SelectDropdown from "../../components/common/ui/select-dropdown";
 import EditDeleteDropdown from "@/components/common/ui/edit-delete-dropdown";
 
 export default function TestPage() {
@@ -13,7 +13,7 @@ export default function TestPage() {
         <div className="flex-colmun gap-16">
           <div className="flex flex-col items-center space-y-4">
             <h2 className="text-xl font-semibold">카테고리 드롭다운</h2>
-            <CategoryDropdown
+            <SelectDropdown
               options={["문화 예술", "식음료", "스포츠", "투어", "관광"]}
               description="카테고리"
             />
@@ -27,9 +27,30 @@ export default function TestPage() {
           </div>
 
           <div className="flex flex-col items-center space-y-4 justify-start">
-            <h2 className="text-xl font-semibold">필터 드롭다운</h2>
+            <h2 className="text-xl font-semibold">필터 드롭다운 1</h2>
             <div className="flex w-full justify-end">
-              <FilterDropdown />
+              <FilterDropdown
+                description="필터"
+                options={[
+                  "예약 신청",
+                  "예약 취소",
+                  "예약 승인",
+                  "예약 거절",
+                  "체험 완료",
+                ]}
+                size="large"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center space-y-4 justify-start">
+            <h2 className="text-xl font-semibold">필터 드롭다운 2</h2>
+            <div className="flex w-full justify-end">
+              <FilterDropdown
+                description="가격"
+                options={["가격이 낮은 순", "가격이 높은 순"]}
+                size="small"
+              />
             </div>
           </div>
         </div>
