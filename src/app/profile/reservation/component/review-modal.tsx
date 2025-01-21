@@ -2,7 +2,7 @@
 
 import Button from "@/components/button";
 import { ReservationResponseDto } from "@/stores/types/reservation-schemas";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { instance } from "@/app/api/api";
 import { AxiosError } from "axios";
@@ -16,18 +16,29 @@ type ReviewModalProps = Pick<
   | "startTime"
   | "endTime"
   | "headCount"
-> & { onClose: () => void };
+> & {
+  isOpen: boolean;
+};
 
 type ReviewState = {
   rating: number;
   content: string;
 };
 
-export function ReviewModal(Props: ReviewModalProps) {
+export function ReviewModal({ isOpen, ...Props }: ReviewModalProps) {
+  const [modalOpen, setModalOpen] = useState(isOpen);
   const [review, setReview] = useState<ReviewState>({
     rating: 0,
     content: "",
   });
+
+  useEffect(() => {
+    setModalOpen(isOpen);
+  }, [isOpen]);
+
+  function onClose() {
+    setModalOpen(!modalOpen);
+  }
 
   function onChangeContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setReview((prev) => ({ ...prev, content: e.target.value }));
@@ -46,9 +57,9 @@ export function ReviewModal(Props: ReviewModalProps) {
           content: review.content,
         }
       );
-      console.log("Review submitted successfully:", response.data);
+      console.log("리뷰 작성 성공:", response.data);
 
-      Props.onClose();
+      onClose();
       alert("리뷰가 성공적으로 작성되었습니다!");
     } catch (e: unknown) {
       if (e instanceof AxiosError && e.response) {
@@ -79,15 +90,22 @@ export function ReviewModal(Props: ReviewModalProps) {
       }
     }
   }
+  if (!modalOpen) return null;
 
   return (
-    <div className="flex-column justify-center fixed inset-0 bg-black bg-opacity-50 z-50">
-      <div className="bg-white flex flex-col tablet:rounded-[2.4rem] font-pretendard desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] gap-[2.4rem] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]">
+    <div
+      className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50 z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white flex flex-col tablet:rounded-[2.4rem] font-pretendard desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] gap-[2.4rem] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-[2.4rem] font-bold leading-[3.2rem] mobile:text-[28px] mobile:leading-[26px]">
             후기 작성
           </h1>
-          <button onClick={Props.onClose}>
+          <button onClick={onClose}>
             <Image src="/image/btn_X.svg" alt="닫기" width={40} height={40} />
           </button>
         </div>
