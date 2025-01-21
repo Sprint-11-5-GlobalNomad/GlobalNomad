@@ -20,7 +20,9 @@ export default function SelectDropdown({
       onClick={() => setIsOpen(!isOpen)}
     >
       <div className="relative w-[80rem] p-[1rem] border border-solid border-gray-900 rounded-[0.4rem] bg-white">
-        <span className="w-full text-lg bg-transparent text-gray-600 font-regular ml-[0.6rem]">
+        <span
+          className={`w-full text-lg bg-transparent font-regular ml-[0.6rem] ${selectedOption ? "text-black" : "text-gray-600"}`}
+        >
           {selectedOption || description}
         </span>
         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
