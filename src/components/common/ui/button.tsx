@@ -26,15 +26,14 @@ const Button: React.FC<ButtonProps> = ({
   useEffect(() => {
     const updateSize = () => {
       const width = window.innerWidth;
-      if (width >= 1440) {
+      if (width >= 1024) {
         setCurrentSize("lg");
-      } else if (width >= 744 && width <= 1439) {
+      } else if (width >= 744 && width <= 1023) {
         setCurrentSize("md");
       } else {
         setCurrentSize("sm");
       }
     };
-
     updateSize(); // 초기 화면 크기 설정
     window.addEventListener("resize", updateSize); // 화면 크기 변경 감지
     return () => window.removeEventListener("resize", updateSize); // 이벤트 제거
