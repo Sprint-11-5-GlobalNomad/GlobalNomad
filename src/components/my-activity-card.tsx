@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ActivityBasicDto } from "@/stores/types/activity-schemas";
+import { ActivityBasicDto } from "@/app/types/activity-schemas";
 import { useState } from "react";
 import Link from "next/link";
 

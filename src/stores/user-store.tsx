@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserServiceResponseDto } from "./types/user-schemas";
+import { UserServiceResponseDto } from "../app/types/user-schemas";
 
 interface UserState {
   currentUser: UserServiceResponseDto | null; // 현재 로그인된 사용자 정보

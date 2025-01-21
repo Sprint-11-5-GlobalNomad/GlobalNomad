@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { NotificationDto } from "./types/notification-schemas";
+import { NotificationDto } from "../app/types/notification-schemas";
 
 interface NotificationState {
   notifications: NotificationDto[]; // 알림 목록

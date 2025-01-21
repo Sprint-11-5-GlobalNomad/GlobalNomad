@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ReservationResponseDto } from "@/stores/types/reservation-schemas";
+import { ReservationResponseDto } from "@/app/types/reservation-schemas";
 
 type ReservationCardProps = Pick<
   ReservationResponseDto,
