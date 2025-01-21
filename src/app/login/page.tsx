@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import axios from "axios"; // import useAuthStore from '../stores/authStore';
+// import axios from "axios";
+// import useAuthStore from '../stores/authStore';
 import Image from "next/image";
 // import Modal from '';
 // import Button from '';
@@ -16,12 +17,12 @@ interface LoginFormInputs {
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 export default function LoginPage() {
-  const [showModal, setShowModal] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
   const router = useRouter();
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     trigger,
   } = useForm<LoginFormInputs>({
@@ -29,8 +30,8 @@ export default function LoginPage() {
   });
   // const { login } = useAuthStore();
 
-  const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    const { email, password } = data;
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -51,10 +52,7 @@ export default function LoginPage() {
 
         {/** 폼 섹션 */}
         <div className="w-full flex flex-col gap-[32px]">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full flex flex-col gap-[28px]"
-          >
+          <form className="w-full flex flex-col gap-[28px]">
             {/* 이메일 */}
             <div className="mb-4">
               <label
@@ -96,7 +94,7 @@ export default function LoginPage() {
             </div>
 
             {/* 비밀번호 */}
-            <div className="mb-4">
+            <div className="mb-4 relative">
               <label
                 htmlFor="password"
                 className="block text-[16px] font-normal leading-[26px] text-[#1B1B1B] mb-1"
@@ -105,18 +103,18 @@ export default function LoginPage() {
               </label>
               <input
                 id="password"
-                type="password"
+                type={showPassword ? "text" : "password"} // showPassword 상태에 따라 type 변경
                 placeholder="비밀번호 입력"
                 className={`
-              w-full
-              px-[20px] py-[16px]
-              border
-              focus:outline-none
-              rounded-[6px]
-              font-pretendard text-[16px] font-normal leading-[26px]
-              placeholder-[#A4A1AA]
-              ${errors.password ? "border-[#FF472E]" : "border-[#DDDDDD]"}
-            `}
+                  w-full
+                  px-[20px] py-[16px]
+                  border
+                  focus:outline-none
+                  rounded-[6px]
+                  font-pretendard text-[16px] font-normal leading-[26px]
+                  placeholder-[#A4A1AA]
+                  ${errors.password ? "border-[#FF472E]" : "border-[#DDDDDD]"}
+                `}
                 {...register("password", {
                   required: "8자 이상 작성해주세요.",
                   minLength: {
@@ -126,6 +124,28 @@ export default function LoginPage() {
                 })}
                 onBlur={() => trigger("password")}
               />
+              {/* 비밀번호 보기 버튼 */}
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-[16px] top-[50%] transform -translate-y-1/2 text-[#79747E]"
+              >
+                {showPassword ? (
+                  <Image
+                    src="/image/visibility_eye.svg"
+                    alt="비밀번호 숨기기"
+                    width={24}
+                    height={24}
+                  />
+                ) : (
+                  <Image
+                    src="/image/visibility_off.svg"
+                    alt="비밀번호 보기"
+                    width={24}
+                    height={24}
+                  />
+                )}
+              </button>
               {/* 비밀번호 에러 메시지 */}
               {errors.password && (
                 <p className="mt-1 text-sm text-[#FF472E]">
@@ -176,17 +196,21 @@ export default function LoginPage() {
           </div>
           <div className="mt-6 flex justify-center gap-4">
             <button className="w-[72px] h-[72px] bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
-              <img
+              <Image
                 src="/image/Google-Icon.svg"
                 alt="Google"
-                className="w-[27px] h-[27px]"
+                width={27}
+                height={27}
+                objectFit="cover"
               />
             </button>
             <button className="w-[72px] h-[72px] bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
-              <img
+              <Image
                 src="/image/Kakao-Icon.svg"
                 alt="Kakao"
-                className="w-[27px] h-[27px]"
+                width={27}
+                height={27}
+                objectFit="cover"
               />
             </button>
           </div>
