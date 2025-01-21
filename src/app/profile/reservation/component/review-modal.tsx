@@ -82,12 +82,7 @@ export function ReviewModal(Props: ReviewModalProps) {
 
   return (
     <div className="flex-column justify-center fixed inset-0 bg-black bg-opacity-50 z-50">
-      <div
-        className="bg-white flex flex-col tablet:rounded-[2.4rem] desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] gap-[2.4rem] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]"
-        style={{
-          fontFamily: "Pretendard",
-        }}
-      >
+      <div className="bg-white flex flex-col tablet:rounded-[2.4rem] font-pretendard desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] gap-[2.4rem] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-[2.4rem] font-bold leading-[3.2rem] mobile:text-[28px] mobile:leading-[26px]">
             후기 작성
@@ -138,13 +133,9 @@ export function ReviewModal(Props: ReviewModalProps) {
           ))}
         </div>
         <textarea
-          className="w-[432px] h-[240px] p-2 border rounded-md resize-none mb-6 mobile:w-[351px] mobile:h-[346px] mobile:rounded-[4px]"
+          className="font-pretendard text-4xl w-[432px] h-[240px] p-2 border rounded-md resize-none mb-6 mobile:w-[351px] mobile:h-[346px] mobile:rounded-[4px]"
           placeholder="후기를 작성해주세요"
           onChange={onChangeContent}
-          style={{
-            fontFamily: "Pretendard",
-            fontSize: "16px",
-          }}
         />
         <Button type="reviewSubmit" label="작성하기" onClick={onSubmitReview} />
       </div>
