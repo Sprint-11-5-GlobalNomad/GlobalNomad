@@ -77,7 +77,6 @@ export default function UserProfileSidebar() {
           </label>
         </div>
       </div>
-      {/* 메뉴 섹션 */}
       <nav className="space-y-[0.5rem]">
         {menuItems.map((item) => (
           <Link
