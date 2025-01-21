@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 // 예약취소 모달 인터페이스
@@ -26,7 +27,7 @@ export function ConfirmationModal({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-center items-center mb-[0.75rem]">
-          <img
+          <Image
             src="/image/check.svg"
             alt="체크 아이콘"
             className="h-[1.5rem] w-[1.5rem]"
