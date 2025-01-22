@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ReviewServiceResponseDto } from "./types/review-schemas";
+import { ReviewServiceResponseDto } from "../app/types/review-schemas";
 
 interface ReviewState {
   reviews: ReviewServiceResponseDto[]; // 특정 활동에 대한 리뷰 목록
