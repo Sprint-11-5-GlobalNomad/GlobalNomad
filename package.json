@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean-install": "rm -rf node_modules && npm install",
+    "sync": "npm install && npm audit fix",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -14,7 +16,7 @@
     "axios": "^1.7.9",
     "globalnomad": "file:",
     "js-cookie": "^3.0.5",
-    "next": "15.1.4",
+    "next": "^15.1.5",
     "next-auth": "^4.24.11",
     "postcss": "^8.5.1",
     "react": "^19.0.0",

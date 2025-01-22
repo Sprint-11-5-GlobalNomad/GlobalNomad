@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/button";
+import Button from "@/components/common/ui/button";
 import { ReservationResponseDto } from "@/stores/types/reservation-schemas";
 import { useEffect, useState } from "react";
 import Image from "next/image";
