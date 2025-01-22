@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import Navbar from "@/components/common/layout/navbar";
+import Footer from "@/components/common/layout/footer";
 
 export const metadata: Metadata = {
   title: "GlobalNomad",
@@ -18,7 +19,8 @@ export default function RootLayout({
       <html lang="ko">
         <body>
           <Navbar />
-          {children}
+          <main>{children}</main>
+          <Footer />
         </body>
       </html>
     </>

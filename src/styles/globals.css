@@ -531,6 +531,11 @@ template {
     @apply bg-gray-100;
   }
 
+  footer {
+    color: #676767;
+    @apply bg-nomad-black;
+  }
+
   button {
     border: 0;
     cursor: pointer;
