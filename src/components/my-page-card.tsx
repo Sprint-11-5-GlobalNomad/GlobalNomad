@@ -55,6 +55,10 @@ export default function UserProfileSidebar() {
             width={160}
             height={160}
             className="rounded-full object-cover border border-gray-200"
+            style={{
+              width: "16rem",
+              height: "16rem",
+            }}
           />
           <label
             htmlFor="profile-upload"
