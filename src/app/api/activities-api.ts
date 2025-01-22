@@ -77,7 +77,7 @@ export const fetchActivityReviews = async (
 };
 
 // 체험 이미지 URL 생성
-export const uploadActivityImage = async (teamId: string, imageFile: File) => {
+export const uploadActivityImage = async (imageFile: File) => {
   const formData = new FormData();
   formData.append("image", imageFile);
 

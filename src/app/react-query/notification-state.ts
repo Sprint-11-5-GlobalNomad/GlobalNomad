@@ -1,18 +1,18 @@
 import {
   fetchNotifications,
   deleteNotification,
-} from "../api/notification-api";
+} from "../api/my-notifications-api";
 import { useCustomQuery, useCustomMutation } from "./react-query-util";
 
 // 내 알림 리스트 조회
-export const useNotifications = (teamId: string, cursorId?: number) =>
-  useCustomQuery(["notifications", teamId, cursorId], () =>
-    fetchNotifications(teamId, cursorId)
+export const useNotifications = (cursorId?: number) =>
+  useCustomQuery(["notifications", cursorId], () =>
+    fetchNotifications(cursorId)
   );
 
 // 알림 삭제
-export const useDeleteNotification = (teamId: string) =>
+export const useDeleteNotification = () =>
   useCustomMutation(
-    (notificationId: number) => deleteNotification(teamId, notificationId),
-    [["notifications", teamId]]
+    (notificationId: number) => deleteNotification(notificationId),
+    [["notifications"]]
   );

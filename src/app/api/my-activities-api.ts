@@ -54,9 +54,9 @@ export const fetchDailyReservationStats = async (
 export const fetchReservationsBySchedule = async (
   activityId: number,
   scheduleId: number,
-  status: "declined" | "pending" | "confirmed",
-  cursorId?: number,
-  size = 10
+  status: string,
+  cursorId: number | undefined,
+  size: number
 ) => {
   const response = await instance.get<{
     cursorId: number;
@@ -82,7 +82,7 @@ export const updateReservationStatus = async (
 };
 
 // 내 체험 삭제
-export const deleteMyActivity = async (teamId: string, activityId: number) => {
+export const deleteMyActivity = async (activityId: number) => {
   await instance.delete(`/my-activities/${activityId}`);
 };
 

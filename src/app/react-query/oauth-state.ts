@@ -20,31 +20,25 @@ interface AuthResponse {
 }
 
 // 로그인
-export const useLogin = (teamId: string) =>
+export const useLogin = () =>
   useCustomMutation<
     AuthResponse, // 반환 타입 수정
     unknown, // 에러 타입
     { email: string; password: string } // 입력 변수 타입
-  >((credentials) => login(teamId, credentials));
+  >((credentials) => login(credentials));
 
 // 간편 회원가입
-export const useSignUpWithOauth = (
-  teamId: string,
-  provider: "google" | "kakao"
-) =>
+export const useSignUpWithOauth = (provider: "google" | "kakao") =>
   useCustomMutation<
     AuthResponse, // 반환 타입 수정
     unknown, // 에러 타입
     SignUpWithOauthRequestBody // 입력 변수 타입
-  >((signUpData) => signUpWithOauth(teamId, provider, signUpData));
+  >((signUpData) => signUpWithOauth(provider, signUpData));
 
 // 간편 로그인
-export const useSignInWithOauth = (
-  teamId: string,
-  provider: "google" | "kakao"
-) =>
+export const useSignInWithOauth = (provider: "google" | "kakao") =>
   useCustomMutation<
     AuthResponse, // 반환 타입 수정
     unknown, // 에러 타입
     SignInWithOauthRequestBody // 입력 변수 타입
-  >((signInData) => signInWithOauth(teamId, provider, signInData));
+  >((signInData) => signInWithOauth(provider, signInData));

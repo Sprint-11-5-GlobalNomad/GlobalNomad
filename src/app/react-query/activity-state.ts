@@ -3,7 +3,7 @@ import {
   createActivity,
   fetchActivityDetail,
   createReservation,
-} from "../api/activity-api";
+} from "../api/activities-api";
 import { useCustomQuery, useCustomMutation } from "./react-query-util";
 import {
   ActivityBasicDto,
@@ -17,38 +17,32 @@ import {
 } from "../types/reservation-schemas";
 
 // 체험 리스트 조회
-export const useActivities = (
-  teamId: string,
-  filters: FindActivitiesQueryDto
-) =>
+export const useActivities = (filters: FindActivitiesQueryDto) =>
   useCustomQuery<
     { cursorId: number; totalCount: number; activities: ActivityBasicDto[] }, // 반환 타입
     unknown // 에러 타입
-  >(["activities", teamId, filters], () => fetchActivities(teamId, filters));
+  >(["activities", filters], () => fetchActivities(filters));
 
 // 체험 등록
-export const useCreateActivity = (teamId: string) =>
+export const useCreateActivity = () =>
   useCustomMutation<
     ActivityWithSubImagesAndSchedulesDto, // 반환 타입
     unknown, // 에러 타입
     CreateActivityBodyDto // 입력 데이터 타입
   >(
-    (activityData: CreateActivityBodyDto) =>
-      createActivity(teamId, activityData),
-    [["activities", teamId]]
+    (activityData: CreateActivityBodyDto) => createActivity(activityData),
+    [["activities"]]
   );
 
 // 체험 상세 조회
-export const useActivityDetail = (teamId: string, activityId: number) =>
+export const useActivityDetail = (activityId: number) =>
   useCustomQuery<
     ActivityWithSubImagesAndSchedulesDto, // 반환 타입
     unknown // 에러 타입
-  >(["activityDetail", teamId, activityId], () =>
-    fetchActivityDetail(teamId, activityId)
-  );
+  >(["activityDetail", activityId], () => fetchActivityDetail(activityId));
 
 // 체험 예약 생성
-export const useCreateReservation = (teamId: string) =>
+export const useCreateReservation = () =>
   useCustomMutation<
     ReservationResponseDto, // 반환 타입
     unknown, // 에러 타입
@@ -60,6 +54,6 @@ export const useCreateReservation = (teamId: string) =>
     }: {
       activityId: number;
       reservationData: CreateReservationBodyDto;
-    }) => createReservation(teamId, activityId, reservationData),
-    [["activities", teamId]]
+    }) => createReservation(activityId, reservationData),
+    [["activities"]]
   );

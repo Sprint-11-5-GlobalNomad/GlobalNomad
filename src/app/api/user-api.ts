@@ -30,7 +30,7 @@ export const updateMyDetails = async (updateData: UpdateUserBodyDto) => {
 };
 
 // 프로필 이미지 URL 생성
-export const uploadProfileImage = async (teamId: string, imageFile: File) => {
+export const uploadProfileImage = async (imageFile: File) => {
   const formData = new FormData();
   formData.append("image", imageFile);
 

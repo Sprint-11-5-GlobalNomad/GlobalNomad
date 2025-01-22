@@ -2,17 +2,17 @@ import {
   fetchMyReservations,
   cancelReservation,
   submitReservationReview,
-} from "../api/my-reservation-api";
+} from "../api/my-reservations-api";
 import { useCustomMutation, useCustomQuery } from "./react-query-util";
 
 // 내 예약 리스트 조회
-export const useMyReservations = (teamId: string, cursorId?: number) =>
-  useCustomQuery(["myReservations", teamId, cursorId], () =>
-    fetchMyReservations(teamId, cursorId)
+export const useMyReservations = (cursorId?: number) =>
+  useCustomQuery(["myReservations", cursorId], () =>
+    fetchMyReservations(cursorId)
   );
 
 // 예약 취소
-export const useCancelReservation = (teamId: string) =>
+export const useCancelReservation = () =>
   useCustomMutation(
     ({
       reservationId,
@@ -20,12 +20,12 @@ export const useCancelReservation = (teamId: string) =>
     }: {
       reservationId: number;
       status: { status: "canceled" };
-    }) => cancelReservation(teamId, reservationId, status),
-    [["myReservations", teamId]]
+    }) => cancelReservation(reservationId, status),
+    [["myReservations"]]
   );
 
 // 예약 리뷰 작성
-export const useSubmitReservationReview = (teamId: string) =>
+export const useSubmitReservationReview = () =>
   useCustomMutation(
     ({
       reservationId,
@@ -33,6 +33,6 @@ export const useSubmitReservationReview = (teamId: string) =>
     }: {
       reservationId: number;
       reviewData: { rating: number; content: string };
-    }) => submitReservationReview(teamId, reservationId, reviewData),
-    [["myReservations", teamId]]
+    }) => submitReservationReview(reservationId, reviewData),
+    [["myReservations"]]
   );
