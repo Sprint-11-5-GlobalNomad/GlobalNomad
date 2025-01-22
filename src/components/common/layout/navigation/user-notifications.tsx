@@ -5,13 +5,52 @@ import Image from "next/image";
 import { useState } from "react";
 import CloseButton from "../../icons/close-button";
 
-interface UserNotificationsProps {
-  notifications?: string[];
+interface Notification {
+  id: number;
+  userId: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
+}
+
+interface NotificationResponse {
+  cursorId: number;
+  totalCount: number;
+  notifications: Notification[];
 }
 
 export default function UserNotifications({
-  notifications = ["알림 1 테스트", "알림 2 테스트"],
-}: UserNotificationsProps) {
+  notifications = [
+    {
+      id: 1,
+      userId: 123,
+      content:
+        "함께하면 즐거운 스트릿 댄스(2023-01-14 15:00~18:00) 예약이 승인되었어요.",
+      createdAt: "2025-01-22T07:46:32.165Z",
+      updatedAt: "2025-01-22T07:46:32.165Z",
+      deletedAt: "2025-01-22T07:46:32.165Z",
+    },
+    {
+      id: 2,
+      userId: 124,
+      content:
+        "함께하면 즐거운 스트릿 댄스(2023-01-14 15:00~18:00) 예약이 거절되었어요.",
+      createdAt: "2025-01-21T07:46:32.165Z",
+      updatedAt: "2025-01-21T07:46:32.165Z",
+      deletedAt: "2025-01-21T07:46:32.165Z",
+    },
+    {
+      id: 3,
+      userId: 125,
+      content:
+        "함께하면 즐거운 스트릿 댄스(2023-01-14 15:00~18:00) 예약이 새로 들어왔어요.",
+      createdAt: "2025-01-21T07:46:32.165Z",
+      updatedAt: "2025-01-21T07:46:32.165Z",
+      deletedAt: "2025-01-21T07:46:32.165Z",
+    },
+  ],
+}: NotificationResponse) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = UseOutsideClick(() => setIsOpen(false));
 
@@ -35,12 +74,18 @@ export default function UserNotifications({
             <CloseButton theme="default" size="small" onClick={handleClose} />
           </div>
           <ul className="flex flex-col">
-            <span className=""></span>
-            <CloseButton theme="gray" size="small" onClick={handleClose} />
+            <div className="flex">
+              <span className="">.</span>
+              {/* 예약 상태에 따라 색상 변하는 점 구현 */}
+              <CloseButton theme="gray" size="small" onClick={handleClose} />
+            </div>
             {notifications.map((notification) => (
-              <li key={notification} className="bg-white">
-                {notification}
-              </li>
+              <div className="bg-white">
+                <li key={notification.id} className="text-md font-regular">
+                  {notification.content}
+                </li>
+                {/* <time key={notification} className="text-xs font-regular color-gray-600">몇분 전</time> */}
+              </div>
             ))}
           </ul>
         </div>
