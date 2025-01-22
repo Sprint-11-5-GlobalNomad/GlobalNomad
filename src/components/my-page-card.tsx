@@ -46,7 +46,7 @@ export default function UserProfileSidebar() {
   };
 
   return (
-    <div className="w-[24rem] p-[1.5rem] bg-white border border-gray-300 rounded-[0.75rem] space-y-[1.5rem]">
+    <div className="w-[38rem] h-[43rem] p-[2.4rem] bg-white border border-gray-300 rounded-[0.75rem] space-y-[1.5rem]">
       <div className="flex flex-col items-center">
         <div className="relative">
           <Image
@@ -81,12 +81,12 @@ export default function UserProfileSidebar() {
           </label>
         </div>
       </div>
-      <nav className="space-y-[0.5rem]">
+      <nav className="space-y-[0.8rem]">
         {menuItems.map((item) => (
           <Link
             href={item.link}
             key={item.label}
-            className={`flex items-center gap-[1rem] px-[1rem] py-[0.75rem] rounded-[0.75rem] text-[1.3rem] font-bold ${
+            className={`flex items-center gap-[1rem] h-[4.4rem] rounded-[0.75rem] text-[1.6rem] font-bold ${
               activeMenu === item.link
                 ? "bg-green-light text-black"
                 : "text-gray-600 hover:bg-gray-50"
@@ -98,7 +98,7 @@ export default function UserProfileSidebar() {
               alt={`${item.label} 아이콘`}
               width={24}
               height={24}
-              className="h-[1.5rem] w-[1.5rem]"
+              className="h-[2.4rem] w-[2.4rem]"
             />
             {item.label}
           </Link>

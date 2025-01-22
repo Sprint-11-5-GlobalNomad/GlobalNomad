@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ButtonSizes } from "../types/button-type";
+import { ButtonSizes } from "@/types/button-type";
 
 interface ButtonProps {
   type: keyof typeof ButtonSizes; // 버튼 역할
@@ -26,15 +26,14 @@ const Button: React.FC<ButtonProps> = ({
   useEffect(() => {
     const updateSize = () => {
       const width = window.innerWidth;
-      if (width >= 1440) {
+      if (width >= 1024) {
         setCurrentSize("lg");
-      } else if (width >= 744 && width <= 1439) {
+      } else if (width >= 744 && width <= 1023) {
         setCurrentSize("md");
       } else {
         setCurrentSize("sm");
       }
     };
-
     updateSize(); // 초기 화면 크기 설정
     window.addEventListener("resize", updateSize); // 화면 크기 변경 감지
     return () => window.removeEventListener("resize", updateSize); // 이벤트 제거
@@ -47,7 +46,7 @@ const Button: React.FC<ButtonProps> = ({
     return null;
   }
 
-  const { width, height, radius } = buttonSize;
+  const { width, height, radius, font_size } = buttonSize;
 
   const baseStyle: React.CSSProperties = {
     display: "inline-flex",
@@ -56,7 +55,7 @@ const Button: React.FC<ButtonProps> = ({
     width: `${width}px`,
     height: `${height}px`,
     borderRadius: `${radius}px`,
-    fontSize: "16px",
+    fontSize: `${font_size}px`,
     fontWeight: "bold",
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.6 : 1,
