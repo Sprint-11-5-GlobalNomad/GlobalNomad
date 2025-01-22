@@ -21,7 +21,11 @@ export const useCustomQuery = <TData, TError = unknown>(
     throw new Error("queryFn이 필요하며 함수이어야 합니다.");
   }
 
-  return useQuery<TData, TError>(queryKey, queryFn, options); // 반환 시 타입 수정
+  return useQuery({
+    ...options,
+    queryKey,
+    queryFn,
+  });
 };
 
 // 공통 useMutation 함수

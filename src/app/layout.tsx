@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "../app/react-query/react-query";
+import Navbar from "@/components/common/layout/navbar";
 import Footer from "@/components/common/layout/footer";
+import QueryProvider from "./react-query/query-provider";
 
 export const metadata: Metadata = {
   title: "GlobalNomad",
@@ -16,13 +16,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
-      <body>
-        <QueryClientProvider client={queryClient}>
-          <main>{children}</main>
-        </QueryClientProvider>
-        <Footer />
-      </body>
-    </html>
+    <>
+      <html lang="ko">
+        <body>
+          <Navbar />
+          <QueryProvider>
+            <main>{children}</main>
+          </QueryProvider>
+          <Footer />
+        </body>
+      </html>
+    </>
   );
 }
