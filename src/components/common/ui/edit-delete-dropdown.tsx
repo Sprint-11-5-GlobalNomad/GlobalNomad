@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 interface EditDeleteDropdown {
   EditRoute: string;
@@ -32,7 +32,7 @@ export default function EditDeleteDropdown({
           w-[16rem] border-solid border-[0.1rem] border-gray-200 z-50"
         >
           <ul className="flex flex-col">
-            <Link to={EditRoute}>
+            <Link href={EditRoute}>
               <li
                 className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
               border-b-[0.1rem] border-solid border-gray-200 py-[1.8rem]"
