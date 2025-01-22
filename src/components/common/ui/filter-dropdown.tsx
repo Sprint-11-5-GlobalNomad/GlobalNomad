@@ -43,7 +43,7 @@ export default function FilterDropdown({
       </div>
       {isOpen && (
         <div
-          className={`absolute right-0 mt-[0.8rem] bg-white shadow-lg overflow-hidden rounded-xl
+          className={`absolute right-0 mt-[0.8rem] bg-white shadow-lg overflow-hidden rounded-[0.6rem]
         border-solid border-[0.1rem] border-gray-200 z-50 ${sizeClasses}`}
         >
           <ul className="flex flex-col h-full">

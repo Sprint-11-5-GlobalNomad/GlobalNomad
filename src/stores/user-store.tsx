@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { UserServiceResponseDto } from "./types/user-schemas";
+import { UserServiceResponseDto } from "../app/types/user-schemas";
 
 interface UserState {
   currentUser: UserServiceResponseDto | null; // 현재 로그인된 사용자 정보
@@ -10,7 +10,8 @@ interface UserState {
 
 export const useUserStore = create<UserState>((set) => ({
   currentUser: null,
-  isAuthenticated: false,
+  isAuthenticated: true,
+  // 테스트 위해 임시로 true 처리
 
   // 로그인 시 호출. 사용자 정보를 상태에 저장하고 인증 상태를 true로 설정합니다.
   login: (user) => set({ currentUser: user, isAuthenticated: true }),

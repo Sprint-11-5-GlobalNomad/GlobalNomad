@@ -2,7 +2,7 @@ import { create } from "zustand";
 import {
   ReservationResponseDto,
   UpdateMyReservationBodyDto,
-} from "./types/reservation-schemas";
+} from "../app/types/reservation-schemas";
 
 interface ReservationState {
   userReservations: ReservationResponseDto[]; // 사용자의 예약 목록

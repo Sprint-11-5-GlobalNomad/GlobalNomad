@@ -1,6 +1,6 @@
 "use client";
 import { useReservationStore } from "@/stores/reservation-store";
-import { ReservationResponseDto } from "@/stores/types/reservation-schemas";
+import { ReservationResponseDto } from "@/app/types/reservation-schemas";
 import { useEffect } from "react";
 
 export default function MyReservation() {
