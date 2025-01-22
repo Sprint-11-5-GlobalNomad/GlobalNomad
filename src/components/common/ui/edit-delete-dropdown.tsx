@@ -17,7 +17,7 @@ export default function EditDeleteDropdown({
 
   return (
     <div className="relative inline-block" onClick={() => setIsOpen(!isOpen)}>
-      <button className="p-2 hover:bg-gray-100 rounded-full">
+      <button className="p-2 hover:bg-gray-100 rounded-full mobile:w-[3.2rem] mobile:h-[3.2rem]">
         <Image
           src="/image/meatball.svg"
           alt="수정하기 삭제하기 드롭다운"
