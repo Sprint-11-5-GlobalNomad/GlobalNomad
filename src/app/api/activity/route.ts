@@ -5,8 +5,6 @@ import { AvailableSchedule } from "@/types/activities-type";
 import { requestor } from "@/app/api/config/requestor";
 import { ActivityListResponse } from "@/types/activities-type";
 
-const BASE_URL = "https://sp-globalnomad-api.vercel.app/4-17";
-
 //체험 리스트조회
 export const getActivities = async (
   cursorId?: number,
