@@ -6,10 +6,10 @@ import {
 import { instance } from "./base-api";
 
 // 로그인
-export const login = async (
-  teamId: string,
-  credentials: { email: string; password: string }
-) => {
+export const login = async (credentials: {
+  email: string;
+  password: string;
+}) => {
   const response = await instance.post<{
     user: {
       id: number;
@@ -21,34 +21,30 @@ export const login = async (
     };
     refreshToken: string;
     accessToken: string;
-  }>(`/${teamId}/auth/login`, credentials);
+  }>(`/auth/login`, credentials);
   return response.data;
 };
 
 // 토큰 재발급
-export const refreshToken = async (teamId: string) => {
+export const refreshToken = async () => {
   const response = await instance.post<{
     refreshToken: string;
     accessToken: string;
-  }>(`/${teamId}/auth/tokens`);
+  }>(`/auth/tokens`);
   return response.data;
 };
 
 // Oauth App 등록/수정
-export const registerOauthApp = async (
-  teamId: string,
-  appData: { appKey: string; provider: "google" | "kakao" }
-) => {
-  const response = await instance.post<OauthApp>(
-    `/${teamId}/oauth/apps`,
-    appData
-  );
+export const registerOauthApp = async (appData: {
+  appKey: string;
+  provider: "google" | "kakao";
+}) => {
+  const response = await instance.post<OauthApp>(`/oauth/apps`, appData);
   return response.data;
 };
 
 // 간편 회원가입
 export const signUpWithOauth = async (
-  teamId: string,
   provider: "google" | "kakao",
   signUpData: SignUpWithOauthRequestBody
 ) => {
@@ -63,13 +59,12 @@ export const signUpWithOauth = async (
     };
     refreshToken: string;
     accessToken: string;
-  }>(`/${teamId}/oauth/sign-up/${provider}`, signUpData);
+  }>(`/oauth/sign-up/${provider}`, signUpData);
   return response.data;
 };
 
 // 간편 로그인
 export const signInWithOauth = async (
-  teamId: string,
   provider: "google" | "kakao",
   signInData: SignInWithOauthRequestBody
 ) => {
@@ -84,6 +79,6 @@ export const signInWithOauth = async (
     };
     refreshToken: string;
     accessToken: string;
-  }>(`/${teamId}/oauth/sign-in/${provider}`, signInData);
+  }>(`/oauth/sign-in/${provider}`, signInData);
   return response.data;
 };

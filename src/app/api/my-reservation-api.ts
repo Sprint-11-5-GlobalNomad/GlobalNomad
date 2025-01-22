@@ -3,7 +3,6 @@ import { ReservationResponseDto } from "../types/reservation-schemas";
 
 // 내 예약 리스트 조회
 export const fetchMyReservations = async (
-  teamId: string,
   cursorId?: number,
   size = 10,
   status?: "pending" | "confirmed" | "declined" | "canceled" | "completed"
@@ -12,18 +11,17 @@ export const fetchMyReservations = async (
     cursorId: number;
     reservations: ReservationResponseDto[];
     totalCount: number;
-  }>(`/${teamId}/my-reservations`, { params: { cursorId, size, status } });
+  }>(`/my-reservations`, { params: { cursorId, size, status } });
   return response.data;
 };
 
 // 내 예약 취소
 export const cancelReservation = async (
-  teamId: string,
   reservationId: number,
   status: { status: "canceled" }
 ) => {
   const response = await instance.patch<ReservationResponseDto>(
-    `/${teamId}/my-reservations/${reservationId}`,
+    `/my-reservations/${reservationId}`,
     status
   );
   return response.data;
@@ -31,7 +29,6 @@ export const cancelReservation = async (
 
 // 내 예약 리뷰 작성
 export const submitReservationReview = async (
-  teamId: string,
   reservationId: number,
   reviewData: { rating: number; content: string }
 ) => {
@@ -43,6 +40,6 @@ export const submitReservationReview = async (
     activityId: number;
     createdAt: string;
     updatedAt: string;
-  }>(`/${teamId}/my-reservations/${reservationId}/reviews`, reviewData);
+  }>(`/my-reservations/${reservationId}/reviews`, reviewData);
   return response.data;
 };

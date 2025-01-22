@@ -11,44 +11,34 @@ import {
 } from "../types/reservation-schemas";
 
 // 체험 리스트 조회
-export const fetchActivities = async (
-  teamId: string,
-  filters: FindActivitiesQueryDto
-) => {
+export const fetchActivities = async (filters: FindActivitiesQueryDto) => {
   const response = await instance.get<{
     cursorId: number;
     totalCount: number;
     activities: ActivityBasicDto[];
-  }>(`/${teamId}/activities`, { params: filters });
+  }>(`/activities`, { params: filters });
   return response.data;
 };
 
 // 체험 등록
-export const createActivity = async (
-  teamId: string,
-  activityData: CreateActivityBodyDto
-) => {
+export const createActivity = async (activityData: CreateActivityBodyDto) => {
   const response = await instance.post<ActivityWithSubImagesAndSchedulesDto>(
-    `/${teamId}/activities`,
+    `/activities`,
     activityData
   );
   return response.data;
 };
 
 // 체험 상세 조회
-export const fetchActivityDetail = async (
-  teamId: string,
-  activityId: number
-) => {
+export const fetchActivityDetail = async (activityId: number) => {
   const response = await instance.get<ActivityWithSubImagesAndSchedulesDto>(
-    `/${teamId}/activities/${activityId}`
+    `/activities/${activityId}`
   );
   return response.data;
 };
 
 // 체험 예약 가능일 조회
 export const fetchAvailableSchedules = async (
-  teamId: string,
   activityId: number,
   year: string,
   month: string
@@ -58,7 +48,7 @@ export const fetchAvailableSchedules = async (
       date: string;
       times: { id: number; startTime: string; endTime: string }[];
     }[]
-  >(`/${teamId}/activities/${activityId}/available-schedule`, {
+  >(`/activities/${activityId}/available-schedule`, {
     params: { year, month },
   });
   return response.data;
@@ -66,7 +56,6 @@ export const fetchAvailableSchedules = async (
 
 // 체험 리뷰 조회
 export const fetchActivityReviews = async (
-  teamId: string,
   activityId: number,
   page = 1,
   size = 3
@@ -83,7 +72,7 @@ export const fetchActivityReviews = async (
       createdAt: string;
       updatedAt: string;
     }[];
-  }>(`/${teamId}/activities/${activityId}/reviews`, { params: { page, size } });
+  }>(`/activities/${activityId}/reviews`, { params: { page, size } });
   return response.data;
 };
 
@@ -93,7 +82,7 @@ export const uploadActivityImage = async (teamId: string, imageFile: File) => {
   formData.append("image", imageFile);
 
   const response = await instance.post<{ activityImageUrl: string }>(
-    `/${teamId}/activities/image`,
+    `/activities/image`,
     formData,
     { headers: { "Content-Type": "multipart/form-data" } }
   );
@@ -102,12 +91,11 @@ export const uploadActivityImage = async (teamId: string, imageFile: File) => {
 
 // 체험 예약 신청
 export const createReservation = async (
-  teamId: string,
   activityId: number,
   reservationData: CreateReservationBodyDto
 ) => {
   const response = await instance.post<ReservationResponseDto>(
-    `/${teamId}/activities/${activityId}/reservations`,
+    `/activities/${activityId}/reservations`,
     reservationData
   );
   return response.data;

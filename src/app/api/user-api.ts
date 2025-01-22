@@ -6,32 +6,24 @@ import {
 } from "../types/user-schemas";
 
 // 회원가입
-export const createUser = async (
-  teamId: string,
-  userData: CreateUserBodyDto
-) => {
+export const createUser = async (userData: CreateUserBodyDto) => {
   const response = await instance.post<UserServiceResponseDto>(
-    `/${teamId}/users`,
+    `/users`,
     userData
   );
   return response.data;
 };
 
 // 내 정보 조회
-export const fetchMyDetails = async (teamId: string) => {
-  const response = await instance.get<UserServiceResponseDto>(
-    `/${teamId}/users/me`
-  );
+export const fetchMyDetails = async () => {
+  const response = await instance.get<UserServiceResponseDto>(`/users/me`);
   return response.data;
 };
 
 // 내 정보 수정
-export const updateMyDetails = async (
-  teamId: string,
-  updateData: UpdateUserBodyDto
-) => {
+export const updateMyDetails = async (updateData: UpdateUserBodyDto) => {
   const response = await instance.patch<UserServiceResponseDto>(
-    `/${teamId}/users/me`,
+    `/users/me`,
     updateData
   );
   return response.data;
@@ -43,7 +35,7 @@ export const uploadProfileImage = async (teamId: string, imageFile: File) => {
   formData.append("image", imageFile);
 
   const response = await instance.post<{ profileImageUrl: string }>(
-    `/${teamId}/users/me/image`,
+    `/users/me/image`,
     formData,
     { headers: { "Content-Type": "multipart/form-data" } }
   );
