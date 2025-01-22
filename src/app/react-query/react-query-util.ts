@@ -8,20 +8,25 @@ import {
 } from "@tanstack/react-query";
 
 // 공통 useQuery 함수
-export const useCustomQuery = <TData, TError = unknown>(
-  queryKey: QueryKey,
-  queryFn: () => Promise<TData>,
-  options?: Omit<UseQueryOptions<TData, TError>, "queryKey" | "queryFn"> // options 타입 수정
+export const useCustomQuery = <
+  TQueryFnData,
+  TError = unknown,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+>(
+  queryKey: TQueryKey,
+  queryFn: () => Promise<TQueryFnData>,
+  options?: Partial<UseQueryOptions<TQueryFnData, TError, TData, TQueryKey>>
 ) => {
   if (!queryKey || !Array.isArray(queryKey)) {
     throw new Error("queryKey가 필요하며 배열이어야 합니다.");
   }
 
-  if (!queryFn) {
-    throw new Error("queryFn이 필요하며 함수이어야 합니다.");
-  }
-
-  return useQuery<TData, TError>(queryKey, queryFn, options); // 반환 시 타입 수정
+  return useQuery({
+    ...options,
+    queryKey,
+    queryFn,
+  });
 };
 
 // 공통 useMutation 함수
