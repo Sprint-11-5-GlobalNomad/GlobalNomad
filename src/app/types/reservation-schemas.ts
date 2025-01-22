@@ -6,7 +6,7 @@ export interface ReservationResponseDto {
   activity: {
     bannerImageUrl: string;
     title: string;
-    id: 0;
+    id: number;
   };
   scheduleId: number;
   status: "pending" | "confirmed" | "declined" | "canceled" | "completed";
