@@ -2,15 +2,16 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface EditDeleteDropdown {
-  onEdit: () => void;
+  EditRoute: string;
   onDelete: () => void;
   // http://localhost:3000/test 에서 드롭다운 펼쳐보려면 onEdit? 이런 식으로 해주면 됨.
 }
 
 export default function EditDeleteDropdown({
-  onEdit,
+  EditRoute,
   onDelete,
 }: EditDeleteDropdown) {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,13 +32,14 @@ export default function EditDeleteDropdown({
           w-[16rem] border-solid border-[0.1rem] border-gray-200 z-50"
         >
           <ul className="flex flex-col">
-            <li
-              onClick={onEdit}
-              className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
+            <Link to={EditRoute}>
+              <li
+                className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
               border-b-[0.1rem] border-solid border-gray-200 py-[1.8rem]"
-            >
-              수정하기
-            </li>
+              >
+                수정하기
+              </li>
+            </Link>
             <li
               onClick={onDelete}
               className="w-full text-lg text-center font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
