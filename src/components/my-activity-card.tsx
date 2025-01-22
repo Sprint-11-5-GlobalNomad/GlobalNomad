@@ -26,17 +26,17 @@ async function canDeleteActivity(activityId: number): Promise<boolean> {
 }
 
 export function MyActivityCard(ActivityProps: ActivityCardProps) {
-  const [ableDeleting, setAbleDeleting] = useState(false);
+  const [isDeleteable, setIsDeleteAble] = useState(false);
 
   async function handleDelete() {
-    if (ableDeleting) return;
-    setAbleDeleting(true);
+    if (isDeleteable) return;
+    setIsDeleteAble(true);
 
     const canDelete = await canDeleteActivity(ActivityProps.id);
 
     if (!canDelete) {
       alert("삭제할 수 없습니다.");
-      setAbleDeleting(false);
+      setIsDeleteAble(false);
       return;
     }
     try {
@@ -53,7 +53,7 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
       console.error("Error deleting activity:", error);
       alert("체험 삭제 중 오류가 발생했습니다.");
     } finally {
-      setAbleDeleting(false);
+      setIsDeleteAble(false);
     }
   }
 
@@ -86,7 +86,7 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
         </div>
         <div className="flex justify-between items-center mt-[0.6rem]">
           <div className="text-[1.6rem] mobile:text-[1.6rem] tablet:text-[2rem] desktop:text-[2rem] leading-[2.4rem] mobile:leading-[2.4rem] desktop:leading-[3.2rem] font-bold text-gray-900">
-            ₩{ActivityProps.price.toLocaleString()}
+            ₩{ActivityProps.price.toLocaleString()} / 인
           </div>
           <EditDeleteDropdown
             onDelete={handleDelete}
