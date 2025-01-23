@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "GlobalNomad",
   description: "당신의 일상을 특별하게 만드는 한 번의 클릭",
   icons: "/logo.svg",
+  viewport: "width=device-width, initial-scale=1.0",
 };
 
 export default function RootLayout({
