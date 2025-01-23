@@ -84,7 +84,7 @@ export default function UserNotifications() {
         <div
           className="flex flex-col w-[36.8rem] h-[35.6rem] 
         border rounded-[1rem] border-gray-400 bg-green-light shadow-notifications 
-        px-[2rem] py-[2.4rem] gap-[1.6rem]
+        px-[2rem] py-[2.4rem] gap-[1.6rem] overflow-scroll
         absolute left-[-2rem] transform -translate-x-1/2 top-[5.6rem]
         mobile:w-full mobile:h-full mobile:py-[4rem] mobile:top-0 mobile:left-0 
         mobile:rounded-[0rem] mobile:transform-none mobile:fixed"
