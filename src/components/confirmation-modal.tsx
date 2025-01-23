@@ -23,28 +23,30 @@ export function ConfirmationModal({
       onClick={onClose}
     >
       <div
-        className="bg-white w-[18.625rem] h-[11.5rem] rounded-[0.75rem] flex flex-col items-center justify-between p-[1rem] shadow-lg"
+        className="bg-white w-[29.8rem] h-[18.4rem] rounded-[0.75rem] flex flex-col items-center justify-between p-[1rem] shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-center items-center mb-[0.75rem]">
           <Image
             src="/image/check.svg"
             alt="체크 아이콘"
-            className="h-[1.5rem] w-[1.5rem]"
+            width={24}
+            height={24}
+            className="h-[2.4rem] w-[2.4rem]"
           />
         </div>
-        <p className="text-center text-[0.9rem] font-medium mb-[1.25rem]">
+        <p className="text-center text-[1.6rem] font-medium mb-[1.25rem]">
           {message}
         </p>
         <div className="flex justify-center gap-[1rem] w-full">
           <button
-            className="w-[5rem] h-[2.25rem] border border-black text-black rounded-[0.375rem] text-[0.875rem]"
+            className="w-[8rem] h-[3.8rem] border border-black text-black rounded-[0.375rem] text-[1.4rem]"
             onClick={onClose}
           >
             아니요
           </button>
           <button
-            className="w-[5rem] h-[2.25rem] bg-nomad-black text-white rounded-[0.375rem] text-[0.875rem]"
+            className="w-[8rem] h-[3.8rem] bg-nomad-black text-white rounded-[0.375rem] text-[1.4rem]"
             onClick={onConfirm}
           >
             취소하기
