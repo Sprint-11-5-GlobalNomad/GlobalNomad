@@ -1,9 +1,12 @@
 import Button from "@/components/common/ui/button";
+import FilterDropdown from "@/components/common/ui/filter-dropdown";
+import SelectDropdown from "@/components/common/ui/select-dropdown";
 import Image from "next/image";
 import React from "react";
 
 export default function Home() {
   return (
+    // 섹션 별로 컴포넌트화 해야 함
     <div>
       {/* 상단 배너 */}
       <div>
@@ -14,26 +17,89 @@ export default function Home() {
           height={550}
           quality={100}
         />
-        <h1 className="text-[6.8rem] leading-[8.115rem] font-bold text-white">
-          상단 배너 문구
-        </h1>
-        <span className="text-2xl font-bold">2월의 인기 체험 BEST 🔥</span>
+        <div>
+          <h1 className="text-[6.8rem] leading-[8.115rem] font-bold text-white">
+            상단 배너 문구
+          </h1>
+          <p className="text-2xl font-bold">2월의 인기 체험 BEST 🔥</p>
+        </div>
       </div>
 
       {/* 검색 영역 */}
       <div>
         <h2>무엇을 체험하고 싶으신가요?</h2>
         <div>
-          <Button type="button" label="체험 검색하기 버튼">
-            검색하기
-          </Button>
+          {/* absolute 로 겹쳐넣기? */}
+          <Image
+            src="/image/search.svg"
+            alt="검색하기 아이콘"
+            width={48}
+            height={48}
+          />
+          <input placeholder="내가 원하는 체험은" />
+          <Button type="search" label="검색하기" variant="default" />
         </div>
       </div>
 
-      <div className="text-[5rem]">함께 배우면 즐거운 스트릿 댄스</div>
-      <div className="text-[1.6rem]">무엇을 체험하고 싶으신가요?</div>
-      <div className="text-[2rem]">인기 체험</div>
-      <div className="text-[2rem]">모든 체험</div>
+      {/* 인기 체험 목록 */}
+      <div>
+        <div>
+          <h2>🔥 인기 체험</h2>
+          <button>
+            <Image
+              src="/image/unactivated_left_arrow.svg"
+              alt="인기체험 이전 목록"
+              width={44}
+              height={44}
+            />
+          </button>
+          <button>
+            <Image
+              src="/image/activated_right_arrow.svg"
+              alt="인기체험 다음 목록"
+              width={44}
+              height={44}
+            />
+          </button>
+        </div>
+        <div>
+          {/* map 배열로 감싸주기 */}
+          <Image
+            src="/image/dance.svg"
+            alt="스트릿 댄스 체험 이미지"
+            width={384}
+            height={384}
+          />
+          <ul>
+            <Image
+              src="/image/rating-star.svg"
+              alt="평균 별점 아이콘"
+              width={18}
+              height={18}
+            />
+            <p>4.9 (793)</p>
+            {/* 251px 넘으면 overflow */}
+            {/* li 태그 이렇게 하면 괜찮으려나? */}
+            <li>함께 배우면 즐거운 스트릿 댄스</li>
+            <p>
+              ₩ <span>/인</span>
+            </p>
+          </ul>
+        </div>
+      </div>
+
+      {/* 필터링 섹션 */}
+      <div>
+        <div></div>
+      </div>
+
+      {/* 모든 체험 목록 */}
+      <div>
+        <div>
+          <h2>🛼 모든 체험</h2>
+        </div>
+      </div>
+
       <div className="text-[1.4rem]">1 2 3 4 5</div>
     </div>
   );
