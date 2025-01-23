@@ -5,15 +5,12 @@ import Image from "next/image";
 import { useState } from "react";
 import { foramtTime } from "@/utils/time-utils";
 import { highlightText } from "@/utils/higlight-text";
+import { useDeleteNotification } from "@/app/react-query/notification-state";
+import { AxiosError } from "axios";
+// import { fetchNotifications } from "@/app/api/my-notifications-api";
 // import { useNotifications } from "@/app/react-query/notification-state";
 
 export default function UserNotifications() {
-  const [isOpen, setIsOpen] = useState(false);
-  const ref = UseOutsideClick(() => setIsOpen(false));
-
-  // const { data, isLoading, error } = useNotifications();
-
-  // 목업 데이터를 직접 설정
   const mockData = {
     totalCount: 3,
     notifications: [
@@ -53,7 +50,15 @@ export default function UserNotifications() {
     ],
   };
 
-  function getStatusColor(content: string) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState(mockData.notifications);
+  const ref = UseOutsideClick(() => setIsOpen(false));
+
+  // const { data, isLoading, error } = useNotifications();
+
+  // 목업 데이터를 직접 설정
+
+  function getNotificationStatusColor(content: string) {
     if (content.includes("승인")) {
       return "bg-blue";
     } else if (content.includes("거절")) {
@@ -62,6 +67,35 @@ export default function UserNotifications() {
       return "bg-green";
     }
   }
+
+  // const {
+  //   data,
+  //   error,
+  //   isLoading,
+  //   isFetchingNextPage,
+  //   hasNextPage,
+  //   fetchNextPage,
+  // } = useInfiniteQuery(["notifications"], fetchNotifications, {
+  //   getNextPageParam: (lastPage, allPages) => {
+  //     return lastPage.nextPage || false;
+  //   },
+  // });
+
+  const deleteNotification = useDeleteNotification();
+
+  const handleDelete = (id: number) => {
+    deleteNotification.mutate(id, {
+      onSuccess: () => {
+        setNotifications((prevNotifications) =>
+          prevNotifications.filter((notification) => notification.id !== id)
+        );
+        alert("알림 삭제 성공");
+      },
+      onError: (error: AxiosError) => {
+        alert(`알림 삭제 실패: ${error.message}`);
+      },
+    });
+  };
 
   // 테스트 후 목 데이터와 함께 삭제해야 함
   const isLoading = false;
@@ -84,7 +118,7 @@ export default function UserNotifications() {
         <div
           className="flex flex-col w-[36.8rem] h-[35.6rem] 
         border rounded-[1rem] border-gray-400 bg-green-light shadow-notifications 
-        px-[2rem] py-[2.4rem] gap-[1.6rem] overflow-scroll
+        px-[2rem] py-[2.4rem] gap-[1.6rem] overflow-auto
         absolute left-[-2rem] transform -translate-x-1/2 top-[5.6rem]
         mobile:w-full mobile:h-full mobile:py-[4rem] mobile:top-0 mobile:left-0 
         mobile:rounded-[0rem] mobile:transform-none mobile:fixed"
@@ -101,6 +135,7 @@ export default function UserNotifications() {
               <div className="flex-between absoulte">
                 <span className="text-xl font-bold">
                   알림 {mockData?.totalCount}개
+                  {/* 알림 {data?.pages?.[0]?.totalCount || 0}개 */}
                 </span>
                 <Image
                   src="/image/btn_X.svg"
@@ -112,7 +147,8 @@ export default function UserNotifications() {
               </div>
 
               <ul className="flex flex-col gap-[0.8rem]">
-                {mockData?.notifications.map((notification) => (
+                {notifications.map((notification) => (
+                  // {data?.pages?.map((page, pageIndex) => <React.Fragment key={pageIndex}>
                   <div
                     key={notification.id}
                     className="bg-white border border-gray-400 rounded-[0.5rem]
@@ -121,13 +157,14 @@ export default function UserNotifications() {
                     <div className="flex justify-between">
                       <div
                         className={`w-[0.5rem] h-[0.5rem] rounded-full 
-                          ${getStatusColor(notification.content)}`}
+                          ${getNotificationStatusColor(notification.content)}`}
                       ></div>
                       <Image
                         src="/image/btn_X_gray_medium.svg"
                         alt="알림 내용 닫기 버튼"
                         width={24}
                         height={24}
+                        onClick={() => handleDelete(notification.id)}
                       />
                     </div>
 
@@ -141,6 +178,7 @@ export default function UserNotifications() {
                     </div>
                   </div>
                 ))}
+                {/* </React.Fragment> */}
               </ul>
             </>
           )}

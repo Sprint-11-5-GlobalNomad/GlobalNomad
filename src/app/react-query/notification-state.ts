@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import {
   fetchNotifications,
   deleteNotification,
@@ -18,7 +19,7 @@ export const useNotifications = (cursorId?: number) =>
 
 // 알림 삭제
 export const useDeleteNotification = () =>
-  useCustomMutation(
+  useCustomMutation<void, AxiosError, number>(
     (notificationId: number) => deleteNotification(notificationId),
     [["notifications"]]
   );
