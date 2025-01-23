@@ -85,11 +85,14 @@ export default function UserNotifications() {
       />
 
       {isOpen && (
+        // 무한 스크롤 구현하며 기본 높이 수정 필요
         <div
-          className="flex flex-col w-[36.8rem] min-h-[20.6rem] max-h-[49.4rem] 
+          className="flex flex-col w-[36.8rem] h-[35.6rem] 
         border rounded-[1rem] border-gray-400 bg-green-light shadow-notifications 
         px-[2rem] py-[2.4rem] gap-[1.6rem]
-        absolute left-[-2rem] transform -translate-x-1/2 top-[5.6rem]"
+        absolute left-[-2rem] transform -translate-x-1/2 top-[5.6rem]
+        mobile:w-full mobile:h-full mobile:py-[4rem] mobile:top-0 mobile:left-0 
+        mobile:rounded-[0rem] mobile:transform-none mobile:fixed"
         >
           {isLoading ? (
             <span className="text-lg text-center">로딩 중...</span>
