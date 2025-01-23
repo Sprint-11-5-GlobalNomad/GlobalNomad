@@ -111,10 +111,10 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
       onClick={onClose}
     >
       <div
-        className="bg-white flex flex-col tablet:rounded-[2.4rem] font-pretendard desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] gap-[2.4rem] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]"
+        className="bg-white flex flex-col tablet:rounded-[2.4rem] font-pretendard desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-[4.1rem]">
           <h1 className="text-[2.4rem] font-bold leading-[3.2rem] mobile:text-[28px] mobile:leading-[26px]">
             후기 작성
           </h1>
@@ -122,53 +122,59 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
             <Image src="/image/btn_X.svg" alt="닫기" width={40} height={40} />
           </button>
         </div>
-        <div className="flex gap-4 mb-6">
-          <Image
-            src={props.activity.bannerImageUrl}
-            alt={props.activity.title}
-            width={126}
-            height={126}
-            className="rounded-[1.2rem] mobile:w-[100px] mobile:h-[100px]"
-          />
-          <div>
-            <h2 className="text-[2rem] font-bold leading-[3.2rem] mobile:text-[16px] mobile:leading-[26px]">
-              {props.activity.title}
-            </h2>
-            <p className="text-[1.8rem] font-normal leading-[2.6rem] mobile:text-[14px] mobile:leading-[24px]">
-              {props.date}ㆍ{props.startTime}-{props.endTime}ㆍ{props.headCount}
-              명
-            </p>
-            <hr className="mb-6" />
-            <div className="text-left text-[3.2rem] font-bold leading-[4.2rem] mb-6 mobile:text-[20px] mobile:leading-[23.87px]">
-              ₩{props.totalPrice}
+        <div className="flex flex-col gap-[2.4rem] mobile:gap-[1.2rem]">
+          <div className="flex gap-[2.4rem]">
+            <Image
+              src={props.activity.bannerImageUrl}
+              alt={props.activity.title}
+              width={126}
+              height={126}
+              className="rounded-[1.2rem] mobile:w-[100px] mobile:h-[100px]"
+            />
+            <div className="flex flex-col gap-[1.2rem]">
+              <h2 className="text-[2rem] font-bol mobile:text-[16px]">
+                {props.activity.title}
+              </h2>
+              <p className="text-[1.8rem] font-normalmobile:text-[14px]">
+                {props.date}ㆍ{props.startTime}-{props.endTime}ㆍ
+                {props.headCount}명
+              </p>
+              <hr className="mb-[0.4rem]" />
+              <div className="text-left text-[3.2rem] font-bold mb-6 mobile:text-[20px]">
+                ₩{props.totalPrice}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="flex justify-center gap-2 mb-6 w-[432px] h-[100px] mobile:w-[351px] mobile:h-[100px] items-center">
-          {[...Array(5)].map((_, index) => (
-            <div key={index} className="w-[54px] h-[50px]">
-              <Image
-                src={
-                  index < review.rating
-                    ? "/image/rating-star.svg"
-                    : "/image/rating-empty-star.svg"
-                }
-                alt={index < review.rating ? "선택된 별점" : "빈 별점"}
-                width={54}
-                height={50}
-                onClick={() => onStarClick(index)}
-                className="cursor-pointer"
-              />
-            </div>
-          ))}
+          <div className="flex justify-center gap-2 w-[432px] h-[100px] mobile:w-[351px] mobile:h-[100px] items-center">
+            {[...Array(5)].map((_, index) => (
+              <div key={index} className="w-[54px] h-[50px]">
+                <Image
+                  src={
+                    index < review.rating
+                      ? "/image/rating-star.svg"
+                      : "/image/rating-empty-star.svg"
+                  }
+                  alt={index < review.rating ? "선택된 별점" : "빈 별점"}
+                  width={54}
+                  height={50}
+                  onClick={() => onStarClick(index)}
+                  className="cursor-pointer"
+                />
+              </div>
+            ))}
+          </div>
+          <textarea
+            className="font-pretendard text-4xl w-[432px] h-[240px] p-2 border rounded-md resize-none mobile:w-[351px] mobile:h-[346px] mobile:rounded-[4px]"
+            placeholder="후기를 작성해주세요"
+            onChange={onChangeContent}
+          />
+          <Button
+            type="reviewSubmit"
+            label="작성하기"
+            onClick={onSubmitReview}
+          />
         </div>
-        <textarea
-          className="font-pretendard text-4xl w-[432px] h-[240px] p-2 border rounded-md resize-none mb-6 mobile:w-[351px] mobile:h-[346px] mobile:rounded-[4px]"
-          placeholder="후기를 작성해주세요"
-          onChange={onChangeContent}
-        />
-        <Button type="reviewSubmit" label="작성하기" onClick={onSubmitReview} />
       </div>
     </div>
   );
