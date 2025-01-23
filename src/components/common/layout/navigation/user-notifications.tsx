@@ -3,7 +3,6 @@
 import UseOutsideClick from "@/hooks/use-outside-click";
 import Image from "next/image";
 import { useState } from "react";
-import CloseButton from "../../icons/close-button";
 import { foramtTime } from "@/utils/time-utils";
 import { highlightText } from "@/utils/higlight-text";
 // import { useNotifications } from "@/app/react-query/notification-state";
@@ -68,10 +67,6 @@ export default function UserNotifications() {
   const isLoading = false;
   const error = null;
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
-
   // 알림 버튼 누를 때마다 데이터 가져오도록 설정 필요
 
   return (
@@ -107,7 +102,13 @@ export default function UserNotifications() {
                 <span className="text-xl font-bold">
                   알림 {mockData?.totalCount}개
                 </span>
-                <CloseButton size="small" onClick={handleClose} />
+                <Image
+                  src="/image/btn_X.svg"
+                  alt="알림창 닫기 버튼"
+                  width={24}
+                  height={24}
+                  onClick={() => setIsOpen(false)}
+                />
               </div>
 
               <ul className="flex flex-col gap-[0.8rem]">
@@ -122,8 +123,12 @@ export default function UserNotifications() {
                         className={`w-[0.5rem] h-[0.5rem] rounded-full 
                           ${getStatusColor(notification.content)}`}
                       ></div>
-                      {/* 예약 상태에 따라 색상 변하는 점 구현 */}
-                      <CloseButton theme="gray" size="small" />
+                      <Image
+                        src="/image/btn_X_gray_medium.svg"
+                        alt="알림 내용 닫기 버튼"
+                        width={24}
+                        height={24}
+                      />
                     </div>
 
                     <div>
