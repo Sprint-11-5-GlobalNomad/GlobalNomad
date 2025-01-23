@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ButtonSizes } from "@/types/button-type";
+import { ButtonSizes } from "@/app/types/button-type";
 
 interface ButtonProps {
   type: keyof typeof ButtonSizes; // 버튼 역할

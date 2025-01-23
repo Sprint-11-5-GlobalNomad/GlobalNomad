@@ -30,6 +30,8 @@ export function ConfirmationModal({
           <Image
             src="/image/check.svg"
             alt="체크 아이콘"
+            width={24}
+            height={24}
             className="h-[1.5rem] w-[1.5rem]"
           />
         </div>
