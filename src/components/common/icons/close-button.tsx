@@ -2,9 +2,9 @@ import Image from "next/image";
 
 interface CloseButtonProps {
   alt?: string;
-  size: "large" | "small";
-  theme: "default" | "gray";
-  onClick: () => void;
+  size?: "large" | "small";
+  theme?: "default" | "gray";
+  onClick?: () => void;
 }
 
 export default function CloseButton({
