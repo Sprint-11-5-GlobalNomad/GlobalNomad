@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Button from "./common/ui/button";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
+import { ReviewModal } from "@/app/profile/reservation/component/review-modal";
 
 type ReservationCardProps = Pick<
   ReservationResponseDto,
@@ -14,6 +15,7 @@ type ReservationCardProps = Pick<
   | "endTime"
   | "headCount"
   | "totalPrice"
+  | "id"
 >;
 
 export function MyReservationCard({
@@ -24,8 +26,10 @@ export function MyReservationCard({
   endTime,
   headCount,
   totalPrice,
+  id,
 }: ReservationCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const cancelReservationMutation = useCancelReservation();
 
   const handleCancelReservation = () => {
@@ -33,7 +37,7 @@ export function MyReservationCard({
       reservationId: activity.id,
       status: { status: "canceled" },
     });
-    setIsModalOpen(false);
+    setIsCancelModalOpen(false);
   };
 
   const getStatusClasses = (status: string) => {
@@ -107,7 +111,14 @@ export function MyReservationCard({
                 type="review"
                 label="예약 취소"
                 variant="outlined"
-                onClick={() => setIsModalOpen(true)} // 모달 열기
+                onClick={() => setIsCancelModalOpen(true)}
+              />
+            )}
+            {status === "completed" && (
+              <Button
+                type="review"
+                label="후기 작성"
+                onClick={() => setIsReviewModalOpen(true)}
               />
             )}
           </div>
@@ -115,10 +126,20 @@ export function MyReservationCard({
       </div>
 
       <ConfirmationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} // 모달 닫기
+        isOpen={isCancelModalOpen}
+        onClose={() => setIsCancelModalOpen(false)} // 모달 닫기
         onConfirm={handleCancelReservation} // 예약 취소
         message="정말 예약을 취소하시겠습니까?"
+      />
+      <ReviewModal
+        activity={activity}
+        date={date}
+        startTime={startTime}
+        endTime={endTime}
+        headCount={headCount}
+        totalPrice={totalPrice}
+        id={id}
+        isOpen={isReviewModalOpen}
       />
     </>
   );
