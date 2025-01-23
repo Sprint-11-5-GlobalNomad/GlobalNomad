@@ -1,11 +1,11 @@
 "use client";
 
 import Button from "@/components/common/ui/button";
-import { ReservationResponseDto } from "@/stores/types/reservation-schemas";
+import { ReservationResponseDto } from "@/app/types/reservation-schemas";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { instance } from "@/app/api/api";
 import { AxiosError } from "axios";
+import { useSubmitReservationReview } from "@/app/react-query/reservation-state";
 
 type ReviewModalProps = Pick<
   ReservationResponseDto,
@@ -25,19 +25,21 @@ type ReviewState = {
   content: string;
 };
 
-export function ReviewModal({ isOpen, ...Props }: ReviewModalProps) {
+export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
   const [modalOpen, setModalOpen] = useState(isOpen);
   const [review, setReview] = useState<ReviewState>({
     rating: 0,
     content: "",
   });
 
+  const submitReviewMutation = useSubmitReservationReview();
+
   useEffect(() => {
     setModalOpen(isOpen);
   }, [isOpen]);
 
   function onClose() {
-    setModalOpen(!modalOpen);
+    setModalOpen(false);
   }
 
   function onChangeContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -49,47 +51,58 @@ export function ReviewModal({ isOpen, ...Props }: ReviewModalProps) {
   }
 
   async function onSubmitReview() {
-    try {
-      const response = await instance.post(
-        `my-reservation/${Props.id}/reviews`,
-        {
+    if (review.rating === 0 || review.content.trim() === "") {
+      alert("별점과 후기를 모두 입력해주세요.");
+      return;
+    }
+
+    submitReviewMutation.mutate(
+      {
+        reservationId: props.id,
+        reviewData: {
           rating: review.rating,
           content: review.content,
-        }
-      );
-      console.log("리뷰 작성 성공:", response.data);
-
-      onClose();
-      alert("리뷰가 성공적으로 작성되었습니다!");
-    } catch (e: unknown) {
-      if (e instanceof AxiosError && e.response) {
-        const { status, data } = e.response;
-        switch (status) {
-          case 400:
-            alert(data.message || "잘못된 요청입니다. 내용을 확인해주세요.");
-            break;
-          case 401:
-            alert("인증에 실패했습니다. 다시 로그인해주세요.");
-            break;
-          case 403:
-            alert(data.message || "리뷰 작성 권한이 없습니다.");
-            break;
-          case 404:
-            alert(data.message || "예약 정보를 찾을 수 없습니다.");
-            break;
-          case 409:
-            alert(data.message || "이미 리뷰를 작성한 예약입니다.");
-            break;
-          default:
-            alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-            break;
-        }
-      } else {
-        console.error("Unexpected error:", e);
-        alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+        },
+      },
+      {
+        onSuccess: () => {
+          alert("리뷰가 성공적으로 작성되었습니다!");
+          onClose();
+        },
+        onError: (error) => {
+          if (error instanceof AxiosError && error.response) {
+            const { status, data } = error.response;
+            switch (status) {
+              case 400:
+                alert(
+                  data.message || "잘못된 요청입니다. 내용을 확인해주세요."
+                );
+                break;
+              case 401:
+                alert("인증에 실패했습니다. 다시 로그인해주세요.");
+                break;
+              case 403:
+                alert(data.message || "리뷰 작성 권한이 없습니다.");
+                break;
+              case 404:
+                alert(data.message || "예약 정보를 찾을 수 없습니다.");
+                break;
+              case 409:
+                alert(data.message || "이미 리뷰를 작성한 예약입니다.");
+                break;
+              default:
+                alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+                break;
+            }
+          } else {
+            console.error("Unexpected error:", error);
+            alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+          }
+        },
       }
-    }
+    );
   }
+
   if (!modalOpen) return null;
 
   return (
@@ -111,23 +124,23 @@ export function ReviewModal({ isOpen, ...Props }: ReviewModalProps) {
         </div>
         <div className="flex gap-4 mb-6">
           <Image
-            src={Props.activity.bannerImageUrl}
-            alt={Props.activity.title}
+            src={props.activity.bannerImageUrl}
+            alt={props.activity.title}
             width={126}
             height={126}
             className="rounded-[1.2rem] mobile:w-[100px] mobile:h-[100px]"
           />
           <div>
             <h2 className="text-[2rem] font-bold leading-[3.2rem] mobile:text-[16px] mobile:leading-[26px]">
-              {Props.activity.title}
+              {props.activity.title}
             </h2>
             <p className="text-[1.8rem] font-normal leading-[2.6rem] mobile:text-[14px] mobile:leading-[24px]">
-              {Props.date}ㆍ{Props.startTime}-{Props.endTime}ㆍ{Props.headCount}
+              {props.date}ㆍ{props.startTime}-{props.endTime}ㆍ{props.headCount}
               명
             </p>
             <hr className="mb-6" />
             <div className="text-left text-[3.2rem] font-bold leading-[4.2rem] mb-6 mobile:text-[20px] mobile:leading-[23.87px]">
-              ₩{Props.totalPrice}
+              ₩{props.totalPrice}
             </div>
           </div>
         </div>
