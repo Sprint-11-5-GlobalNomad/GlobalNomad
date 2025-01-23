@@ -5,7 +5,7 @@ import { ReservationResponseDto } from "../types/reservation-schemas";
 export const fetchMyReservations = async (
   cursorId?: number,
   size = 10,
-  status?: "pending" | "confirmed" | "declined" | "canceled" | "completed"
+  status?: string
 ) => {
   const response = await instance.get<{
     cursorId: number;

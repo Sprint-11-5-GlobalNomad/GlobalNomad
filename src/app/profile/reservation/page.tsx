@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useMyReservations } from "@/app/react-query/reservation-state";
 import FilterDropdown from "@/components/common/ui/filter-dropdown";
 import { EmptyActivity } from "@/components/empty-activity";
@@ -14,8 +15,23 @@ const filterOption: string[] = [
   "체험 완료",
 ];
 
+const statusMapping: Record<string, string> = {
+  "예약 완료": "pending",
+  "예약 취소": "canceled",
+  "예약 승인": "confirmed",
+  "예약 거절": "declined",
+  "체험 완료": "completed",
+};
+
 export default function MyReservation() {
-  const { data, isLoading } = useMyReservations();
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+
+  const selectedStatus =
+    selectedFilter && statusMapping[selectedFilter]
+      ? statusMapping[selectedFilter]
+      : undefined;
+
+  const { data, isLoading } = useMyReservations(undefined, selectedStatus);
 
   return (
     <div className="flex flex-row justify-center min-h-[700px] h-auto mt-[7.2rem]">
@@ -27,6 +43,7 @@ export default function MyReservation() {
             description={"필터"}
             options={filterOption}
             size={"large"}
+            onSelect={(option) => setSelectedFilter(option)} // 필터 변경
           />
         </div>
         <div className="flex flex-col gap-[2.4rem] mt-[1.6rem] h-auto desktop:w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.4rem]">
