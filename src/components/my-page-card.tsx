@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function UserProfileSidebar() {
+interface SidebarProps {
+  page: string;
+  onNavigate?: (link: string) => void; // onNavigate 추가
+}
+
+export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
   const menuItems = [
     {
       label: "내 정보",
@@ -28,8 +33,7 @@ export default function UserProfileSidebar() {
     },
   ];
 
-  const [activeMenu, setActiveMenu] = useState("/profile");
-  const [profileImage, setProfileImage] = useState(
+  const [profileImage, setProfileImage] = React.useState(
     "/image/profile_default.svg"
   );
 
@@ -46,7 +50,7 @@ export default function UserProfileSidebar() {
   };
 
   return (
-    <div className="w-[24rem] p-[1.5rem] bg-white border border-gray-300 rounded-[0.75rem] space-y-[1.5rem]">
+    <div className="w-[38rem] h-[43.2rem] p-[2.4rem] tablet:w-[25.1rem] tablet:h-[43.2rem] mobile:w-[34.4rem] mobile:h-[43.2rem] bg-white border border-black rounded-[0.75rem] space-y-[2.4rem]">
       <div className="flex flex-col items-center">
         <div className="relative">
           <Image
@@ -55,6 +59,10 @@ export default function UserProfileSidebar() {
             width={160}
             height={160}
             className="rounded-full object-cover border border-gray-200"
+            style={{
+              width: "16rem",
+              height: "16rem",
+            }}
           />
           <label
             htmlFor="profile-upload"
@@ -77,24 +85,24 @@ export default function UserProfileSidebar() {
           </label>
         </div>
       </div>
-      <nav className="space-y-[0.5rem]">
+      <nav className="space-y-[0.8rem]">
         {menuItems.map((item) => (
           <Link
             href={item.link}
             key={item.label}
-            className={`flex items-center gap-[1rem] px-[1rem] py-[0.75rem] rounded-[0.75rem] text-[1.3rem] font-bold ${
-              activeMenu === item.link
+            onClick={() => onNavigate?.(item.link)} // onNavigate 호출
+            className={`flex items-center gap-[1rem] h-[4.4rem] rounded-[0.75rem] text-[1.6rem] font-bold ${
+              page === item.link
                 ? "bg-green-light text-black"
                 : "text-gray-600 hover:bg-gray-50"
             }`}
-            onClick={() => setActiveMenu(item.link)}
           >
             <Image
               src={item.icon}
               alt={`${item.label} 아이콘`}
               width={24}
               height={24}
-              className="h-[1.5rem] w-[1.5rem]"
+              className="h-[2.4rem] w-[2.4rem]"
             />
             {item.label}
           </Link>
