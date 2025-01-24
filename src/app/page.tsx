@@ -1,5 +1,5 @@
 import HeroBanner from "@/components/common/pages/home/hero-banner";
-import Button from "@/components/common/ui/button";
+import SearchSection from "@/components/common/pages/home/search-section";
 import FilterDropdown from "@/components/common/ui/filter-dropdown";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,25 +7,9 @@ import React from "react";
 
 export default function Home() {
   return (
-    // 섹션 별로 컴포넌트화 해야 함
     <div className="mt-[7rem]">
       <HeroBanner />
-
-      {/* 검색 영역 */}
-      <div>
-        <h2>무엇을 체험하고 싶으신가요?</h2>
-        <div>
-          {/* absolute 로 겹쳐넣기? */}
-          <Image
-            src="/image/search.svg"
-            alt="검색하기 아이콘"
-            width={48}
-            height={48}
-          />
-          <input placeholder="내가 원하는 체험은" />
-          <Button type="search" label="검색하기" variant="default" />
-        </div>
-      </div>
+      <SearchSection />
 
       {/* 인기 체험 목록 */}
       <div>
