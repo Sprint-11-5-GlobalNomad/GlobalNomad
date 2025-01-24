@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ScheduleResponseDto } from "./types/schedule-schemas";
+import { ScheduleResponseDto } from "../app/types/schedule-schemas";
 
 interface ScheduleState {
   availableSchedules: ScheduleResponseDto[]; // 예약 가능한 일정 목록
