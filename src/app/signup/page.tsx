@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+// import Button from "../../components/common/ui/button";
 
 interface SignupFormInputs {
   email: string;
@@ -47,9 +49,9 @@ export default function SignupPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center px-4 py-8 max-w-[640px] w-full mx-auto gap-[56px]">
+      <div className="flex flex-col items-center px-[1.6rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
         {/* 로고 섹션 */}
-        <div className="flex justify-center mb-8 w-full">
+        <div className="flex justify-center mb-[3.2rem] w-full">
           <Image
             src="/image/logo-big.svg"
             alt="Logo"
@@ -62,224 +64,232 @@ export default function SignupPage() {
         </div>
 
         {/* 폼 섹션 */}
-        <div className="w-full flex flex-col gap-[32px]">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full flex flex-col gap-[28px]"
-          >
-            {/* 이메일 */}
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-[16px] font-normal leading-[26px] text-[#1B1B1B] mb-1"
-              >
-                이메일
-              </label>
-              <input
-                id="email"
-                type="text"
-                placeholder="이메일을 입력해 주세요"
-                className={`w-full px-[20px] py-[16px] border focus:outline-none rounded-[6px] text-[16px] placeholder-[#A4A1AA] ${
-                  errors.email ? "border-[#FF472E]" : "border-[#DDDDDD]"
-                }`}
-                {...register("email", {
-                  required: "이메일을 입력해주세요.",
-                  pattern: {
-                    value: emailRegex,
-                    message: "잘못된 이메일입니다.",
-                  },
-                })}
-                onBlur={() => trigger("email")}
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-[#FF472E]">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-
-            {/* 닉네임 */}
-            <div className="mb-4">
-              <label
-                htmlFor="nickname"
-                className="block text-[16px] font-normal leading-[26px] text-[#1B1B1B] mb-1"
-              >
-                닉네임
-              </label>
-              <input
-                id="nickname"
-                type="text"
-                placeholder="닉네임을 입력해 주세요"
-                className={`w-full px-[20px] py-[16px] border focus:outline-none rounded-[6px] text-[16px] placeholder-[#A4A1AA] ${
-                  errors.nickname ? "border-[#FF472E]" : "border-[#DDDDDD]"
-                }`}
-                {...register("nickname", {
-                  required: "닉네임을 입력해주세요.",
-                  minLength: {
-                    value: 2,
-                    message: "닉네임은 2자 이상이어야 합니다.",
-                  },
-                })}
-                onBlur={() => trigger("nickname")}
-              />
-              {errors.nickname && (
-                <p className="mt-1 text-sm text-[#FF472E]">
-                  {errors.nickname.message}
-                </p>
-              )}
-            </div>
-
-            {/* 비밀번호 */}
-            <div className="mb-4 relative">
-              <label
-                htmlFor="password"
-                className="block text-[16px] font-normal leading-[26px] text-[#1B1B1B] mb-1"
-              >
-                비밀번호
-              </label>
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="8자 이상 입력해 주세요"
-                className={`w-full px-[20px] py-[16px] border focus:outline-none rounded-[6px] text-[16px] placeholder-[#A4A1AA] ${
-                  errors.password ? "border-[#FF472E]" : "border-[#DDDDDD]"
-                }`}
-                {...register("password", {
-                  required: "비밀번호를 입력해주세요.",
-                  minLength: {
-                    value: 8,
-                    message: "비밀번호는 8자 이상이어야 합니다.",
-                  },
-                })}
-                onBlur={() => trigger("password")}
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute right-[16px] top-[50%] transform -translate-y-1/2 text-[#79747E]"
-              >
-                {showPassword ? (
-                  <Image
-                    src="/image/visibility_eye.svg"
-                    alt="비밀번호 숨기기"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src="/image/visibility_off.svg"
-                    alt="비밀번호 보기"
-                    width={24}
-                    height={24}
-                  />
-                )}
-              </button>
-              {errors.password && (
-                <p className="mt-1 text-sm text-[#FF472E]">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            {/* 비밀번호 확인 */}
-            <div className="mb-4 relative">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-[16px] font-normal leading-[26px] text-[#1B1B1B] mb-1"
-              >
-                비밀번호 확인
-              </label>
-              <input
-                id="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="비밀번호를 한번 더 입력해 주세요"
-                className={`w-full px-[20px] py-[16px] border focus:outline-none rounded-[6px] text-[16px] placeholder-[#A4A1AA] ${
-                  errors.confirmPassword
-                    ? "border-[#FF472E]"
-                    : "border-[#DDDDDD]"
-                }`}
-                {...register("confirmPassword", {
-                  validate: (value) =>
-                    value === password || "비밀번호가 일치하지 않습니다.",
-                })}
-                onBlur={() => trigger("confirmPassword")}
-              />
-              <button
-                type="button"
-                onClick={toggleConfirmPasswordVisibility}
-                className="absolute right-[16px] top-[50%] transform -translate-y-1/2 text-[#79747E]"
-              >
-                {showConfirmPassword ? (
-                  <Image
-                    src="/image/visibility_eye.svg"
-                    alt="비밀번호 숨기기"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src="/image/visibility_off.svg"
-                    alt="비밀번호 보기"
-                    width={24}
-                    height={24}
-                  />
-                )}
-              </button>
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-[#FF472E]">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
-
-            {/* 회원가입 버튼 */}
-            <button
-              type="submit"
-              className="w-full h-[48px] rounded-[6px] bg-[#A4A1AA] text-white flex items-center justify-center text-[16px] font-bold leading-[26px]"
+        <div className="w-full flex flex-col gap-[4.8rem]">
+          <div className="w-full flex flex-col gap-[3.2rem]">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full flex flex-col gap-[2.8rem]"
             >
-              회원가입하기
-            </button>
-          </form>
+              {/* 이메일 */}
+              <div className="mb-[1.6rem]">
+                <label
+                  htmlFor="email"
+                  className="block text-[1.6rem] font-normal leading-[2.6rem] text-[var(--color-black)] mb-[0.4rem]"
+                >
+                  이메일
+                </label>
+                <input
+                  id="email"
+                  type="text"
+                  placeholder="이메일을 입력해 주세요"
+                  className={`w-full px-[2rem] py-[1.6rem] border focus:outline-none rounded-[0.6rem] text-[1.6rem] placeholder-[var(--color-gray-600)] ${
+                    errors.email
+                      ? "border-[var(--color-red)]"
+                      : "border-[var(--color-gray-300)]"
+                  }`}
+                  {...register("email", {
+                    required: "이메일을 입력해주세요.",
+                    pattern: {
+                      value: emailRegex,
+                      message: "잘못된 이메일입니다.",
+                    },
+                  })}
+                  onBlur={() => trigger("email")}
+                />
+                {errors.email && (
+                  <p className="mt-[0.4rem] text-[1.2rem] text-[var(--color-red)]">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
 
-          {/* 회원가입 이동 */}
-          <p className="mt-4 text-center font-pretendard text-[16px] text-[#333236] font-normal text-gray-600">
-            회원이신가요?{" "}
-            <span
-              onClick={() => router.push("/signup")} // (5) 회원가입 페이지 이동
-              className="font-pretendard text-[16px] font-normal text-[#0B3B2D] cursor-pointer"
-            >
-              로그인하기
-            </span>
-          </p>
-        </div>
-        {/* 소셜 로그인 */}
-        <div className="w-full flex flex-col gap-10">
-          <div className="flex items-center justify-between my-8">
-            <div className="flex-grow h-px bg-[#DDDDDD]"></div>
-            <span className="mx-[28px] text-[#79747E] text-[18px] leading-[24px] font-normal">
-              SNS 계정으로 회원가입하기
-            </span>
-            <div className="flex-grow h-px bg-[#DDDDDD]"></div>
+              {/* 닉네임 */}
+              <div className="mb-[1.6rem]">
+                <label
+                  htmlFor="nickname"
+                  className="block text-[1.6rem] font-normal leading-[2.6rem] text-[var(--color-black)] mb-[0.4rem]"
+                >
+                  닉네임
+                </label>
+                <input
+                  id="nickname"
+                  type="text"
+                  placeholder="닉네임을 입력해 주세요"
+                  className={`w-full px-[2.0rem] py-[1.6rem] border focus:outline-none rounded-[0.6rem] text-[1.6rem] placeholder-[var(--color-gray-600)] ${
+                    errors.nickname
+                      ? "border-[var(--color-red)]"
+                      : "border-[var(--color-gray-300)]"
+                  }`}
+                  {...register("nickname", {
+                    required: "닉네임을 입력해주세요.",
+                    minLength: {
+                      value: 2,
+                      message: "닉네임은 2자 이상이어야 합니다.",
+                    },
+                  })}
+                  onBlur={() => trigger("nickname")}
+                />
+                {errors.nickname && (
+                  <p className="mt-[0.4rem] text-[1.2rem] text-[var(--color-red)]">
+                    {errors.nickname.message}
+                  </p>
+                )}
+              </div>
+
+              {/* 비밀번호 */}
+              <div className="mb-[1.6rem] relative">
+                <label
+                  htmlFor="password"
+                  className="block text-[1.6rem] font-normal leading-[2.6rem] text-[var(--color-black)] mb-[0.4rem]"
+                >
+                  비밀번호
+                </label>
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="8자 이상 입력해 주세요"
+                  className={`w-full px-[2.0rem] py-[1.6rem] border focus:outline-none rounded-[0.6rem] text-[1.6rem] placeholder-[var(--color-gray-600)] ${
+                    errors.password
+                      ? "border-[var(--color-red)]"
+                      : "border-[var(--color-gray-300)]"
+                  }`}
+                  {...register("password", {
+                    required: "비밀번호를 입력해주세요.",
+                    minLength: {
+                      value: 8,
+                      message: "비밀번호는 8자 이상이어야 합니다.",
+                    },
+                  })}
+                  onBlur={() => trigger("password")}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-[1.6rem] top-[50%] transform -translate-y-1/2 text-[var(--color-gray-800)]"
+                >
+                  {showPassword ? (
+                    <Image
+                      src="/image/visibility_eye.svg"
+                      alt="비밀번호 숨기기"
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <Image
+                      src="/image/visibility_off.svg"
+                      alt="비밀번호 보기"
+                      width={24}
+                      height={24}
+                    />
+                  )}
+                </button>
+                {errors.password && (
+                  <p className="mt-[0.4rem] text-[1.2rem] text-[var(--color-red)]">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+
+              {/* 비밀번호 확인 */}
+              <div className="mb-[1.6rem] relative">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-[1.6rem] font-normal leading-[2.6rem] text-[var(--color-black)] mb-[0.4rem]"
+                >
+                  비밀번호 확인
+                </label>
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="비밀번호를 한번 더 입력해 주세요"
+                  className={`w-full px-[2.0rem] py-[1.6rem] border focus:outline-none rounded-[0.6rem] text-[1.6rem] placeholder-[var(--color-gray-600)] ${
+                    errors.confirmPassword
+                      ? "border-[var(--color-red)]"
+                      : "border-[var(--color-gray-300)]"
+                  }`}
+                  {...register("confirmPassword", {
+                    validate: (value) =>
+                      value === password || "비밀번호가 일치하지 않습니다.",
+                  })}
+                  onBlur={() => trigger("confirmPassword")}
+                />
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute right-[1.6rem] top-[50%] transform -translate-y-1/2 text-[var(--color-gray-800)]"
+                >
+                  {showConfirmPassword ? (
+                    <Image
+                      src="/image/visibility_off.svg"
+                      alt="비밀번호 보기"
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <Image
+                      src="/image/visibility_eye.svg"
+                      alt="비밀번호 숨기기"
+                      width={24}
+                      height={24}
+                    />
+                  )}
+                </button>
+                {errors.confirmPassword && (
+                  <p className="mt-[0.4rem] text-[1.2rem] text-[var(--color-red)]">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+
+              {/* 회원가입 버튼 */}
+              <button
+                type="submit"
+                className="w-full h-[4.8rem] rounded-[0.6rem] bg-[var(--color-gray-600)] text-[var(--color-gray-0)] flex items-center justify-center text-[1.6rem] font-bold leading-[2.6rem]"
+              >
+                회원가입하기
+              </button>
+            </form>
+
+            {/* 회원가입 이동 */}
+            <p className="mt-[1.6rem] text-center text-[1.6rem] text-[var(--color-gray-900)] font-normal text-text-[var(gray-600)]">
+              회원이신가요?{" "}
+              <Link
+                href="/signup"
+                className="text-[1.6rem] font-normal text-[var(--color-green)] cursor-pointer"
+              >
+                로그인하기
+              </Link>
+            </p>
           </div>
-          <div className="mt-6 flex justify-center gap-4">
-            <button className="w-[72px] h-[72px] bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
-              <Image
-                src="/image/Google-Icon.svg"
-                alt="Google"
-                width={27}
-                height={27}
-                objectFit="cover"
-              />
-            </button>
-            <button className="w-[72px] h-[72px] bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
-              <Image
-                src="/image/Kakao-Icon.svg"
-                alt="Kakao"
-                width={27}
-                height={27}
-                objectFit="cover"
-              />
-            </button>
+          {/* 소셜 로그인 */}
+          <div className="w-full flex flex-col gap[4rem]">
+            <div className="flex items-center justify-between my-[3.2rem]">
+              <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
+              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
+                SNS 계정으로 회원가입하기
+              </span>
+              <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
+            </div>
+            <div className="mt-[2.4rem] flex justify-center gap-[1.6rem]">
+              <button className="w-[7.2rem] h-[7.2rem] bg-[var(--color-gray-0)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
+                <Image
+                  src="/image/Google-Icon.svg"
+                  alt="Google"
+                  width={27}
+                  height={27}
+                  objectFit="cover"
+                />
+              </button>
+              <button className="w-[7.2rem] h-[7.2rem] bg-[var(--color-gray-0)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
+                <Image
+                  src="/image/Kakao-Icon.svg"
+                  alt="Kakao"
+                  width={27}
+                  height={27}
+                  objectFit="cover"
+                />
+              </button>
+            </div>
           </div>
         </div>
       </div>
