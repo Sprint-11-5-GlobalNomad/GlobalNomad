@@ -2,22 +2,23 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import Link from "next/link";
 
 interface EditDeleteDropdown {
-  onEdit: () => void;
+  EditRoute: string;
   onDelete: () => void;
   // http://localhost:3000/test 에서 드롭다운 펼쳐보려면 onEdit? 이런 식으로 해주면 됨.
 }
 
 export default function EditDeleteDropdown({
-  onEdit,
+  EditRoute,
   onDelete,
 }: EditDeleteDropdown) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="relative inline-block" onClick={() => setIsOpen(!isOpen)}>
-      <button className="p-2 hover:bg-gray-100 rounded-full">
+      <button className="p-2 hover:bg-gray-100 rounded-full mobile:w-[3.2rem] mobile:h-[3.2rem]">
         <Image
           src="/image/meatball.svg"
           alt="수정하기 삭제하기 드롭다운"
@@ -31,13 +32,14 @@ export default function EditDeleteDropdown({
           w-[16rem] border-solid border-[0.1rem] border-gray-200 z-50"
         >
           <ul className="flex flex-col">
-            <li
-              onClick={onEdit}
-              className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
+            <Link href={EditRoute}>
+              <li
+                className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
               border-b-[0.1rem] border-solid border-gray-200 py-[1.8rem]"
-            >
-              수정하기
-            </li>
+              >
+                수정하기
+              </li>
+            </Link>
             <li
               onClick={onDelete}
               className="w-full text-lg text-center font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center

@@ -1,8 +1,10 @@
+"use client";
+
 import React, { useState } from "react";
 import { DropdownCheckIcon } from "../icons/dropdown-check-icon";
 import { DropdownArrowIcon } from "../icons/dropdown-arrow-icon";
 
-interface CategoryDropdownProps {
+interface SelectDropdownProps {
   options: string[];
   description: string;
 }
@@ -10,7 +12,7 @@ interface CategoryDropdownProps {
 export default function SelectDropdown({
   options,
   description,
-}: CategoryDropdownProps) {
+}: SelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 

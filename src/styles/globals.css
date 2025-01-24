@@ -471,6 +471,7 @@ template {
   :root {
     /*color palette*/
     --color-black: #1b1b1b;
+    --color-white: #ffffff;
     --color-nomad-black: #112211;
 
     /* gray scale */
@@ -487,7 +488,7 @@ template {
 
     /* green */
     --color-green: #00a007;
-    --color-green-light: #cedb05;
+    --color-green-light: #ced8d5;
     --color-green-dark: #0b3b2d;
 
     /* red */
@@ -530,6 +531,11 @@ template {
     font-weight: var(--medium);
     color: #1b1b1b;
     @apply bg-gray-100;
+  }
+
+  footer {
+    color: #676767;
+    @apply bg-nomad-black;
   }
 
   button {

@@ -5,7 +5,8 @@ import UserMenu from "@/components/common/layout/navigation/user-menu";
 export default function Navbar() {
   return (
     <header
-      className="bg-white border-solid border-b border-gray-300 flex justify-center
+      className="bg-white border-solid border-b border-gray-300
+      flex justify-center z-50 fixed top-0 left-0 right-0
       mx-auto w-full h-[7rem] p-[1rem]
       tablet:px-[2.4rem] tablet:py-[2rem]
       mobile:px-[2rem]"
