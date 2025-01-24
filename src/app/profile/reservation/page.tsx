@@ -1,84 +1,73 @@
 "use client";
-import { useReservationStore } from "@/stores/reservation-store";
-import { ReservationResponseDto } from "@/app/types/reservation-schemas";
-import { useEffect } from "react";
+
+import { useState } from "react";
+import { useMyReservations } from "@/app/react-query/reservation-state";
+import FilterDropdown from "@/components/common/ui/filter-dropdown";
+import { EmptyActivity } from "@/components/empty-activity";
+import UserProfileSidebar from "@/components/my-page-card";
+import { MyReservationCard } from "@/components/my-reservation-card";
+
+const filterOption: string[] = [
+  "예약 완료",
+  "예약 취소",
+  "예약 승인",
+  "예약 거절",
+  "체험 완료",
+];
+
+const statusMapping: Record<string, string> = {
+  "예약 완료": "pending",
+  "예약 취소": "canceled",
+  "예약 승인": "confirmed",
+  "예약 거절": "declined",
+  "체험 완료": "completed",
+};
 
 export default function MyReservation() {
-  const { userReservations, setUserReservations } = useReservationStore();
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
-  // 일단 목데이터 넣어놨습니다.
-  const fetchReservations = async () => {
-    // API 요청 로직을 추가해야함
-    const mockData: ReservationResponseDto[] = [
-      {
-        id: 1,
-        teamId: "team123",
-        userId: 101,
-        activity: {
-          bannerImageUrl: "https://example.com/banner1.jpg",
-          title: "Activity 1",
-          id: 1,
-        },
-        scheduleId: 203,
-        status: "confirmed",
-        reviewSubmitted: false,
-        totalPrice: 5000,
-        headCount: 2,
-        date: "2025-01-20",
-        startTime: "10:00",
-        endTime: "12:00",
-        createdAt: "2025-01-10T10:00:00Z",
-        updatedAt: "2025-01-15T12:00:00Z",
-      },
-      {
-        id: 2,
-        teamId: "team456",
-        userId: 102,
-        activity: {
-          bannerImageUrl: "https://example.com/banner2.jpg",
-          title: "Activity 2",
-          id: 2,
-        },
-        scheduleId: 204,
-        status: "canceled",
-        reviewSubmitted: true,
-        totalPrice: 3000,
-        headCount: 1,
-        date: "2025-01-22",
-        startTime: "14:00",
-        endTime: "16:00",
-        createdAt: "2025-01-11T10:00:00Z",
-        updatedAt: "2025-01-18T12:00:00Z",
-      },
-    ];
+  const selectedStatus =
+    selectedFilter && statusMapping[selectedFilter]
+      ? statusMapping[selectedFilter]
+      : undefined;
 
-    setUserReservations(mockData);
-  };
-
-  useEffect(() => {
-    fetchReservations();
-  }, []);
+  const { data, isLoading } = useMyReservations(undefined, selectedStatus);
 
   return (
-    <div>
-      <div>
-        <div>프로필 있는 자리</div>
-        <div>
-          <div>
-            <div>예약 내역</div>
-            <div>드롭다운 자리</div>
-          </div>
-          <div>
-            {userReservations.length > 0 ? (
-              userReservations.map((reservation) => (
-                <div key={reservation.id}>
-                  <div>예약 카드 컴포넌트 추가</div>
-                </div>
-              ))
-            ) : (
-              <p>EmptyActivity 컴포넌트 추가</p>
-            )}
-          </div>
+    <div className="flex flex-row justify-center min-h-[700px] h-auto mt-[7.2rem]">
+      <UserProfileSidebar />
+      <div className="pl-[2.4rem]">
+        <div className=" flex flex-row justify-between items-center">
+          <h2 className="text-[3.2rem]">예약 내역</h2>
+          <FilterDropdown
+            description={"필터"}
+            options={filterOption}
+            size={"large"}
+            onSelect={(option) => setSelectedFilter(option)} // 필터 변경
+          />
+        </div>
+        <div className="flex flex-col gap-[2.4rem] mt-[1.6rem] h-auto desktop:w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.4rem]">
+          {isLoading ? (
+            <p>로딩 중...</p>
+          ) : data && data.reservations.length > 0 ? (
+            data.reservations.map((reservation) => (
+              <MyReservationCard
+                key={reservation.id}
+                activity={reservation.activity}
+                status={reservation.status}
+                date={reservation.date}
+                startTime={reservation.startTime}
+                endTime={reservation.endTime}
+                headCount={reservation.headCount}
+                totalPrice={reservation.totalPrice}
+                id={reservation.id}
+              />
+            ))
+          ) : (
+            <div className="mt-[5rem]">
+              <EmptyActivity />
+            </div>
+          )}
         </div>
       </div>
     </div>

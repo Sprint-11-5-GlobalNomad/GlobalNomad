@@ -6,9 +6,9 @@ import {
 import { useCustomMutation, useCustomQuery } from "./react-query-util";
 
 // 내 예약 리스트 조회
-export const useMyReservations = (cursorId?: number) =>
-  useCustomQuery(["myReservations", cursorId], () =>
-    fetchMyReservations(cursorId)
+export const useMyReservations = (cursorId?: number, status?: string) =>
+  useCustomQuery(["myReservations", cursorId, status], () =>
+    fetchMyReservations(cursorId, 10, status)
   );
 
 // 예약 취소
