@@ -7,7 +7,7 @@ import React from "react";
 export default function Home() {
   return (
     // 섹션 별로 컴포넌트화 해야 함
-    <div>
+    <div className="mt-[7rem]">
       {/* 상단 배너 */}
       <Link href="/" className="relative w-full h-[40vh] block">
         <Image
