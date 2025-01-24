@@ -19,8 +19,8 @@ export default function Home() {
           layout="fill"
           objectFit="cover"
         />
-        <div>
-          <h1 className="text-[6.8rem] leading-[8.115rem] font-bold text-white">
+        <div className="absoulte top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">
+          <h1 className="text-[6.8rem] leading-[8.115rem] font-bold">
             상단 배너 문구
           </h1>
           <p className="text-2xl font-bold">2월의 인기 체험 BEST 🔥</p>
