@@ -4,7 +4,7 @@ import Button from "../../ui/button";
 export default function SearchSection() {
   return (
     <div
-      className="bg-white w-[102.4rem] max-w-[120rem] max-h-[18.4rem]
+      className="bg-white w-[120rem] max-h-[18.4rem]
     px-[2.4rem] py-[3.2rem] flex flex-col gap-[3.2rem] border rounded-[1.6rem]
     absolute transform -translate-x-1/2 -translate-y-[8vh] top-1/2 left-1/2
     shadow-search tablet:w-[69.6rem] tablet:h-[18.4rem]
