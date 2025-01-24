@@ -1,6 +1,7 @@
 import Button from "@/components/common/ui/button";
 import FilterDropdown from "@/components/common/ui/filter-dropdown";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function Home() {
@@ -8,13 +9,15 @@ export default function Home() {
     // 섹션 별로 컴포넌트화 해야 함
     <div>
       {/* 상단 배너 */}
-      <div>
+      <Link href="/" className="relative w-full h-[40vh] block">
         <Image
           src="/image/main_banner.jpg"
           alt="메인 배너 이미지"
-          width={1920}
-          height={550}
+          // width={1920}
+          // height={550}
           quality={100}
+          layout="fill"
+          objectFit="cover"
         />
         <div>
           <h1 className="text-[6.8rem] leading-[8.115rem] font-bold text-white">
@@ -22,7 +25,7 @@ export default function Home() {
           </h1>
           <p className="text-2xl font-bold">2월의 인기 체험 BEST 🔥</p>
         </div>
-      </div>
+      </Link>
 
       {/* 검색 영역 */}
       <div>
@@ -64,27 +67,29 @@ export default function Home() {
         <ul>
           {/* map 배열로 감싸주기 */}
           {/* 이미지 크기 왜 제멋대로야 */}
-          <Image
-            src="/image/dance.svg"
-            alt="스트릿 댄스 체험 이미지"
-            width={384}
-            height={384}
-          />
-          <div>
+          <Link href="/">
             <Image
-              src="/image/rating-star.svg"
-              alt="평균 별점 아이콘"
-              width={18}
-              height={18}
+              src="/image/dance.svg"
+              alt="스트릿 댄스 체험 이미지"
+              width={384}
+              height={384}
             />
-            <p>4.9 (793)</p>
-            {/* 251px 넘으면 overflow */}
-            {/* li 태그 이렇게 하면 괜찮으려나? */}
-            <li>함께 배우면 즐거운 스트릿 댄스</li>
-            <p>
-              ₩ <span>/인</span>
-            </p>
-          </div>
+            <div>
+              <Image
+                src="/image/rating-star.svg"
+                alt="평균 별점 아이콘"
+                width={18}
+                height={18}
+              />
+              <p>4.9 (793)</p>
+              {/* 251px 넘으면 overflow */}
+              {/* li 태그 이렇게 하면 괜찮으려나? */}
+              <li>함께 배우면 즐거운 스트릿 댄스</li>
+              <p>
+                ₩ <span>/인</span>
+              </p>
+            </div>
+          </Link>
         </ul>
       </div>
 
@@ -104,28 +109,30 @@ export default function Home() {
         <h2>🛼 모든 체험</h2>
         <ul>
           {/* map 배열로 감싸주기 */}
-          <Image
-            src="/image/cliff.svg"
-            alt="피오르 체험 이미지"
-            width={283}
-            height={283}
-          />
-          {/* 여기 아래 부분 컴포넌트로 해서 쓸 수도 있겠다 */}
-          <div>
+          <Link href="/">
             <Image
-              src="/image/rating-star.svg"
-              alt="평균 별점 아이콘"
-              width={18}
-              height={18}
+              src="/image/cliff.svg"
+              alt="피오르 체험 이미지"
+              width={283}
+              height={283}
             />
-            <p>3.9 (108)</p>
-            {/* 251px 넘으면 overflow */}
-            {/* li 태그 이렇게 하면 괜찮으려나? */}
-            <li>피오르 체험</li>
-            <p>
-              ₩ <span>/인</span>
-            </p>
-          </div>
+            {/* 여기 아래 부분 컴포넌트로 해서 쓸 수도 있겠다 */}
+            <div>
+              <Image
+                src="/image/rating-star.svg"
+                alt="평균 별점 아이콘"
+                width={18}
+                height={18}
+              />
+              <p>3.9 (108)</p>
+              {/* 251px 넘으면 overflow */}
+              {/* li 태그 이렇게 하면 괜찮으려나? */}
+              <li>피오르 체험</li>
+              <p>
+                ₩ <span>/인</span>
+              </p>
+            </div>
+          </Link>
         </ul>
       </div>
 
