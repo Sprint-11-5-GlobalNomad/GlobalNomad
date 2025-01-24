@@ -471,6 +471,7 @@ template {
   :root {
     /*color palette*/
     --color-black: #1b1b1b;
+    --color-white: #ffffff;
     --color-nomad-black: #112211;
 
     /* gray scale */
