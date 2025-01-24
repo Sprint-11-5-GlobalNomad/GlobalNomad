@@ -35,7 +35,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 768); // 모바일 감지
+      setIsMobileView(window.innerWidth <= 743); // 모바일 감지
     };
 
     handleResize();
@@ -74,8 +74,8 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex justify-center  py-[7.2rem]">
-        <div className="flex gap-[2.4rem]">
+      <div className="flex justify-center  py-[7.2rem] mt-[7.2rem]">
+        <div className="flex gap-[2.4rem] ">
           {!isMobileView && (
             <div>
               <UserProfileSidebar page={currentPage} />
@@ -107,7 +107,7 @@ export default function ProfilePage() {
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="w-full h-[4.2rem] border border-gray-300 rounded-[0.5rem] px-[1.2rem] text-[1.2rem]"
+                  className="w-full h-[4.2rem] border border-gray-300 rounded-[0.5rem] px-[1.2rem] text-[1.2rem] "
                   placeholder="닉네임을 입력하세요"
                 />
               </div>
@@ -137,7 +137,7 @@ export default function ProfilePage() {
                   className={`w-full h-[4.2rem] border ${
                     errorMessage ? "border-red-500" : "border-gray-300"
                   } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
-                  placeholder="새 비밀번호를 입력하세요"
+                  placeholder="8자 이상 입력해주세요"
                 />
               </div>
 
@@ -153,7 +153,7 @@ export default function ProfilePage() {
                   className={`w-full h-[4.2rem] border ${
                     errorMessage ? "border-red-500" : "border-gray-300"
                   } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
-                  placeholder="비밀번호를 한번 더 입력하세요"
+                  placeholder="비밀번호를 한번 더 입력해주세요"
                   onBlur={() => {
                     if (newPassword && newPassword !== confirmPassword) {
                       setErrorMessage("비밀번호가 일치하지 않습니다.");
