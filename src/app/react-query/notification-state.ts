@@ -12,9 +12,34 @@ type FetchNotificationsReturnType = Awaited<
 
 // 내 알림 리스트 조회
 export const useNotifications = (cursorId?: number) =>
-  useQuery<FetchNotificationsReturnType, Error>({
+  useQuery<FetchNotificationsReturnType, AxiosError>({
     queryKey: ["notifications", cursorId],
-    queryFn: () => fetchNotifications(cursorId),
+    queryFn: async () => {
+      try {
+        return await fetchNotifications(cursorId);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 400:
+              console.error(
+                "알림 목록을 가져오는 데 실패했습니다. cursorId는 숫자로 입력해주세요."
+              );
+              break;
+            case 401:
+              console.error(
+                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+              );
+              break;
+            default:
+              console.error(
+                "알림 목록을 가져오는 중 알 수 없는 오류가 발생했습니다.",
+                error
+              );
+          }
+        }
+        throw error;
+      }
+    },
   });
 
 // 알림 삭제
@@ -26,7 +51,26 @@ export const useDeleteNotification = () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
     onError: (error: AxiosError) => {
-      console.error("Failed to delete notification:", error);
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            console.error(
+              "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+            );
+            break;
+          case 403:
+            console.error("본인의 알림만 삭제할 수 있습니다.");
+            break;
+          case 404:
+            console.error("존재하지 않는 알림입니다.");
+            break;
+          default:
+            console.error(
+              "알림 삭제 중 알 수 없는 오류가 발생했습니다.",
+              error
+            );
+        }
+      }
     },
   });
 };

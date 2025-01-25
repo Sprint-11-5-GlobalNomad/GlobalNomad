@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import {
   fetchMyActivities,
   fetchMonthlyReservationStats,
@@ -39,12 +40,33 @@ interface DailyReservationStat {
 
 // 내 체험 리스트 조회
 export const useMyActivities = (cursorId?: number, size = 20) =>
-  useQuery<
-    { cursorId: number; totalCount: number; activities: ActivityBasicDto[] },
-    unknown
-  >({
+  useQuery<{
+    cursorId: number;
+    totalCount: number;
+    activities: ActivityBasicDto[];
+  }>({
     queryKey: ["myActivities", cursorId],
-    queryFn: () => fetchMyActivities(cursorId, size),
+    queryFn: async () => {
+      try {
+        return await fetchMyActivities(cursorId, size);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 400:
+              console.error("cursorId는 숫자로 입력해주세요.");
+              break;
+            case 401:
+              console.error(
+                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+              );
+              break;
+            default:
+              console.error("체험 리스트를 가져오는 중 오류가 발생했습니다.");
+          }
+        }
+        throw error;
+      }
+    },
   });
 
 // 월별 예약 현황 조회
@@ -55,14 +77,64 @@ export const useMonthlyReservationStats = (
 ) =>
   useQuery<MonthlyReservationStat[], unknown>({
     queryKey: ["monthlyReservationStats", activityId, year, month],
-    queryFn: () => fetchMonthlyReservationStats(activityId, year, month),
+    queryFn: async () => {
+      try {
+        return await fetchMonthlyReservationStats(activityId, year, month);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 400:
+              console.error("year는 YYYY 형식으로 입력해주세요.");
+              break;
+            case 401:
+              console.error(
+                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+              );
+              break;
+            case 403:
+              console.error("본인의 체험만 조회할 수 있습니다.");
+              break;
+            default:
+              console.error(
+                "월별 예약 현황을 가져오는 중 오류가 발생했습니다."
+              );
+          }
+        }
+        throw error;
+      }
+    },
   });
 
 // 날짜별 예약 정보 조회
 export const useDailyReservationStats = (activityId: number, date: string) =>
   useQuery<DailyReservationStat[], unknown>({
     queryKey: ["dailyReservationStats", activityId, date],
-    queryFn: () => fetchDailyReservationStats(activityId, date),
+    queryFn: async () => {
+      try {
+        return await fetchDailyReservationStats(activityId, date);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 400:
+              console.error("날짜는 YYYY-MM-DD 형식으로 입력해주세요.");
+              break;
+            case 401:
+              console.error(
+                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+              );
+              break;
+            case 403:
+              console.error("본인의 체험만 조회할 수 있습니다.");
+              break;
+            default:
+              console.error(
+                "날짜별 예약 정보를 가져오는 중 오류가 발생했습니다."
+              );
+          }
+        }
+        throw error;
+      }
+    },
   });
 
 // 예약 시간대별 예약 내역 조회
@@ -73,14 +145,11 @@ export const useReservationsBySchedule = (
   cursorId?: number,
   size = 10
 ) =>
-  useQuery<
-    {
-      cursorId: number;
-      totalCount: number;
-      reservations: ReservationResponseDto[];
-    },
-    unknown
-  >({
+  useQuery<{
+    cursorId: number;
+    totalCount: number;
+    reservations: ReservationResponseDto[];
+  }>({
     queryKey: [
       "reservationsBySchedule",
       activityId,
@@ -88,14 +157,38 @@ export const useReservationsBySchedule = (
       status,
       cursorId,
     ],
-    queryFn: () =>
-      fetchReservationsBySchedule(
-        activityId,
-        scheduleId,
-        status,
-        cursorId,
-        size
-      ),
+    queryFn: async () => {
+      try {
+        return await fetchReservationsBySchedule(
+          activityId,
+          scheduleId,
+          status,
+          cursorId,
+          size
+        );
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 400:
+              console.error("cursorId는 숫자로 입력해주세요.");
+              break;
+            case 401:
+              console.error(
+                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+              );
+              break;
+            case 403:
+              console.error("본인의 체험만 조회할 수 있습니다.");
+              break;
+            default:
+              console.error(
+                "예약 시간대별 정보를 가져오는 중 오류가 발생했습니다."
+              );
+          }
+        }
+        throw error;
+      }
+    },
   });
 
 // 예약 상태 업데이트
@@ -110,7 +203,7 @@ export const useUpdateReservationStatus = () => {
       status: "confirmed" | "declined";
     }
   >({
-    mutationFn: ({ activityId, reservationId, status }) =>
+    mutationFn: async ({ activityId, reservationId, status }) =>
       updateReservationStatus(activityId, reservationId, { status }),
     onSuccess: (_, { activityId }) => {
       queryClient.invalidateQueries({
@@ -120,8 +213,29 @@ export const useUpdateReservationStatus = () => {
         queryKey: ["dailyReservationStats", activityId],
       });
     },
-    onError: (error: unknown) => {
-      console.error("Reservation status update failed:", error);
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 400:
+            console.error(
+              "status는 pending, confirmed, declined 중 하나로 입력해주세요."
+            );
+            break;
+          case 401:
+            console.error(
+              "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+            );
+            break;
+          case 403:
+            console.error("본인의 체험만 예약 상태를 변경할 수 있습니다.");
+            break;
+          case 404:
+            console.error("존재하지 않는 체험입니다.");
+            break;
+          default:
+            console.error("예약 상태 업데이트 중 오류가 발생했습니다.");
+        }
+      }
     },
   });
 };
@@ -130,12 +244,31 @@ export const useUpdateReservationStatus = () => {
 export const useDeleteMyActivity = () => {
   const queryClient = useQueryClient();
   return useMutation<void, unknown, number>({
-    mutationFn: (activityId) => deleteMyActivity(activityId),
+    mutationFn: async (activityId) => deleteMyActivity(activityId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["myActivities"] });
     },
-    onError: (error: unknown) => {
-      console.error("Activity deletion failed:", error);
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 400:
+            console.error("신청 예약이 있는 체험은 삭제할 수 없습니다.");
+            break;
+          case 401:
+            console.error(
+              "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+            );
+            break;
+          case 403:
+            console.error("본인의 체험만 삭제할 수 있습니다.");
+            break;
+          case 404:
+            console.error("존재하지 않는 체험입니다.");
+            break;
+          default:
+            console.error("체험 삭제 중 오류가 발생했습니다.");
+        }
+      }
     },
   });
 };
@@ -148,7 +281,7 @@ export const useUpdateMyActivity = () => {
     unknown,
     { activityId: number; updateData: UpdateMyActivityBodyDto }
   >({
-    mutationFn: ({ activityId, updateData }) =>
+    mutationFn: async ({ activityId, updateData }) =>
       updateMyActivity(activityId, updateData),
     onSuccess: (_, { activityId }) => {
       queryClient.invalidateQueries({ queryKey: ["myActivities"] });
@@ -156,8 +289,30 @@ export const useUpdateMyActivity = () => {
         queryKey: ["activityDetail", activityId],
       });
     },
-    onError: (error: unknown) => {
-      console.error("Activity update failed:", error);
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 400:
+            console.error("제목은 문자열로 입력해주세요.");
+            break;
+          case 401:
+            console.error(
+              "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+            );
+            break;
+          case 403:
+            console.error("본인의 체험만 수정할 수 있습니다.");
+            break;
+          case 404:
+            console.error("존재하지 않는 체험입니다.");
+            break;
+          case 409:
+            console.error("겹치는 예약 가능 시간대가 존재합니다.");
+            break;
+          default:
+            console.error("체험 수정 중 오류가 발생했습니다.");
+        }
+      }
     },
   });
 };
