@@ -1,10 +1,10 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createUser,
   fetchMyDetails,
   updateMyDetails,
   uploadProfileImage,
 } from "../api/user-api";
-import { useCustomMutation, useCustomQuery } from "./react-query-util";
 import {
   CreateUserBodyDto,
   UpdateUserBodyDto,
@@ -12,35 +12,50 @@ import {
 } from "../types/user-schemas";
 
 // 회원가입
-export const useCreateUser = () =>
-  useCustomMutation<
-    UserServiceResponseDto, // TData: 반환 타입
-    unknown, // TError: 에러 타입
-    CreateUserBodyDto // TVariables: 입력 변수 타입
-  >((userData: CreateUserBodyDto) => createUser(userData), [["myDetails"]]);
+export const useCreateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation<UserServiceResponseDto, unknown, CreateUserBodyDto>({
+    mutationFn: (userData: CreateUserBodyDto) => createUser(userData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myDetails"] });
+    },
+    onError: (error: unknown) => {
+      console.error("Failed to create user:", error);
+    },
+  });
+};
 
 // 내 정보 조회
 export const useMyDetails = () =>
-  useCustomQuery<UserServiceResponseDto, unknown>(["myDetails"], () =>
-    // 반환 타입과 에러 타입 명시
-    fetchMyDetails()
-  );
+  useQuery<UserServiceResponseDto, unknown>({
+    queryKey: ["myDetails"],
+    queryFn: () => fetchMyDetails(),
+  });
 
 // 내 정보 수정
-export const useUpdateMyDetails = () =>
-  useCustomMutation<
-    UserServiceResponseDto, // TData: 반환 타입
-    unknown, // TError: 에러 타입
-    UpdateUserBodyDto // TVariables: 입력 변수 타입
-  >(
-    (updateData: UpdateUserBodyDto) => updateMyDetails(updateData),
-    [["myDetails"]]
-  );
+export const useUpdateMyDetails = () => {
+  const queryClient = useQueryClient();
+  return useMutation<UserServiceResponseDto, unknown, UpdateUserBodyDto>({
+    mutationFn: (updateData: UpdateUserBodyDto) => updateMyDetails(updateData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myDetails"] });
+    },
+    onError: (error: unknown) => {
+      console.error("Failed to update user details:", error);
+    },
+  });
+};
 
 // 프로필 이미지 업로드
-export const useUploadProfileImage = () =>
-  useCustomMutation<
-    { profileImageUrl: string }, // TData: 반환 타입
-    unknown, // TError: 에러 타입
-    File // TVariables: 입력 변수 타입
-  >((imageFile: File) => uploadProfileImage(imageFile), [["myDetails"]]);
+export const useUploadProfileImage = () => {
+  const queryClient = useQueryClient();
+  return useMutation<{ profileImageUrl: string }, unknown, File>({
+    mutationFn: (imageFile: File) => uploadProfileImage(imageFile),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myDetails"] });
+    },
+    onError: (error: unknown) => {
+      console.error("Failed to upload profile image:", error);
+    },
+  });
+};

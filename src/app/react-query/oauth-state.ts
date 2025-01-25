@@ -1,5 +1,5 @@
+import { useMutation } from "@tanstack/react-query";
 import { login, signUpWithOauth, signInWithOauth } from "../api/auth-api";
-import { useCustomMutation } from "./react-query-util";
 import {
   SignUpWithOauthRequestBody,
   SignInWithOauthRequestBody,
@@ -21,24 +21,39 @@ interface AuthResponse {
 
 // 로그인
 export const useLogin = () =>
-  useCustomMutation<
-    AuthResponse, // 반환 타입 수정
+  useMutation<
+    AuthResponse, // 반환 타입
     unknown, // 에러 타입
     { email: string; password: string } // 입력 변수 타입
-  >((credentials) => login(credentials));
+  >({
+    mutationFn: (credentials) => login(credentials),
+    onError: (error: unknown) => {
+      console.error("Login failed:", error);
+    },
+  });
 
 // 간편 회원가입
 export const useSignUpWithOauth = (provider: "google" | "kakao") =>
-  useCustomMutation<
-    AuthResponse, // 반환 타입 수정
+  useMutation<
+    AuthResponse, // 반환 타입
     unknown, // 에러 타입
     SignUpWithOauthRequestBody // 입력 변수 타입
-  >((signUpData) => signUpWithOauth(provider, signUpData));
+  >({
+    mutationFn: (signUpData) => signUpWithOauth(provider, signUpData),
+    onError: (error: unknown) => {
+      console.error("Sign up with OAuth failed:", error);
+    },
+  });
 
 // 간편 로그인
 export const useSignInWithOauth = (provider: "google" | "kakao") =>
-  useCustomMutation<
-    AuthResponse, // 반환 타입 수정
+  useMutation<
+    AuthResponse, // 반환 타입
     unknown, // 에러 타입
     SignInWithOauthRequestBody // 입력 변수 타입
-  >((signInData) => signInWithOauth(provider, signInData));
+  >({
+    mutationFn: (signInData) => signInWithOauth(provider, signInData),
+    onError: (error: unknown) => {
+      console.error("Sign in with OAuth failed:", error);
+    },
+  });

@@ -1,38 +1,53 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchMyReservations,
   cancelReservation,
   submitReservationReview,
 } from "../api/my-reservations-api";
-import { useCustomMutation, useCustomQuery } from "./react-query-util";
 
 // 내 예약 리스트 조회
 export const useMyReservations = (cursorId?: number, status?: string) =>
-  useCustomQuery(["myReservations", cursorId, status], () =>
-    fetchMyReservations(cursorId, 10, status)
-  );
+  useQuery({
+    queryKey: ["myReservations", cursorId, status],
+    queryFn: () => fetchMyReservations(cursorId, 10, status),
+  });
 
 // 예약 취소
-export const useCancelReservation = () =>
-  useCustomMutation(
-    ({
+export const useCancelReservation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
       reservationId,
       status,
     }: {
       reservationId: number;
       status: { status: "canceled" };
     }) => cancelReservation(reservationId, status),
-    [["myReservations"]]
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myReservations"] });
+    },
+    onError: (error: unknown) => {
+      console.error("Failed to cancel reservation:", error);
+    },
+  });
+};
 
 // 예약 리뷰 작성
-export const useSubmitReservationReview = () =>
-  useCustomMutation(
-    ({
+export const useSubmitReservationReview = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
       reservationId,
       reviewData,
     }: {
       reservationId: number;
       reviewData: { rating: number; content: string };
     }) => submitReservationReview(reservationId, reviewData),
-    [["myReservations"]]
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myReservations"] });
+    },
+    onError: (error: unknown) => {
+      console.error("Failed to submit reservation review:", error);
+    },
+  });
+};
