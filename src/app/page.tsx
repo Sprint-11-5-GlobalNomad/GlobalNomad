@@ -1,12 +1,12 @@
-import AllExperiences from "@/components/common/pages/home/all-experiences";
-import AllExperiencesTitle from "@/components/common/pages/home/all-experiences-title";
-import CategoryPriceFilter from "@/components/common/pages/home/category-price-filter";
-import HeroBanner from "@/components/common/pages/home/hero-banner";
-import PopularExperiences from "@/components/common/pages/home/popular-experiences";
-import PopularExperiencesTitle from "@/components/common/pages/home/popular-experiences-title";
-import SearchSection from "@/components/common/pages/home/search-section";
+import CategoryPriceFilter from "@/components/pages/home/category-price-filter";
+import HeroBanner from "@/components/pages/home/hero-banner";
+import SearchSection from "@/components/pages/home/search-section";
 import Pagination from "@/components/common/ui/pagination";
 import React from "react";
+import PopularActivitiesTitle from "@/components/pages/home/popular-activities-title";
+import PopularActivities from "@/components/pages/home/popular-activities";
+import AllActivitiesTitle from "@/components/pages/home/all-activities-title";
+import AllActivities from "@/components/pages/home/all-activities";
 
 export default function Home() {
   return (
@@ -14,13 +14,13 @@ export default function Home() {
       <HeroBanner />
       <SearchSection />
 
-      <PopularExperiencesTitle />
-      <PopularExperiences />
+      <PopularActivitiesTitle />
+      <PopularActivities />
 
       <CategoryPriceFilter />
 
-      <AllExperiencesTitle />
-      <AllExperiences />
+      <AllActivitiesTitle />
+      <AllActivities />
 
       <Pagination />
     </div>

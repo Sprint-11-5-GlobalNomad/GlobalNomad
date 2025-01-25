@@ -2,7 +2,7 @@ import { activityData } from "@/data/activity-data";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function PopularExperiences() {
+export default function PopularActivities() {
   return (
     <ul
       className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar

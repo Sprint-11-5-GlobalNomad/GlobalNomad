@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ActivityBasicDto } from "@/stores/types/activity-schemas";
-import EditDeleteDropdown from "./common/ui/edit-delete-dropdown";
+import EditDeleteDropdown from "./common/ui/dropdown/edit-delete-dropdown";
 import { useState } from "react";
 
 type ActivityCardProps = Pick<

@@ -1,5 +1,5 @@
-import Button from "../../ui/button";
-import FilterDropdown from "../../ui/filter-dropdown";
+import Button from "../../common/ui/button";
+import FilterDropdown from "../../common/ui/dropdown/filter-dropdown";
 
 export default function CategoryPriceFilter() {
   return (

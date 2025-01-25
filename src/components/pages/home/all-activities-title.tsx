@@ -1,4 +1,4 @@
-export default function AllExperiencesTitle() {
+export default function AllActivitiesTitle() {
   return (
     <div
       className="flex-between w-[120rem] mt-[3.5rem] mb-[3.2rem]
