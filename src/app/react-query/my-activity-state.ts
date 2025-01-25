@@ -53,7 +53,7 @@ export const useMyActivities = (cursorId?: number, size = 20) =>
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error("cursorId는 숫자로 입력해주세요.");
+              console.error(error.message);
               break;
             case 401:
               console.error(
@@ -84,7 +84,7 @@ export const useMonthlyReservationStats = (
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error("year는 YYYY 형식으로 입력해주세요.");
+              console.error(error.message);
               break;
             case 401:
               console.error(
@@ -116,7 +116,7 @@ export const useDailyReservationStats = (activityId: number, date: string) =>
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error("날짜는 YYYY-MM-DD 형식으로 입력해주세요.");
+              console.error(error.message);
               break;
             case 401:
               console.error(
@@ -170,7 +170,7 @@ export const useReservationsBySchedule = (
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error("cursorId는 숫자로 입력해주세요.");
+              console.error(error.message);
               break;
             case 401:
               console.error(
@@ -217,9 +217,7 @@ export const useUpdateReservationStatus = () => {
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
           case 400:
-            console.error(
-              "status는 pending, confirmed, declined 중 하나로 입력해주세요."
-            );
+            console.error(error.message);
             break;
           case 401:
             console.error(
@@ -252,7 +250,7 @@ export const useDeleteMyActivity = () => {
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
           case 400:
-            console.error("신청 예약이 있는 체험은 삭제할 수 없습니다.");
+            console.error(error.message);
             break;
           case 401:
             console.error(
@@ -293,7 +291,7 @@ export const useUpdateMyActivity = () => {
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
           case 400:
-            console.error("제목은 문자열로 입력해주세요.");
+            console.error(error.message);
             break;
           case 401:
             console.error(
