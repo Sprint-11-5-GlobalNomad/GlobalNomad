@@ -24,7 +24,7 @@ export const useCreateUser = () => {
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            console.error("이메일 형식으로 작성해주세요.");
+            console.error(error.message);
             break;
           case 409:
             console.error("중복된 이메일입니다.");
@@ -79,7 +79,7 @@ export const useUpdateMyDetails = () => {
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            console.error("닉네임은 10자 이하로 작성해주세요.");
+            console.error(error.message);
             break;
           case 401:
             console.error(
