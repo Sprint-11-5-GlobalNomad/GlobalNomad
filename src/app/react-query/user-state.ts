@@ -1,10 +1,11 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import {
   createUser,
   fetchMyDetails,
   updateMyDetails,
   uploadProfileImage,
 } from "../api/user-api";
-import { useCustomMutation, useCustomQuery } from "./react-query-util";
 import {
   CreateUserBodyDto,
   UpdateUserBodyDto,
@@ -12,35 +13,113 @@ import {
 } from "../types/user-schemas";
 
 // 회원가입
-export const useCreateUser = () =>
-  useCustomMutation<
-    UserServiceResponseDto, // TData: 반환 타입
-    unknown, // TError: 에러 타입
-    CreateUserBodyDto // TVariables: 입력 변수 타입
-  >((userData: CreateUserBodyDto) => createUser(userData), [["myDetails"]]);
+export const useCreateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation<UserServiceResponseDto, AxiosError, CreateUserBodyDto>({
+    mutationFn: async (userData: CreateUserBodyDto) => createUser(userData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myDetails"] });
+    },
+    onError: (error) => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            console.error("이메일 형식으로 작성해주세요.");
+            break;
+          case 409:
+            console.error("중복된 이메일입니다.");
+            break;
+          default:
+            console.error("회원가입 중 알 수 없는 오류가 발생했습니다.");
+        }
+      } else {
+        console.error("회원가입 요청 실패:", error.message);
+      }
+    },
+  });
+};
 
 // 내 정보 조회
 export const useMyDetails = () =>
-  useCustomQuery<UserServiceResponseDto, unknown>(["myDetails"], () =>
-    // 반환 타입과 에러 타입 명시
-    fetchMyDetails()
-  );
+  useQuery<UserServiceResponseDto, AxiosError>({
+    queryKey: ["myDetails"],
+    queryFn: async () => {
+      try {
+        return await fetchMyDetails();
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 401:
+              console.error(
+                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+              );
+              break;
+            case 404:
+              console.error("존재하지 않는 유저입니다.");
+              break;
+            default:
+              console.error("내 정보 조회 중 알 수 없는 오류가 발생했습니다.");
+          }
+        }
+        throw error;
+      }
+    },
+  });
 
 // 내 정보 수정
-export const useUpdateMyDetails = () =>
-  useCustomMutation<
-    UserServiceResponseDto, // TData: 반환 타입
-    unknown, // TError: 에러 타입
-    UpdateUserBodyDto // TVariables: 입력 변수 타입
-  >(
-    (updateData: UpdateUserBodyDto) => updateMyDetails(updateData),
-    [["myDetails"]]
-  );
+export const useUpdateMyDetails = () => {
+  const queryClient = useQueryClient();
+  return useMutation<UserServiceResponseDto, AxiosError, UpdateUserBodyDto>({
+    mutationFn: async (updateData: UpdateUserBodyDto) =>
+      updateMyDetails(updateData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myDetails"] });
+    },
+    onError: (error) => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            console.error("닉네임은 10자 이하로 작성해주세요.");
+            break;
+          case 401:
+            console.error(
+              "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+            );
+            break;
+          default:
+            console.error("내 정보 수정 중 알 수 없는 오류가 발생했습니다.");
+        }
+      } else {
+        console.error("내 정보 수정 요청 실패:", error.message);
+      }
+    },
+  });
+};
 
 // 프로필 이미지 업로드
-export const useUploadProfileImage = () =>
-  useCustomMutation<
-    { profileImageUrl: string }, // TData: 반환 타입
-    unknown, // TError: 에러 타입
-    File // TVariables: 입력 변수 타입
-  >((imageFile: File) => uploadProfileImage(imageFile), [["myDetails"]]);
+export const useUploadProfileImage = () => {
+  const queryClient = useQueryClient();
+  return useMutation<{ profileImageUrl: string }, AxiosError, File>({
+    mutationFn: async (imageFile: File) => uploadProfileImage(imageFile),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myDetails"] });
+    },
+    onError: (error) => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 401:
+            console.error(
+              "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+            );
+            break;
+          default:
+            console.error(
+              "프로필 이미지 업로드 중 알 수 없는 오류가 발생했습니다."
+            );
+        }
+      } else {
+        console.error("프로필 이미지 업로드 요청 실패:", error.message);
+      }
+    },
+  });
+};
