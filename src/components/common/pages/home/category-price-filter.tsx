@@ -5,12 +5,12 @@ export default function CategoryPriceFilter() {
   return (
     <div className="flex-between gap-[1rem] w-[120rem]">
       <div className="flex-between gap-[2.4rem]">
-        <Button type="main" label="문화・예술" variant="main" />
-        <Button type="main" label="식음료" variant="main" />
-        <Button type="main" label="스포츠" variant="main" />
-        <Button type="main" label="투어" variant="main" />
-        <Button type="main" label="관광" variant="main" />
-        <Button type="main" label="웰빙" variant="main" />
+        <Button type="category" label="문화・예술" variant="category" />
+        <Button type="category" label="식음료" variant="category" />
+        <Button type="category" label="스포츠" variant="category" />
+        <Button type="category" label="투어" variant="category" />
+        <Button type="category" label="관광" variant="category" />
+        <Button type="category" label="웰빙" variant="category" />
       </div>
 
       <FilterDropdown

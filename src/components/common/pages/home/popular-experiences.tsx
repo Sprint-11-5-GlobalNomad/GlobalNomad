@@ -36,7 +36,9 @@ export default function PopularExperiences() {
                   width={18}
                   height={18}
                 />
-                <p className="text-md font-semiBold">4.9 (793)</p>
+                <p className="text-md font-semiBold">
+                  {activity.rating} ({activity.reviewCount})
+                </p>
               </div>
               <p
                 className="w-[25.1rem] text-3xl font-bold break-keep
