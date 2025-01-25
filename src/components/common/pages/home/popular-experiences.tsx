@@ -5,15 +5,16 @@ import Link from "next/link";
 export default function PopularExperiences() {
   return (
     <ul
-      className="flex gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
+      className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
     tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
     >
       {activityData.map((activity) => (
         <li
           key={activity.id}
-          className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem]
-          tablet:flex-shrink-0 mobile:w-[18.4rem] mobile:h-[18.4rem] mobile:flex-shrink-0"
+          className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
+          mobile:w-[18.4rem] mobile:h-[18.4rem]"
+          // tablet:flex-shrink-0 mobile:flex-shrink-0
         >
           <Link href="/">
             <Image
@@ -45,7 +46,7 @@ export default function PopularExperiences() {
               </p>
               <p className="text-xl font-bold flex-between gap-[0.5rem]">
                 ₩ {Number(activity.price).toLocaleString("ko-KR")}
-                <span className="font-md font-regular text-gray-700">/인</span>
+                <span className="text-md font-regular text-gray-700">/인</span>
               </p>
             </div>
           </Link>
