@@ -2,7 +2,7 @@ import { create } from "zustand";
 import {
   ActivityBasicDto,
   FindActivitiesQueryDto,
-} from "./types/activity-schemas";
+} from "../app/types/activity-schemas";
 
 interface ActivityState {
   activityList: ActivityBasicDto[]; // 활동 목록

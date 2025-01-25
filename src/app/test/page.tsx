@@ -1,8 +1,8 @@
 "use client";
 
-import FilterDropdown from "@/components/common/ui/filter-dropdown";
+import FilterDropdown from "@/components/common/ui/dropdown/filter-dropdown";
 import SelectDropdown from "../../components/common/ui/select-dropdown";
-import EditDeleteDropdown from "@/components/common/ui/edit-delete-dropdown";
+import EditDeleteDropdown from "@/components/common/ui/dropdown/edit-delete-dropdown";
 
 export default function TestPage() {
   return (

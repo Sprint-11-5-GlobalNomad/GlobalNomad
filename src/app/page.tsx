@@ -1,14 +1,28 @@
+import CategoryPriceFilter from "@/components/pages/home/category-price-filter";
+import HeroBanner from "@/components/pages/home/hero-banner";
+import SearchSection from "@/components/pages/home/search-section";
+import Pagination from "@/components/common/ui/pagination";
 import React from "react";
+import PopularActivitiesTitle from "@/components/pages/home/popular-activities-title";
+import PopularActivities from "@/components/pages/home/popular-activities";
+import AllActivitiesTitle from "@/components/pages/home/all-activities-title";
+import AllActivities from "@/components/pages/home/all-activities";
 
 export default function Home() {
   return (
-    <div>
-      <div className="text-[5rem]">함께 배우면 즐거운 스트릿 댄스</div>
-      <div className="text-[1.6rem]">무엇을 체험하고 싶으신가요?</div>
-      <div className="text-[2rem]">인기 체험</div>
-      <div className="text-[2rem]">모든 체험</div>
-      <div className="text-[1.4rem]">1 2 3 4 5</div>
-      <div className="text-[2.5rem]">footer</div>
+    <div className="mt-[7rem] flex-column">
+      <HeroBanner />
+      <SearchSection />
+
+      <PopularActivitiesTitle />
+      <PopularActivities />
+
+      <CategoryPriceFilter />
+
+      <AllActivitiesTitle />
+      <AllActivities />
+
+      <Pagination />
     </div>
   );
 }

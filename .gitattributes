@@ -1,0 +1,15 @@
+# error 해결 - warning: in the working copy of '~.svg', LF will be replaced by CRLF the next time Git touches it
+
+# 텍스트 파일 자동 변환 (운영 체제에 따라 CRLF/LF 적용)
+* text=auto
+
+# Windows 배치 스크립트는 CRLF 강제
+*.bat eol=crlf
+
+# Unix/Linux 스크립트는 LF 강제
+*.sh eol=lf
+
+# 바이너리 파일 변환 방지
+*.png binary
+*.jpg binary
+*.svg binary
