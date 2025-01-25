@@ -37,7 +37,8 @@ export default function PopularExperiences() {
                   height={18}
                 />
                 <p className="text-md font-semiBold">
-                  {activity.rating} ({activity.reviewCount})
+                  {activity.rating} (
+                  {Number(activity.reviewCount).toLocaleString("ko-KR")})
                 </p>
               </div>
               <p
