@@ -475,6 +475,7 @@ template {
     --color-nomad-black: #112211;
 
     /* gray scale */
+    --color-gray-0: #fefefe;
     --color-gray-100: #fafafa;
     --color-gray-200: #eeeeee;
     --color-gray-300: #dddddd;
