@@ -21,9 +21,7 @@ export const useNotifications = (cursorId?: number) =>
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error(
-                "알림 목록을 가져오는 데 실패했습니다. cursorId는 숫자로 입력해주세요."
-              );
+              console.error(error.message);
               break;
             case 401:
               console.error(

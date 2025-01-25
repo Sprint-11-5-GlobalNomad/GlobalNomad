@@ -31,9 +31,7 @@ export const useActivities = (filters: FindActivitiesQueryDto) =>
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 400) {
-            console.error(
-              "체험 리스트를 가져오는 데 실패했습니다. 페이지네이션 방식이 'offset' 또는 'cursor'로 설정되었는지 확인하세요."
-            );
+            console.error(error.message);
           } else if (error.response?.status === 401) {
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
@@ -66,9 +64,7 @@ export const useCreateActivity = () => {
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(
-              "잘못된 요청입니다. 제목, 카테고리, 주소 등 입력값을 확인하세요."
-            );
+            console.error(error.message);
             break;
           case 409:
             console.error(
@@ -134,9 +130,7 @@ export const useCreateReservation = () => {
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(
-              "잘못된 요청입니다. 예약하려는 스케줄 ID 또는 인원을 확인하세요."
-            );
+            console.error(error.message);
             break;
           case 409:
             console.error("해당 스케줄은 이미 확정된 예약이 존재합니다.");

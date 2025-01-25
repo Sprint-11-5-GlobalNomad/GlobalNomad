@@ -17,7 +17,7 @@ export const useMyReservations = (cursorId?: number, status?: string) =>
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error("cursorId는 숫자로 입력해주세요.");
+              console.error(error.message);
               break;
             case 401:
               console.error(
@@ -54,7 +54,7 @@ export const useCancelReservation = () => {
       if (error.response?.status) {
         switch (error.response?.status) {
           case 400:
-            console.error("status는 canceled만 가능합니다.");
+            console.error(error.message);
             break;
           case 401:
             console.error(
@@ -93,7 +93,7 @@ export const useSubmitReservationReview = () => {
       if (error.response?.status) {
         switch (error.response?.status) {
           case 400:
-            console.error("content는 문자열로 입력해주세요.");
+            console.error(error.message);
             break;
           case 401:
             console.error(

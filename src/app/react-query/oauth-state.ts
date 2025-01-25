@@ -37,9 +37,7 @@ export const useLogin = () =>
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(
-              "이메일 형식이 올바르지 않습니다. 이메일 형식을 확인해주세요."
-            );
+            console.error(error.message);
             break;
           case 404:
             console.error(
@@ -99,9 +97,7 @@ export const useRefreshToken = () =>
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(
-              "잘못된 요청입니다. 토큰 요청에 필요한 데이터를 확인하세요."
-            );
+            console.error(error.message);
             break;
           case 401:
             console.error("인증되지 않은 요청입니다. 다시 로그인하세요.");
