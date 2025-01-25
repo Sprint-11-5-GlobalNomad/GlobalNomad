@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useMyReservations } from "@/app/react-query/reservation-state";
-import FilterDropdown from "@/components/common/ui/filter-dropdown";
+import FilterDropdown from "@/components/common/ui/dropdown/filter-dropdown";
 import { EmptyActivity } from "@/components/empty-activity";
-import UserProfileSidebar from "@/components/my-page-card";
+import UserProfileSidebar from "@/components/common/layout/my-page-card";
 import { MyReservationCard } from "@/components/my-reservation-card";
 
 const filterOption: string[] = [

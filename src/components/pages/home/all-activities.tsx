@@ -2,7 +2,7 @@ import { activityData } from "@/data/activity-data";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AllExperiences() {
+export default function AllActivities() {
   return (
     <ul
       className="grid grid-cols-4 gap-[2rem] w-[120rem] mb-[6rem]

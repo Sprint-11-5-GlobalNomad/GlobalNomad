@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function PopularExperiencesTitle() {
+export default function PopularActivitiesTitle() {
   return (
     <div
       className="flex-between w-[120rem] mt-[16rem] mb-[3.2rem]

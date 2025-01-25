@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import UserProfileSidebar from "@/components/my-page-card";
+import UserProfileSidebar from "@/components/common/layout/my-page-card";
 import Button from "@/components/common/ui/button";
 import { useUpdateMyDetails } from "../react-query/user-state";
 import { fetchMyDetails } from "../api/user-api";
