@@ -106,6 +106,7 @@ export default function Home() {
 
       {/* 모든 체험 목록 */}
       <div>
+        <Button type="main" label="문화 예술" variant="main" />
         <h2>🛼 모든 체험</h2>
         <ul>
           {/* map 배열로 감싸주기 */}
