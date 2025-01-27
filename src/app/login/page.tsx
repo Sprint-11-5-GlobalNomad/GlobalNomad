@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { useLoginMutation } from "../../hooks/use-login-mutation";
 import Image from "next/image";
 import Link from "next/link";
-// import Modal from '';
-// import Button from '';
+import Modal from "../../components/common/ui/modal/message-modal";
+import Button from "../../components/common/ui/button";
 
 interface LoginFormInputs {
   email: string;
@@ -18,7 +18,8 @@ const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  // const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const loginMutation = useLoginMutation(); // useMutation 훅 호출
   const router = useRouter();
 
@@ -38,15 +39,22 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       await loginMutation.mutateAsync(data); // API 요청 실행
-      alert("로그인 성공!");
       router.push("/dashboard"); // 로그인 성공 후 이동
     } catch (error) {
       console.error("로그인 에러:", error);
+      setModalMessage("비밀번호가 일치하지 않습니다.");
+      setShowModal(true);
     }
   };
 
   return (
     <div>
+      {/* 모달 컴포넌트 */}
+      <Modal
+        isOpen={showModal}
+        message={modalMessage}
+        onClose={() => setShowModal(false)} // 닫기 버튼 동작
+      />
       <div className="flex flex-col items-center px-[1.6rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
         {/** 로고 섹션 */}
         <div className="flex justify-center mb-[3.2rem] w-full">
@@ -166,21 +174,36 @@ export default function LoginPage() {
             </div>
 
             {/* 로그인 버튼 */}
-            <button
+            <Button
               type="submit"
-              className={`
-              flex items-center justify-center w-full h-[4.8rem] px-[13.6rem] 
-              py-[1.4rem] gap-[0.8rem] rounded-[0.6rem] bg-[var(--color-gray-600)] 
-              text-[var(--color-white)]`}
-              disabled={loginMutation.isLoading}
-            >
-              {loginMutation.isLoading ? "로그인 중..." : "로그인"}
-              <span
-                className={`text-[1.6rem] font-bold leading-[2.6rem] text-center`}
-              >
-                로그인 하기
-              </span>
-            </button>
+              label="로그인 하기"
+              variant="default"
+              className={`w-full h-[4.8rem] rounded-[0.6rem]`}
+              onClick={(e) => {
+                e.preventDefault(); // 기본 동작 방지
+                trigger() // 모든 필드 검증
+                  .then(async (isValid) => {
+                    if (isValid) {
+                      const data = {
+                        email:
+                          (document.getElementById("email") as HTMLInputElement)
+                            ?.value || "",
+                        password:
+                          (
+                            document.getElementById(
+                              "password"
+                            ) as HTMLInputElement
+                          )?.value || "",
+                      };
+                      await onSubmit(data); // 로그인 함수 실행
+                    } else {
+                      setModalMessage("입력 정보를 확인해주세요.");
+                      setShowModal(true);
+                    }
+                  });
+              }}
+              // disabled={loginMutation.isLoading}
+            />
           </form>
 
           {/* 회원가입 이동 */}

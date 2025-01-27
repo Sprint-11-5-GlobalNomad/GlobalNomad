@@ -6,7 +6,7 @@ import { ButtonSizes } from "@/app/types/button-type";
 interface ButtonProps {
   type: keyof typeof ButtonSizes; // 버튼 역할
   label: React.ReactNode; // 버튼 텍스트
-  onClick?: () => void; // 클릭 이벤트
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // 클릭 이벤트
   variant?: "default" | "outlined" | "category" | "page" | "selected"; // 스타일
   disabled?: boolean; // 비활성화
   className?: string; // 추가 클래스
