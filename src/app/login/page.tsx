@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-// import axios from "axios";
-// import useAuthStore from '../stores/authStore';
+import { useLoginMutation } from "../../hooks/use-login-mutation";
 import Image from "next/image";
 import Link from "next/link";
 // import Modal from '';
@@ -20,6 +19,7 @@ const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   // const [showModal, setShowModal] = useState(false);
+  const loginMutation = useLoginMutation(); // useMutation 훅 호출
   const router = useRouter();
 
   const {
@@ -33,6 +33,16 @@ export default function LoginPage() {
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const onSubmit = async (data: LoginFormInputs) => {
+    try {
+      await loginMutation.mutateAsync(data); // API 요청 실행
+      alert("로그인 성공!");
+      router.push("/dashboard"); // 로그인 성공 후 이동
+    } catch (error) {
+      console.error("로그인 에러:", error);
+    }
   };
 
   return (
@@ -162,7 +172,9 @@ export default function LoginPage() {
               flex items-center justify-center w-full h-[4.8rem] px-[13.6rem] 
               py-[1.4rem] gap-[0.8rem] rounded-[0.6rem] bg-[var(--color-gray-600)] 
               text-[var(--color-white)]`}
+              disabled={loginMutation.isLoading}
             >
+              {loginMutation.isLoading ? "로그인 중..." : "로그인"}
               <span
                 className={`text-[1.6rem] font-bold leading-[2.6rem] text-center`}
               >
