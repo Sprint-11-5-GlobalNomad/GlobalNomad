@@ -3,11 +3,13 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useLoginMutation } from "../../hooks/use-login-mutation";
+import { useLogin } from "../react-query/oauth-state";
 import Image from "next/image";
 import Link from "next/link";
-import Modal from "../../components/common/ui/modal/message-modal";
+import MessageModal from "../../components/common/ui/modal/message-modal";
 import Button from "../../components/common/ui/button";
+
+import { AxiosError } from "axios";
 
 interface LoginFormInputs {
   email: string;
@@ -18,42 +20,71 @@ const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
-  const loginMutation = useLoginMutation(); // useMutation 훅 호출
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const loginMutation = useLogin();
   const router = useRouter();
 
   const {
     register,
     formState: { errors },
     trigger,
+    handleSubmit,
+    watch,
   } = useForm<LoginFormInputs>({
     mode: "onBlur",
   });
-  // const { login } = useAuthStore();
+
+  React.useEffect(() => {
+    const email = watch("email");
+    const password = watch("password");
+    const isEmailValid = emailRegex.test(email); // 이메일 유효성 체크
+    const isPasswordValid = password.length >= 8; // 비밀번호 유효성 체크
+    setIsButtonDisabled(!(isEmailValid && isPasswordValid)); // 둘 다 유효하면 버튼 활성화
+  }, [watch("email"), watch("password")]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const onSubmit = async (data: LoginFormInputs) => {
-    try {
-      await loginMutation.mutateAsync(data); // API 요청 실행
-      router.push("/dashboard"); // 로그인 성공 후 이동
-    } catch (error) {
-      console.error("로그인 에러:", error);
-      setModalMessage("비밀번호가 일치하지 않습니다.");
-      setShowModal(true);
-    }
+  // 모달 열기 함수
+  const openModal = (message: string) => {
+    setModalState({ isOpen: true, message });
+  };
+
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setModalState({ isOpen: false, message: "" });
+  };
+
+  const onSubmit = (data: LoginFormInputs) => {
+    loginMutation.mutate(data, {
+      onSuccess: () => {
+        router.push("/"); // 로그인 성공 시 메인 페이지로 이동
+      },
+      onError: (error) => {
+        // error를 안전하게 처리
+        if (error instanceof AxiosError) {
+          const errorMessage =
+            error.response?.data?.message || "로그인에 실패했습니다.";
+          openModal(errorMessage); // 에러 메시지를 모달로 표시
+        } else {
+          openModal("알 수 없는 오류가 발생했습니다."); // AxiosError가 아닌 경우 기본 메시지 표시
+        }
+      },
+    });
   };
 
   return (
     <div>
       {/* 모달 컴포넌트 */}
-      <Modal
-        isOpen={showModal}
-        message={modalMessage}
-        onClose={() => setShowModal(false)} // 닫기 버튼 동작
+      <MessageModal
+        isOpen={modalState.isOpen}
+        message={modalState.message}
+        onClose={closeModal}
       />
       <div className="flex flex-col items-center px-[1.6rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
         {/** 로고 섹션 */}
@@ -71,7 +102,10 @@ export default function LoginPage() {
 
         {/** 폼 섹션 */}
         <div className="w-full flex flex-col gap-[3.2rem]">
-          <form className="w-full flex flex-col gap-[2.8rem]">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="w-full flex flex-col gap-[2.8rem]"
+          >
             {/* 이메일 */}
             <div className="mb-[1.6rem]">
               <label
@@ -113,58 +147,60 @@ export default function LoginPage() {
             </div>
 
             {/* 비밀번호 */}
-            <div className="mb-[1.6rem] relative">
+            <div className="mb-[1.6rem]">
               <label
                 htmlFor="password"
                 className="block text-[1.6rem] font-normal leading-[2.6rem] text-[var(--color-black)] mb-[0.4rem]"
               >
                 비밀번호
               </label>
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"} // showPassword 상태에 따라 type 변경
-                placeholder="비밀번호 입력"
-                className={`
-                w-full
-                px-[0.2rem] py-[1.6rem]
-                border
-                focus:outline-none
-                rounded-[0.6rem]
-                text-[1.6rem] font-normal leading-[2.6rem]
-                placeholder-[var(--color-gray-600)]
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"} // showPassword 상태에 따라 type 변경
+                  placeholder="비밀번호 입력"
+                  className={`
+                    w-full
+                    px-[0.2rem] py-[1.6rem]
+                    border
+                    focus:outline-none
+                    rounded-[0.6rem]
+                    text-[1.6rem] font-normal leading-[2.6rem]
+                    placeholder-[var(--color-gray-600)]
                   ${errors.password ? "border-[var(--color-red)]" : "border-[var(--color-gray-300)]"}
                 `}
-                {...register("password", {
-                  required: "8자 이상 작성해주세요.",
-                  minLength: {
-                    value: 8,
-                    message: "8자 이상 작성해주세요.",
-                  },
-                })}
-                onBlur={() => trigger("password")}
-              />
-              {/* 비밀번호 보기 버튼 */}
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute right-[1.6rem] top-[50%] transform -translate-y-1/2 text-[var(--color-gray-800)]"
-              >
-                {showPassword ? (
-                  <Image
-                    src="/image/visibility_off.svg"
-                    alt="비밀번호 보기"
-                    width={24}
-                    height={24}
-                  />
-                ) : (
-                  <Image
-                    src="/image/visibility_eye.svg"
-                    alt="비밀번호 숨기기"
-                    width={24}
-                    height={24}
-                  />
-                )}
-              </button>
+                  {...register("password", {
+                    required: "8자 이상 작성해주세요.",
+                    minLength: {
+                      value: 8,
+                      message: "8자 이상 작성해주세요.",
+                    },
+                  })}
+                  onBlur={() => trigger("password")}
+                />
+                {/* 비밀번호 보기 버튼 */}
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-[1.6rem] top-[50%] transform -translate-y-1/2 text-[var(--color-gray-800)]"
+                >
+                  {showPassword ? (
+                    <Image
+                      src="/image/visibility_off.svg"
+                      alt="비밀번호 보기"
+                      width={24}
+                      height={24}
+                    />
+                  ) : (
+                    <Image
+                      src="/image/visibility_eye.svg"
+                      alt="비밀번호 숨기기"
+                      width={24}
+                      height={24}
+                    />
+                  )}
+                </button>
+              </div>
               {/* 비밀번호 에러 메시지 */}
               {errors.password && (
                 <p className="mt-[0.4rem] text-[1.2rem] text-[var(--color-red)]">
@@ -175,34 +211,12 @@ export default function LoginPage() {
 
             {/* 로그인 버튼 */}
             <Button
-              type="submit"
+              type="loginSignup"
               label="로그인 하기"
-              variant="default"
-              className={`w-full h-[4.8rem] rounded-[0.6rem]`}
-              onClick={(e) => {
-                e.preventDefault(); // 기본 동작 방지
-                trigger() // 모든 필드 검증
-                  .then(async (isValid) => {
-                    if (isValid) {
-                      const data = {
-                        email:
-                          (document.getElementById("email") as HTMLInputElement)
-                            ?.value || "",
-                        password:
-                          (
-                            document.getElementById(
-                              "password"
-                            ) as HTMLInputElement
-                          )?.value || "",
-                      };
-                      await onSubmit(data); // 로그인 함수 실행
-                    } else {
-                      setModalMessage("입력 정보를 확인해주세요.");
-                      setShowModal(true);
-                    }
-                  });
-              }}
-              // disabled={loginMutation.isLoading}
+              variant="loginSignup"
+              disabled={isButtonDisabled}
+              className={`flex items-center justify-center w-[64rem] h-[4.8rem] px-[13.6rem] 
+                py-[1.4rem] gap-[0.8rem] rounded-[0.6rem] `}
             />
           </form>
 
