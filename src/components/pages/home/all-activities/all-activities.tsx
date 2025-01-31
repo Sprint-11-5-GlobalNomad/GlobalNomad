@@ -19,7 +19,10 @@ export default function AllActivities({ activities }: AllActivitiesProps) {
           className="border rounded-[2rem] flex-column gap-[1.6rem]
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
         >
-          <Link href="/" className="flex-column gap-[1.6rem]">
+          <Link
+            href={`/activity/${activity.id}`}
+            className="flex-column gap-[1.6rem]"
+          >
             <div className="h-[28.3rem] w-[28.3rem]">
               <Image
                 src={activity.bannerImageUrl}

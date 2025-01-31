@@ -20,7 +20,7 @@ export default function PopularActivities({ activities }: AllActivitiesProps) {
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
           // tablet:flex-shrink-0 mobile:flex-shrink-0
         >
-          <Link href="/">
+          <Link href={`/activity/${activity.id}`}>
             <Image
               src={activity.bannerImageUrl}
               alt={activity.title}
