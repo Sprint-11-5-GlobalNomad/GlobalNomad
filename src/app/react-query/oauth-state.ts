@@ -43,9 +43,11 @@ export const useLogin = () =>
             console.error(
               "존재하지 않는 유저입니다. 올바른 이메일을 입력했는지 확인하세요."
             );
+            alert(error.message);
             break;
           default:
             console.error("로그인 중 알 수 없는 오류가 발생했습니다.", error);
+            alert(error.message);
         }
       }
     },
@@ -62,6 +64,7 @@ export const useSignUpWithOauth = (provider: "google" | "kakao") =>
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
         console.error("OAuth 회원가입 중 오류가 발생했습니다.", error);
+        alert(error.message);
       }
     },
   });
@@ -77,6 +80,7 @@ export const useSignInWithOauth = (provider: "google" | "kakao") =>
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
         console.error("OAuth 로그인 중 오류가 발생했습니다.", error);
+        alert(error.message);
       }
     },
   });
@@ -98,15 +102,18 @@ export const useRefreshToken = () =>
         switch (error.response?.status) {
           case 400:
             console.error(error.message);
+            alert(error.message);
             break;
           case 401:
             console.error("인증되지 않은 요청입니다. 다시 로그인하세요.");
+            alert(error.message);
             break;
           default:
             console.error(
               "토큰 갱신 중 알 수 없는 오류가 발생했습니다.",
               error
             );
+            alert(error.message);
         }
       }
     },

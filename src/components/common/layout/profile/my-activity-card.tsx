@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ActivityBasicDto } from "@/app/types/activity-schemas";
 import EditDeleteDropdown from "../../ui/dropdown/edit-delete-dropdown";
 import { useState } from "react";
+import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
 
 type ActivityCardProps = Pick<
   ActivityBasicDto,
@@ -12,27 +13,20 @@ type ActivityCardProps = Pick<
 
 export function MyActivityCard(ActivityProps: ActivityCardProps) {
   const [isDeleteable, setIsDeleteAble] = useState(false);
+  const deleteMyActivity = useDeleteMyActivity();
 
   async function handleDelete() {
     if (isDeleteable) return;
     setIsDeleteAble(true);
 
-    try {
-      const response = await fetch(``, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
+    deleteMyActivity.mutate(ActivityProps.id, {
+      onSuccess: () => {
         alert("체험이 성공적으로 삭제되었습니다.");
-      } else {
-        alert("체험 삭제에 실패했습니다.");
-      }
-    } catch (error) {
-      console.error("Error deleting activity:", error);
-      alert("체험 삭제 중 오류가 발생했습니다.");
-    } finally {
-      setIsDeleteAble(false);
-    }
+      },
+      onSettled: () => {
+        setIsDeleteAble(false);
+      },
+    });
   }
 
   return (
