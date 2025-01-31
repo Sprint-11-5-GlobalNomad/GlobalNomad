@@ -25,15 +25,19 @@ export const useCreateUser = () => {
         switch (error.response.status) {
           case 400:
             console.error(error.message);
+            alert(error.message);
             break;
           case 409:
             console.error("중복된 이메일입니다.");
+            alert(error.message);
             break;
           default:
             console.error("회원가입 중 알 수 없는 오류가 발생했습니다.");
+            alert(error.message);
         }
       } else {
         console.error("회원가입 요청 실패:", error.message);
+        alert(error.message);
       }
     },
   });
@@ -53,12 +57,15 @@ export const useMyDetails = () =>
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
+              alert(error.message);
               break;
             case 404:
               console.error("존재하지 않는 유저입니다.");
+              alert(error.message);
               break;
             default:
               console.error("내 정보 조회 중 알 수 없는 오류가 발생했습니다.");
+              alert(error.message);
           }
         }
         throw error;
@@ -80,17 +87,21 @@ export const useUpdateMyDetails = () => {
         switch (error.response.status) {
           case 400:
             console.error(error.message);
+            alert(error.message);
             break;
           case 401:
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
+            alert(error.message);
             break;
           default:
             console.error("내 정보 수정 중 알 수 없는 오류가 발생했습니다.");
+            alert(error.message);
         }
       } else {
         console.error("내 정보 수정 요청 실패:", error.message);
+        alert(error.message);
       }
     },
   });
@@ -111,14 +122,17 @@ export const useUploadProfileImage = () => {
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
+            alert(error.message);
             break;
           default:
             console.error(
               "프로필 이미지 업로드 중 알 수 없는 오류가 발생했습니다."
             );
+            alert(error.message);
         }
       } else {
         console.error("프로필 이미지 업로드 요청 실패:", error.message);
+        alert(error.message);
       }
     },
   });

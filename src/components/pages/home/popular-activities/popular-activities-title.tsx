@@ -1,6 +1,16 @@
 import Image from "next/image";
 
-export default function PopularActivitiesTitle() {
+interface PopularActivitiesTitleProps {
+  handleNextCursor: () => void;
+  handlePrevCursor: () => void;
+  cursorId: number | null;
+}
+
+export default function PopularActivitiesTitle({
+  handleNextCursor,
+  handlePrevCursor,
+  cursorId,
+}: PopularActivitiesTitleProps) {
   return (
     <div
       className="flex-between w-[120rem] mt-[16rem] mb-[3.2rem]
@@ -13,7 +23,11 @@ export default function PopularActivitiesTitle() {
         🔥 인기 체험
       </h2>
       <div className="flex gap-[1.2rem]">
-        <button className="tablet:hidden mobile:hidden">
+        <button
+          className="tablet:hidden mobile:hidden"
+          onClick={handleNextCursor}
+          disabled={!cursorId}
+        >
           <Image
             src="/image/unactivated_left_arrow.svg"
             alt="인기체험 이전 목록"
@@ -21,7 +35,10 @@ export default function PopularActivitiesTitle() {
             height={44}
           />
         </button>
-        <button className="tablet:hidden mobile:hidden">
+        <button
+          className="tablet:hidden mobile:hidden"
+          onClick={handlePrevCursor}
+        >
           <Image
             src="/image/activated_right_arrow.svg"
             alt="인기체험 다음 목록"

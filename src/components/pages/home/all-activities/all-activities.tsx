@@ -1,5 +1,4 @@
 import { ActivityBasicDto } from "@/app/types/activity-schemas";
-// import { activityData } from "@/data/activity-data";
 import Image from "next/image";
 import Link from "next/link";
 
