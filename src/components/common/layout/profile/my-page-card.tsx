@@ -18,12 +18,12 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
     },
     {
       label: "예약 내역",
-      link: "/profile/reservation",
+      link: "/profile/my-reservations",
       icon: "/image/reservation.svg",
     },
     {
       label: "체험 관리",
-      link: "/profile/activity",
+      link: "/profile/my-activities",
       icon: "/image/management.svg",
     },
     {
