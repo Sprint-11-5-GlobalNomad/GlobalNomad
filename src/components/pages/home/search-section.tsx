@@ -13,7 +13,7 @@ export default function SearchSection() {
       <h2 className="text-xl font-bold mobile:text-lg">
         무엇을 체험하고 싶으신가요?
       </h2>
-      <div className="flex-between gap-[1rem] h-[5.6rem] items-center">
+      <form className="flex-between gap-[1rem] h-[5.6rem] items-center">
         <div
           className="flex gap-[1rem] w-full h-full focus-within:border-green
       border border-solid border-gray-800 rounded-[0.4rem] mobile:gap-0 mobile:w-[18.7rem]"
@@ -25,6 +25,7 @@ export default function SearchSection() {
             height={48}
           />
           <input
+            type="search"
             placeholder="내가 원하는 체험은"
             className="placeholder:text-gray-700 text-lg font-regular
           w-full rounded-[0.4rem] outline-none
@@ -32,7 +33,7 @@ export default function SearchSection() {
           />
         </div>
         <Button type="search" label="검색하기" variant="default" />
-      </div>
+      </form>
     </div>
   );
 }

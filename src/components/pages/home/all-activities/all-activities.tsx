@@ -1,15 +1,20 @@
-import { activityData } from "@/data/activity-data";
+import { ActivityBasicDto } from "@/app/types/activity-schemas";
+// import { activityData } from "@/data/activity-data";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AllActivities() {
+interface AllActivitiesProps {
+  activities: Array<ActivityBasicDto>;
+}
+
+export default function AllActivities({ activities }: AllActivitiesProps) {
   return (
     <ul
       className="grid grid-cols-4 gap-[2rem] w-[120rem] mb-[6rem]
     tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
     >
-      {activityData.map((activity) => (
+      {activities.map((activity) => (
         <li
           key={activity.id}
           className="border rounded-[2rem] flex-column gap-[1.6rem]
