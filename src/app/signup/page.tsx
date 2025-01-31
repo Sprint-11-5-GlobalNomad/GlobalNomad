@@ -64,13 +64,6 @@ export default function SignupPage() {
         openModal("가입이 완료되었습니다!");
         router.push("/login"); // 성공 시 로그인 페이지로 이동
       },
-      onError: (error) => {
-        if (error.response?.status === 409) {
-          openModal("이미 사용 중인 이메일입니다.");
-        } else {
-          alert("회원가입에 실패했습니다. 다시 시도해주세요.");
-        }
-      },
     });
   };
 
