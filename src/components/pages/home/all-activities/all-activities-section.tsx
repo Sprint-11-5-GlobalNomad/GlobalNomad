@@ -17,6 +17,7 @@ export default function AllActivitiesSection() {
     method: "offset",
     page,
     size,
+    sort: "latest",
   });
 
   const totalPages = Math.ceil((data?.totalCount || 0) / size);
