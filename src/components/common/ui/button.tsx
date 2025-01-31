@@ -5,9 +5,15 @@ import { ButtonSizes } from "@/app/types/button-type";
 
 interface ButtonProps {
   type: keyof typeof ButtonSizes; // 버튼 역할
-  label: string; // 버튼 텍스트
-  onClick?: () => void; // 클릭 이벤트
-  variant?: "default" | "outlined"; // 스타일
+  label: React.ReactNode; // 버튼 텍스트
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // 클릭 이벤트 event: React.MouseEvent<HTMLButtonElement>추가
+  variant?:
+    | "default"
+    | "outlined"
+    | "category"
+    | "page"
+    | "selected"
+    | "loginSignup"; // 스타일
   disabled?: boolean; // 비활성화
   className?: string; // 추가 클래스
 }
@@ -56,7 +62,6 @@ const Button: React.FC<ButtonProps> = ({
     height: `${height}px`,
     borderRadius: `${radius}px`,
     fontSize: `${font_size}px`,
-    fontWeight: "bold",
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.6 : 1,
     transition: "all 0.3s ease",
@@ -68,12 +73,36 @@ const Button: React.FC<ButtonProps> = ({
       backgroundColor: disabled ? "#c0c0c0" : "#000",
       color: "#fff",
       border: "none",
+      fontWeight: "bold",
     },
     outlined: {
       ...baseStyle,
       backgroundColor: "#fff",
       color: "#000",
-      border: `2px solid ${disabled ? "#c0c0c0" : "#000"}`,
+      border: `1px solid ${disabled ? "#c0c0c0" : "#000"}`,
+      fontWeight: "bold",
+    },
+    category: {
+      ...baseStyle,
+      backgroundColor: "#fff",
+      color: "#0B3B2D",
+      border: "1px solid #0B3B2D",
+    },
+    selected: {
+      ...baseStyle,
+      color: "#fff",
+      backgroundColor: "#0B3B2D",
+    },
+    page: {
+      ...baseStyle,
+      backgroundColor: disabled ? "#0B3B2D" : "#fff",
+      color: disabled ? "#A1A1A1" : "#0B3B2D",
+      border: `1px solid ${disabled ? "#DDDDDD" : "#0B3B2D"}`,
+    },
+    loginSignup: {
+      ...baseStyle,
+      backgroundColor: disabled ? "#A4A1AA" : "#0B3B2D",
+      color: "#fff",
     },
   };
 

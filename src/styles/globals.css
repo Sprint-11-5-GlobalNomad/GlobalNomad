@@ -471,9 +471,11 @@ template {
   :root {
     /*color palette*/
     --color-black: #1b1b1b;
+    --color-white: #ffffff;
     --color-nomad-black: #112211;
 
     /* gray scale */
+    --color-gray-0: #fefefe;
     --color-gray-100: #fafafa;
     --color-gray-200: #eeeeee;
     --color-gray-300: #dddddd;
@@ -557,5 +559,13 @@ template {
   }
   .flex-column {
     @apply flex flex-col items-center;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
   }
 }

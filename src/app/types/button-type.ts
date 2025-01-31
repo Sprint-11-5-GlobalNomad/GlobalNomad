@@ -81,6 +81,16 @@ const ButtonSizes: Record<
     md: { width: 82, height: 38, radius: 6, font_size: 14 },
     sm: { width: 82, height: 38, radius: 6, font_size: 14 },
   },
+  category: {
+    lg: { width: 127, height: 58, radius: 15, font_size: 18 },
+    md: { width: 120, height: 58, radius: 15, font_size: 18 },
+    sm: { width: 80, height: 41, radius: 15, font_size: 16 },
+  },
+  page: {
+    lg: { width: 55, height: 55, radius: 15, font_size: 18 },
+    md: { width: 55, height: 55, radius: 15, font_size: 18 },
+    sm: { width: 40, height: 40, radius: 15, font_size: 18 },
+  },
 };
 
 export { ButtonSizes };
