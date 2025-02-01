@@ -27,12 +27,14 @@ export const useNotifications = (cursorId?: number) =>
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
+              alert(error.message);
               break;
             default:
               console.error(
                 "알림 목록을 가져오는 중 알 수 없는 오류가 발생했습니다.",
                 error
               );
+              alert(error.message);
           }
         }
         throw error;
@@ -55,18 +57,22 @@ export const useDeleteNotification = () => {
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
+            alert(error.message);
             break;
           case 403:
             console.error("본인의 알림만 삭제할 수 있습니다.");
+            alert(error.message);
             break;
           case 404:
             console.error("존재하지 않는 알림입니다.");
+            alert(error.message);
             break;
           default:
             console.error(
               "알림 삭제 중 알 수 없는 오류가 발생했습니다.",
               error
             );
+            alert(error.message);
         }
       }
     },
