@@ -6,7 +6,7 @@ import Link from "next/link";
 
 interface SidebarProps {
   page: string;
-  onNavigate?: (link: string) => void; // onNavigate 추가
+  onNavigate?: (link: string) => void;
 }
 
 export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
@@ -50,64 +50,71 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
   };
 
   return (
-    <div className="w-[38rem] h-[43.2rem] p-[2.4rem] tablet:w-[25.1rem] tablet:h-[43.2rem] mobile:w-[34.4rem] mobile:h-[43.2rem] bg-white border border-black rounded-[0.75rem] space-y-[2.4rem]">
-      <div className="flex flex-col items-center">
-        <div className="relative">
-          <Image
-            src={profileImage}
-            alt="Profile"
-            width={160}
-            height={160}
-            className="rounded-full object-cover border border-gray-200"
-            style={{
-              width: "16rem",
-              height: "16rem",
-            }}
-          />
-          <label
-            htmlFor="profile-upload"
-            className="absolute bottom-0 right-0 cursor-pointer"
-          >
+    <div className="w-full mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center min-h-screen ">
+      <div
+        className="w-[38rem] h-[43.2rem] p-[2.4rem] 
+        tablet:w-[25.1rem] tablet:h-[43.2rem] 
+        mobile:w-full mobile:max-w-[34.4rem] mobile:h-[43.2rem] mobile:mt-[2.4rem] bg-white 
+        border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md"
+      >
+        <div className="flex flex-col items-center justify-center">
+          <div className="relative">
             <Image
-              src="/image/btn.svg"
-              alt="프로필 이미지 변경"
-              width={44}
-              height={44}
-              className="rounded-full"
+              src={profileImage}
+              alt="Profile"
+              width={160}
+              height={160}
+              className="rounded-full object-cover border border-gray-200"
+              style={{
+                width: "16rem",
+                height: "16rem",
+              }}
             />
-            <input
-              type="file"
-              id="profile-upload"
-              accept="image/*"
-              onChange={handleProfileChange}
-              className="hidden"
-            />
-          </label>
+            <label
+              htmlFor="profile-upload"
+              className="absolute bottom-0 right-0 cursor-pointer"
+            >
+              <Image
+                src="/image/btn.svg"
+                alt="프로필 이미지 변경"
+                width={44}
+                height={44}
+                className="rounded-full"
+              />
+              <input
+                type="file"
+                id="profile-upload"
+                accept="image/*"
+                onChange={handleProfileChange}
+                className="hidden"
+              />
+            </label>
+          </div>
         </div>
+        <nav className="space-y-[0.8rem]">
+          {menuItems.map((item) => (
+            <Link
+              href={item.link}
+              key={item.label}
+              onClick={() => onNavigate?.(item.link)}
+              className={`flex items-center gap-[1rem] h-[4.4rem] rounded-[0.75rem] text-[1.6rem] pl-[1.6rem] font-bold ${
+                page === item.link
+                  ? "bg-green-light text-black"
+                  : "text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              <Image
+                src={item.icon}
+                alt={`${item.label} 아이콘`}
+                width={24}
+                height={24}
+                className="h-[2.4rem] w-[2.4rem]"
+              />
+              {item.label}
+            </Link>
+          ))}
+        </nav>
       </div>
-      <nav className="space-y-[0.8rem]">
-        {menuItems.map((item) => (
-          <Link
-            href={item.link}
-            key={item.label}
-            onClick={() => onNavigate?.(item.link)} // onNavigate 호출
-            className={`flex items-center gap-[1rem] h-[4.4rem] rounded-[0.75rem] text-[1.6rem] font-bold ${
-              page === item.link
-                ? "bg-green-light text-black"
-                : "text-gray-600 hover:bg-gray-50"
-            }`}
-          >
-            <Image
-              src={item.icon}
-              alt={`${item.label} 아이콘`}
-              width={24}
-              height={24}
-              className="h-[2.4rem] w-[2.4rem]"
-            />
-            {item.label}
-          </Link>
-        ))}
-      </nav>
     </div>
   );
 }
