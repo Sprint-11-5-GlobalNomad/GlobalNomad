@@ -23,15 +23,24 @@ export const login = async (credentials: {
     refreshToken: string;
     accessToken: string;
   }>(`/auth/login`, credentials);
+
+  const { accessToken, refreshToken } = response.data;
+  localStorage.setItem("accessToken", accessToken);
+  localStorage.setItem("refreshToken", refreshToken);
+
   return response.data;
 };
 
 // 토큰 재발급
 export const refreshToken = async () => {
+  const token = localStorage.getItem("refreshToken");
+  if (!token) throw new Error("Refresh token이 없습니다.");
+
   const response = await instance.post<{
     refreshToken: string;
     accessToken: string;
-  }>(`/auth/tokens`);
+  }>(`/auth/tokens`, { refreshToken: token });
+
   return response.data;
 };
 

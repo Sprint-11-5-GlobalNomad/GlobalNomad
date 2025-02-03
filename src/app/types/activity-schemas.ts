@@ -16,13 +16,16 @@ export interface ActivityBasicDto {
 
 export interface FindActivitiesQueryDto {
   method: "offset" | "cursor";
-  cursorId?: number;
+  cursorId?: number | null;
   category?: "문화 · 예술" | "식음료" | "스포츠" | "투어" | "관광" | "웰빙";
   keyword?: string;
   sort?: "most_reviewed" | "price_asc" | "price_desc" | "latest";
   page?: number;
   size?: number;
 }
+
+export type CategoryType = Pick<FindActivitiesQueryDto, "category">["category"];
+export type SortType = Pick<FindActivitiesQueryDto, "sort">["sort"];
 
 export interface ActivityWithSubImagesAndSchedulesDto {
   id: number;
