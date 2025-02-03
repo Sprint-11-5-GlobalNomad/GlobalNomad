@@ -45,7 +45,7 @@ export default function ActivityExplorer() {
 
   const totalPages = Math.ceil((data?.totalCount || 0) / size);
 
-  const suffix = isLastCharHasBatchim(debouncedQuery) ? "으로 " : "로 ";
+  const suffix = isLastCharHasBatchim(searchQuery) ? "으로 " : "로 ";
 
   return (
     <>
@@ -74,14 +74,16 @@ export default function ActivityExplorer() {
           {isError && <ErrorIndicator width={80} height={80} />}
 
           {activities.length > 0 ? (
-            <div>
+            <>
               <AllActivities activities={activities} />
-              <Pagination
-                totalPages={totalPages}
-                currentPage={page}
-                setPage={setPage}
-              />
-            </div>
+              <div className="flex gap-[1rem] justify-center">
+                <Pagination
+                  totalPages={totalPages}
+                  currentPage={page}
+                  setPage={setPage}
+                />
+              </div>
+            </>
           ) : (
             !isLoading &&
             !isError && (
