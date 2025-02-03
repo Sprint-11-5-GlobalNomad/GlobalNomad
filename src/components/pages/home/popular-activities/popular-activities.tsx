@@ -1,22 +1,26 @@
-import { activityData } from "@/data/activity-data";
+import { ActivityBasicDto } from "@/app/types/activity-schemas";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function PopularActivities() {
+interface AllActivitiesProps {
+  activities: Array<ActivityBasicDto>;
+}
+
+export default function PopularActivities({ activities }: AllActivitiesProps) {
   return (
     <ul
       className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
     tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
     >
-      {activityData.map((activity) => (
+      {activities.map((activity) => (
         <li
           key={activity.id}
           className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
           // tablet:flex-shrink-0 mobile:flex-shrink-0
         >
-          <Link href="/">
+          <Link href={`/activity/${activity.id}`}>
             <Image
               src={activity.bannerImageUrl}
               alt={activity.title}

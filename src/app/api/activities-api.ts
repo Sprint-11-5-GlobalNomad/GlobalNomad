@@ -12,11 +12,15 @@ import {
 
 // 체험 리스트 조회
 export const fetchActivities = async (filters: FindActivitiesQueryDto) => {
+  const params = { ...filters };
+  if (filters.cursorId === undefined) {
+    delete params.cursorId;
+  }
   const response = await instance.get<{
-    cursorId: number;
+    cursorId: number | null;
     totalCount: number;
     activities: ActivityBasicDto[];
-  }>(`/activities`, { params: filters });
+  }>(`/activities`, { params });
   return response.data;
 };
 

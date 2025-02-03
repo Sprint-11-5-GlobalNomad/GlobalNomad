@@ -1,21 +1,28 @@
-import { activityData } from "@/data/activity-data";
+import { ActivityBasicDto } from "@/app/types/activity-schemas";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AllActivities() {
+interface AllActivitiesProps {
+  activities: ActivityBasicDto[];
+}
+
+export default function AllActivities({ activities }: AllActivitiesProps) {
   return (
     <ul
       className="grid grid-cols-4 gap-[2rem] w-[120rem] mb-[6rem]
     tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
     >
-      {activityData.map((activity) => (
+      {activities.map((activity) => (
         <li
           key={activity.id}
           className="border rounded-[2rem] flex-column gap-[1.6rem]
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
         >
-          <Link href="/" className="flex-column gap-[1.6rem]">
+          <Link
+            href={`/activity/${activity.id}`}
+            className="flex-column gap-[1.6rem]"
+          >
             <div className="h-[28.3rem] w-[28.3rem]">
               <Image
                 src={activity.bannerImageUrl}
