@@ -6,8 +6,8 @@ import AllActivitiesTitle from "./all-activities-title";
 import CategoryPriceFilter from "./category-price-filter";
 import { useActivities } from "@/app/react-query/activity-state";
 import { useState } from "react";
-import { LoadingIndicator } from "@/components/common/layout/loading-indicator";
-import { ErrorIndicator } from "@/components/common/layout/error-indicator";
+import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
+import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { CategoryType, SortType } from "@/app/types/activity-schemas";
 
 export default function AllActivitiesSection() {

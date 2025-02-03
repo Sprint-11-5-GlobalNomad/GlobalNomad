@@ -1,7 +1,7 @@
 "use client";
 
-import { LoadingIndicator } from "@/components/common/layout/loading-indicator";
-import { ErrorIndicator } from "@/components/common/layout/error-indicator";
+import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
+import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { useInfiniteActivities } from "@/app/react-query/use-infinite-scroll";
 import Image from "next/image";
 // import { useEffect, useRef, useState } from "react";
@@ -58,7 +58,7 @@ export default function PopularActivitiesSection() {
   return (
     <>
       <div
-        className="flex-between w-[120rem] mt-[16rem] mb-[3.2rem]
+        className="flex-between w-[120rem] mt-[15.8rem] mb-[3.2rem]
     tablet:w-[69.6rem] mobile:w-[34.3rem] mobile:mt-[9.4rem] mobile:mb-[1.6rem]"
       >
         <h2

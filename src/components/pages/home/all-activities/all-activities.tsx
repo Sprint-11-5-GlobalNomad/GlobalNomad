@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface AllActivitiesProps {
-  activities: Array<ActivityBasicDto>;
+  activities: ActivityBasicDto[];
 }
 
 export default function AllActivities({ activities }: AllActivitiesProps) {

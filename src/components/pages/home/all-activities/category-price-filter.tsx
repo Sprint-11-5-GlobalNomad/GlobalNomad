@@ -3,7 +3,14 @@ import Button from "../../../common/ui/button";
 import FilterDropdown from "../../../common/ui/dropdown/filter-dropdown";
 import { CategoryType, SortType } from "@/app/types/activity-schemas";
 
-const categories = ["문화・예술", "식음료", "스포츠", "투어", "관광", "웰빙"];
+const categories: CategoryType[] = [
+  "문화 · 예술",
+  "식음료",
+  "스포츠",
+  "투어",
+  "관광",
+  "웰빙",
+];
 
 interface CategoryPriceFilterProps {
   onFilterChange: (category: CategoryType, sort: SortType) => void;
