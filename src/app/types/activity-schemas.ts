@@ -24,6 +24,9 @@ export interface FindActivitiesQueryDto {
   size?: number;
 }
 
+export type CategoryType = Pick<FindActivitiesQueryDto, "category">["category"];
+export type SortType = Pick<FindActivitiesQueryDto, "sort">["sort"];
+
 export interface ActivityWithSubImagesAndSchedulesDto {
   id: number;
   userId: number;
