@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import UserProfileSidebar from "@/components/common/layout/my-page-card";
+import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
-import { useUpdateMyDetails } from "../react-query/user-state";
-import { fetchMyDetails } from "../api/user-api";
+import { useUpdateMyDetails, useMyDetails } from "../react-query/user-state";
 
 export default function ProfilePage() {
   const currentPage = "/profile";
 
+  const { data: userDetails, isLoading: isFetching } = useMyDetails();
+
   const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -20,22 +20,14 @@ export default function ProfilePage() {
   const { mutate: updateMyDetails, isLoading } = useUpdateMyDetails();
 
   useEffect(() => {
-    const loadUserDetails = async () => {
-      try {
-        const userDetails = await fetchMyDetails();
-        setNickname(userDetails.nickname || "");
-        setEmail(userDetails.email || "");
-      } catch (error) {
-        console.error("사용자 정보를 불러오는 중 오류 발생:", error);
-      }
-    };
-
-    loadUserDetails();
-  }, []);
+    if (userDetails?.nickname) {
+      setNickname(userDetails.nickname);
+    }
+  }, [userDetails]);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 768); // 모바일 감지
+      setIsMobileView(window.innerWidth <= 743); // 모바일 감지
     };
 
     handleResize();
@@ -63,6 +55,10 @@ export default function ProfilePage() {
     );
   };
 
+  if (isFetching) {
+    return <p>로딩 중...</p>;
+  }
+
   if (isMobileView && !showDetails) {
     return (
       <UserProfileSidebar
@@ -74,7 +70,7 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="flex justify-center  py-[7.2rem]">
+      <div className="flex justify-center py-[7.2rem] mt-[7.2rem]">
         <div className="flex gap-[2.4rem]">
           {!isMobileView && (
             <div>
@@ -96,38 +92,37 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Form */}
             <div className="space-y-[3.2rem]">
               {/* 닉네임 */}
               <div>
-                <label className="block text-[2.4rem] font-bold mb-[0.5rem]">
+                <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   닉네임
                 </label>
                 <input
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="w-full h-[4.2rem] border border-gray-300 rounded-[0.5rem] px-[1.2rem] text-[1.2rem]"
+                  className="w-full h-[4.2rem] border border-gray-700 rounded-[0.5rem] px-[1.2rem] text-[1.2rem]"
                   placeholder="닉네임을 입력하세요"
                 />
               </div>
 
-              {/* 이메일 수정 불가능 */}
+              {/* 이메일 */}
               <div>
-                <label className="block text-[2.4rem] font-bold mb-[0.5rem]">
+                <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   이메일
                 </label>
                 <input
                   type="email"
-                  value={email}
-                  disabled // 창 비활성화
-                  className="w-full h-[4.2rem] border border-gray-300 rounded-[0.5rem] px-[1.2rem] text-[1.2rem] bg-gray-100"
+                  value={userDetails?.email || ""}
+                  disabled
+                  className="w-full h-[4.2rem] border border-gray-700 rounded-[0.5rem] px-[1.2rem] text-[1.2rem] bg-gray-100"
                 />
               </div>
 
               {/* 새 비밀번호 */}
               <div>
-                <label className="block text-[2.4rem] font-bold mb-[0.5rem]">
+                <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   새 비밀번호
                 </label>
                 <input
@@ -135,15 +130,15 @@ export default function ProfilePage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   className={`w-full h-[4.2rem] border ${
-                    errorMessage ? "border-red-500" : "border-gray-300"
+                    errorMessage ? "border-red-500" : "border-gray-700"
                   } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
-                  placeholder="새 비밀번호를 입력하세요"
+                  placeholder="8자 이상 입력해주세요"
                 />
               </div>
 
               {/* 비밀번호 재입력 */}
               <div>
-                <label className="block text-[2.4rem] font-bold mb-[0.5rem]">
+                <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   비밀번호 재입력
                 </label>
                 <input
@@ -151,9 +146,9 @@ export default function ProfilePage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className={`w-full h-[4.2rem] border ${
-                    errorMessage ? "border-red-500" : "border-gray-300"
+                    errorMessage ? "border-red-500" : "border-gray-700"
                   } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
-                  placeholder="비밀번호를 한번 더 입력하세요"
+                  placeholder="비밀번호를 한번 더 입력해주세요"
                   onBlur={() => {
                     if (newPassword && newPassword !== confirmPassword) {
                       setErrorMessage("비밀번호가 일치하지 않습니다.");

@@ -1,10 +1,10 @@
 import { useCancelReservation } from "@/app/react-query/reservation-state";
-import ConfirmationModal from "@/components/confirmation-modal";
 import { useState } from "react";
 import Image from "next/image";
-import Button from "./common/ui/button";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
-import { ReviewModal } from "@/app/profile/reservation/component/review-modal";
+import { ReviewModal } from "@/app/profile/my-reservations/component/review-modal";
+import Button from "@/components/common/ui/button";
+import ConfirmationModal from "@/components/common/ui/modal/confirmation-modal";
 
 type ReservationCardProps = Pick<
   ReservationResponseDto,

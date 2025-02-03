@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { useMyReservations } from "@/app/react-query/reservation-state";
 import FilterDropdown from "@/components/common/ui/dropdown/filter-dropdown";
-import { EmptyActivity } from "@/components/empty-activity";
-import UserProfileSidebar from "@/components/common/layout/my-page-card";
-import { MyReservationCard } from "@/components/my-reservation-card";
+import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
+import { MyReservationCard } from "@/components/pages/profile-reservation/my-reservation-card";
+import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
 
 const filterOption: string[] = [
   "예약 완료",
@@ -35,10 +35,10 @@ export default function MyReservation() {
 
   return (
     <div className="flex flex-row justify-center min-h-[700px] h-auto mt-[7.2rem]">
-      <UserProfileSidebar />
+      <UserProfileSidebar page={"/my-reservations"} />
       <div className="pl-[2.4rem]">
         <div className=" flex flex-row justify-between items-center">
-          <h2 className="text-[3.2rem]">예약 내역</h2>
+          <h2 className="text-[3.2rem] font-bold">예약 내역</h2>
           <FilterDropdown
             description={"필터"}
             options={filterOption}
