@@ -17,7 +17,7 @@ export default function ProfilePage() {
   const [isMobileView, setIsMobileView] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  const { mutate: updateMyDetails, isLoading } = useUpdateMyDetails();
+  const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
 
   useEffect(() => {
     if (userDetails?.nickname) {
@@ -85,9 +85,9 @@ export default function ProfilePage() {
               <h2 className="text-[3.2rem] font-bold">내 정보</h2>
               <Button
                 type="profileSave"
-                label={isLoading ? "저장 중..." : "저장하기"}
+                label={isPending ? "저장 중..." : "저장하기"}
                 onClick={handleSave}
-                disabled={isLoading}
+                disabled={isPending}
                 variant="default"
               />
             </div>
