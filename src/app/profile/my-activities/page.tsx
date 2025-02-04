@@ -16,10 +16,12 @@ export default function MyActivities() {
   }
 
   return (
-    <div className="flex flex-row justify-center min-h-[700px] h-auto mt-[14.2rem] pb-[10rem]">
-      <UserProfileSidebar page="/profile/my-activities" />
-      <div className="pl-[2.4rem]">
-        <div className=" flex flex-row justify-between items-center">
+    <div className="flex flex-row justify-center gap-[2.4rem] mt-[14.4rem] mobile:mt-[9rem] mb-[18.3rem] mobile:mb-[10rem]">
+      <div className="mobile:hidden">
+        <UserProfileSidebar page={"/profile/my-activities"} />
+      </div>
+      <div className="flex flex-col">
+        <div className="h-[5.3rem] flex flex-row justify-between items-center">
           <h2 className="text-[3.2rem] font-bold">내 체험 관리</h2>
           <Button
             type="profileSave"
@@ -43,7 +45,7 @@ export default function MyActivities() {
               />
             ))
           ) : (
-            <div className="mt-[5rem]">
+            <div className="mt-[5rem] mb-[4.1rem]">
               <EmptyActivity />
             </div>
           )}

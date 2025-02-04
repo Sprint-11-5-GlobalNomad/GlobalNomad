@@ -50,7 +50,7 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
   };
 
   return (
-    <div className="w-full mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center min-h-screen ">
+    <div className="mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center ">
       <div
         className="w-[38rem] h-[43.2rem] p-[2.4rem] 
         tablet:w-[25.1rem] tablet:h-[43.2rem] 
