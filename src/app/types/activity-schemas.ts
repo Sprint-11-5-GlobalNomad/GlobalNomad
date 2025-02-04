@@ -1,10 +1,21 @@
 // Activity DTOs
+export const CATEGORY_TYPES = [
+  "문화 · 예술",
+  "식음료",
+  "스포츠",
+  "투어",
+  "관광",
+  "웰빙",
+] as const;
+
+export type CategoryType = (typeof CATEGORY_TYPES)[number];
+
 export interface ActivityBasicDto {
   id: number;
   userId: number;
   title: string;
   description: string;
-  category: "문화 · 예술" | "식음료" | "스포츠" | "투어" | "관광" | "웰빙";
+  category: CategoryType;
   price: number;
   address: string;
   bannerImageUrl: string;
@@ -24,7 +35,7 @@ export interface FindActivitiesQueryDto {
   size?: number;
 }
 
-export type CategoryType = Pick<FindActivitiesQueryDto, "category">["category"];
+// export type CategoryType = Pick<FindActivitiesQueryDto, "category">["category"];
 export type SortType = Pick<FindActivitiesQueryDto, "sort">["sort"];
 
 export interface ActivityWithSubImagesAndSchedulesDto {

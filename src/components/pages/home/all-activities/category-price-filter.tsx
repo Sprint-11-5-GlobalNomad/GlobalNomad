@@ -1,26 +1,22 @@
 import { useState } from "react";
 import Button from "../../../common/ui/button";
 import FilterDropdown from "../../../common/ui/dropdown/filter-dropdown";
-import { CategoryType, SortType } from "@/app/types/activity-schemas";
-
-const categories: CategoryType[] = [
-  "문화 · 예술",
-  "식음료",
-  "스포츠",
-  "투어",
-  "관광",
-  "웰빙",
-];
+import {
+  CATEGORY_TYPES,
+  CategoryType,
+  SortType,
+} from "@/app/types/activity-schemas";
 
 interface CategoryPriceFilterProps {
-  onFilterChange: (category: CategoryType, sort: SortType) => void;
+  onFilterChange: (category: CategoryType | undefined, sort: SortType) => void;
 }
 
 export default function CategoryPriceFilter({
   onFilterChange,
 }: CategoryPriceFilterProps) {
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategoryType>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryType | undefined
+  >(undefined);
   const [selectedSort, setSelectedSort] = useState<SortType>(undefined);
 
   const handleCategoryChange = (category: CategoryType) => {
@@ -41,9 +37,9 @@ export default function CategoryPriceFilter({
   return (
     <div className="flex-between gap-[1rem] w-[120rem]">
       <div className="flex-between gap-[2.4rem]">
-        {categories.map((category) => (
+        {CATEGORY_TYPES.map((category, index) => (
           <Button
-            key={category}
+            key={index}
             type="category"
             label={category}
             variant={category === selectedCategory ? "selected" : "category"}

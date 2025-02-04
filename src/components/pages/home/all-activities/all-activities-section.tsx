@@ -9,26 +9,32 @@ import { useState } from "react";
 import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { CategoryType, SortType } from "@/app/types/activity-schemas";
+import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
+
+const SIZE = 8;
 
 export default function AllActivitiesSection() {
-  const size = 8;
   const [page, setPage] = useState(1);
-  const [category, setCategory] = useState<CategoryType>(undefined);
+  const [category, setCategory] = useState<CategoryType | undefined>(undefined);
   const [sort, setSort] = useState<SortType>(undefined);
 
   const { data, isLoading, isError } = useActivities({
     method: "offset",
     page,
-    size,
+    size: SIZE,
     sort: sort || "latest",
     category,
   });
 
-  const totalPages = Math.ceil((data?.totalCount || 0) / size);
+  const totalPages = Math.ceil((data?.totalCount || 0) / SIZE);
 
-  const handleFilterChange = (category: CategoryType, sort: SortType) => {
+  const handleFilterChange = (
+    category: CategoryType | undefined,
+    sort: SortType
+  ) => {
     setCategory(category);
     setSort(sort);
+    setPage(1);
   };
 
   return (
@@ -40,8 +46,12 @@ export default function AllActivitiesSection() {
         <LoadingIndicator width={80} height={80} />
       ) : isError ? (
         <ErrorIndicator width={80} height={80} />
-      ) : (
+      ) : (data?.activities?.length ?? 0 > 0) ? (
         <AllActivities activities={data?.activities || []} />
+      ) : (
+        <div className="m-[10rem]">
+          <EmptyActivity />
+        </div>
       )}
 
       <Pagination

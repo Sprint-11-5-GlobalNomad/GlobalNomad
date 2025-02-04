@@ -26,6 +26,7 @@ export const useActivities = (filters: FindActivitiesQueryDto) =>
   }>({
     queryKey: ["activities", filters],
     queryFn: async () => {
+      console.log("체험 리스트 조회 요청 필터:", filters);
       try {
         return await fetchActivities(filters);
       } catch (error) {
