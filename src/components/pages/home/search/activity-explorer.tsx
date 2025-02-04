@@ -16,20 +16,25 @@ const isLastCharHasBatchim = (text: string): boolean => {
   if (!text) return false;
   const lastChar = text[text.length - 1];
   const unicode = lastChar.charCodeAt(0);
-  return (unicode - 44032) % 28 !== 0; // 받침이 있으면 true
+  return (unicode - 44032) % 28 !== 0;
+};
+
+const CONFIG = {
+  SIZE: 16,
+  SUFFIX_WITH_BATCHIM: "으로 ",
+  SUFFIX_WITHOUT_BATCHIM: "로 ",
 };
 
 export default function ActivityExplorer() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [debouncedQuery] = useDebounce(searchQuery, 500);
   const [page, setPage] = useState(1);
-  const size = 16;
 
   const { data, isLoading, isError } = useActivities({
     method: "offset",
     page,
-    size,
-    keyword: debouncedQuery,
+    size: CONFIG.SIZE,
+    ...(debouncedQuery && { keyword: debouncedQuery }),
   });
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,9 +48,11 @@ export default function ActivityExplorer() {
 
   const activities = data?.activities ?? [];
 
-  const totalPages = Math.ceil((data?.totalCount || 0) / size);
+  const totalPages = Math.ceil((data?.totalCount || 0) / CONFIG.SIZE);
 
-  const suffix = isLastCharHasBatchim(searchQuery) ? "으로 " : "로 ";
+  const suffix = isLastCharHasBatchim(searchQuery)
+    ? CONFIG.SUFFIX_WITH_BATCHIM
+    : CONFIG.SUFFIX_WITHOUT_BATCHIM;
 
   return (
     <>

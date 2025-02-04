@@ -8,11 +8,9 @@ import UseOutsideClick from "@/hooks/use-outside-click";
 import { useAuth } from "@/app/api/use-auth";
 
 export default function UserMenu() {
-  const { user, isAuthenticated, logout, loading } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const ref = UseOutsideClick(() => setIsOpen(false));
-
-  if (loading) return <></>;
 
   return (
     <>
