@@ -16,25 +16,22 @@ export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // ✅ 토큰 가져오기
   const getAccessToken = () => localStorage.getItem("accessToken");
 
-  // ✅ 로그아웃
+  // ✅ 로그아웃 (토큰 삭제 후 리디렉션)
   const logout = useCallback(() => {
     console.log("🔴 로그아웃 실행");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     setUser(null);
-
-    // 🔄 로그인 상태였을 때만 새로고침 실행
-    if (user !== null) {
-      window.location.reload();
-    }
+    window.location.href = "/"; // ✅ 메인 페이지로 이동
   }, []);
 
   // ✅ 로그인 상태 확인 & 유저 정보 가져오기
   const checkAuthStatus = useCallback(async () => {
+    setLoading(true);
     const token = getAccessToken();
+
     if (!token) {
       setUser(null);
       setLoading(false);
@@ -42,25 +39,23 @@ export const useAuth = () => {
     }
 
     try {
-      setLoading(true); // ✅ API 호출 전 로딩 상태 시작
       const userData = await fetchMyDetails();
       setUser(userData);
     } catch (e) {
       console.error("❌ 유저 정보 불러오기 실패, 로그아웃", e);
       logout();
     } finally {
-      setLoading(false); // ✅ API 호출이 끝난 후 로딩 상태 종료
+      setLoading(false);
     }
-  }, [logout]); // ✅ logout을 의존성으로 유지
+  }, [logout]);
 
-  // ✅ 앱 실행 시 로그인 상태 확인
   useEffect(() => {
     checkAuthStatus();
   }, [checkAuthStatus]);
 
   return {
     user,
-    isAuthenticated: !!user, // ✅ user 유무로 인증 여부 판단
+    isAuthenticated: !!user,
     loading,
     logout,
   };
