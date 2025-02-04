@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { DropdownCheckIcon } from "../icons/dropdown-check-icon";
-import { DropdownArrowIcon } from "../icons/dropdown-arrow-icon";
+import { DropdownArrowIcon } from "../../icons/dropdown-arrow-icon";
+import { DropdownCheckIcon } from "../../icons/dropdown-check-icon";
 
 interface SelectDropdownProps {
   options: string[];
@@ -21,9 +21,9 @@ export default function SelectDropdown({
       className="relative w-full max-w-md"
       onClick={() => setIsOpen(!isOpen)}
     >
-      <div className="relative w-[80rem] p-[1rem] border border-solid border-gray-900 rounded-[0.4rem] bg-white">
+      <div className="relative w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] p-[1rem] border border-solid border-gray-900 rounded-[0.4rem] bg-white">
         <span
-          className={`w-full text-lg bg-transparent font-regular ml-[0.6rem] ${selectedOption ? "text-black" : "text-gray-600"}`}
+          className={`absolute top-[1.5rem] w-full text-lg bg-transparent font-regular ml-[0.6rem] ${selectedOption ? "text-black" : "text-gray-600"}`}
         >
           {selectedOption || description}
         </span>
@@ -33,7 +33,7 @@ export default function SelectDropdown({
       </div>
 
       {isOpen && (
-        <ul className="absolute w-[80rem] mt-2 border border-gray-300 rounded-[0.6rem] bg-white z-50 p-[0.8rem]">
+        <ul className="absolute w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] mt-2 border border-gray-300 rounded-[0.6rem] bg-white z-50 p-[0.8rem]">
           {options.map((option) => (
             <li
               key={option}
