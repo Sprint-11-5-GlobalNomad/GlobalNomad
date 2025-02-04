@@ -41,7 +41,8 @@ export default function ActivityInfoHeader({
                 width={16}
                 height={16}
               />
-              4.9(293)
+              {activity.rating} (
+              {Number(activity.reviewCount).toLocaleString("ko-KR")})
             </span>
             <div className="flex items-center gap-[0.6rem]">
               <Image
@@ -51,7 +52,7 @@ export default function ActivityInfoHeader({
                 height={16}
               />
               <span className="font-regular text-md text-nomad-black text-opacity-75">
-                주소
+                {activity.address}
               </span>
             </div>
           </div>
