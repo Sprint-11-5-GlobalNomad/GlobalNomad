@@ -7,7 +7,6 @@ import Link from "next/link";
 interface EditDeleteDropdown {
   EditRoute: string;
   onDelete: () => void;
-  // http://localhost:3000/test 에서 드롭다운 펼쳐보려면 onEdit? 이런 식으로 해주면 됨.
 }
 
 export default function EditDeleteDropdown({
