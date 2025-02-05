@@ -3,18 +3,19 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useProfile } from "@/context/profilecontext";
 
 interface SidebarProps {
   page: string;
-  profileImageUrl?: string;
   onProfileImageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function UserProfileSidebar({
   page,
-  profileImageUrl,
   onProfileImageChange,
 }: SidebarProps) {
+  const { profileImageUrl } = useProfile(); // ✅ 전역 상태 사용
+
   const menuItems = [
     { label: "내 정보", link: "/profile", icon: "/image/profile.svg" },
     {
@@ -29,7 +30,7 @@ export default function UserProfileSidebar({
     },
     {
       label: "예약 현황",
-      link: "/profile/activity/reservation",
+      link: "/profile/my-activities/reservation",
       icon: "/image/calendar.svg",
     },
   ];
@@ -50,6 +51,10 @@ export default function UserProfileSidebar({
               width={160}
               height={160}
               className="rounded-full object-cover border border-gray-200"
+              style={{
+                width: "16rem",
+                height: "16rem",
+              }}
             />
             <label
               htmlFor="profile-upload"

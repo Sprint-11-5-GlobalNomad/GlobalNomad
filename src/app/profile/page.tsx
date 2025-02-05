@@ -1,28 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import { useUpdateMyDetails, useMyDetails } from "../react-query/user-state";
 import { uploadProfileImage } from "../api/user-api";
+import { useProfile } from "@/context/profilecontext";
 
 const currentPage = "/profile";
 
 export default function ProfilePage() {
   const { data: userDetails, isLoading: isFetching } = useMyDetails();
   const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
+  const { profileImageUrl, setProfileImageUrl } = useProfile();
 
   const [nickname, setNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profileImageUrl, setProfileImageUrl] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (userDetails?.nickname) setNickname(userDetails.nickname);
     if (userDetails?.profileImageUrl)
       setProfileImageUrl(userDetails.profileImageUrl);
-  }, [userDetails]);
+  }, [userDetails, setProfileImageUrl]);
 
   const handleSave = () => {
     if (newPassword && newPassword !== confirmPassword) {
@@ -53,8 +54,9 @@ export default function ProfilePage() {
       const imageFile = event.target.files[0];
       try {
         const response = await uploadProfileImage(imageFile);
-        setProfileImageUrl(response.profileImageUrl); // 서버에서 받은 URL을 상태에 저장
+        setProfileImageUrl(response.profileImageUrl); // ✅ 전역 상태 업데이트
       } catch (error) {
+        console.error("프로필 이미지 업로드 오류:", error);
         alert("프로필 이미지 업로드에 실패했습니다.");
       }
     }
@@ -68,7 +70,7 @@ export default function ProfilePage() {
         <div className="flex gap-[2.4rem]">
           <UserProfileSidebar
             page={currentPage}
-            profileImageUrl={profileImageUrl}
+            profileImageUrl={profileImageUrl} // ✅ 전역 상태에서 가져옴
             onProfileImageChange={handleProfileImageChange}
           />
           <div className="flex-1 rounded-[0.75rem] h-auto">

@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import Footer from "@/components/common/layout/footer";
 import QueryProvider from "./react-query/query-provider";
 import Navbar from "@/components/common/layout/navbar";
+import { ProfileProvider } from "@/context/profilecontext";
 
 export const metadata: Metadata = {
   title: "GlobalNomad",
@@ -20,8 +21,10 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <QueryProvider>
-          <Navbar />
-          <main>{children}</main>
+          <ProfileProvider>
+            <Navbar />
+            <main>{children}</main>
+          </ProfileProvider>
         </QueryProvider>
         <Footer />
       </body>
