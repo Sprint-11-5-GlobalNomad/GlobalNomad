@@ -13,7 +13,9 @@ interface ButtonProps {
     | "category"
     | "page"
     | "selected"
-    | "loginSignup"; // 스타일
+    | "loginSignup"
+    | "reservationTimeAdd"
+    | "reservationTimeDelete";
   disabled?: boolean; // 비활성화
   className?: string; // 추가 클래스
 }
@@ -103,6 +105,17 @@ const Button: React.FC<ButtonProps> = ({
       ...baseStyle,
       backgroundColor: disabled ? "#A4A1AA" : "#0B3B2D",
       color: "#fff",
+    },
+    reservationTimeAdd: {
+      ...baseStyle,
+      backgroundColor: "#0B3B2D",
+      color: "#fff",
+    },
+    reservationTimeDelete: {
+      ...baseStyle,
+      backgroundColor: "fff",
+      color: "#79747E",
+      border: "1px solid #dddddd",
     },
   };
 
