@@ -20,7 +20,7 @@ export default function ActivityDetailPage() {
       {activity ? (
         <div className="flex-column">
           <ActivityInfoHeader activity={activity} />
-          <ActivityImages />
+          <ActivityImages activity={activity} />
         </div>
       ) : (
         <EmptyActivity />

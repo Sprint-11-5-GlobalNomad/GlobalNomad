@@ -34,9 +34,11 @@ export default function MyReservation() {
   const { data, isLoading } = useMyReservations(undefined, selectedStatus);
 
   return (
-    <div className="flex flex-row justify-center min-h-[700px] h-auto mt-[7.2rem]">
-      <UserProfileSidebar page={"/my-reservations"} />
-      <div className="pl-[2.4rem]">
+    <div className="flex flex-row justify-center gap-[2.4rem] mt-[14.4rem] mobile:mt-[9rem] mb-[18.3rem] mobile:mb-[10rem]">
+      <div className="mobile:hidden">
+        <UserProfileSidebar page={"/profile/my-reservations"} />
+      </div>
+      <div className="flex flex-col">
         <div className=" flex flex-row justify-between items-center">
           <h2 className="text-[3.2rem] font-bold">예약 내역</h2>
           <FilterDropdown
@@ -64,7 +66,7 @@ export default function MyReservation() {
               />
             ))
           ) : (
-            <div className="mt-[5rem]">
+            <div className="mt-[5rem] mb-[4.1rem]">
               <EmptyActivity />
             </div>
           )}
