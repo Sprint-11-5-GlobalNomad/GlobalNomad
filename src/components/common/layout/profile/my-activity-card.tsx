@@ -62,7 +62,7 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
           </div>
           <EditDeleteDropdown
             onDelete={handleDelete}
-            EditRoute={`/profile/activity/${ActivityProps.id}/edit`}
+            EditRoute={`/profile/my-activities/${ActivityProps.id}/edit`}
           />
         </div>
       </div>
