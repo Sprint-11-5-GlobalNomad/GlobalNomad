@@ -115,7 +115,13 @@ export default function ActivityPostPage() {
                     <TimeDropdown options={timeTabel} description="0:00" />
                   </div>
                 </div>
-                <button type="button">+</button>
+                <div className="relative top-[4.2rem]">
+                  <Button
+                    ButtonType="reservationTime"
+                    variant="reservationTimeAdd"
+                    label="+"
+                  />
+                </div>
               </div>
               <hr />
               {reservationTimes.length > 0 ? (
@@ -148,7 +154,11 @@ export default function ActivityPostPage() {
                           value={reservationTime.endTime}
                         />
                       </div>
-                      <button>-</button>
+                      <Button
+                        ButtonType="reservationTime"
+                        variant="reservationTimeDelete"
+                        label="-"
+                      />
                     </div>
                   );
                 })
