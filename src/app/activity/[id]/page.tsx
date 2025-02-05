@@ -5,6 +5,7 @@ import ActivityImages from "@/components/common/layout/activity-detail/activity-
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
+import ActivityDetails from "@/components/pages/activity-detail/activity-details";
 import ActivityInfoHeader from "@/components/pages/activity-detail/activity-info-header";
 import { useParams } from "next/navigation";
 
@@ -19,8 +20,9 @@ export default function ActivityDetailPage() {
     <>
       {activity ? (
         <div className="flex-column">
-          <ActivityInfoHeader activity={activity} />
-          <ActivityImages activity={activity} />
+          <ActivityInfoHeader />
+          <ActivityImages />
+          <ActivityDetails />
         </div>
       ) : (
         <EmptyActivity />

@@ -1,18 +1,18 @@
-import { ActivityWithSubImagesAndSchedulesDto } from "@/app/types/activity-schemas";
+import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 
-interface ActivityImagesProps {
-  activity: ActivityWithSubImagesAndSchedulesDto;
-}
+export default function ActivityImages() {
+  const { id } = useParams();
+  const { data: activity } = useActivityDetail(Number(id));
+  const subImageCount = activity?.subImages.length;
 
-export default function ActivityImages({ activity }: ActivityImagesProps) {
-  const subImageCount = activity.subImages.length;
   return (
     <div className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]">
       {subImageCount === 0 ? (
         <Image
-          src={activity.bannerImageUrl}
-          alt={`${activity.title} 배너 이미지`}
+          src={activity!.bannerImageUrl}
+          alt={`${activity?.title} 배너 이미지`}
           width={1198}
           height={534}
           className="rounded-[1.2rem] w-full h-full object-cover"
@@ -20,8 +20,8 @@ export default function ActivityImages({ activity }: ActivityImagesProps) {
       ) : (
         <div className="w-[119.8rem] h-[53.4rem] flex gap-[0.8rem] mb-[8.5rem]">
           <Image
-            src={activity.bannerImageUrl}
-            alt={`${activity.title} 배너 이미지`}
+            src={activity!.bannerImageUrl}
+            alt={`${activity?.title} 배너 이미지`}
             width={595}
             height={534}
             className="rounded-[1.2rem]"
@@ -35,7 +35,7 @@ export default function ActivityImages({ activity }: ActivityImagesProps) {
                   : "grid-cols-2 grid-rows-2"
             } w-full h-full`}
           >
-            {activity.subImages.map((subImage, index) => {
+            {activity?.subImages.map((subImage, index) => {
               const isThirdImageWithFullWidth =
                 subImageCount === 3 && index === 2;
 

@@ -1,23 +1,19 @@
 "use client";
 
+import { useActivityDetail } from "@/app/react-query/activity-state";
 import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
-import { ActivityWithSubImagesAndSchedulesDto } from "@/app/types/activity-schemas";
 import EditDeleteDropdown from "@/components/common/ui/dropdown/edit-delete-dropdown";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
-interface ActivityInfoHeaderProps {
-  activity: ActivityWithSubImagesAndSchedulesDto;
-}
-
-export default function ActivityInfoHeader({
-  activity,
-}: ActivityInfoHeaderProps) {
+export default function ActivityInfoHeader() {
+  const { id } = useParams();
+  const { data: activity } = useActivityDetail(Number(id));
   const { mutate: deleteMyActivity } = useDeleteMyActivity();
   const router = useRouter();
 
   const handleDelete = () => {
-    if (confirm("정말 삭제하시겠습니까?")) {
+    if (activity?.id && confirm("정말 삭제하시겠습니까?")) {
       deleteMyActivity(activity.id);
       router.push("/");
     }
@@ -27,11 +23,11 @@ export default function ActivityInfoHeader({
     <div className="w-[120rem] flex-between mt-[14.8rem] mb-[2.5rem]">
       <div className="flex flex-col justify-start gap-[1rem]">
         <span className="font-regular text-md text-nomad-black text-opacity-75">
-          {activity.category}
+          {activity?.category}
         </span>
         <div className="flex flex-col gap-[1.6rem]">
           <h1 className="font-bold text-3xl text-nomad-black m-0">
-            {activity.title}
+            {activity?.title}
           </h1>
           <div className="flex items-center gap-[0.8rem]">
             <span className="flex items-center gap-[0.6rem] font-regular text-md">
@@ -41,8 +37,8 @@ export default function ActivityInfoHeader({
                 width={16}
                 height={16}
               />
-              {activity.rating} (
-              {Number(activity.reviewCount).toLocaleString("ko-KR")})
+              {activity?.rating} (
+              {Number(activity?.reviewCount).toLocaleString("ko-KR")})
             </span>
             <div className="flex items-center gap-[0.6rem]">
               <Image
@@ -52,14 +48,14 @@ export default function ActivityInfoHeader({
                 height={16}
               />
               <span className="font-regular text-md text-nomad-black text-opacity-75">
-                {activity.address}
+                {activity?.address}
               </span>
             </div>
           </div>
         </div>
       </div>
       <EditDeleteDropdown
-        EditRoute={`/profile/activity/${activity.id}/edit`}
+        EditRoute={`/profile/activity/${activity?.id}/edit`}
         onDelete={handleDelete}
       />
     </div>
