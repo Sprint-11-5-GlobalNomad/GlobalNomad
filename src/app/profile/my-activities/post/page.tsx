@@ -6,15 +6,7 @@ import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
 import { useForm, FormProvider } from "react-hook-form";
 import Image from "next/image";
 import { useState } from "react";
-
-const activityCategory = [
-  "문화 · 예술",
-  "식음료",
-  "스포츠",
-  "투어",
-  "관광",
-  "웰빙",
-];
+import { CATEGORY_TYPES } from "@/app/types/activity-schemas";
 
 type ReservationAvailableTime = {
   date: string;
@@ -64,7 +56,10 @@ export default function ActivityPostPage() {
             placeholder="제목"
             className="w-[79.2rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
           />
-          <SelectDropdown options={activityCategory} description={"카테고리"} />
+          <SelectDropdown
+            options={[...CATEGORY_TYPES]}
+            description={"카테고리"}
+          />
           <textarea
             name="description"
             placeholder="설명"
@@ -158,9 +153,9 @@ export default function ActivityPostPage() {
           </div>
           <div className="flex flex-col gap-[2.4rem]">
             <h3 className="text-2xl font-bold">배너 이미지</h3>
-            <div className="relative w-40 h-40 border border-gray-300 rounded-md flex items-center justify-center">
+            <div className="relative w-[18rem] h-[18rem] border border-gray-300 rounded-md flex items-center justify-center">
               {bannerImage ? (
-                <div className="relative w-40 h-40">
+                <div className="relative w-[18rem] h-[18rem]">
                   <Image
                     src={bannerImage}
                     alt="배너 이미지"
@@ -200,7 +195,7 @@ export default function ActivityPostPage() {
               {introImages.map((img, index) => (
                 <div
                   key={index}
-                  className="relative w-40 h-40 border border-gray-300 rounded-md"
+                  className="relative w-[18rem] h-[18rem] border border-gray-300 rounded-md"
                 >
                   <Image
                     src={img}
@@ -219,7 +214,7 @@ export default function ActivityPostPage() {
               ))}
 
               {introImages.length < 4 && (
-                <label className="cursor-pointer w-40 h-40 border border-gray-300 rounded-md flex items-center justify-center">
+                <label className="cursor-pointer w-[18rem] h-[18rem] border border-gray-300 rounded-md flex items-center justify-center">
                   <input
                     type="file"
                     accept="image/*"
