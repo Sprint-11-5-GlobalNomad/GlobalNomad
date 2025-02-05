@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useProfile } from "@/context/profilecontext";
+import { useMyDetails } from "@/app/react-query/user-state"; // React Query 훅 사용
 
 interface SidebarProps {
   page: string;
@@ -14,7 +14,7 @@ export default function UserProfileSidebar({
   page,
   onProfileImageChange,
 }: SidebarProps) {
-  const { profileImageUrl } = useProfile(); // ✅ 전역 상태 사용
+  const { data: userDetails } = useMyDetails(); // 유저 정보 가져오기
 
   const menuItems = [
     { label: "내 정보", link: "/profile", icon: "/image/profile.svg" },
@@ -46,7 +46,7 @@ export default function UserProfileSidebar({
         <div className="flex flex-col items-center justify-center">
           <div className="relative">
             <Image
-              src={profileImageUrl || "/image/profile_default.svg"}
+              src={userDetails?.profileImageUrl || "/image/profile_default.svg"}
               alt="Profile"
               width={160}
               height={160}
