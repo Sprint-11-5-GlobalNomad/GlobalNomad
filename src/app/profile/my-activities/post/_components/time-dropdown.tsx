@@ -9,7 +9,7 @@ interface SelectDropdownProps {
   description: string;
 }
 
-export default function SelectDropdown({
+export default function TimeDropdown({
   options,
   description,
 }: SelectDropdownProps) {

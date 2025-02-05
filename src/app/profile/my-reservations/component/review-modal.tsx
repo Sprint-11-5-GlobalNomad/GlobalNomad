@@ -170,7 +170,7 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
             onChange={onChangeContent}
           />
           <Button
-            type="reviewSubmit"
+            ButtonType="reviewSubmit"
             label="작성하기"
             onClick={onSubmitReview}
           />

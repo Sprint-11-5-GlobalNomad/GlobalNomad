@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { ButtonSizes } from "@/app/types/button-type";
 
 interface ButtonProps {
-  type: keyof typeof ButtonSizes; // 버튼 역할
+  ButtonType: keyof typeof ButtonSizes; // 버튼 역할
   label: React.ReactNode; // 버튼 텍스트
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // 클릭 이벤트 event: React.MouseEvent<HTMLButtonElement>추가
   variant?:
@@ -19,7 +19,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({
-  type,
+  ButtonType,
   label,
   onClick,
   variant = "default",
@@ -45,7 +45,7 @@ const Button: React.FC<ButtonProps> = ({
     return () => window.removeEventListener("resize", updateSize); // 이벤트 제거
   }, []);
 
-  const buttonSize = ButtonSizes[type]?.[currentSize];
+  const buttonSize = ButtonSizes[ButtonType]?.[currentSize];
 
   if (!buttonSize) {
     console.error("Invalid size or type for Button");

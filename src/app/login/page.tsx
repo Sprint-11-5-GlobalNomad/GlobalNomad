@@ -211,7 +211,7 @@ export default function LoginPage() {
 
             {/* 로그인 버튼 */}
             <Button
-              type="loginSignup"
+              ButtonType="loginSignup"
               label="로그인 하기"
               variant="loginSignup"
               disabled={isButtonDisabled}

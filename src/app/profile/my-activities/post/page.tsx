@@ -51,7 +51,7 @@ export default function ActivityPostPage() {
         <form className="flex flex-col w-[79.2rem] gap-[2.4rem]">
           <div className="flex flex-row justify-between items-center">
             <h2 className="text-3xl font-bold font-pretendard">내 체험 등록</h2>
-            <Button type="profileSave" label="등록하기" />
+            <Button ButtonType="profileSave" label="등록하기" />
           </div>
           <input
             type="text"
