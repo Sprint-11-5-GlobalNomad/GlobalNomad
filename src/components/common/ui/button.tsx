@@ -126,6 +126,7 @@ const Button: React.FC<ButtonProps> = ({
       className={className}
       disabled={disabled}
       aria-disabled={disabled}
+      type="button"
     >
       {label}
     </button>
