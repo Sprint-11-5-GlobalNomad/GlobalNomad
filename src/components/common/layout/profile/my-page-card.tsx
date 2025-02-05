@@ -1,20 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMyDetails } from "@/app/react-query/user-state"; // React Query 훅 사용
+import { useMyDetails } from "@/app/react-query/user-state";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface SidebarProps {
   page: string;
+  profileImageUrl?: string;
+  onNavigate?: () => void;
   onProfileImageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function UserProfileSidebar({
   page,
+  onNavigate,
   onProfileImageChange,
 }: SidebarProps) {
-  const { data: userDetails } = useMyDetails(); // 유저 정보 가져오기
+  const queryClient = useQueryClient();
+  const { data: userDetails } = useMyDetails();
+
+  const profileImageUrl =
+    userDetails?.profileImageUrl || "/image/profile_default.svg";
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+  }, [profileImageUrl, queryClient]);
 
   const menuItems = [
     { label: "내 정보", link: "/profile", icon: "/image/profile.svg" },
@@ -36,25 +48,17 @@ export default function UserProfileSidebar({
   ];
 
   return (
-    <div className="mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center">
-      <div
-        className="w-[38rem] h-[43.2rem] p-[2.4rem] 
-        tablet:w-[25.1rem] tablet:h-[43.2rem] 
-        mobile:w-full mobile:max-w-[34.4rem] mobile:h-[43.2rem] mobile:mt-[2.4rem] bg-white 
-        border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md"
-      >
+    <div className="w-full mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center min-h-screen">
+      <div className="w-[38rem] h-[43.2rem] p-[2.4rem] mobile:mt-[7rem] bg-white border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md">
         <div className="flex flex-col items-center justify-center">
           <div className="relative">
             <Image
-              src={userDetails?.profileImageUrl || "/image/profile_default.svg"}
+              src={profileImageUrl}
               alt="Profile"
               width={160}
               height={160}
               className="rounded-full object-cover border border-gray-200"
-              style={{
-                width: "16rem",
-                height: "16rem",
-              }}
+              style={{ width: "16rem", height: "16rem" }}
             />
             <label
               htmlFor="profile-upload"
@@ -81,6 +85,12 @@ export default function UserProfileSidebar({
             <Link
               href={item.link}
               key={item.label}
+              onClick={(e) => {
+                if (item.link === "/profile" && onNavigate) {
+                  e.preventDefault();
+                  onNavigate();
+                }
+              }}
               className={`flex items-center gap-[1rem] h-[4.4rem] rounded-[0.75rem] text-[1.6rem] pl-[1.6rem] font-bold ${
                 page === item.link
                   ? "bg-green-light text-black"
@@ -92,7 +102,6 @@ export default function UserProfileSidebar({
                 alt={`${item.label} 아이콘`}
                 width={24}
                 height={24}
-                className="h-[2.4rem] w-[2.4rem]"
               />
               {item.label}
             </Link>
