@@ -20,6 +20,9 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
   function handleModalClose() {
     setIsCancelModalOpen(false);
   }
+  function handleModalOpen() {
+    setIsCancelModalOpen(true);
+  }
 
   async function handleDelete() {
     if (isDeleteable) return;
@@ -68,7 +71,7 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
             ₩{ActivityProps.price.toLocaleString()} / 인
           </div>
           <EditDeleteDropdown
-            onDelete={handleDelete}
+            onDelete={handleModalOpen}
             EditRoute={`/profile/my-activities/${ActivityProps.id}/edit`}
           />
         </div>
