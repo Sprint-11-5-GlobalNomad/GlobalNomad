@@ -1,0 +1,70 @@
+/* FullCalendar 기본 스타일 초기화 */
+.fc {
+  font-family: "Pretendard", sans-serif;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+/* 요일 헤더 스타일 */
+.fc-col-header {
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  overflow: hidden;
+}
+
+.fc-col-header-cell {
+  font-size: 4rem;
+  color: #969696;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb !important;
+  text-transform: uppercase;
+  padding: 0 !important;
+  height: 43px !important;
+  text-align: start !important;
+  background-color: white !important;
+}
+
+/* 날짜 칸 스타일 */
+.fc-daygrid-day {
+  border: 1px solid #e5e7eb !important; /* 날짜 칸 구분선 추가 */
+  background-color: white !important;
+  height: 154px !important; /* 세로 크기 고정 */
+  text-align: left !important;
+  position: relative; /* 날짜 숫자 위치 조정을 위해 필요 */
+}
+
+/* 오늘 날짜 스타일 */
+.fc-day-today {
+  background: rgba(0, 123, 255, 0.1) !important;
+  border-radius: 5px !important;
+}
+
+/* 날짜 숫자 크기 조정 및 위치 수정 */
+.fc-daygrid-day-number {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #969696;
+  position: absolute;
+  top: 12px;
+  left: 12px !important; /* 왼쪽 정렬 */
+  text-align: left !important;
+  width: auto !important;
+}
+
+/* FullCalendar 날짜 박스 사이 구분선 스타일 추가 */
+.fc-daygrid-day-frame {
+  display: flex !important;
+  justify-content: flex-start !important;
+  border-right: 1px solid #e5e7eb !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.fc-daygrid-day-frame:last-child {
+  border-right: none !important;
+}
+
+/* 이전 달, 다음 달 날짜 숨김 */
+.fc-day-other {
+  visibility: hidden !important;
+  display: none !important;
+}

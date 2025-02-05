@@ -28,7 +28,7 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
     },
     {
       label: "예약 현황",
-      link: "/profile/activity/reservation",
+      link: "/profile/my-activities/reservation",
       icon: "/image/calendar.svg",
     },
   ];
