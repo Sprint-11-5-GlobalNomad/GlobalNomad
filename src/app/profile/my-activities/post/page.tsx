@@ -7,6 +7,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import Image from "next/image";
 import { useState } from "react";
 import { CATEGORY_TYPES } from "@/app/types/activity-schemas";
+import { timeTabel } from "./_constants/constants";
+import TimeDropdown from "./_components/time-dropdown";
 
 type ReservationAvailableTime = {
   date: string;
@@ -18,7 +20,7 @@ export default function ActivityPostPage() {
   const methods = useForm();
   const [bannerImage, setBannerImage] = useState<string | null>(null);
   const [introImages, setIntroImages] = useState<string[]>([]);
-  const [reservationTime, setReservationTime] = useState<
+  const [reservationTimes, setReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
 
@@ -101,10 +103,7 @@ export default function ActivityPostPage() {
                     <h4 className="font-pretendard text-xl font-medium text-gray-900">
                       시작 시간
                     </h4>
-                    <input
-                      type="time"
-                      className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                    />
+                    <TimeDropdown options={timeTabel} description="0:00" />
                   </div>
                   <div className="relative top-[5.9rem] font-pretendard text-[2rem] font-bold">
                     ~
@@ -113,39 +112,46 @@ export default function ActivityPostPage() {
                     <h4 className="font-pretendard text-xl font-medium text-gray-900">
                       종료 시간
                     </h4>
-                    <input
-                      type="time"
-                      className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                    />
+                    <TimeDropdown options={timeTabel} description="0:00" />
                   </div>
                 </div>
                 <button type="button">+</button>
               </div>
               <hr />
-              {reservationTime ? (
-                <div className="flex flex-row gap-[2.1rem]">
-                  <input
-                    type="date"
-                    className="w-[37.9rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                    disabled
-                  />
-                  <div className="flex flex-row gap-[1.2rem]">
-                    <input
-                      type="time"
-                      className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                      disabled
-                    />
-                    <div className="relative top-[1.6rem] font-pretendard text-[2rem] font-bold">
-                      ~
+              {reservationTimes.length > 0 ? (
+                reservationTimes.map((reservationTime) => {
+                  return (
+                    <div
+                      className="flex flex-row gap-[2.1rem]"
+                      key={reservationTime.date}
+                    >
+                      <input
+                        type="date"
+                        className="w-[37.9rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                        disabled
+                        value={reservationTime.date}
+                      />
+                      <div className="flex flex-row gap-[1.2rem]">
+                        <input
+                          type="time"
+                          className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                          disabled
+                          value={reservationTime.startTime}
+                        />
+                        <div className="relative top-[1.6rem] font-pretendard text-[2rem] font-bold">
+                          ~
+                        </div>
+                        <input
+                          type="time"
+                          className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                          disabled
+                          value={reservationTime.endTime}
+                        />
+                      </div>
+                      <button>-</button>
                     </div>
-                    <input
-                      type="time"
-                      className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                      disabled
-                    />
-                  </div>
-                  <button>-</button>
-                </div>
+                  );
+                })
               ) : (
                 <div></div>
               )}
