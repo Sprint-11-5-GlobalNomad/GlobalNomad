@@ -1,6 +1,7 @@
 "use client";
 
 import { useActivityDetail } from "@/app/react-query/activity-state";
+import ActivityImages from "@/components/common/layout/activity-detail/activity-images";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
@@ -19,6 +20,7 @@ export default function ActivityDetailPage() {
       {activity ? (
         <div className="flex-column">
           <ActivityInfoHeader activity={activity} />
+          <ActivityImages />
         </div>
       ) : (
         <EmptyActivity />
