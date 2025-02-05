@@ -7,8 +7,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import Image from "next/image";
 import { useState } from "react";
 import { CATEGORY_TYPES } from "@/app/types/activity-schemas";
-import { timeTabel } from "./_constants/constants";
-import TimeDropdown from "./_components/time-dropdown";
+import ReservationTimeSelector from "./_components/set-reservation-time";
 
 type ReservationAvailableTime = {
   date: string;
@@ -83,90 +82,10 @@ export default function ActivityPostPage() {
               className="w-[79.2rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
             />
           </div>
-          <div className="flex flex-col gap-[2.4rem]">
-            <h3 className="font-pretendard text-2xl font-bold">
-              예약 가능한 시간대
-            </h3>
-            <div className="flex flex-col gap-[2.1rem]">
-              <div className="flex flex-row gap-[2.1rem]">
-                <div className="flex flex-col gap-[1rem]">
-                  <h4 className="font-pretendard text-xl font-medium text-gray-900">
-                    날짜
-                  </h4>
-                  <input
-                    type="date"
-                    className="w-[37.9rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                  />
-                </div>
-                <div className="flex flex-row gap-[1.2rem] relative">
-                  <div className="flex flex-col gap-[1rem]">
-                    <h4 className="font-pretendard text-xl font-medium text-gray-900">
-                      시작 시간
-                    </h4>
-                    <TimeDropdown options={timeTabel} description="0:00" />
-                  </div>
-                  <div className="relative top-[5.9rem] font-pretendard text-[2rem] font-bold">
-                    ~
-                  </div>
-                  <div className="flex flex-col gap-[1rem]">
-                    <h4 className="font-pretendard text-xl font-medium text-gray-900">
-                      종료 시간
-                    </h4>
-                    <TimeDropdown options={timeTabel} description="0:00" />
-                  </div>
-                </div>
-                <div className="relative top-[4.2rem]">
-                  <Button
-                    ButtonType="reservationTime"
-                    variant="reservationTimeAdd"
-                    label="+"
-                  />
-                </div>
-              </div>
-              <hr />
-              {reservationTimes.length > 0 ? (
-                reservationTimes.map((reservationTime) => {
-                  return (
-                    <div
-                      className="flex flex-row gap-[2.1rem]"
-                      key={reservationTime.date}
-                    >
-                      <input
-                        type="date"
-                        className="w-[37.9rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                        disabled
-                        value={reservationTime.date}
-                      />
-                      <div className="flex flex-row gap-[1.2rem]">
-                        <input
-                          type="time"
-                          className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                          disabled
-                          value={reservationTime.startTime}
-                        />
-                        <div className="relative top-[1.6rem] font-pretendard text-[2rem] font-bold">
-                          ~
-                        </div>
-                        <input
-                          type="time"
-                          className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                          disabled
-                          value={reservationTime.endTime}
-                        />
-                      </div>
-                      <Button
-                        ButtonType="reservationTime"
-                        variant="reservationTimeDelete"
-                        label="-"
-                      />
-                    </div>
-                  );
-                })
-              ) : (
-                <div></div>
-              )}
-            </div>
-          </div>
+          <ReservationTimeSelector
+            reservationTimes={reservationTimes}
+            setReservationTimes={setReservationTimes}
+          />
           <div className="flex flex-col gap-[2.4rem]">
             <h3 className="text-2xl font-bold">배너 이미지</h3>
             <div className="relative w-[18rem] h-[18rem] border border-gray-300 rounded-md flex items-center justify-center">

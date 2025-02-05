@@ -7,11 +7,13 @@ import React, { useState } from "react";
 interface SelectDropdownProps {
   options: string[];
   description: string;
+  onSelect: (option: string) => void; // 추가된 프롭
 }
 
 export default function TimeDropdown({
   options,
   description,
+  onSelect,
 }: SelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -23,7 +25,9 @@ export default function TimeDropdown({
     >
       <div className="relative w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] p-[1rem] border border-solid border-gray-900 rounded-[0.4rem] bg-white">
         <span
-          className={`absolute top-[1.5rem] mobile:top-[1rem] w-full text-lg bg-transparent font-regular ml-[0.6rem] ${selectedOption ? "text-black" : "text-gray-600"}`}
+          className={`absolute top-[1.5rem] mobile:top-[1rem] w-full text-lg bg-transparent font-regular ml-[0.6rem] ${
+            selectedOption ? "text-black" : "text-gray-600"
+          }`}
         >
           {selectedOption || description}
         </span>
@@ -40,6 +44,7 @@ export default function TimeDropdown({
               className="group px-8 py-6 text-lg rounded-[0.6rem] flex items-center hover:bg-green-dark hover:text-white"
               onClick={() => {
                 setSelectedOption(option);
+                onSelect(option);
                 setIsOpen(false);
               }}
             >
