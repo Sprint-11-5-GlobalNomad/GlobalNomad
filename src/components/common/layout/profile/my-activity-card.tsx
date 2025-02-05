@@ -5,6 +5,7 @@ import { ActivityBasicDto } from "@/app/types/activity-schemas";
 import EditDeleteDropdown from "../../ui/dropdown/edit-delete-dropdown";
 import { useState } from "react";
 import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
+import ConfirmationModal from "../../ui/modal/confirmation-modal";
 
 type ActivityCardProps = Pick<
   ActivityBasicDto,
@@ -12,8 +13,13 @@ type ActivityCardProps = Pick<
 >;
 
 export function MyActivityCard(ActivityProps: ActivityCardProps) {
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isDeleteable, setIsDeleteAble] = useState(false);
   const deleteMyActivity = useDeleteMyActivity();
+
+  function handleModalClose() {
+    setIsCancelModalOpen(false);
+  }
 
   async function handleDelete() {
     if (isDeleteable) return;
@@ -25,6 +31,7 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
       },
       onSettled: () => {
         setIsDeleteAble(false);
+        setIsCancelModalOpen(false);
       },
     });
   }
@@ -66,6 +73,12 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
           />
         </div>
       </div>
+      <ConfirmationModal
+        isOpen={isCancelModalOpen}
+        onClose={handleModalClose}
+        onConfirm={handleDelete}
+        message={"삭제하시겠습니까?"}
+      />
     </div>
   );
 }
