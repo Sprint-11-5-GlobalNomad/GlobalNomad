@@ -4,36 +4,25 @@ import React, { useState, useEffect } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import { useUpdateMyDetails, useMyDetails } from "../react-query/user-state";
+import { uploadProfileImage } from "../api/user-api";
+
+const currentPage = "/profile";
 
 export default function ProfilePage() {
-  const currentPage = "/profile";
-
   const { data: userDetails, isLoading: isFetching } = useMyDetails();
+  const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
 
   const [nickname, setNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [isMobileView, setIsMobileView] = useState(false);
-  const [showDetails, setShowDetails] = useState(false);
-
-  const { mutate: updateMyDetails, isLoading } = useUpdateMyDetails();
 
   useEffect(() => {
-    if (userDetails?.nickname) {
-      setNickname(userDetails.nickname);
-    }
+    if (userDetails?.nickname) setNickname(userDetails.nickname);
+    if (userDetails?.profileImageUrl)
+      setProfileImageUrl(userDetails.profileImageUrl);
   }, [userDetails]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 743); // 모바일 감지
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const handleSave = () => {
     if (newPassword && newPassword !== confirmPassword) {
@@ -42,56 +31,57 @@ export default function ProfilePage() {
     }
 
     setErrorMessage("");
-    updateMyDetails(
-      { nickname, newPassword },
-      {
-        onSuccess: () => {
-          alert("정보가 성공적으로 업데이트되었습니다.");
-        },
-        onError: () => {
-          alert("정보 업데이트 중 오류가 발생했습니다.");
-        },
-      }
-    );
+
+    const updateData: {
+      nickname: string;
+      newPassword?: string;
+      profileImageUrl?: string;
+    } = { nickname };
+    if (newPassword) updateData.newPassword = newPassword;
+    if (profileImageUrl) updateData.profileImageUrl = profileImageUrl;
+
+    updateMyDetails(updateData, {
+      onSuccess: () => alert("정보가 성공적으로 업데이트되었습니다."),
+      onError: () => alert("정보 업데이트 중 오류가 발생했습니다."),
+    });
   };
 
-  if (isFetching) {
-    return <p>로딩 중...</p>;
-  }
+  const handleProfileImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      const imageFile = event.target.files[0];
+      try {
+        const response = await uploadProfileImage(imageFile);
+        setProfileImageUrl(response.profileImageUrl); // 서버에서 받은 URL을 상태에 저장
+      } catch (error) {
+        alert("프로필 이미지 업로드에 실패했습니다.");
+      }
+    }
+  };
 
-  if (isMobileView && !showDetails) {
-    return (
-      <UserProfileSidebar
-        page={currentPage}
-        onNavigate={() => setShowDetails(true)}
-      />
-    );
-  }
+  if (isFetching) return <p>로딩 중...</p>;
 
   return (
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center py-[7.2rem] mt-[7.2rem]">
         <div className="flex gap-[2.4rem]">
-          {!isMobileView && (
-            <div>
-              <UserProfileSidebar page={currentPage} />
-            </div>
-          )}
-
-          {/* Content */}
+          <UserProfileSidebar
+            page={currentPage}
+            profileImageUrl={profileImageUrl}
+            onProfileImageChange={handleProfileImageChange}
+          />
           <div className="flex-1 rounded-[0.75rem] h-auto">
-            {/* Header */}
-            <div className="flex justify-between items-center w-[78rem] mb-[2.4rem] pb-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.3rem]">
+            <div className="flex justify-between items-center w-[78rem] mb-[2.4rem] pb-[2.4rem]">
               <h2 className="text-[3.2rem] font-bold">내 정보</h2>
               <Button
                 type="profileSave"
-                label={isLoading ? "저장 중..." : "저장하기"}
+                label={isPending ? "저장 중..." : "저장하기"}
                 onClick={handleSave}
-                disabled={isLoading}
+                disabled={isPending}
                 variant="default"
               />
             </div>
-
             <div className="space-y-[3.2rem]">
               {/* 닉네임 */}
               <div>
