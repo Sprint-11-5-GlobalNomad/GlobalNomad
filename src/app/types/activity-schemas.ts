@@ -54,6 +54,12 @@ export interface ActivityWithSubImagesAndSchedulesDto {
   schedules: { id: number; date: string; startTime: string; endTime: string }[];
 }
 
+export interface FindReviewsQueryDto {
+  activityId: number;
+  page?: number;
+  size?: number;
+}
+
 export interface CreateActivityBodyDto {
   title: string;
   category: string;

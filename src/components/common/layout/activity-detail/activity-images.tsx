@@ -1,11 +1,18 @@
+"use client";
+
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { LoadingIndicator } from "../indicator/loading-indicator";
+import { ErrorIndicator } from "../indicator/error-indicator";
 
 export default function ActivityImages() {
   const { id } = useParams();
-  const { data: activity } = useActivityDetail(Number(id));
+  const { data: activity, isLoading, isError } = useActivityDetail(Number(id));
   const subImageCount = activity?.subImages.length;
+
+  if (isLoading) return <LoadingIndicator width={100} height={100} />;
+  if (isError) return <ErrorIndicator width={100} height={100} />;
 
   return (
     <div className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]">

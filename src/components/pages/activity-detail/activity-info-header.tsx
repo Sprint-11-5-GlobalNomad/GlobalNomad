@@ -22,7 +22,7 @@ export default function ActivityInfoHeader() {
   return (
     <div className="w-[120rem] flex-between mt-[14.8rem] mb-[2.5rem]">
       <div className="flex flex-col justify-start gap-[1rem]">
-        <span className="font-regular text-md text-nomad-black text-opacity-75">
+        <span className="font-regular text-md text-nomad-black opacity-75">
           {activity?.category}
         </span>
         <div className="flex flex-col gap-[1.6rem]">
@@ -40,14 +40,14 @@ export default function ActivityInfoHeader() {
               {activity?.rating} (
               {Number(activity?.reviewCount).toLocaleString("ko-KR")})
             </span>
-            <div className="flex items-center gap-[0.6rem]">
+            <div className="flex items-center gap-[0.2rem]">
               <Image
                 src="/image/location.svg"
-                alt="체험 위치 옆 아이콘"
-                width={16}
-                height={16}
+                alt="체험 위치 아이콘"
+                width={18}
+                height={18}
               />
-              <span className="font-regular text-md text-nomad-black text-opacity-75">
+              <span className="font-regular text-md text-nomad-black opacity-75">
                 {activity?.address}
               </span>
             </div>
