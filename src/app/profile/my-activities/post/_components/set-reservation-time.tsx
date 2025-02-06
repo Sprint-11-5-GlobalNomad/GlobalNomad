@@ -112,7 +112,7 @@ export default function ReservationTimeSelector({
             />
             <div className="flex flex-row gap-[1.2rem]">
               <input
-                type="time"
+                type="text"
                 className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
                 disabled
                 value={reservationTime.startTime}
@@ -121,7 +121,7 @@ export default function ReservationTimeSelector({
                 ~
               </div>
               <input
-                type="time"
+                type="text"
                 className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
                 disabled
                 value={reservationTime.endTime}
