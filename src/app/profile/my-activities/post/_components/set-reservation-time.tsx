@@ -71,6 +71,7 @@ export default function ReservationTimeSelector({
               <TimeDropdown
                 options={timeTable}
                 description="0:00"
+                selectedOption={newReservationTime.startTime}
                 onSelect={(startTime) =>
                   setNewReservationTime({ ...newReservationTime, startTime })
                 }
@@ -86,6 +87,7 @@ export default function ReservationTimeSelector({
               <TimeDropdown
                 options={timeTable}
                 description="0:00"
+                selectedOption={newReservationTime.endTime}
                 onSelect={(endTime) =>
                   setNewReservationTime({ ...newReservationTime, endTime })
                 }
@@ -101,7 +103,8 @@ export default function ReservationTimeSelector({
             />
           </div>
         </div>
-        <hr />
+
+        {reservationTimes.length > 0 && <hr />}
         {reservationTimes.map((reservationTime, index) => (
           <div className="flex flex-row gap-[2.1rem]" key={index}>
             <input

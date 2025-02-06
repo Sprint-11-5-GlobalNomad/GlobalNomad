@@ -1,22 +1,21 @@
-"use client";
-
 import { DropdownArrowIcon } from "@/components/common/icons/dropdown-arrow-icon";
 import { DropdownCheckIcon } from "@/components/common/icons/dropdown-check-icon";
-import React, { useState } from "react";
+import { useState } from "react";
 
 interface SelectDropdownProps {
   options: string[];
   description: string;
-  onSelect: (option: string) => void; // 추가된 프롭
+  onSelect: (option: string) => void;
+  selectedOption: string | null;
 }
 
 export default function TimeDropdown({
   options,
   description,
+  selectedOption,
   onSelect,
 }: SelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   return (
     <div
@@ -43,7 +42,6 @@ export default function TimeDropdown({
               key={option}
               className="group px-8 py-6 text-lg rounded-[0.6rem] flex items-center hover:bg-green-dark hover:text-white"
               onClick={() => {
-                setSelectedOption(option);
                 onSelect(option);
                 setIsOpen(false);
               }}
