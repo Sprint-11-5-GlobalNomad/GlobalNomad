@@ -55,7 +55,7 @@ export default function IntroImagesUploader({
             />
             <button
               onClick={() => removeIntroImage(index)}
-              className="absolute top-0 right-0 bg-gray-700 text-white text-xs px-2 py-1 rounded-full"
+              className="absolute top-0 right-0 bg-gray-700 text-white text-xs px-3 py-1 rounded-full"
               type="button"
             >
               X
