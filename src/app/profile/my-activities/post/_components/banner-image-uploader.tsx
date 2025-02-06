@@ -19,22 +19,39 @@ export default function BannerImageUploader({
   return (
     <div className="flex flex-col gap-[2.4rem]">
       <h3 className="text-2xl font-bold">배너 이미지</h3>
-      <div className="relative w-[18rem] h-[18rem] border border-gray-300 rounded-md flex items-center justify-center">
+      <div className="relative w-[38.4rem] h-[18rem] border border-gray-300 rounded-md flex items-center justify-start">
         {bannerImage ? (
-          <div className="relative w-[18rem] h-[18rem]">
-            <Image
-              src={bannerImage}
-              alt="배너 이미지"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-md"
-            />
-            <button
-              onClick={() => setBannerImage(null)}
-              className="absolute top-0 right-0 bg-gray-700 text-white text-xs px-2 py-1 rounded-full"
-            >
-              X
-            </button>
+          <div className="flex flex-row gap-[2.4rem]">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleBannerUpload}
+                className="hidden"
+              />
+              <Image
+                src="/image/set_image_btn.svg"
+                alt="이미지 등록"
+                width={180}
+                height={180}
+              />
+            </label>
+            <div className="relative w-[18rem] h-[18rem] border-[0.1rem] border-black">
+              <Image
+                src={bannerImage}
+                alt="배너 이미지"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-md"
+              />
+              <button
+                onClick={() => setBannerImage(null)}
+                className="absolute top-0 right-0 bg-gray-700 text-white text-xs px-2 py-1 rounded-full"
+                type="button"
+              >
+                X
+              </button>
+            </div>
           </div>
         ) : (
           <label className="cursor-pointer">
