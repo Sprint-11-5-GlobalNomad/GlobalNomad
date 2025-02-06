@@ -18,11 +18,13 @@ interface ButtonProps {
     | "reservationTimeDelete";
   disabled?: boolean; // 비활성화
   className?: string; // 추가 클래스
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
   ButtonType,
   label,
+  type = "button",
   onClick,
   variant = "default",
   disabled = false,
@@ -126,7 +128,7 @@ const Button: React.FC<ButtonProps> = ({
       className={className}
       disabled={disabled}
       aria-disabled={disabled}
-      type="button"
+      type={type}
     >
       {label}
     </button>
