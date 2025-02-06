@@ -3,6 +3,7 @@ import Pagination from "@/components/common/ui/pagination";
 import { formatDate } from "@/utils/date-utils";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const SIZE = 3;
 
@@ -12,10 +13,12 @@ export default function ReviewSection() {
     filters: { activityId: Number(id), page: 1, size: SIZE },
   });
 
+  const [page, setPage] = useState(1);
+
   const totlaPages = Math.ceil((data?.totalCount || 0) / SIZE);
 
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <ul className="flex flex-col gap-[2.4rem] mb-[7.2rem]">
         {data?.reviews.map((review, index) => (
           <div key={review.id}>
@@ -57,7 +60,13 @@ export default function ReviewSection() {
           </div>
         ))}
       </ul>
-      <Pagination totalPages={totlaPages} />
+      <div className="flex gap-[1rem]">
+        <Pagination
+          totalPages={totlaPages}
+          currentPage={page}
+          setPage={setPage}
+        />
+      </div>
     </div>
   );
 }
