@@ -8,9 +8,9 @@ import {
   CATEGORY_TYPES,
   CreateActivityBodyDto,
 } from "@/app/types/activity-schemas";
-import ReservationTimeSelector from "./_components/set-reservation-time";
-import BannerImageUploader from "./_components/banner-image-uploader";
-import IntroImagesUploader from "./_components/intro-image-uploader";
+import ReservationTimeSelector from "../../../../components/pages/activity-post-edit/set-reservation-time";
+import BannerImageUploader from "../../../../components/pages/activity-post-edit/banner-image-uploader";
+import IntroImagesUploader from "../../../../components/pages/activity-post-edit/intro-image-uploader";
 
 type ReservationAvailableTime = {
   date: string;
