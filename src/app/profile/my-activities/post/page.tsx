@@ -3,7 +3,7 @@ import { useState } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, Controller } from "react-hook-form";
 import {
   CATEGORY_TYPES,
   CreateActivityBodyDto,
@@ -79,18 +79,23 @@ export default function ActivityPostPage() {
             )}
           </div>
 
-          <div>
-            <SelectDropdown
-              options={[...CATEGORY_TYPES]}
-              description="카테고리"
-              {...register("category", {
-                required: "카테고리를 선택해주세요.",
-              })}
-            />
-            {errors.category && (
-              <p className="text-red-500 text-sm">{errors.category.message}</p>
+          <Controller
+            name="category"
+            control={methods.control}
+            rules={{ required: "카테고리를 선택해주세요." }}
+            render={({ field }) => (
+              <SelectDropdown
+                options={[...CATEGORY_TYPES]}
+                description="카테고리"
+                value={field.value || ""}
+                onChange={field.onChange} // 부모 상태 업데이트
+                onBlur={field.onBlur}
+              />
             )}
-          </div>
+          />
+          {errors.category && (
+            <p className="text-red-500 text-sm">{errors.category.message}</p>
+          )}
 
           <div>
             <textarea
