@@ -1,39 +1,73 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import { useUpdateMyDetails, useMyDetails } from "../react-query/user-state";
+import { uploadProfileImage } from "../api/user-api";
+import { useQueryClient } from "@tanstack/react-query";
+
+const currentPage = "/profile";
 
 export default function ProfilePage() {
-  const currentPage = "/profile";
-
   const { data: userDetails, isLoading: isFetching } = useMyDetails();
+  const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
+  const queryClient = useQueryClient();
 
   const [nickname, setNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
-
   useEffect(() => {
-    if (userDetails?.nickname) {
-      setNickname(userDetails.nickname);
+    if (userDetails?.nickname) setNickname(userDetails.nickname);
+    if (userDetails?.profileImageUrl) {
+      setProfileImageUrl(userDetails.profileImageUrl);
     }
   }, [userDetails]);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 743); // 모바일 감지
+      setIsMobileView(window.innerWidth <= 743);
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleProfileImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      const imageFile = event.target.files[0];
+      try {
+        const response = await uploadProfileImage(imageFile);
+
+        setProfileImageUrl(response.profileImageUrl);
+
+        queryClient.setQueryData(["userDetails"], (oldData: any) => ({
+          ...oldData,
+          profileImageUrl: response.profileImageUrl,
+        }));
+
+        updateMyDetails(
+          { profileImageUrl: response.profileImageUrl },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+            },
+          }
+        );
+      } catch (error) {
+        console.error("프로필 이미지 업로드 오류:", error);
+        alert("프로필 이미지 업로드에 실패했습니다.");
+      }
+    }
+  };
 
   const handleSave = () => {
     if (newPassword && newPassword !== confirmPassword) {
@@ -42,28 +76,33 @@ export default function ProfilePage() {
     }
 
     setErrorMessage("");
-    updateMyDetails(
-      { nickname, newPassword },
-      {
-        onSuccess: () => {
-          alert("정보가 성공적으로 업데이트되었습니다.");
-        },
-        onError: () => {
-          alert("정보 업데이트 중 오류가 발생했습니다.");
-        },
-      }
-    );
+
+    const updateData: {
+      nickname: string;
+      newPassword?: string;
+      profileImageUrl?: string;
+    } = { nickname };
+    if (newPassword) updateData.newPassword = newPassword;
+    if (profileImageUrl) updateData.profileImageUrl = profileImageUrl;
+
+    updateMyDetails(updateData, {
+      onSuccess: () => {
+        alert("정보가 성공적으로 업데이트되었습니다.");
+        queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+      },
+      onError: () => alert("정보 업데이트 중 오류가 발생했습니다."),
+    });
   };
 
-  if (isFetching) {
-    return <p>로딩 중...</p>;
-  }
+  if (isFetching) return <p>로딩 중...</p>;
 
   if (isMobileView && !showDetails) {
     return (
       <UserProfileSidebar
         page={currentPage}
         onNavigate={() => setShowDetails(true)}
+        profileImageUrl={profileImageUrl || "/image/profile_default.svg"}
+        onProfileImageChange={handleProfileImageChange}
       />
     );
   }
@@ -74,17 +113,21 @@ export default function ProfilePage() {
         <div className="flex gap-[2.4rem]">
           {!isMobileView && (
             <div>
-              <UserProfileSidebar page={currentPage} />
+              <UserProfileSidebar
+                page={currentPage}
+                onProfileImageChange={handleProfileImageChange}
+                profileImageUrl={
+                  profileImageUrl || "/image/profile_default.svg"
+                }
+              />
             </div>
           )}
 
-          {/* Content */}
           <div className="flex-1 rounded-[0.75rem] h-auto">
-            {/* Header */}
             <div className="flex justify-between items-center w-[78rem] mb-[2.4rem] pb-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.3rem]">
               <h2 className="text-[3.2rem] font-bold">내 정보</h2>
               <Button
-                type="profileSave"
+                ButtonType="profileSave"
                 label={isPending ? "저장 중..." : "저장하기"}
                 onClick={handleSave}
                 disabled={isPending}
@@ -93,7 +136,6 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-[3.2rem]">
-              {/* 닉네임 */}
               <div>
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   닉네임
@@ -107,7 +149,6 @@ export default function ProfilePage() {
                 />
               </div>
 
-              {/* 이메일 */}
               <div>
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   이메일

@@ -1,21 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useMyDetails } from "@/app/react-query/user-state";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface SidebarProps {
   page: string;
-  onNavigate?: (link: string) => void;
+  profileImageUrl?: string;
+  onNavigate?: () => void;
+  onProfileImageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
+export default function UserProfileSidebar({
+  page,
+  onNavigate,
+  onProfileImageChange,
+}: SidebarProps) {
+  const queryClient = useQueryClient();
+  const { data: userDetails } = useMyDetails();
+
+  const profileImageUrl =
+    userDetails?.profileImageUrl || "/image/profile_default.svg";
+
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+  }, [profileImageUrl, queryClient]);
+
   const menuItems = [
-    {
-      label: "내 정보",
-      link: "/profile",
-      icon: "/image/profile.svg",
-    },
+    { label: "내 정보", link: "/profile", icon: "/image/profile.svg" },
     {
       label: "예약 내역",
       link: "/profile/my-reservations",
@@ -33,42 +47,18 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
     },
   ];
 
-  const [profileImage, setProfileImage] = React.useState(
-    "/image/profile_default.svg"
-  );
-
-  const handleProfileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          setProfileImage(e.target.result as string);
-        }
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
-
   return (
-    <div className="mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center ">
-      <div
-        className="w-[38rem] h-[43.2rem] p-[2.4rem] 
-        tablet:w-[25.1rem] tablet:h-[43.2rem] 
-        mobile:w-full mobile:max-w-[34.4rem] mobile:h-[43.2rem] mobile:mt-[2.4rem] bg-white 
-        border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md"
-      >
+    <div className="w-full mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center min-h-screen">
+      <div className="w-[38rem] h-[43.2rem] p-[2.4rem] mobile:mt-[7rem] bg-white border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md">
         <div className="flex flex-col items-center justify-center">
           <div className="relative">
             <Image
-              src={profileImage}
+              src={profileImageUrl}
               alt="Profile"
               width={160}
               height={160}
               className="rounded-full object-cover border border-gray-200"
-              style={{
-                width: "16rem",
-                height: "16rem",
-              }}
+              style={{ width: "16rem", height: "16rem" }}
             />
             <label
               htmlFor="profile-upload"
@@ -79,13 +69,12 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
                 alt="프로필 이미지 변경"
                 width={44}
                 height={44}
-                className="rounded-full"
               />
               <input
                 type="file"
                 id="profile-upload"
                 accept="image/*"
-                onChange={handleProfileChange}
+                onChange={onProfileImageChange}
                 className="hidden"
               />
             </label>
@@ -96,7 +85,12 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
             <Link
               href={item.link}
               key={item.label}
-              onClick={() => onNavigate?.(item.link)}
+              onClick={(e) => {
+                if (item.link === "/profile" && onNavigate) {
+                  e.preventDefault();
+                  onNavigate();
+                }
+              }}
               className={`flex items-center gap-[1rem] h-[4.4rem] rounded-[0.75rem] text-[1.6rem] pl-[1.6rem] font-bold ${
                 page === item.link
                   ? "bg-green-light text-black"
@@ -108,7 +102,6 @@ export default function UserProfileSidebar({ page, onNavigate }: SidebarProps) {
                 alt={`${item.label} 아이콘`}
                 width={24}
                 height={24}
-                className="h-[2.4rem] w-[2.4rem]"
               />
               {item.label}
             </Link>

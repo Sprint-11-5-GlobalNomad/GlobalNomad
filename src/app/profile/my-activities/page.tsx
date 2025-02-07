@@ -24,7 +24,7 @@ export default function MyActivities() {
         <div className="h-[5.3rem] flex flex-row justify-between items-center">
           <h2 className="text-[3.2rem] font-bold">내 체험 관리</h2>
           <Button
-            type="profileSave"
+            ButtonType="profileSave"
             label="체험 등록하기"
             onClick={ToPostPage}
           />
