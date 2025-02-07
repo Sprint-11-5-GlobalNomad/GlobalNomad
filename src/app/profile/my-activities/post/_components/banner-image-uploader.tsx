@@ -36,17 +36,17 @@ export default function BannerImageUploader({
                 height={180}
               />
             </label>
-            <div className="relative w-[18rem] h-[18rem] border-[0.1rem] border-black">
+            <div className="relative w-[18rem] h-[18rem]">
               <Image
                 src={bannerImage}
                 alt="배너 이미지"
                 layout="fill"
                 objectFit="cover"
-                className="rounded-md"
+                className="rounded-[2.4rem] border-[0.1rem] border-solid border-black"
               />
               <button
                 onClick={() => setBannerImage(null)}
-                className="absolute top-0 right-0 bg-gray-700 text-white text-xs px-3 py-1 rounded-full"
+                className="absolute top-[-2rem] right-[-2rem] bg-black bg-opacity-80 text-white w-[4rem] tablet:w-[3.2rem] mobile:w-[2.4rem] h-[4rem] tablet:h-[3.2rem] mobile:h-[2.4rem] text-xl tablet:text-lg mobile:text-base px-3 py-1 rounded-full"
                 type="button"
               >
                 X
