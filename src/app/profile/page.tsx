@@ -127,7 +127,7 @@ export default function ProfilePage() {
             <div className="flex justify-between items-center w-[78rem] mb-[2.4rem] pb-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.3rem]">
               <h2 className="text-[3.2rem] font-bold">내 정보</h2>
               <Button
-                type="profileSave"
+                ButtonType="profileSave"
                 label={isPending ? "저장 중..." : "저장하기"}
                 onClick={handleSave}
                 disabled={isPending}
