@@ -17,7 +17,7 @@ export default function BookingSection() {
   return (
     <div
       className="border border-solid border-gray-300 rounded-[1.2rem]
-    bg-white w-[38.4rem] h-[74.6rem] shadow-container
+    bg-white w-[38.4rem] h-[76.6rem] shadow-container
     flex flex-col items-start px-[2.4rem] pt-[2.4rem] pb-[1.8rem]"
     >
       <form className="flex flex-col gap-[1.6rem]">
@@ -88,7 +88,7 @@ export default function BookingSection() {
                     </button>
                     <input
                       value={count}
-                      className="w-[4rem] p-[0.8rem] text-md text-gray-900
+                      className="w-[4rem] p-[0.6rem] text-md text-gray-900
                     font-regular text-center focus:outline-none"
                     />
                     <button
