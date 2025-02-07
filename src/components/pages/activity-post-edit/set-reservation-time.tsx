@@ -46,11 +46,11 @@ export default function ReservationTimeSelector({
     <div className="flex flex-col gap-[2.4rem]">
       <h3 className="font-pretendard text-2xl font-bold">예약 가능한 시간대</h3>
       <div className="flex flex-col gap-[2.1rem]">
-        <div className="flex flex-row gap-[2.1rem]">
+        <div className="flex flex-row gap-[2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
           <div className="flex flex-col gap-[1rem]">
-            <h4 className="font-pretendard text-xl font-medium text-gray-900">
+            <label className="font-pretendard text-xl font-medium text-gray-900">
               날짜
-            </h4>
+            </label>
             <input
               type="date"
               value={newReservationTime.date}
@@ -60,14 +60,14 @@ export default function ReservationTimeSelector({
                   date: e.target.value,
                 })
               }
-              className="w-[37.9rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+              className="w-[37.9rem] tablet:w-[14.9rem] mobile:w-[13rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
             />
           </div>
-          <div className="flex flex-row gap-[1.2rem] relative">
+          <div className="flex flex-row gap-[1.2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem] relative">
             <div className="flex flex-col gap-[1rem]">
-              <h4 className="font-pretendard text-xl font-medium text-gray-900">
+              <label className="font-pretendard text-xl font-medium text-gray-900">
                 시작 시간
-              </h4>
+              </label>
               <TimeDropdown
                 options={timeTable}
                 description="0:00"
@@ -77,13 +77,15 @@ export default function ReservationTimeSelector({
                 }
               />
             </div>
-            <div className="relative top-[5.9rem] font-pretendard text-[2rem] font-bold">
-              ~
+            <div className="hidden desktop:block">
+              <div className="relative top-[5.9rem] font-pretendard text-[2rem] font-bold">
+                ~
+              </div>
             </div>
             <div className="flex flex-col gap-[1rem]">
-              <h4 className="font-pretendard text-xl font-medium text-gray-900">
+              <label className="font-pretendard text-xl font-medium text-gray-900">
                 종료 시간
-              </h4>
+              </label>
               <TimeDropdown
                 options={timeTable}
                 description="0:00"
@@ -106,26 +108,32 @@ export default function ReservationTimeSelector({
 
         {reservationTimes.length > 0 && <hr />}
         {reservationTimes.map((reservationTime, index) => (
-          <div className="flex flex-row gap-[2.1rem]" key={index}>
+          <div
+            className="flex flex-row gap-[2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]"
+            key={index}
+          >
             <input
-              type="date"
-              className="w-[37.9rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+              type="text"
+              className="w-[37.9rem] tablet:w-[14.9rem] mobile:w-[13rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
               disabled
               value={reservationTime.date}
             />
-            <div className="flex flex-row gap-[1.2rem]">
+            <div className="flex flex-row gap-[1.2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
               <input
                 type="text"
-                className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
                 disabled
                 value={reservationTime.startTime}
               />
-              <div className="relative top-[1.6rem] font-pretendard text-[2rem] font-bold">
-                ~
+              <div className="hidden desktop:block">
+                <div className="relative top-[1.6rem] font-pretendard text-[2rem] font-bold">
+                  ~
+                </div>
               </div>
+
               <input
                 type="text"
-                className="w-[14rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
                 disabled
                 value={reservationTime.endTime}
               />

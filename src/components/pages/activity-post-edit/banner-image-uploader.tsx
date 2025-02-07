@@ -19,10 +19,10 @@ export default function BannerImageUploader({
   return (
     <div className="flex flex-col gap-[2.4rem]">
       <h3 className="text-2xl font-bold">배너 이미지</h3>
-      <div className="relative w-[38.4rem] h-[18rem] border border-gray-300 rounded-md flex items-center justify-start">
+      <div className="relative w-[38.4rem] tablet:w-[42.8rem] mobile:w-[34.2rem] h-[18rem] tablet:h-[20.4rem] mobile:h-[16.7rem] border border-gray-300 rounded-md flex items-center justify-start">
         {bannerImage ? (
-          <div className="flex flex-row gap-[2.4rem]">
-            <label className="cursor-pointer">
+          <div className="flex flex-row gap-[2.4rem] tablet:gap-[1.6rem] mobile:gap-[0.8rem]">
+            <label className="cursor-pointer  w-[18rem] tablet:w-[20.4rem] mobile:w-[16.7rem] h-[18rem] tablet:h-[20.4rem] mobile:h-[16.7rem]">
               <input
                 type="file"
                 accept="image/*"
@@ -32,11 +32,11 @@ export default function BannerImageUploader({
               <Image
                 src="/image/set_image_btn.svg"
                 alt="이미지 등록"
-                width={180}
-                height={180}
+                width={204}
+                height={204}
               />
             </label>
-            <div className="relative w-[18rem] h-[18rem]">
+            <div className="relative w-[18rem] tablet:w-[20.4rem] mobile:w-[16.7rem] h-[18rem] tablet:h-[20.4rem] mobile:h-[16.7rem]">
               <Image
                 src={bannerImage}
                 alt="배너 이미지"
@@ -54,7 +54,7 @@ export default function BannerImageUploader({
             </div>
           </div>
         ) : (
-          <label className="cursor-pointer">
+          <label className="cursor-pointer w-[18rem] tablet:w-[20.4rem] mobile:w-[16.7rem] h-[18rem] tablet:h-[20.4rem] mobile:h-[16.7rem]">
             <input
               type="file"
               accept="image/*"
@@ -64,8 +64,8 @@ export default function BannerImageUploader({
             <Image
               src="/image/set_image_btn.svg"
               alt="이미지 등록"
-              width={180}
-              height={180}
+              width={204}
+              height={204}
             />
           </label>
         )}

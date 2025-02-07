@@ -48,14 +48,16 @@ export default function ActivityPostPage() {
   };
 
   return (
-    <div className="flex flex-row justify-center mt-[14.4rem] mb-[14.4rem] gap-[2.4rem]">
-      <UserProfileSidebar page="/profile/my-activities" />
+    <div className="flex flex-row justify-center mt-[14.4rem] mb-[14.4rem] ">
+      <div className="mobile:hidden tablet:ml-[2.4rem]">
+        <UserProfileSidebar page={"/profile/my-activities"} />
+      </div>
       <FormProvider {...methods}>
         <form
-          className="flex flex-col w-[79.2rem] gap-[2.4rem]"
+          className="flex flex-col w-[79.2rem] gap-[2.4rem] desktop:ml-[2.4rem] ml-[1.6rem] "
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row gap-[51.9rem] tablet:gap-[15.5rem] mobile:gap-[6.9rem] items-center">
             <h2 className="text-3xl font-bold font-pretendard">내 체험 등록</h2>
             <Button
               ButtonType="profileSave"
@@ -71,7 +73,7 @@ export default function ActivityPostPage() {
             <input
               type="text"
               placeholder="제목"
-              className="w-[79.2rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+              className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
               {...register("title", { required: "제목을 입력해주세요." })}
             />
             {errors.title && (
@@ -100,7 +102,7 @@ export default function ActivityPostPage() {
           <div>
             <textarea
               placeholder="설명"
-              className="w-[79.2rem] h-[34.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+              className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[34.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
               {...register("description", { required: "설명을 입력해주세요." })}
             />
             {errors.description && (
@@ -111,11 +113,11 @@ export default function ActivityPostPage() {
           </div>
 
           <div className="flex flex-col gap-[1.6rem]">
-            <h3 className="font-pretendard text-2xl font-bold">가격</h3>
+            <label className="font-pretendard text-2xl font-bold">가격</label>
             <input
               type="number"
               placeholder="가격"
-              className="w-[79.2rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+              className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
               {...register("price", {
                 required: "가격을 입력해주세요.",
                 min: { value: 1, message: "가격은 1 이상이어야 합니다." },
@@ -127,11 +129,11 @@ export default function ActivityPostPage() {
           </div>
 
           <div className="flex flex-col gap-[1.6rem]">
-            <h3 className="font-pretendard text-2xl font-bold">주소</h3>
+            <label className="font-pretendard text-2xl font-bold">주소</label>
             <input
               type="text"
               placeholder="주소를 입력해주세요."
-              className="w-[79.2rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+              className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
               {...register("address", { required: "주소를 입력해주세요." })}
             />
             {errors.address && (
