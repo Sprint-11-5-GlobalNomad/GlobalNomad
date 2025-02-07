@@ -5,6 +5,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
+import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
 import "@/styles/fullcalendar.css";
 
 const ReservationPage = () => {
@@ -68,23 +69,29 @@ const ReservationPage = () => {
 
       {/* 오른쪽 캘린더 영역 */}
       <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
-        <h2 className="text-2xl font-bold mb-[3.2rem] text-start">예약 현황</h2>
+        <h1 className="text-[3.2rem] font-bold mb-[3.8rem] text-start mt-0">
+          예약 현황
+        </h1>
 
         {/* 체험명 선택 드롭다운 */}
-        <div className="mb-[3rem]">
-          <select
-            className="w-full h-[5.6rem] p-3 border border-gray-300 rounded-md text-[1.6rem] font-regular"
-            value={selectedExperience}
-            onChange={(e) => setSelectedExperience(e.target.value)}
-          >
-            {experiences.map((experience, index) => (
-              <option key={index} value={experience}>
-                {experience}
-              </option>
-            ))}
-          </select>
+        <div className="mb-[3rem] relative">
+          <div className="relative border border-gray-300 rounded-md p-[1.6rem] bg-white w-full">
+            <label
+              className={`absolute left-[1.6rem] top-[1.6rem] text-[1.4rem] text-gray-500 transition-all ${
+                selectedExperience
+                  ? "top-[0.6rem] text-[1.2rem] text-gray-800"
+                  : ""
+              }`}
+            >
+              체험명
+            </label>
+            <SelectDropdown
+              options={experiences}
+              description={selectedExperience || "체험을 선택하세요"}
+              onChange={(value) => setSelectedExperience(value)}
+            />
+          </div>
         </div>
-
         {/* 네비게이션 버튼 */}
         <div className="flex justify-center items-center mb-6">
           <button onClick={handlePrev} className="text-2xl mx-[9.6rem]">
