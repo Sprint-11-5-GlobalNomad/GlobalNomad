@@ -1,4 +1,5 @@
 import { useActivityDetail } from "@/app/react-query/activity-state";
+import BookingCalendar from "@/components/common/ui/booking-calendar";
 import Button from "@/components/common/ui/button";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -35,7 +36,9 @@ export default function BookingSection() {
           w-[33.6rem] pt-[1.6rem]"
           >
             <h2 className="text-xl font-bold">날짜</h2>
-            <div className="ml-[1.6rem] mt-[1.6rem]">달력 이미지</div>
+            <div className="ml-[1.6rem] mt-[1.6rem]">
+              <BookingCalendar />
+            </div>
           </div>
         </div>
 
