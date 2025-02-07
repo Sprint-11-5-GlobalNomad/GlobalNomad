@@ -12,6 +12,7 @@ import ReservationTimeSelector from "../../../../components/pages/activity-post-
 import BannerImageUploader from "../../../../components/pages/activity-post-edit/banner-image-uploader";
 import IntroImagesUploader from "../../../../components/pages/activity-post-edit/intro-image-uploader";
 import { useCreateActivity } from "@/app/react-query/activity-state";
+import MessageModal from "@/components/common/ui/modal/message-modal";
 
 type ReservationAvailableTime = {
   date: string;
@@ -35,6 +36,7 @@ export default function ActivityPostPage() {
   const [reservationTimes, setReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const { mutate, isPending } = useCreateActivity();
 
@@ -55,10 +57,15 @@ export default function ActivityPostPage() {
     };
     mutate(activityData, {
       onSuccess: () => {
-        alert("체험이 성공적으로 등록되었습니다!");
+        setModalIsOpen(true);
       },
     });
   };
+
+  function closeModal() {
+    setModalIsOpen(false);
+    window.location.href = "/profile/my-activities";
+  }
 
   return (
     <div className="flex flex-row justify-center mt-[14.4rem] mb-[14.4rem] ">
@@ -184,6 +191,11 @@ export default function ActivityPostPage() {
           />
         </form>
       </FormProvider>
+      <MessageModal
+        isOpen={modalIsOpen}
+        onClose={closeModal}
+        message={"체험 등록이 완료되었습니다."}
+      />
     </div>
   );
 }
