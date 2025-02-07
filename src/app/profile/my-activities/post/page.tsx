@@ -11,6 +11,7 @@ import {
 import ReservationTimeSelector from "../../../../components/pages/activity-post-edit/set-reservation-time";
 import BannerImageUploader from "../../../../components/pages/activity-post-edit/banner-image-uploader";
 import IntroImagesUploader from "../../../../components/pages/activity-post-edit/intro-image-uploader";
+import { useCreateActivity } from "@/app/react-query/activity-state";
 
 type ReservationAvailableTime = {
   date: string;
@@ -35,16 +36,28 @@ export default function ActivityPostPage() {
     ReservationAvailableTime[]
   >([]);
 
+  const { mutate, isPending } = useCreateActivity();
+
   const onSubmit = (data: CreateActivityBodyDto) => {
-    if (!bannerImage) {
-      alert("배너 이미지를 등록해주세요.");
-      return;
-    }
-    if (reservationTimes.length === 0) {
-      alert("예약 가능한 시간대를 추가해주세요.");
-      return;
-    }
-    console.log("폼 제출됨", data);
+    const activityData: CreateActivityBodyDto = {
+      title: data.title,
+      category: data.category,
+      description: data.description,
+      price: data.price,
+      address: data.address,
+      bannerImageUrl: bannerImage as string,
+      subImageUrls: introImages.length > 0 ? introImages : undefined,
+      schedules: reservationTimes.map(({ date, startTime, endTime }) => ({
+        date,
+        startTime,
+        endTime,
+      })),
+    };
+    mutate(activityData, {
+      onSuccess: () => {
+        alert("체험이 성공적으로 등록되었습니다!");
+      },
+    });
   };
 
   return (
@@ -61,7 +74,7 @@ export default function ActivityPostPage() {
             <h2 className="text-3xl font-bold font-pretendard">내 체험 등록</h2>
             <Button
               ButtonType="profileSave"
-              label="등록하기"
+              label={isPending ? "등록 중..." : "등록하기"}
               type="submit"
               disabled={
                 !isValid || !bannerImage || reservationTimes.length === 0
@@ -90,7 +103,7 @@ export default function ActivityPostPage() {
                 options={[...CATEGORY_TYPES]}
                 description="카테고리"
                 value={field.value || ""}
-                onChange={field.onChange} // 부모 상태 업데이트
+                onChange={field.onChange}
                 onBlur={field.onBlur}
               />
             )}
