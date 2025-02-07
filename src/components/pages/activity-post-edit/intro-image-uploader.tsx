@@ -49,8 +49,7 @@ export default function IntroImagesUploader({
             <Image
               src={img}
               alt="소개 이미지"
-              width={204}
-              height={204}
+              layout="fill"
               objectFit="cover"
               className="rounded-[2.4rem] border-[0.1rem] border-solid border-black"
             />
