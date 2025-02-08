@@ -180,7 +180,7 @@ export default function LoginPage() {
                 />
                 {/* 비밀번호 보기 버튼 */}
                 <button
-                  type="button"
+                  type="submit"
                   onClick={togglePasswordVisibility}
                   className="absolute right-[1.6rem] top-[50%] transform -translate-y-1/2 text-[var(--color-gray-800)]"
                 >
@@ -211,6 +211,7 @@ export default function LoginPage() {
 
             {/* 로그인 버튼 */}
             <Button
+              type="submit"
               ButtonType="loginSignup"
               label="로그인 하기"
               variant="loginSignup"
