@@ -6,9 +6,10 @@ import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import ReviewSection from "./review-section";
 import { useAuth } from "@/app/api/use-auth";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
 const getSatisfactionLevel = (rating?: number) => {
-  if (rating === undefined) return "평가 없음";
+  if (rating === undefined || rating === 0) return "평가 없음";
   if (rating >= 4.0) return "매우 만족";
   if (rating >= 3.0) return "만족";
   if (rating >= 2.0) return "불만족";
@@ -21,6 +22,7 @@ export default function ActivityDetails() {
 
   const { user } = useAuth();
   const isOwner = user?.id === activity?.userId;
+  const isRated = activity?.rating !== undefined && activity?.rating !== 0;
 
   return (
     <div className="w-[120rem] flex justify-between">
@@ -92,7 +94,14 @@ export default function ActivityDetails() {
             </div>
           </div>
 
-          <ReviewSection />
+          {isRated ? (
+            <ReviewSection />
+          ) : (
+            <EmptyContent
+              description="아직 등록한 리뷰가 없어요"
+              className="my-[30rem] w-[80rem]"
+            />
+          )}
         </div>
       </div>
       {isOwner ? <></> : <BookingSection />}

@@ -5,7 +5,7 @@ import { useMyReservations } from "@/app/react-query/reservation-state";
 import FilterDropdown from "@/components/common/ui/dropdown/filter-dropdown";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import { MyReservationCard } from "@/components/pages/profile-reservation/my-reservation-card";
-import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
 const filterOption: string[] = [
   "예약 완료",
@@ -67,7 +67,7 @@ export default function MyReservation() {
             ))
           ) : (
             <div className="mt-[5rem] mb-[4.1rem]">
-              <EmptyActivity />
+              <EmptyContent />
             </div>
           )}
         </div>

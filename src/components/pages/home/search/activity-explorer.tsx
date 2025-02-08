@@ -9,8 +9,8 @@ import Pagination from "@/components/common/ui/pagination";
 import AllActivities from "../all-activities/all-activities";
 import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
-import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
 import { useDebounce } from "use-debounce";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
 const isLastCharHasBatchim = (text: string): boolean => {
   if (!text) return false;
@@ -95,7 +95,7 @@ export default function ActivityExplorer() {
             !isLoading &&
             !isError && (
               <div className="m-[20rem]">
-                <EmptyActivity />
+                <EmptyContent />
               </div>
             )
           )}
