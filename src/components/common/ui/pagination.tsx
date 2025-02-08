@@ -30,7 +30,10 @@ export default function Pagination({
       <Link
         href={`?page=${currentPage - 1}`}
         passHref
-        onClick={() => handlePageChange(currentPage - 1)}
+        onClick={(e) => {
+          e.preventDefault();
+          handlePageChange(currentPage - 1);
+        }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
           rounded-[1.5rem] border border-solid bg-white
           ${currentPage === 1 ? "border-gray-300 cursor-not-allowed" : "border-green-dark hover:bg-green-dark"}`}
@@ -47,7 +50,10 @@ export default function Pagination({
           href={`?page=${page}`}
           key={page}
           passHref
-          onClick={() => handlePageChange(page)}
+          onClick={(e) => {
+            e.preventDefault();
+            handlePageChange(page);
+          }}
           className={`w-[5.5rem] h-[5.5rem] bg-white px-[1.5rem] py-[1.5rem]
         flex items-center justify-center rounded-[1.5rem]
         border border-solid border-green-dark hover:bg-green-dark
@@ -61,7 +67,10 @@ export default function Pagination({
       <Link
         href={`?page=${currentPage + 1}`}
         passHref
-        onClick={() => handlePageChange(currentPage + 1)}
+        onClick={(e) => {
+          e.preventDefault();
+          handlePageChange(currentPage + 1);
+        }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
       rounded-[1.5rem] border border-solid bg-white
       ${currentPage === totalPages ? "border-gray-300 cursor-not-allowed" : "border-green-dark hover:bg-green-dark"}`}

@@ -76,7 +76,10 @@ export default function BookingSection() {
                   w-[12rem] flex-between shadow-stepper shadow-stepperInset"
                   >
                     <button
-                      onClick={handleDecrease}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDecrease();
+                      }}
                       className="p-[1rem] rounded-tl-[0.6rem] rounded-bl-[0.6rem]"
                     >
                       <Image
@@ -88,11 +91,15 @@ export default function BookingSection() {
                     </button>
                     <input
                       value={count}
+                      onChange={(e) => setCount(Number(e.target.value) || 1)}
                       className="w-[4rem] p-[0.6rem] text-md text-gray-900
                     font-regular text-center focus:outline-none"
                     />
                     <button
-                      onClick={handleIncrease}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleIncrease();
+                      }}
                       className="p-[1rem] rounded-tr-[0.6rem] rounded-br-[0.6rem]"
                     >
                       <Image
