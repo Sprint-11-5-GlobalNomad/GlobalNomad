@@ -33,6 +33,7 @@ export default function Pagination({
         onClick={(e) => {
           e.preventDefault();
           handlePageChange(currentPage - 1);
+          window.history.pushState({}, "", `?page=${currentPage - 1}`);
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
           rounded-[1.5rem] border border-solid bg-white
@@ -46,23 +47,25 @@ export default function Pagination({
         />
       </Link>
       {pages.map((page) => (
-        <Link
-          href={`?page=${page}`}
-          key={page}
-          passHref
-          onClick={(e) => {
-            e.preventDefault();
-            handlePageChange(page);
-          }}
-          className={`w-[5.5rem] h-[5.5rem] bg-white px-[1.5rem] py-[1.5rem]
+        <div key={page} className="hover:text-white">
+          <Link
+            href={`?page=${page}`}
+            passHref
+            onClick={(e) => {
+              e.preventDefault();
+              handlePageChange(page);
+              window.history.pushState({}, "", `?page=${page}`);
+            }}
+            className={`w-[5.5rem] h-[5.5rem] bg-white px-[1.5rem] py-[1.5rem]
         flex items-center justify-center rounded-[1.5rem]
         border border-solid border-green-dark hover:bg-green-dark
          ${currentPage === page ? "bg-green-drak" : ""}`}
-        >
-          <span className="color-green-dark font-regular text-2lg text-center hover:color-white">
-            {page}
-          </span>
-        </Link>
+          >
+            <span className="color-green-dark font-regular text-2lg text-center">
+              {page}
+            </span>
+          </Link>
+        </div>
       ))}
       <Link
         href={`?page=${currentPage + 1}`}
@@ -70,6 +73,7 @@ export default function Pagination({
         onClick={(e) => {
           e.preventDefault();
           handlePageChange(currentPage + 1);
+          window.history.pushState({}, "", `?page=${currentPage + 1}`);
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
       rounded-[1.5rem] border border-solid bg-white
