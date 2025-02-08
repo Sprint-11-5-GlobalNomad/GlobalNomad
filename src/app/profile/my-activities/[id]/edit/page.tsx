@@ -153,23 +153,25 @@ export default function ActivityPostPage() {
             )}
           </div>
 
-          <Controller
-            name="category"
-            control={methods.control}
-            rules={{ required: "카테고리를 선택해주세요." }}
-            render={({ field }) => (
-              <SelectDropdown
-                options={[...CATEGORY_TYPES]}
-                description="카테고리"
-                value={field.value || ""}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
+          <div>
+            <Controller
+              name="category"
+              control={methods.control}
+              rules={{ required: "카테고리를 선택해주세요." }}
+              render={({ field }) => (
+                <SelectDropdown
+                  options={[...CATEGORY_TYPES]}
+                  description="카테고리"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                />
+              )}
+            />
+            {errors.category && (
+              <p className="text-red-500 text-sm">{errors.category.message}</p>
             )}
-          />
-          {errors.category && (
-            <p className="text-red-500 text-sm">{errors.category.message}</p>
-          )}
+          </div>
 
           <div>
             <textarea
