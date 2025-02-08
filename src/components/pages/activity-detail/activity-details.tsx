@@ -6,6 +6,14 @@ import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import ReviewSection from "./review-section";
 
+const getSatisfactionLevel = (rating?: number) => {
+  if (rating === undefined) return "평가 없음";
+  if (rating >= 4.0) return "매우 만족";
+  if (rating >= 3.0) return "만족";
+  if (rating >= 2.0) return "불만족";
+  return "매우 불만족";
+};
+
 export default function ActivityDetails() {
   const { id } = useParams();
   const { data: activity } = useActivityDetail(Number(id));
@@ -64,7 +72,9 @@ export default function ActivityDetails() {
                 {activity?.rating}
               </span>
               <div className="flex flex-col gap-[0.8rem]">
-                <span className="text-2lg font-regular">매우 만족</span>
+                <span className="text-2lg font-regular">
+                  {getSatisfactionLevel(activity?.rating)}
+                </span>
                 <span className="flex items-center gap-[0.6rem]">
                   <Image
                     src="/image/rating-star.svg"
