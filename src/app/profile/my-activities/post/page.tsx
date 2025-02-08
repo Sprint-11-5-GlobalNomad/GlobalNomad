@@ -132,8 +132,8 @@ export default function ActivityPostPage() {
             )}
           </div>
 
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">가격</label>
+          <label className="flex flex-col gap-[1.6rem] ">
+            <div className="font-pretendard text-2xl font-bold">가격</div>
             <input
               type="number"
               placeholder="가격"
@@ -146,10 +146,10 @@ export default function ActivityPostPage() {
             {errors.price && (
               <p className="text-red-500 text-sm">{errors.price.message}</p>
             )}
-          </div>
+          </label>
 
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">주소</label>
+          <label className="flex flex-col gap-[1.6rem]">
+            <div className="font-pretendard text-2xl font-bold">주소</div>
             <input
               type="text"
               placeholder="주소를 입력해주세요."
@@ -159,7 +159,7 @@ export default function ActivityPostPage() {
             {errors.address && (
               <p className="text-red-500 text-sm">{errors.address.message}</p>
             )}
-          </div>
+          </label>
 
           <div>
             <ReservationTimeSelector

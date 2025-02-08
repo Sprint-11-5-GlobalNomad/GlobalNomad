@@ -47,10 +47,10 @@ export default function ReservationTimeSelector({
       <h3 className="font-pretendard text-2xl font-bold">예약 가능한 시간대</h3>
       <div className="flex flex-col gap-[2.1rem]">
         <div className="flex flex-row gap-[2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
-          <div className="flex flex-col gap-[1rem]">
-            <label className="font-pretendard text-xl font-medium text-gray-900">
+          <label className="flex flex-col gap-[1rem]">
+            <div className="font-pretendard text-xl font-medium text-gray-900">
               날짜
-            </label>
+            </div>
             <input
               type="date"
               value={newReservationTime.date}
@@ -62,7 +62,7 @@ export default function ReservationTimeSelector({
               }
               className="w-[37.9rem] tablet:w-[14.9rem] mobile:w-[13rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
             />
-          </div>
+          </label>
           <div className="flex flex-row gap-[1.2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem] relative">
             <div className="flex flex-col gap-[1rem]">
               <label className="font-pretendard text-xl font-medium text-gray-900">

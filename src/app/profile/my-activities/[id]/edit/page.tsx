@@ -11,6 +11,7 @@ import {
 import ReservationTimeSelector from "@/components/pages/activity-post-edit/set-reservation-time";
 import BannerImageUploader from "@/components/pages/activity-post-edit/banner-image-uploader";
 import IntroImagesUploader from "@/components/pages/activity-post-edit/intro-image-uploader";
+import { useParams } from "next/navigation";
 
 type ReservationAvailableTime = {
   date: string;
@@ -19,6 +20,7 @@ type ReservationAvailableTime = {
 };
 
 export default function ActivityPostPage() {
+  const { id } = useParams();
   const methods = useForm<CreateActivityBodyDto>({
     mode: "onBlur", // 필드에서 포커스가 벗어날 때 검증
   });
@@ -112,8 +114,8 @@ export default function ActivityPostPage() {
             )}
           </div>
 
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">가격</label>
+          <label className="flex flex-col gap-[1.6rem] ">
+            <div className="font-pretendard text-2xl font-bold">가격</div>
             <input
               type="number"
               placeholder="가격"
@@ -126,10 +128,10 @@ export default function ActivityPostPage() {
             {errors.price && (
               <p className="text-red-500 text-sm">{errors.price.message}</p>
             )}
-          </div>
+          </label>
 
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">주소</label>
+          <label className="flex flex-col gap-[1.6rem]">
+            <div className="font-pretendard text-2xl font-bold">주소</div>
             <input
               type="text"
               placeholder="주소를 입력해주세요."
@@ -139,7 +141,7 @@ export default function ActivityPostPage() {
             {errors.address && (
               <p className="text-red-500 text-sm">{errors.address.message}</p>
             )}
-          </div>
+          </label>
 
           <div>
             <ReservationTimeSelector
