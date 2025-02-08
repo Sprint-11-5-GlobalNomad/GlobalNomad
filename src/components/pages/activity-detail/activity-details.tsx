@@ -5,6 +5,7 @@ import BookingSection from "./booking-section";
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import ReviewSection from "./review-section";
+import { useAuth } from "@/app/api/use-auth";
 
 const getSatisfactionLevel = (rating?: number) => {
   if (rating === undefined) return "평가 없음";
@@ -17,6 +18,9 @@ const getSatisfactionLevel = (rating?: number) => {
 export default function ActivityDetails() {
   const { id } = useParams();
   const { data: activity } = useActivityDetail(Number(id));
+
+  const { user } = useAuth();
+  const isOwner = user?.id === activity?.userId;
 
   return (
     <div className="w-[120rem] flex justify-between">
@@ -91,7 +95,7 @@ export default function ActivityDetails() {
           <ReviewSection />
         </div>
       </div>
-      <BookingSection />
+      {isOwner ? <></> : <BookingSection />}
     </div>
   );
 }
