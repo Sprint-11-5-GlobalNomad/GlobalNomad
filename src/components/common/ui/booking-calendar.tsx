@@ -17,15 +17,11 @@ const MONTHS = [
   "December",
 ];
 
-export default function CustomCalendar() {
+export default function BookingCalendar() {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth()); // 0: 1월, 11: 12월
   const [selectedDate, setSelectedDate] = useState(today);
-
-  // 요일 이름 배열
-  const daysOfWeek = DAYSOFWEEK;
-  const months = MONTHS;
 
   // 📌 달력 데이터 생성 함수
   const generateCalendar = () => {
@@ -94,7 +90,7 @@ export default function CustomCalendar() {
           />
         </button>
         <span className="font-bold text-md">
-          {months[currentMonth]} {currentYear}
+          {MONTHS[currentMonth]} {currentYear}
         </span>
         <button
           onClick={(e) => {
@@ -113,7 +109,7 @@ export default function CustomCalendar() {
 
       {/* 📌 요일 */}
       <div className="grid grid-cols-7 w-[25rem] justify-items-center">
-        {daysOfWeek.map((day) => (
+        {DAYSOFWEEK.map((day) => (
           <span
             key={day}
             className="text-md font-bold
