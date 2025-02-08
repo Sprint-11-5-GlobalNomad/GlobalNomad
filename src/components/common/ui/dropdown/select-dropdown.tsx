@@ -21,17 +21,23 @@ export default function SelectDropdown({
   onBlur,
 }: SelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isTouched, setIsTouched] = useState(false); // 포커스 여부 추적
 
   const dropdownRef = UseOutsideClick(() => {
     setIsOpen(false);
-    onBlur?.();
+    if (isTouched) {
+      onBlur?.();
+    }
   });
 
   return (
     <div className="relative w-full max-w-md" ref={dropdownRef}>
       <div
         className="relative w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] p-[1rem] border border-solid border-gray-900 rounded-[0.4rem] bg-white cursor-pointer"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => {
+          setIsOpen((prev) => !prev);
+          setIsTouched(true); // 드롭다운 클릭 시 touched 상태 true
+        }}
       >
         <span
           className={`absolute top-[1.5rem] w-full text-lg bg-transparent font-regular ml-[0.6rem] ${
