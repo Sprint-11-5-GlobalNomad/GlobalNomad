@@ -4,6 +4,7 @@ import {
   FindActivitiesQueryDto,
   ActivityWithSubImagesAndSchedulesDto,
   CreateActivityBodyDto,
+  FindReviewsQueryDto,
 } from "../types/activity-schemas";
 import {
   CreateReservationBodyDto,
@@ -59,11 +60,12 @@ export const fetchAvailableSchedules = async (
 };
 
 // 체험 리뷰 조회
-export const fetchActivityReviews = async (
-  activityId: number,
-  page = 1,
-  size = 3
-) => {
+export const fetchActivityReviews = async ({
+  filters,
+}: {
+  filters: FindReviewsQueryDto;
+}) => {
+  const params = { ...filters };
   const response = await instance.get<{
     averageRating: number;
     totalCount: number;
@@ -76,7 +78,7 @@ export const fetchActivityReviews = async (
       createdAt: string;
       updatedAt: string;
     }[];
-  }>(`/activities/${activityId}/reviews`, { params: { page, size } });
+  }>(`/activities/${filters.activityId}/reviews`, { params });
   return response.data;
 };
 

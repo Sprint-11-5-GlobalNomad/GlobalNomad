@@ -18,7 +18,7 @@ export default function SearchForm({
       className="bg-white w-[120rem] max-h-[18.4rem]
     px-[2.4rem] py-[3.2rem] flex flex-col gap-[3.2rem] border rounded-[1.6rem]
     absolute transform -translate-x-1/2 -translate-y-[10vh] top-1/2 left-1/2
-    shadow-search tablet:w-[69.6rem] tablet:h-[18.4rem]
+    shadow-container tablet:w-[69.6rem] tablet:h-[18.4rem]
     mobile:w-[34.3rem] mobile:px-[2.4rem] mobile:py-[1.6rem] mobile:gap-[1.5rem]"
     >
       <h2 className="text-xl font-bold mobile:text-lg">
@@ -48,7 +48,7 @@ export default function SearchForm({
           mobile:text-md"
           />
         </div>
-        <Button type="search" label="검색하기" variant="default" />
+        <Button ButtonType="search" label="검색하기" variant="default" />
       </form>
     </div>
   );

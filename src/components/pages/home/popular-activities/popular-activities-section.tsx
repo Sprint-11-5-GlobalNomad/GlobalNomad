@@ -1,55 +1,20 @@
-"use client";
+// "use client";
 
 import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { useInfiniteActivities } from "@/app/react-query/use-infinite-scroll";
 import Image from "next/image";
-// import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-export default function PopularActivitiesSection() {
-  const size = 9;
+const SIZE = 9;
 
+export default function PopularActivitiesSection() {
   const { data, isLoading, isError } = useInfiniteActivities({
     method: "cursor",
     cursorId: null,
-    size,
+    size: SIZE,
     sort: "most_reviewed",
   });
-
-  //   const handleReachEnd = () => {
-  //     if (hasNextPage) {
-  //       fetchNextPage();
-  //     }
-  //   };
-
-  //   // 🔥 UI에서 현재 보고 있는 페이지를 관리
-  //   const [pageIndex, setPageIndex] = useState(0);
-
-  //   // 전체 데이터 가져오기
-  //   const activities = data?.pages.flatMap((page) => page.activities) || [];
-  //   const totalItems = activities.length;
-  //   const maxPageIndex = Math.ceil(totalItems / size) - 1; // 최대 페이지
-
-  //   // UI 상에서 다음 목록으로 이동
-  //   const handleNextCursor = () => {
-  //     if (pageIndex < maxPageIndex) {
-  //       setPageIndex((prev) => prev + 1);
-  //     }
-  //   };
-
-  //   // UI 상에서 이전 목록으로 이동
-  //   const handlePrevCursor = () => {
-  //     if (pageIndex > 0) {
-  //       setPageIndex((prev) => prev - 1);
-  //     }
-  //   };
-
-  //   // 🔥 현재 페이지에 해당하는 3개만 slice 해서 보여주기
-  //   const visibleActivities = activities.slice(
-  //     pageIndex * size,
-  //     (pageIndex + 1) * size
-  //   );
 
   const activities = data?.pages.flatMap((page) => page.activities) || [];
 
@@ -100,24 +65,16 @@ export default function PopularActivitiesSection() {
       ) : isError ? (
         <ErrorIndicator width={80} height={80} />
       ) : (
-        // <Swiper
-        //   slidesPerView={3}
-        //   spaceBetween={24}
-        //   loop={false}
-        //   onReachEnd={handleReachEnd}
-        // >
         <ul
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
     tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
         >
           {activities.map((activity) => (
-            //   <SwiperSlide key={activity.id}>
             <li
               key={activity.id}
               className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
-              // tablet:flex-shrink-0 mobile:flex-shrink-0
             >
               <Link href={`/activity/${activity.id}`}>
                 <Image
@@ -159,10 +116,8 @@ export default function PopularActivitiesSection() {
                 </div>
               </Link>
             </li>
-            //   </SwiperSlide>
           ))}
         </ul>
-        // </Swiper>
       )}
     </>
   );

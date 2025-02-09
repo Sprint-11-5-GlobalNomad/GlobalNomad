@@ -91,6 +91,11 @@ const ButtonSizes: Record<
     md: { width: 55, height: 55, radius: 15, font_size: 18 },
     sm: { width: 40, height: 40, radius: 15, font_size: 18 },
   },
+  reservationTime: {
+    lg: { width: 56, height: 56, radius: 9, font_size: 26 },
+    md: { width: 56, height: 56, radius: 9, font_size: 26 },
+    sm: { width: 44, height: 44, radius: 7, font_size: 20 },
+  },
 };
 
 export { ButtonSizes };

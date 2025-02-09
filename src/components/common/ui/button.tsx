@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { ButtonSizes } from "@/app/types/button-type";
 
 interface ButtonProps {
-  type: keyof typeof ButtonSizes; // 버튼 역할
+  ButtonType: keyof typeof ButtonSizes; // 버튼 역할
   label: React.ReactNode; // 버튼 텍스트
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // 클릭 이벤트 event: React.MouseEvent<HTMLButtonElement>추가
   variant?:
@@ -13,14 +13,18 @@ interface ButtonProps {
     | "category"
     | "page"
     | "selected"
-    | "loginSignup"; // 스타일
+    | "loginSignup"
+    | "reservationTimeAdd"
+    | "reservationTimeDelete";
   disabled?: boolean; // 비활성화
   className?: string; // 추가 클래스
+  type?: "button" | "submit" | "reset";
 }
 
 const Button: React.FC<ButtonProps> = ({
-  type,
+  ButtonType,
   label,
+  type = "button",
   onClick,
   variant = "default",
   disabled = false,
@@ -45,7 +49,7 @@ const Button: React.FC<ButtonProps> = ({
     return () => window.removeEventListener("resize", updateSize); // 이벤트 제거
   }, []);
 
-  const buttonSize = ButtonSizes[type]?.[currentSize];
+  const buttonSize = ButtonSizes[ButtonType]?.[currentSize];
 
   if (!buttonSize) {
     console.error("Invalid size or type for Button");
@@ -104,6 +108,17 @@ const Button: React.FC<ButtonProps> = ({
       backgroundColor: disabled ? "#A4A1AA" : "#0B3B2D",
       color: "#fff",
     },
+    reservationTimeAdd: {
+      ...baseStyle,
+      backgroundColor: "#0B3B2D",
+      color: "#fff",
+    },
+    reservationTimeDelete: {
+      ...baseStyle,
+      backgroundColor: "fff",
+      color: "#79747E",
+      border: "1px solid #dddddd",
+    },
   };
 
   return (
@@ -113,6 +128,7 @@ const Button: React.FC<ButtonProps> = ({
       className={className}
       disabled={disabled}
       aria-disabled={disabled}
+      type={type}
     >
       {label}
     </button>

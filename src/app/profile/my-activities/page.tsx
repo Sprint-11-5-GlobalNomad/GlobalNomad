@@ -5,17 +5,29 @@ import { EmptyActivity } from "@/components/common/layout/profile/empty-activity
 import { MyActivityCard } from "@/components/common/layout/profile/my-activity-card";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function MyActivities() {
   const { isLoading, data } = useMyActivities();
+  const router = useRouter();
+
+  function ToPostPage() {
+    router.push("/profile/my-activities/post");
+  }
 
   return (
-    <div className="flex flex-row justify-center min-h-[700px] h-auto mt-[14.2rem] pb-[10rem]">
-      <UserProfileSidebar page="/profile/my-activities" />
-      <div className="pl-[2.4rem]">
-        <div className=" flex flex-row justify-between items-center">
+    <div className="flex flex-row justify-center gap-[2.4rem] mt-[14.4rem] mobile:mt-[9rem] mb-[18.3rem] mobile:mb-[10rem]">
+      <div className="mobile:hidden">
+        <UserProfileSidebar page={"/profile/my-activities"} />
+      </div>
+      <div className="flex flex-col">
+        <div className="h-[5.3rem] flex flex-row justify-between items-center">
           <h2 className="text-[3.2rem] font-bold">내 체험 관리</h2>
-          <Button type="profileSave" label="체험 등록하기" />
+          <Button
+            ButtonType="profileSave"
+            label="체험 등록하기"
+            onClick={ToPostPage}
+          />
         </div>
         <div className="flex flex-col gap-[2.4rem] mt-[1.6rem] h-auto desktop:w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.4rem]">
           {isLoading ? (
@@ -33,7 +45,7 @@ export default function MyActivities() {
               />
             ))
           ) : (
-            <div className="mt-[5rem]">
+            <div className="mt-[5rem] mb-[4.1rem]">
               <EmptyActivity />
             </div>
           )}

@@ -1,18 +1,14 @@
 "use client";
 
-import { useUserStore } from "@/stores/user-store";
 import Link from "next/link";
 import UserNotifications from "@/components/common/layout/navigation/user-notifications";
 import Image from "next/image";
 import { useState } from "react";
 import UseOutsideClick from "@/hooks/use-outside-click";
+import { useAuth } from "@/app/api/use-auth";
 
 export default function UserMenu() {
-  const { isAuthenticated, logout, currentUser } = useUserStore(
-    (state) => state
-  );
-  // useUserStore(state) 가 아닌 이유: useUserStore 는 기본적으로 선택자 함수를 인수로 받도록 설계되어 있기 때문
-
+  const { user, isAuthenticated, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const ref = UseOutsideClick(() => setIsOpen(false));
 
@@ -26,12 +22,12 @@ export default function UserMenu() {
             className="flex-between gap-[1rem] border-solid border-l-[0.1rem] border-gray-300 pl-[2rem]"
           >
             <Image
-              src={currentUser?.profileImageUrl || "/image/profile_default.svg"}
+              src={user?.profileImageUrl || "/image/profile_default.svg"}
               alt="프로필 이미지"
               width={32}
               height={32}
             />
-            <span className="text-md">{currentUser?.nickname || "닉네임"}</span>
+            <span className="text-md">{user?.nickname || "닉네임"}</span>
             {isOpen && (
               <div
                 ref={ref}

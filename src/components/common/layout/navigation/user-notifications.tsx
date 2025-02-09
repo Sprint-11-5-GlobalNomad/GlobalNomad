@@ -3,7 +3,7 @@
 import UseOutsideClick from "@/hooks/use-outside-click";
 import Image from "next/image";
 import { useState } from "react";
-import { foramtTime } from "@/utils/time-utils";
+import { formatTime } from "@/utils/time-utils";
 import { highlightText } from "@/utils/higlight-text";
 import { useDeleteNotification } from "@/app/react-query/notification-state";
 import { AxiosError } from "axios";
@@ -173,7 +173,7 @@ export default function UserNotifications() {
                         {highlightText(notification.content)}
                       </li>
                       <time className="text-xs font-regular text-gray-600">
-                        {foramtTime(notification.updatedAt)}
+                        {formatTime(notification.updatedAt)}
                       </time>
                     </div>
                   </div>
