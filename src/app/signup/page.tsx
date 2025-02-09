@@ -104,9 +104,8 @@ export default function SignupPage() {
       onError: (error) => {
         setIsSignupSuccess(false);
         if (error instanceof AxiosError) {
-          const errorMessage =
-            error.response?.data?.message || "회원 가입에 실패하였습니다.";
-          openModal(errorMessage);
+          // const errorMessage = error.response?.data?.message || "회원 가입에 실패하였습니다.";
+          openModal("이미 사용중인 이메일입니다.");
         }
       },
     });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useLogin } from "../react-query/oauth-state";
@@ -74,6 +74,14 @@ export default function LoginPage() {
       },
     });
   };
+
+  // 로그인 상태에서 리디렉션
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken"); // 예시: localStorage 사용
+    if (token) {
+      router.replace("/"); // 로그인 상태면 메인 페이지로 리디렉션
+    }
+  }, []);
 
   return (
     <div>
