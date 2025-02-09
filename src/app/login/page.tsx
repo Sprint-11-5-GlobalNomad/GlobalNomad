@@ -8,7 +8,6 @@ import Image from "next/image";
 import Link from "next/link";
 import MessageModal from "../../components/common/ui/modal/message-modal";
 import Button from "../../components/common/ui/button";
-
 import { AxiosError } from "axios";
 
 interface LoginFormInputs {
@@ -70,9 +69,7 @@ export default function LoginPage() {
         if (error instanceof AxiosError) {
           const errorMessage =
             error.response?.data?.message || "로그인에 실패했습니다.";
-          openModal(errorMessage); // 에러 메시지를 모달로 표시
-        } else {
-          openModal("알 수 없는 오류가 발생했습니다."); // AxiosError가 아닌 경우 기본 메시지 표시
+          openModal(errorMessage);
         }
       },
     });
@@ -80,13 +77,7 @@ export default function LoginPage() {
 
   return (
     <div>
-      {/* 모달 컴포넌트 */}
-      <MessageModal
-        isOpen={modalState.isOpen}
-        message={modalState.message}
-        onClose={closeModal}
-      />
-      <div className="flex flex-col items-center px-[1.6rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
+      <div className="flex flex-col items-center my-[11.8rem] px-[1.6rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
         {/** 로고 섹션 */}
         <div className="flex justify-center mb-[3.2rem] w-full">
           <Image
@@ -120,20 +111,20 @@ export default function LoginPage() {
                 placeholder="이메일 입력"
                 // 빨간 테두리: errors.email 있으면 적용
                 className={`
-              w-full
-              px-[0.2rem] py-[1.6rem]
-              border
-              focus:outline-none
-              rounded-[0.6rem]
-              text-[1.6rem] font-normal leading-[2.6rem]
-              placeholder-[var(--color-gray-600)]
-              ${errors.email ? "border-[var(--color-red)]" : "border-[var(--color-gray-300)]"}
-            `}
+                  w-full
+                  px-[2rem] py-[1.6rem]
+                  border
+                  focus:outline-none
+                  rounded-[0.6rem]
+                  text-[1.6rem] font-normal leading-[2.6rem]
+                  placeholder-[var(--color-gray-600)]
+                  ${errors.email ? "border-[var(--color-red)]" : "border-[var(--color-gray-300)]"}
+                `}
                 {...register("email", {
-                  required: "잘못된 이메일입니다.",
+                  required: "이메일을 입력해주세요.",
                   pattern: {
                     value: emailRegex,
-                    message: "잘못된 이메일입니다.",
+                    message: "이메일 형식으로 작성해주세요.",
                   },
                 })}
                 onBlur={() => trigger("email")}
@@ -161,7 +152,7 @@ export default function LoginPage() {
                   placeholder="비밀번호 입력"
                   className={`
                     w-full
-                    px-[0.2rem] py-[1.6rem]
+                    px-[2rem] py-[1.6rem]
                     border
                     focus:outline-none
                     rounded-[0.6rem]
@@ -242,9 +233,9 @@ export default function LoginPage() {
           </div>
           <div className="mt-[2.4rem] flex justify-center gap-4">
             <Link
-              href="https://www.google.com" // 절대 URL
-              target="_blank" // 새 탭에서 열기
-              rel="noopener noreferrer" // 보안 강화
+              href="https://www.google.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-[7.2rem] h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
             >
               <Image
@@ -256,9 +247,9 @@ export default function LoginPage() {
               />
             </Link>
             <Link
-              href="https://developers.kakao.com/docs/latest/ko/message/rest-api" // 절대 URL
-              target="_blank" // 새 탭에서 열기
-              rel="noopener noreferrer" // 보안 강화
+              href="https://developers.kakao.com/docs/latest/ko/message/rest-api"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-[7.2rem] h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
             >
               <Image
@@ -272,6 +263,12 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      {/* 모달 컴포넌트 */}
+      <MessageModal
+        isOpen={modalState.isOpen}
+        message={modalState.message}
+        onClose={closeModal}
+      />
     </div>
   );
 }
