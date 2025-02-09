@@ -7,7 +7,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "sprint-fe-project.s3.ap-northeast-2.amazonaws.com",
         port: "",
-        pathname: "/globalnomad/activity_registration_image/**", // 경로 패턴
+        pathname: "/globalnomad/activity_registration_image/**", // 경로 패턴턴
+        search: "",
+      },
+      {
+        protocol: "https",
+        hostname: "sprint-fe-project.s3.ap-northeast-2.amazonaws.com",
+        port: "",
+        pathname: "/globalnomad/profile_image/**",
         search: "",
       },
     ],
