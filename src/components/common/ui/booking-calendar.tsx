@@ -70,13 +70,33 @@ export default function BookingCalendar({
 
   // 📌 월 이동 함수
   const handlePrevMonth = () => {
-    setCurrentMonth((prev) => (prev === 0 ? 11 : prev - 1));
-    if (currentMonth === 0) setCurrentYear((prev) => prev - 1);
+    // 이전 달로 이동
+    const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+    // 이전 달의 1일 계산
+    const newDate = new Date(newYear, newMonth, 1);
+
+    setCurrentMonth(newMonth);
+    setCurrentYear(newYear);
+
+    // 부모에게 전달 (이전 달의 1일)
+    onSelectDate(newDate);
   };
 
   const handleNextMonth = () => {
-    setCurrentMonth((prev) => (prev === 11 ? 0 : prev + 1));
-    if (currentMonth === 11) setCurrentYear((prev) => prev + 1);
+    // 다음 달로 이동
+    const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+    const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+
+    // 다음 달의 1일 계산
+    const newDate = new Date(newYear, newMonth, 1);
+
+    setCurrentMonth(newMonth);
+    setCurrentYear(newYear);
+
+    // 부모에게 전달 (다음 달의 1일)
+    onSelectDate(newDate);
   };
 
   return (

@@ -42,6 +42,8 @@ export default function BookingSection() {
       )
     : [];
 
+  const [selectedTime, setSelectedTime] = useState<number | null>(null);
+
   return (
     <div
       className="border border-solid border-gray-300 rounded-[1.2rem]
@@ -92,9 +94,14 @@ export default function BookingSection() {
                             <Button
                               key={time.id}
                               ButtonType="availableTime"
-                              variant="category"
+                              variant={
+                                selectedTime === time.id
+                                  ? "selected"
+                                  : "category"
+                              }
                               label={`${time.startTime}~${time.endTime}`}
                               className="flex-shrink-0"
+                              onClick={() => setSelectedTime(time.id)}
                             />
                           ))
                         )
