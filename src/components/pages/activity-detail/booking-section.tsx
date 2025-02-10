@@ -10,6 +10,7 @@ export default function BookingSection() {
   const { data: activity } = useActivityDetail(Number(id));
 
   const [count, setCount] = useState(1);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleIncrease = () => setCount((prev) => prev + 1);
   const handleDecrease = () => setCount((prev) => Math.max(prev - 1, 1));
@@ -17,7 +18,7 @@ export default function BookingSection() {
   return (
     <div
       className="border border-solid border-gray-300 rounded-[1.2rem]
-    bg-white w-[38.4rem] h-[76.6rem] shadow-container
+    bg-white w-[38.4rem] h-[78rem] shadow-container
     flex flex-col items-start px-[2.4rem] pt-[2.4rem] pb-[1.8rem]"
     >
       <form className="flex flex-col gap-[1.6rem]">
@@ -37,7 +38,7 @@ export default function BookingSection() {
           >
             <h2 className="text-xl font-bold">날짜</h2>
             <div className="ml-[1.6rem] mt-[1.6rem]">
-              <BookingCalendar />
+              <BookingCalendar onSelectDate={setSelectedDate} />
             </div>
           </div>
         </div>
