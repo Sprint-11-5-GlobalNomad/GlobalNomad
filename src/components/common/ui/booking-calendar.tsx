@@ -2,7 +2,7 @@ import { ScheduleResponseDto } from "@/app/types/schedule-schemas";
 import Image from "next/image";
 import { useState } from "react";
 
-const DAYSOFWEEK = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"];
+const DAYSOFWEEK = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"] as const;
 const MONTHS = [
   "January",
   "February",
@@ -16,12 +16,12 @@ const MONTHS = [
   "October",
   "November",
   "December",
-];
+] as const;
 
 interface BookingCalendarProps {
   schedules?: ScheduleResponseDto[];
-  selectedDate: Date | null;
-  onSelectDate: (day: Date | null) => void;
+  selectedDate: Date;
+  onSelectDate: (day: Date) => void;
 }
 
 export default function BookingCalendar({
@@ -33,9 +33,7 @@ export default function BookingCalendar({
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth()); // 0: 1월, 11: 12월
 
-  const availableDates: string[] | undefined = schedules?.map(
-    (schedule) => schedule.date
-  );
+  const availableDates = schedules?.map((schedule) => schedule.date);
 
   console.log("예약 가능일", schedules);
   console.log("예약 가능일 배열", availableDates);
@@ -89,10 +87,11 @@ export default function BookingCalendar({
       {/* 📌 헤더 (월 변경 버튼) */}
       <div className="flex-between w-[25rem] mt-[1rem]">
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            handlePrevMonth();
-          }}
+          type="button"
+          onClick={
+            // e.preventDefault();
+            handlePrevMonth
+          }
         >
           <Image
             src="/image/Prev.svg"
@@ -104,12 +103,7 @@ export default function BookingCalendar({
         <span className="font-bold text-md">
           {MONTHS[currentMonth]} {currentYear}
         </span>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            handleNextMonth();
-          }}
-        >
+        <button type="button" onClick={handleNextMonth}>
           <Image
             src="/image/Next.svg"
             alt="다음 달 이동 버튼"

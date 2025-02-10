@@ -14,9 +14,9 @@ export default function BookingSection() {
   const { data: activity } = useActivityDetail(Number(id));
 
   const [count, setCount] = useState(1);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-  const handleDateChange = (day: Date | null) => {
+  const handleDateChange = (day: Date) => {
     setSelectedDate(day);
   };
 
