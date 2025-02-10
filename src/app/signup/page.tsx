@@ -113,7 +113,7 @@ export default function SignupPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center my-[11.8rem] px-[1.6rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
+      <div className="flex flex-col items-center my-[11.8rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
         {/* 로고 섹션 */}
         <div className="flex justify-center mb-[3.2rem] w-full">
           <Image
