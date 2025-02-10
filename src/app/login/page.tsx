@@ -62,7 +62,7 @@ export default function LoginPage() {
   const onSubmit = (data: LoginFormInputs) => {
     loginMutation.mutate(data, {
       onSuccess: () => {
-        router.push("/"); // 로그인 성공 시 메인 페이지로 이동
+        window.location.href = "/";
       },
       onError: (error) => {
         // error를 안전하게 처리
@@ -210,7 +210,8 @@ export default function LoginPage() {
 
             {/* 로그인 버튼 */}
             <Button
-              type="loginSignup"
+              type="submit"
+              ButtonType="loginSignup"
               label="로그인 하기"
               variant="loginSignup"
               disabled={isButtonDisabled}

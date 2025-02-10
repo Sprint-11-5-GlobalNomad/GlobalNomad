@@ -1,0 +1,133 @@
+import { useActivityDetail } from "@/app/react-query/activity-state";
+import BookingCalendar from "@/components/common/ui/booking-calendar";
+import Button from "@/components/common/ui/button";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+
+export default function BookingSection() {
+  const { id } = useParams();
+  const { data: activity } = useActivityDetail(Number(id));
+
+  const [count, setCount] = useState(1);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleIncrease = () => setCount((prev) => prev + 1);
+  const handleDecrease = () => setCount((prev) => Math.max(prev - 1, 1));
+
+  return (
+    <div
+      className="border border-solid border-gray-300 rounded-[1.2rem]
+    bg-white w-[38.4rem] h-[78rem] shadow-container
+    flex flex-col items-start px-[2.4rem] pt-[2.4rem] pb-[1.8rem]"
+    >
+      <form className="flex flex-col gap-[1.6rem]">
+        <div className="flex flex-col gap-[1.6rem]">
+          {/* 가격 섹션 */}
+          <div>
+            <p className="text-3xl font-bold flex items-center gap-[0.5rem]">
+              ₩ {Number(activity?.price).toLocaleString("ko-KR")}
+              <span className="text-xl font-regular text-gray-900">/ 인</span>
+            </p>
+          </div>
+
+          {/* 캘린더 섹션 */}
+          <div
+            className="border-t border-solid border-gray-300
+          w-[33.6rem] pt-[1.6rem]"
+          >
+            <h2 className="text-xl font-bold">날짜</h2>
+            <div className="ml-[1.6rem] mt-[1.6rem]">
+              <BookingCalendar onSelectDate={setSelectedDate} />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-[2.4rem]">
+          {/* 예약 가능한 시간 */}
+          <div className="flex flex-col gap-[2.4rem] w-[33.6rem]">
+            <div className="flex flex-col gap-[2.4rem]">
+              <div className="flex flex-col gap-[1.2rem]">
+                <div
+                  className="flex flex-col gap-[0.8rem]
+              border-b border-solid border-gray-300 pb-[1.6rem]"
+                >
+                  <div className="flex flex-col gap-[1.4rem]">
+                    <h3 className="text-2lg font-bold">예약 가능한 시간</h3>
+                    <div className="flex gap-[1.2rem] overflow-x-auto hide-scrollbar">
+                      {activity?.schedules.map((schedule) => (
+                        <Button
+                          key={schedule.id}
+                          ButtonType="availableTime"
+                          variant="category"
+                          label={`${schedule.startTime}~${schedule.endTime}`}
+                          className="flex-shrink-0"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                {/* 참여 인원 수 */}
+
+                <div className="flex flex-col gap-[0.8rem]">
+                  <h3 className="text-2lg font-bold">참여 인원 수</h3>
+                  {/* 참여 인원 수 선택 */}
+                  <div
+                    className="border border-solid border-gray-500 rounded-[0.6rem]
+                  w-[12rem] flex-between shadow-stepper shadow-stepperInset"
+                  >
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDecrease();
+                      }}
+                      className="p-[1rem] rounded-tl-[0.6rem] rounded-bl-[0.6rem]"
+                    >
+                      <Image
+                        src="/image/Subtract.svg"
+                        alt="참여 인원 수 빼기"
+                        width={20}
+                        height={20}
+                      />
+                    </button>
+                    <input
+                      value={count}
+                      onChange={(e) => setCount(Number(e.target.value) || 1)}
+                      className="w-[4rem] p-[0.6rem] text-md text-gray-900
+                    font-regular text-center focus:outline-none"
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleIncrease();
+                      }}
+                      className="p-[1rem] rounded-tr-[0.6rem] rounded-br-[0.6rem]"
+                    >
+                      <Image
+                        src="/image/Add.svg"
+                        alt="참여 인원 수 빼기"
+                        width={20}
+                        height={20}
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {/* 예약하기 버튼 */}
+              <Button ButtonType="reservation" type="submit" label="예약하기" />
+            </div>
+          </div>
+          {/* 총 합계 섹션 */}
+          <div className="pt-[1.6rem] border-t border-solid border-gray-300">
+            <div className="flex-between">
+              <h4 className="text-xl font-bold">총 합계</h4>
+              <span className="text-xl font-bold">
+                ₩ {Number(activity?.price).toLocaleString("ko-KR")}
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  );
+}

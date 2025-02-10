@@ -5,12 +5,16 @@ import {
   createActivity,
   fetchActivityDetail,
   createReservation,
+  fetchActivityReviews,
+  fetchAvailableSchedules,
 } from "../api/activities-api";
 import {
   ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,
   CreateActivityBodyDto,
   FindActivitiesQueryDto,
+  FindAvailableScheduleQueryDto,
+  FindReviewsQueryDto,
 } from "../types/activity-schemas";
 import {
   ReservationResponseDto,
@@ -26,6 +30,7 @@ export const useActivities = (filters: FindActivitiesQueryDto) =>
   }>({
     queryKey: ["activities", filters],
     queryFn: async () => {
+      console.log("체험 리스트 조회 요청 필터:", filters);
       try {
         return await fetchActivities(filters);
       } catch (error) {
@@ -121,6 +126,38 @@ export const useActivityDetail = (activityId: number) =>
       }
     },
   });
+
+// 체험 리뷰 조회
+export const useReviews = ({ filters }: { filters: FindReviewsQueryDto }) => {
+  const query = useQuery({
+    queryKey: ["activityReviews", filters],
+    queryFn: () => fetchActivityReviews({ filters }),
+    staleTime: 60 * 60 * 1000,
+    retry: 1,
+  });
+  if (query.isError) {
+    console.error(query.error);
+  }
+  return query;
+};
+
+// 체험 예약 가능일 조회
+export const useAvailableSchedules = ({
+  filters,
+}: {
+  filters: FindAvailableScheduleQueryDto;
+}) => {
+  const query = useQuery({
+    queryKey: ["availableSchedules", filters],
+    queryFn: () => fetchAvailableSchedules({ filters }),
+    staleTime: 60 * 60 * 1000,
+    retry: 1,
+  });
+  if (query.isError) {
+    console.error(query.error);
+  }
+  return query;
+};
 
 // 체험 예약 생성
 export const useCreateReservation = () => {

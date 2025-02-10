@@ -4,6 +4,8 @@ import {
   FindActivitiesQueryDto,
   ActivityWithSubImagesAndSchedulesDto,
   CreateActivityBodyDto,
+  FindReviewsQueryDto,
+  FindAvailableScheduleQueryDto,
 } from "../types/activity-schemas";
 import {
   CreateReservationBodyDto,
@@ -42,28 +44,30 @@ export const fetchActivityDetail = async (activityId: number) => {
 };
 
 // 체험 예약 가능일 조회
-export const fetchAvailableSchedules = async (
-  activityId: number,
-  year: string,
-  month: string
-) => {
+export const fetchAvailableSchedules = async ({
+  filters,
+}: {
+  filters: FindAvailableScheduleQueryDto;
+}) => {
+  const params = { ...filters };
   const response = await instance.get<
     {
       date: string;
       times: { id: number; startTime: string; endTime: string }[];
     }[]
-  >(`/activities/${activityId}/available-schedule`, {
-    params: { year, month },
+  >(`/activities/${filters.activityId}/available-schedule`, {
+    params,
   });
   return response.data;
 };
 
 // 체험 리뷰 조회
-export const fetchActivityReviews = async (
-  activityId: number,
-  page = 1,
-  size = 3
-) => {
+export const fetchActivityReviews = async ({
+  filters,
+}: {
+  filters: FindReviewsQueryDto;
+}) => {
+  const params = { ...filters };
   const response = await instance.get<{
     averageRating: number;
     totalCount: number;
@@ -76,7 +80,7 @@ export const fetchActivityReviews = async (
       createdAt: string;
       updatedAt: string;
     }[];
-  }>(`/activities/${activityId}/reviews`, { params: { page, size } });
+  }>(`/activities/${filters.activityId}/reviews`, { params });
   return response.data;
 };
 

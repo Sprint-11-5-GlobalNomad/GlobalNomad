@@ -108,7 +108,7 @@ export function MyReservationCard({
             </div>
             {status === "pending" && (
               <Button
-                type="review"
+                ButtonType="review"
                 label="예약 취소"
                 variant="outlined"
                 onClick={() => setIsCancelModalOpen(true)}
@@ -116,7 +116,7 @@ export function MyReservationCard({
             )}
             {status === "completed" && (
               <Button
-                type="review"
+                ButtonType="review"
                 label="후기 작성"
                 onClick={() => setIsReviewModalOpen(true)}
               />
