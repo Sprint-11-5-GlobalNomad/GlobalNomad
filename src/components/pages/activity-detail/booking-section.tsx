@@ -1,6 +1,11 @@
-import { useActivityDetail } from "@/app/react-query/activity-state";
+import {
+  useActivityDetail,
+  useAvailableSchedules,
+  useCreateReservation,
+} from "@/app/react-query/activity-state";
 import BookingCalendar from "@/components/common/ui/booking-calendar";
 import Button from "@/components/common/ui/button";
+import MessageModal from "@/components/common/ui/modal/message-modal";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -9,11 +14,53 @@ export default function BookingSection() {
   const { id } = useParams();
   const { data: activity } = useActivityDetail(Number(id));
 
-  const [count, setCount] = useState(1);
+  const [headCount, setHeadCount] = useState(1);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleIncrease = () => setCount((prev) => prev + 1);
-  const handleDecrease = () => setCount((prev) => Math.max(prev - 1, 1));
+  const handleDateChange = (day: Date) => {
+    setSelectedDate(day);
+  };
+
+  const { data: schedules } = useAvailableSchedules({
+    filters: {
+      activityId: Number(id),
+      year: selectedDate ? selectedDate.getFullYear().toString() : "",
+      month: selectedDate
+        ? (selectedDate.getMonth() + 1).toString().padStart(2, "0")
+        : "",
+    },
+  });
+
+  const handleIncrease = () => setHeadCount((prev) => prev + 1);
+  const handleDecrease = () => setHeadCount((prev) => Math.max(prev - 1, 1));
+
+  const availableTimes = selectedDate
+    ? schedules?.filter(
+        (schedule) =>
+          new Date(schedule.date).toLocaleDateString("sv-SE") ===
+          selectedDate.toLocaleDateString("sv-SE")
+      )
+    : [];
+
+  const totalPrice = (activity?.price ?? 1) * headCount;
+
+  const { mutate: createReservation } = useCreateReservation();
+
+  const isReservationAvailable = selectedTime > 0 && headCount > 0;
+
+  const handleBooking = () => {
+    const reservationData = {
+      scheduleId: selectedTime,
+      headCount,
+    };
+
+    createReservation(
+      { activityId: Number(id), reservationData },
+      { onSuccess: () => setIsModalOpen(true) }
+    );
+  };
 
   return (
     <div
@@ -38,7 +85,11 @@ export default function BookingSection() {
           >
             <h2 className="text-xl font-bold">날짜</h2>
             <div className="ml-[1.6rem] mt-[1.6rem]">
-              <BookingCalendar onSelectDate={setSelectedDate} />
+              <BookingCalendar
+                schedules={schedules}
+                selectedDate={selectedDate}
+                onSelectDate={handleDateChange}
+              />
             </div>
           </div>
         </div>
@@ -55,15 +106,33 @@ export default function BookingSection() {
                   <div className="flex flex-col gap-[1.4rem]">
                     <h3 className="text-2lg font-bold">예약 가능한 시간</h3>
                     <div className="flex gap-[1.2rem] overflow-x-auto hide-scrollbar">
-                      {activity?.schedules.map((schedule) => (
-                        <Button
-                          key={schedule.id}
-                          ButtonType="availableTime"
-                          variant="category"
-                          label={`${schedule.startTime}~${schedule.endTime}`}
-                          className="flex-shrink-0"
-                        />
-                      ))}
+                      {availableTimes && availableTimes.length > 0 ? (
+                        availableTimes.map((schedule) =>
+                          schedule.times.map((time) => (
+                            <Button
+                              key={time.id}
+                              ButtonType="availableTime"
+                              variant={
+                                selectedTime === time.id
+                                  ? "selected"
+                                  : "category"
+                              }
+                              label={`${time.startTime}~${time.endTime}`}
+                              className="flex-shrink-0"
+                              onClick={() => setSelectedTime(time.id)}
+                            />
+                          ))
+                        )
+                      ) : selectedDate ? (
+                        <span className="text-2lg">
+                          이 날짜에는 예약 가능한 시간이 없습니다.
+                        </span>
+                      ) : (
+                        <span className="text-2lg">
+                          날짜를 선택하면 해당 날짜의 예약 가능한 시간이
+                          조회됩니다
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -91,8 +160,10 @@ export default function BookingSection() {
                       />
                     </button>
                     <input
-                      value={count}
-                      onChange={(e) => setCount(Number(e.target.value) || 1)}
+                      value={headCount}
+                      onChange={(e) =>
+                        setHeadCount(Number(e.target.value) || 1)
+                      }
                       className="w-[4rem] p-[0.6rem] text-md text-gray-900
                     font-regular text-center focus:outline-none"
                     />
@@ -114,7 +185,16 @@ export default function BookingSection() {
                 </div>
               </div>
               {/* 예약하기 버튼 */}
-              <Button ButtonType="reservation" type="submit" label="예약하기" />
+              <Button
+                ButtonType="reservation"
+                type="submit"
+                label="예약하기"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleBooking();
+                }}
+                disabled={!isReservationAvailable}
+              />
             </div>
           </div>
           {/* 총 합계 섹션 */}
@@ -122,12 +202,19 @@ export default function BookingSection() {
             <div className="flex-between">
               <h4 className="text-xl font-bold">총 합계</h4>
               <span className="text-xl font-bold">
-                ₩ {Number(activity?.price).toLocaleString("ko-KR")}
+                ₩ {Number(totalPrice).toLocaleString("ko-KR")}
               </span>
             </div>
           </div>
         </div>
       </form>
+      {isModalOpen && (
+        <MessageModal
+          onClose={() => setIsModalOpen(false)}
+          isOpen={isModalOpen}
+          message="예약이 완료되었습니다."
+        />
+      )}
     </div>
   );
 }

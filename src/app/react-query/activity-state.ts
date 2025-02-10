@@ -159,7 +159,7 @@ export const useAvailableSchedules = ({
   return query;
 };
 
-// 체험 예약 생성
+// 체험 예약 신청
 export const useCreateReservation = () => {
   const queryClient = useQueryClient();
   return useMutation<
