@@ -1,20 +1,23 @@
 import {
   useActivityDetail,
   useAvailableSchedules,
+  useCreateReservation,
 } from "@/app/react-query/activity-state";
 import BookingCalendar from "@/components/common/ui/booking-calendar";
 import Button from "@/components/common/ui/button";
+import MessageModal from "@/components/common/ui/modal/message-modal";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
 export default function BookingSection() {
   const { id } = useParams();
-
   const { data: activity } = useActivityDetail(Number(id));
 
-  const [count, setCount] = useState(1);
+  const [headCount, setHeadCount] = useState(1);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDateChange = (day: Date) => {
     setSelectedDate(day);
@@ -28,11 +31,10 @@ export default function BookingSection() {
         ? (selectedDate.getMonth() + 1).toString().padStart(2, "0")
         : "",
     },
-    enabled: !!selectedDate,
   });
 
-  const handleIncrease = () => setCount((prev) => prev + 1);
-  const handleDecrease = () => setCount((prev) => Math.max(prev - 1, 1));
+  const handleIncrease = () => setHeadCount((prev) => prev + 1);
+  const handleDecrease = () => setHeadCount((prev) => Math.max(prev - 1, 1));
 
   const availableTimes = selectedDate
     ? schedules?.filter(
@@ -42,7 +44,23 @@ export default function BookingSection() {
       )
     : [];
 
-  const [selectedTime, setSelectedTime] = useState<number | null>(null);
+  const totalPrice = (activity?.price ?? 1) * headCount;
+
+  const { mutate: createReservation } = useCreateReservation();
+
+  const isReservationAvailable = selectedTime > 0 && headCount > 0;
+
+  const handleBooking = () => {
+    const reservationData = {
+      scheduleId: selectedTime,
+      headCount,
+    };
+
+    createReservation(
+      { activityId: Number(id), reservationData },
+      { onSuccess: () => setIsModalOpen(true) }
+    );
+  };
 
   return (
     <div
@@ -142,8 +160,10 @@ export default function BookingSection() {
                       />
                     </button>
                     <input
-                      value={count}
-                      onChange={(e) => setCount(Number(e.target.value) || 1)}
+                      value={headCount}
+                      onChange={(e) =>
+                        setHeadCount(Number(e.target.value) || 1)
+                      }
                       className="w-[4rem] p-[0.6rem] text-md text-gray-900
                     font-regular text-center focus:outline-none"
                     />
@@ -165,7 +185,16 @@ export default function BookingSection() {
                 </div>
               </div>
               {/* 예약하기 버튼 */}
-              <Button ButtonType="reservation" type="submit" label="예약하기" />
+              <Button
+                ButtonType="reservation"
+                type="submit"
+                label="예약하기"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleBooking();
+                }}
+                disabled={!isReservationAvailable}
+              />
             </div>
           </div>
           {/* 총 합계 섹션 */}
@@ -173,12 +202,19 @@ export default function BookingSection() {
             <div className="flex-between">
               <h4 className="text-xl font-bold">총 합계</h4>
               <span className="text-xl font-bold">
-                ₩ {Number(activity?.price).toLocaleString("ko-KR")}
+                ₩ {Number(totalPrice).toLocaleString("ko-KR")}
               </span>
             </div>
           </div>
         </div>
       </form>
+      {isModalOpen && (
+        <MessageModal
+          onClose={() => setIsModalOpen(false)}
+          isOpen={isModalOpen}
+          message="예약이 완료되었습니다."
+        />
+      )}
     </div>
   );
 }
