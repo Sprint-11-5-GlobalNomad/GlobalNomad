@@ -53,20 +53,20 @@ export default function ReservationModal({
     scheduleId,
     activeTab
   );
-  if (!isOpen) return null; // ✅ Hook 실행 후 조건문 배치
+  if (!isOpen) return null;
 
   // 1시간 단위 예약 리스트
   const timeSlots = [...Array(24)].map(
     (_, hour) => `${hour}:00 ~ ${hour + 1}:00`
   );
 
-  // ✅ 현재 선택된 예약 리스트 필터링
+  // 현재 선택된 예약 리스트 필터링
   const filteredReservations: Reservation[] =
     reservations && Array.isArray(reservations)
       ? reservations.filter((r: Reservation) => r.status === activeTab)
       : [];
 
-  // ✅ 예약 상태 업데이트 함수
+  // 예약 상태 업데이트 함수
   const handleUpdateStatus = async (
     id: number,
     status: "confirmed" | "declined"

@@ -13,6 +13,7 @@ import ReservationModal from "./reservation-modal";
 import { EventClickArg } from "@fullcalendar/core";
 
 interface ActivityBasicDto {
+  //임시데이터사용
   id: number;
   name?: string;
 }
@@ -41,7 +42,7 @@ export default function ReservationPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
 
-  // ✅ 임시 데이터 (예약 일정)
+  // 임시 데이터
   const tempReservations: Reservation[] = [
     {
       id: 1,
@@ -81,7 +82,6 @@ export default function ReservationPage() {
     },
   ];
 
-  // ✅ URL에서 체험 ID 가져오기
   useEffect(() => {
     const activityId = searchParams.get("activityId");
     if (activityId) {
@@ -89,7 +89,7 @@ export default function ReservationPage() {
     }
   }, [searchParams]);
 
-  // ✅ 이벤트 데이터 설정
+  // 이벤트 데이터 설정
   useEffect(() => {
     setEvents(
       tempReservations.map((reservation) => ({
@@ -100,7 +100,7 @@ export default function ReservationPage() {
     );
   }, []);
 
-  // ✅ 예약이 지나면 자동으로 "완료" 상태로 변경
+  // 예약이 지나면 자동으로 완료료
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setSelectedReservations((prev) =>
@@ -110,7 +110,7 @@ export default function ReservationPage() {
     );
   }, []);
 
-  // 🔄 달력 이동 버튼
+  // 달력 이동
   const handlePrev = () => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -127,7 +127,7 @@ export default function ReservationPage() {
     }
   };
 
-  // 📌 이벤트 클릭 시 모달 열기 및 예약 정보 설정
+  //이벤트 클릭 시 모달 열기 및 예약 정보
   const handleEventClick = (info: EventClickArg) => {
     setSelectedDate(info.event.startStr);
     const filteredReservations = tempReservations
@@ -137,7 +137,7 @@ export default function ReservationPage() {
     setModalOpen(true);
   };
 
-  // 📌 예약 승인/거절 기능
+  //예약 승인/거절
   const handleUpdateStatus = (id: number, status: "confirmed" | "declined") => {
     setSelectedReservations((prev) => {
       return prev.map((res) => {
@@ -149,7 +149,7 @@ export default function ReservationPage() {
           status === "confirmed" &&
           res.startTime === prev.find((r) => r.id === id)?.startTime
         ) {
-          return { ...res, status: "declined" }; // 기존 승인된 예약 거절
+          return { ...res, status: "declined" };
         }
         return res;
       });
