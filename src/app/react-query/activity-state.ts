@@ -6,12 +6,14 @@ import {
   fetchActivityDetail,
   createReservation,
   fetchActivityReviews,
+  fetchAvailableSchedules,
 } from "../api/activities-api";
 import {
   ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,
   CreateActivityBodyDto,
   FindActivitiesQueryDto,
+  FindAvailableScheduleQueryDto,
   FindReviewsQueryDto,
 } from "../types/activity-schemas";
 import {
@@ -130,6 +132,24 @@ export const useReviews = ({ filters }: { filters: FindReviewsQueryDto }) => {
   const query = useQuery({
     queryKey: ["activityReviews", filters],
     queryFn: () => fetchActivityReviews({ filters }),
+    staleTime: 60 * 60 * 1000,
+    retry: 1,
+  });
+  if (query.isError) {
+    console.error(query.error);
+  }
+  return query;
+};
+
+// 체험 예약 가능일 조회
+export const useAvailableSchedules = ({
+  filters,
+}: {
+  filters: FindAvailableScheduleQueryDto;
+}) => {
+  const query = useQuery({
+    queryKey: ["availableSchedules", filters],
+    queryFn: () => fetchAvailableSchedules({ filters }),
     staleTime: 60 * 60 * 1000,
     retry: 1,
   });

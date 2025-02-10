@@ -5,10 +5,24 @@ import BookingSection from "./booking-section";
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import ReviewSection from "./review-section";
+import { useAuth } from "@/app/api/use-auth";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
+
+const getSatisfactionLevel = (rating?: number) => {
+  if (rating === undefined || rating === 0) return "평가 없음";
+  if (rating >= 4.0) return "매우 만족";
+  if (rating >= 3.0) return "만족";
+  if (rating >= 2.0) return "불만족";
+  return "매우 불만족";
+};
 
 export default function ActivityDetails() {
   const { id } = useParams();
   const { data: activity } = useActivityDetail(Number(id));
+
+  const { user } = useAuth();
+  const isOwner = user?.id === activity?.userId;
+  const isRated = activity?.rating !== undefined && activity?.rating !== 0;
 
   return (
     <div className="w-[120rem] flex justify-between">
@@ -64,7 +78,9 @@ export default function ActivityDetails() {
                 {activity?.rating}
               </span>
               <div className="flex flex-col gap-[0.8rem]">
-                <span className="text-2lg font-regular">매우 만족</span>
+                <span className="text-2lg font-regular">
+                  {getSatisfactionLevel(activity?.rating)}
+                </span>
                 <span className="flex items-center gap-[0.6rem]">
                   <Image
                     src="/image/rating-star.svg"
@@ -78,10 +94,17 @@ export default function ActivityDetails() {
             </div>
           </div>
 
-          <ReviewSection />
+          {isRated ? (
+            <ReviewSection />
+          ) : (
+            <EmptyContent
+              description="아직 등록한 리뷰가 없어요"
+              className="my-[30rem] w-[80rem]"
+            />
+          )}
         </div>
       </div>
-      <BookingSection />
+      {isOwner ? <></> : <BookingSection />}
     </div>
   );
 }

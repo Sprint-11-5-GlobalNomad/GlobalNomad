@@ -97,27 +97,33 @@ export default function ActivityPostPage() {
               {...register("title", { required: "제목을 입력해주세요." })}
             />
             {errors.title && (
-              <p className="text-red-500 text-sm">{errors.title.message}</p>
+              <p className="text-red-500 text-sm mt-2">
+                {errors.title.message}
+              </p>
             )}
           </div>
 
-          <Controller
-            name="category"
-            control={methods.control}
-            rules={{ required: "카테고리를 선택해주세요." }}
-            render={({ field }) => (
-              <SelectDropdown
-                options={[...CATEGORY_TYPES]}
-                description="카테고리"
-                value={field.value || ""}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
+          <div>
+            <Controller
+              name="category"
+              control={methods.control}
+              rules={{ required: "카테고리를 선택해주세요." }}
+              render={({ field }) => (
+                <SelectDropdown
+                  options={[...CATEGORY_TYPES]}
+                  description="카테고리"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                />
+              )}
+            />
+            {errors.category && (
+              <p className="text-red-500 text-sm mt-2">
+                {errors.category.message}
+              </p>
             )}
-          />
-          {errors.category && (
-            <p className="text-red-500 text-sm">{errors.category.message}</p>
-          )}
+          </div>
 
           <div>
             <textarea
@@ -126,40 +132,48 @@ export default function ActivityPostPage() {
               {...register("description", { required: "설명을 입력해주세요." })}
             />
             {errors.description && (
-              <p className="text-red-500 text-sm">
+              <p className="text-red-500 text-sm mt-2">
                 {errors.description.message}
               </p>
             )}
           </div>
 
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">가격</label>
-            <input
-              type="number"
-              placeholder="가격"
-              className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-              {...register("price", {
-                required: "가격을 입력해주세요.",
-                min: { value: 1, message: "가격은 1 이상이어야 합니다." },
-              })}
-            />
-            {errors.price && (
-              <p className="text-red-500 text-sm">{errors.price.message}</p>
-            )}
-          </div>
+          <label className="flex flex-col gap-[1.6rem] ">
+            <div className="font-pretendard text-2xl font-bold">가격</div>
+            <div>
+              <input
+                type="number"
+                placeholder="가격"
+                className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                {...register("price", {
+                  required: "가격을 입력해주세요.",
+                  min: { value: 1, message: "가격은 1 이상이어야 합니다." },
+                })}
+              />
+              {errors.price && (
+                <p className="text-red-500 text-sm mt-2">
+                  {errors.price.message}
+                </p>
+              )}
+            </div>
+          </label>
 
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">주소</label>
-            <input
-              type="text"
-              placeholder="주소를 입력해주세요."
-              className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-              {...register("address", { required: "주소를 입력해주세요." })}
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm">{errors.address.message}</p>
-            )}
-          </div>
+          <label className="flex flex-col gap-[1.6rem]">
+            <div className="font-pretendard text-2xl font-bold">주소</div>
+            <div>
+              <input
+                type="text"
+                placeholder="주소를 입력해주세요."
+                className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                {...register("address", { required: "주소를 입력해주세요." })}
+              />
+              {errors.address && (
+                <p className="text-red-500 text-sm mt-2">
+                  {errors.address.message}
+                </p>
+              )}
+            </div>
+          </label>
 
           <div>
             <ReservationTimeSelector

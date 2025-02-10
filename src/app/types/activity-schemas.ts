@@ -60,6 +60,12 @@ export interface FindReviewsQueryDto {
   size?: number;
 }
 
+export interface FindAvailableScheduleQueryDto {
+  activityId: number;
+  year: string;
+  month: string;
+}
+
 export interface CreateActivityBodyDto {
   title: string;
   category: string;

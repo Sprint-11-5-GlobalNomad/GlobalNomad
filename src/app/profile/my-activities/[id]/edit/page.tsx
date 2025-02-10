@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
@@ -7,10 +7,15 @@ import { useForm, FormProvider, Controller } from "react-hook-form";
 import {
   CATEGORY_TYPES,
   CreateActivityBodyDto,
+  UpdateMyActivityBodyDto,
 } from "@/app/types/activity-schemas";
 import ReservationTimeSelector from "@/components/pages/activity-post-edit/set-reservation-time";
 import BannerImageUploader from "@/components/pages/activity-post-edit/banner-image-uploader";
 import IntroImagesUploader from "@/components/pages/activity-post-edit/intro-image-uploader";
+import { useParams } from "next/navigation";
+import { useActivityDetail } from "@/app/react-query/activity-state";
+import MessageModal from "@/components/common/ui/modal/message-modal";
+import { useUpdateMyActivity } from "@/app/react-query/my-activity-state";
 
 type ReservationAvailableTime = {
   date: string;
@@ -19,21 +24,54 @@ type ReservationAvailableTime = {
 };
 
 export default function ActivityPostPage() {
+  const { id } = useParams();
+  const activityId = Number(id);
+  const { data: activityDetail, isLoading } = useActivityDetail(activityId);
+  const updateActivityMutation = useUpdateMyActivity();
+
   const methods = useForm<CreateActivityBodyDto>({
-    mode: "onBlur", // 필드에서 포커스가 벗어날 때 검증
+    mode: "onBlur",
+    defaultValues: {
+      title: "",
+      category: "",
+      description: "",
+      price: 0,
+      address: "",
+    },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-  } = methods;
-
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [bannerImage, setBannerImage] = useState<string | null>(null);
   const [introImages, setIntroImages] = useState<string[]>([]);
   const [reservationTimes, setReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors, isValid },
+  } = methods;
+
+  useEffect(() => {
+    if (activityDetail) {
+      setValue("title", activityDetail.title);
+      setValue("category", activityDetail.category);
+      setValue("description", activityDetail.description);
+      setValue("price", activityDetail.price);
+      setValue("address", activityDetail.address);
+      setBannerImage(activityDetail.bannerImageUrl);
+      setIntroImages(activityDetail.subImages.map((img) => img.imageUrl));
+      setReservationTimes(
+        activityDetail.schedules.map((schedule) => ({
+          date: schedule.date,
+          startTime: schedule.startTime,
+          endTime: schedule.endTime,
+        }))
+      );
+    }
+  }, [activityDetail, setValue]);
 
   const onSubmit = (data: CreateActivityBodyDto) => {
     if (!bannerImage) {
@@ -44,17 +82,51 @@ export default function ActivityPostPage() {
       alert("예약 가능한 시간대를 추가해주세요.");
       return;
     }
-    console.log("폼 제출됨", data);
+
+    const updateData: UpdateMyActivityBodyDto = {
+      title: data.title,
+      category: data.category,
+      description: data.description,
+      price: data.price,
+      address: data.address,
+      bannerImageUrl: bannerImage,
+      subImageUrlsToAdd: introImages,
+      schedulesToAdd: reservationTimes.map(({ date, startTime, endTime }) => ({
+        date,
+        startTime,
+        endTime,
+      })),
+    };
+
+    updateActivityMutation.mutate(
+      { activityId, updateData },
+      {
+        onSuccess: () => {
+          setModalIsOpen(true);
+        },
+        onError: (error) => {
+          console.error("체험 수정 중 오류 발생:", error);
+          alert("체험 수정 중 오류가 발생했습니다. 다시 시도해주세요.");
+        },
+      }
+    );
   };
 
+  function closeModal() {
+    setModalIsOpen(false);
+    window.location.href = "/profile/my-activities";
+  }
+
+  if (isLoading) return <div>로딩 중...</div>;
+
   return (
-    <div className="flex flex-row justify-center mt-[14.4rem] mb-[14.4rem] ">
+    <div className="flex flex-row justify-center mt-[14.4rem] mb-[14.4rem]">
       <div className="mobile:hidden tablet:ml-[2.4rem]">
         <UserProfileSidebar page={"/profile/my-activities"} />
       </div>
       <FormProvider {...methods}>
         <form
-          className="flex flex-col w-[79.2rem] gap-[2.4rem] desktop:ml-[2.4rem] ml-[1.6rem] "
+          className="flex flex-col w-[79.2rem] gap-[2.4rem] desktop:ml-[2.4rem] ml-[1.6rem]"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-row gap-[51.9rem] tablet:gap-[15.5rem] mobile:gap-[6.9rem] items-center">
@@ -81,23 +153,25 @@ export default function ActivityPostPage() {
             )}
           </div>
 
-          <Controller
-            name="category"
-            control={methods.control}
-            rules={{ required: "카테고리를 선택해주세요." }}
-            render={({ field }) => (
-              <SelectDropdown
-                options={[...CATEGORY_TYPES]}
-                description="카테고리"
-                value={field.value || ""}
-                onChange={field.onChange} // 부모 상태 업데이트
-                onBlur={field.onBlur}
-              />
+          <div>
+            <Controller
+              name="category"
+              control={methods.control}
+              rules={{ required: "카테고리를 선택해주세요." }}
+              render={({ field }) => (
+                <SelectDropdown
+                  options={[...CATEGORY_TYPES]}
+                  description="카테고리"
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                />
+              )}
+            />
+            {errors.category && (
+              <p className="text-red-500 text-sm">{errors.category.message}</p>
             )}
-          />
-          {errors.category && (
-            <p className="text-red-500 text-sm">{errors.category.message}</p>
-          )}
+          </div>
 
           <div>
             <textarea
@@ -112,8 +186,8 @@ export default function ActivityPostPage() {
             )}
           </div>
 
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">가격</label>
+          <label className="flex flex-col gap-[1.6rem]">
+            <div className="font-pretendard text-2xl font-bold">가격</div>
             <input
               type="number"
               placeholder="가격"
@@ -126,31 +200,13 @@ export default function ActivityPostPage() {
             {errors.price && (
               <p className="text-red-500 text-sm">{errors.price.message}</p>
             )}
-          </div>
-
-          <div className="flex flex-col gap-[1.6rem]">
-            <label className="font-pretendard text-2xl font-bold">주소</label>
-            <input
-              type="text"
-              placeholder="주소를 입력해주세요."
-              className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-              {...register("address", { required: "주소를 입력해주세요." })}
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm">{errors.address.message}</p>
-            )}
-          </div>
+          </label>
 
           <div>
             <ReservationTimeSelector
               reservationTimes={reservationTimes}
               setReservationTimes={setReservationTimes}
             />
-            {reservationTimes.length === 0 && (
-              <p className="text-red-500 text-sm mt-2">
-                최소 한 개 이상의 예약 가능한 시간을 추가해주세요.
-              </p>
-            )}
           </div>
 
           <div>
@@ -158,11 +214,6 @@ export default function ActivityPostPage() {
               bannerImage={bannerImage}
               setBannerImage={setBannerImage}
             />
-            {!bannerImage && (
-              <p className="text-red-500 text-sm mt-2">
-                배너 이미지를 등록해주세요.
-              </p>
-            )}
           </div>
 
           <IntroImagesUploader
@@ -171,6 +222,11 @@ export default function ActivityPostPage() {
           />
         </form>
       </FormProvider>
+      <MessageModal
+        isOpen={modalIsOpen}
+        onClose={closeModal}
+        message={"체험 수정이 완료되었습니다."}
+      />
     </div>
   );
 }

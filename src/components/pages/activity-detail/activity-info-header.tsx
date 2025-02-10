@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/app/api/use-auth";
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
 import EditDeleteDropdown from "@/components/common/ui/dropdown/edit-delete-dropdown";
@@ -11,6 +12,9 @@ export default function ActivityInfoHeader() {
   const { data: activity } = useActivityDetail(Number(id));
   const { mutate: deleteMyActivity } = useDeleteMyActivity();
   const router = useRouter();
+  const { user } = useAuth();
+
+  const isOwner = user?.id === activity?.userId;
 
   const handleDelete = () => {
     if (activity?.id && confirm("정말 삭제하시겠습니까?")) {
@@ -54,10 +58,14 @@ export default function ActivityInfoHeader() {
           </div>
         </div>
       </div>
-      <EditDeleteDropdown
-        EditRoute={`/profile/activity/${activity?.id}/edit`}
-        onDelete={handleDelete}
-      />
+      {isOwner ? (
+        <EditDeleteDropdown
+          EditRoute={`/profile/activity/${activity?.id}/edit`}
+          onDelete={handleDelete}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

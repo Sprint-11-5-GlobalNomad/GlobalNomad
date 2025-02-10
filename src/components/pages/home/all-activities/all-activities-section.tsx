@@ -9,7 +9,7 @@ import { useState } from "react";
 import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { CategoryType, SortType } from "@/app/types/activity-schemas";
-import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
 const SIZE = 8;
 
@@ -50,7 +50,7 @@ export default function AllActivitiesSection() {
         <AllActivities activities={data?.activities || []} />
       ) : (
         <div className="m-[10rem]">
-          <EmptyActivity />
+          <EmptyContent />
         </div>
       )}
 
