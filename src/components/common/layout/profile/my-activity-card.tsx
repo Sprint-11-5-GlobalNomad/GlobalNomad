@@ -6,6 +6,7 @@ import EditDeleteDropdown from "../../ui/dropdown/edit-delete-dropdown";
 import { useState } from "react";
 import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
 import ConfirmationModal from "../../ui/modal/confirmation-modal";
+import { useCanDeleteActivity } from "@/hooks/use-can-delete-activity";
 
 type ActivityCardProps = Pick<
   ActivityBasicDto,
@@ -13,6 +14,7 @@ type ActivityCardProps = Pick<
 >;
 
 export function MyActivityCard(ActivityProps: ActivityCardProps) {
+  const { canDelete } = useCanDeleteActivity(ActivityProps.id);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isDeleteable, setIsDeleteAble] = useState(false);
   const deleteMyActivity = useDeleteMyActivity();
@@ -20,7 +22,12 @@ export function MyActivityCard(ActivityProps: ActivityCardProps) {
   function handleModalClose() {
     setIsCancelModalOpen(false);
   }
+
   function handleModalOpen() {
+    if (!canDelete) {
+      alert("예약 대기 또는 승인 상태의 체험은 삭제할 수 없습니다.");
+      return;
+    }
     setIsCancelModalOpen(true);
   }
 
