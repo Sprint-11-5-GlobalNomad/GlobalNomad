@@ -1,7 +1,7 @@
 "use client";
 
 import { useMyActivities } from "@/app/react-query/my-activity-state";
-import { EmptyActivity } from "@/components/common/layout/profile/empty-activity";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 import { MyActivityCard } from "@/components/common/layout/profile/my-activity-card";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
@@ -46,7 +46,7 @@ export default function MyActivities() {
             ))
           ) : (
             <div className="mt-[5rem] mb-[4.1rem]">
-              <EmptyActivity />
+              <EmptyContent />
             </div>
           )}
         </div>

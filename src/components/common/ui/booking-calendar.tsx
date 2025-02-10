@@ -1,4 +1,6 @@
+import { useAvailableSchedules } from "@/app/react-query/activity-state";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 const DAYSOFWEEK = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat"];
@@ -17,15 +19,35 @@ const MONTHS = [
   "December",
 ];
 
-export default function CustomCalendar() {
+interface BookingCalendarProps {
+  onSelectDate: (day: Date) => void;
+}
+
+export default function BookingCalendar({
+  onSelectDate,
+}: BookingCalendarProps) {
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth()); // 0: 1월, 11: 12월
   const [selectedDate, setSelectedDate] = useState(today);
 
-  // 요일 이름 배열
-  const daysOfWeek = DAYSOFWEEK;
-  const months = MONTHS;
+  const { id } = useParams();
+  const { data: schedules } = useAvailableSchedules({
+    filters: {
+      activityId: Number(id),
+      year: currentYear.toString(),
+      month: String(currentMonth + 1).padStart(2, "0"),
+    },
+  });
+
+  console.log("예약 가능일 조회용", id);
+  console.log("예약 가능일", schedules);
+
+  const availableDates: string[] | undefined = schedules?.map(
+    (schedule) => schedule.date
+  );
+
+  console.log("예약 가능일 배열", availableDates);
 
   // 📌 달력 데이터 생성 함수
   const generateCalendar = () => {
@@ -70,13 +92,15 @@ export default function CustomCalendar() {
 
   // 📌 날짜 선택 함수
   const handleSelectDate = (day: number) => {
-    setSelectedDate(new Date(currentYear, currentMonth, day));
+    const selected = new Date(currentYear, currentMonth, day);
+    setSelectedDate(selected);
+    onSelectDate(selected);
   };
 
   return (
     <div
       className="border border-solid border-gray-200 rounded-[0.8rem]
-      w-[30.465rem] h-[24.1rem] flex-column"
+      w-[30.465rem] flex-column"
     >
       {/* 📌 헤더 (월 변경 버튼) */}
       <div className="flex-between w-[25rem] mt-[1rem]">
@@ -94,7 +118,7 @@ export default function CustomCalendar() {
           />
         </button>
         <span className="font-bold text-md">
-          {months[currentMonth]} {currentYear}
+          {MONTHS[currentMonth]} {currentYear}
         </span>
         <button
           onClick={(e) => {
@@ -113,7 +137,7 @@ export default function CustomCalendar() {
 
       {/* 📌 요일 */}
       <div className="grid grid-cols-7 w-[25rem] justify-items-center">
-        {daysOfWeek.map((day) => (
+        {DAYSOFWEEK.map((day) => (
           <span
             key={day}
             className="text-md font-bold
@@ -126,26 +150,36 @@ export default function CustomCalendar() {
 
       {/* 📌 날짜들 */}
       <div className="grid grid-cols-7 w-[25rem]">
-        {generateCalendar().map((day, index) => (
-          <button
-            key={index}
-            className={`h-[3.2rem] text-[1.3rem] leading-[1.77rem] p-[1rem] w-[3.571rem]
+        {generateCalendar().map((day, index) => {
+          // 현재 날짜가 예약 가능한 날짜인지 확인
+          const isAvailable: boolean =
+            availableDates?.includes(
+              `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day.date).padStart(2, "0")}`
+            ) ?? false;
+
+          return (
+            <button
+              key={index}
+              className={`h-[3.2rem] text-[1.3rem] leading-[1.77rem] p-[1rem] w-[3.571rem]
                 flex justify-center items-center rounded-[0.8rem] ${
                   day.isCurrentMonth ? "text-gray-900" : "text-gray-600"
                 } ${
-                  selectedDate.getDate() === day.date &&
-                  selectedDate.getMonth() === currentMonth
-                    ? "bg-green-dark text-white"
-                    : "hover:bg-green-light hover:text-green-dark"
+                  !isAvailable
+                    ? "text-gray-200 cursor-not-allowed"
+                    : selectedDate.getDate() === day.date &&
+                        selectedDate.getMonth() === currentMonth
+                      ? "bg-green-dark text-white"
+                      : "hover:bg-green-light hover:text-green-dark"
                 }`}
-            onClick={(e) => {
-              e.preventDefault();
-              if (day.isCurrentMonth) handleSelectDate(day.date);
-            }}
-          >
-            {day.date}
-          </button>
-        ))}
+              onClick={(e) => {
+                e.preventDefault();
+                if (day.isCurrentMonth) handleSelectDate(day.date);
+              }}
+            >
+              {day.date}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function HeroBanner() {
   return (
-    <Link href="/activity/3697" className="relative w-full h-[40vh] block">
+    <Link href="/activity/3697" className="relative w-full h-[50vh] block">
       <div className="relative w-full h-full bg-gradient-to-r from-black/60 to-black/40">
         <Image
           src="/image/main_banner.jpg"
