@@ -144,14 +144,17 @@ export const useReviews = ({ filters }: { filters: FindReviewsQueryDto }) => {
 // 체험 예약 가능일 조회
 export const useAvailableSchedules = ({
   filters,
+  enabled = true,
 }: {
   filters: FindAvailableScheduleQueryDto;
+  enabled?: boolean;
 }) => {
   const query = useQuery({
     queryKey: ["availableSchedules", filters],
     queryFn: () => fetchAvailableSchedules({ filters }),
     staleTime: 60 * 60 * 1000,
     retry: 1,
+    enabled,
   });
   if (query.isError) {
     console.error(query.error);
