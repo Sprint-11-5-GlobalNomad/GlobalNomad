@@ -1,5 +1,6 @@
 import axios from "axios";
 import { refreshToken as refreshTokenAPI } from "./auth-api";
+import { removeTokens } from "@/utils/remove-tokens";
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
@@ -59,8 +60,7 @@ instance.interceptors.response.use(
         return instance.request(originalRequest);
       } catch (refreshError) {
         console.error("❌ 토큰 갱신 실패, 로그아웃 처리");
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
+        removeTokens();
 
         // ✅ 강제 로그아웃 실행 (useAuth에 logout 함수 추가 필요)
         window.location.href = "/login";

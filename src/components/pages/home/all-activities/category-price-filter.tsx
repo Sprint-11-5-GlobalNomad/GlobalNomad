@@ -40,7 +40,7 @@ export default function CategoryPriceFilter({
         {CATEGORY_TYPES.map((category, index) => (
           <Button
             key={index}
-            type="category"
+            ButtonType="category"
             label={category}
             variant={category === selectedCategory ? "selected" : "category"}
             onClick={() => handleCategoryChange(category as CategoryType)}

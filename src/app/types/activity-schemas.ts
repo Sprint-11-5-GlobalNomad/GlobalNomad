@@ -35,7 +35,6 @@ export interface FindActivitiesQueryDto {
   size?: number;
 }
 
-// export type CategoryType = Pick<FindActivitiesQueryDto, "category">["category"];
 export type SortType = Pick<FindActivitiesQueryDto, "sort">["sort"];
 
 export interface ActivityWithSubImagesAndSchedulesDto {
@@ -53,6 +52,12 @@ export interface ActivityWithSubImagesAndSchedulesDto {
   updatedAt: string;
   subImages: { id: number; imageUrl: string }[];
   schedules: { id: number; date: string; startTime: string; endTime: string }[];
+}
+
+export interface FindReviewsQueryDto {
+  activityId: number;
+  page?: number;
+  size?: number;
 }
 
 export interface CreateActivityBodyDto {
