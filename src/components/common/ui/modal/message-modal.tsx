@@ -1,3 +1,4 @@
+import UseOutsideClick from "@/hooks/use-outside-click";
 import React from "react";
 
 // 로그인 모달 인터페이스
@@ -18,6 +19,7 @@ export function MessageModal({ isOpen, onClose, message }: ModalProps) {
       <div
         className="bg-white w-[33.75rem] h-[15.625rem] rounded-[0.75rem] flex flex-col p-[1.5rem] shadow-lg"
         onClick={(e) => e.stopPropagation()}
+        ref={UseOutsideClick(onClose)}
       >
         <div className="flex-grow flex items-center justify-center">
           <p className="text-center text-[1.125rem] font-medium">{message}</p>
