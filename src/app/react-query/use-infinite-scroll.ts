@@ -11,8 +11,11 @@ import Error from "next/error";
 export function useInfinityMyActivities() {
   return useInfiniteQuery({
     queryKey: ["activities"],
-    queryFn: async ({ pageParam = null }: { pageParam: unknown }) =>
-      fetchMyActivities(pageParam, 10),
+    queryFn: async ({
+      pageParam = null,
+    }: {
+      pageParam: number | null | undefined;
+    }) => fetchMyActivities(pageParam, 10),
     getNextPageParam: (lastPage) => {
       return lastPage.cursorId || undefined;
     },
@@ -77,7 +80,11 @@ export const useInfiniteActivities = (filters: FindActivitiesQueryDto) => {
 export const useInfiniteMyReservations = (status?: string) => {
   return useInfiniteQuery({
     queryKey: ["infiniteMyReservations", status], // ✅ 필터 값을 queryKey에 포함
-    queryFn: async ({ pageParam = null }: { pageParam: unknown }) => {
+    queryFn: async ({
+      pageParam = null,
+    }: {
+      pageParam: number | null | undefined;
+    }) => {
       return fetchMyReservations(pageParam, 10, status); // ✅ API에 필터 전달
     },
     getNextPageParam: (lastPage) => {
