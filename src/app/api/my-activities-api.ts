@@ -6,9 +6,12 @@ import {
 import { ReservationResponseDto } from "../types/reservation-schemas";
 
 // 내 체험 리스트 조회
-export const fetchMyActivities = async (cursorId?: number, size = 20) => {
+export const fetchMyActivities = async (
+  cursorId?: number | null,
+  size = 20
+) => {
   const response = await instance.get<{
-    cursorId: number;
+    cursorId: number | null;
     totalCount: number;
     activities: ActivityBasicDto[];
   }>(`/my-activities`, { params: { cursorId, size } });
