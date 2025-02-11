@@ -5,56 +5,18 @@ import Image from "next/image";
 import { useState } from "react";
 import { formatTime } from "@/utils/time-utils";
 import { highlightText } from "@/utils/higlight-text";
-import { useDeleteNotification } from "@/app/react-query/notification-state";
-import { AxiosError } from "axios";
-// import { fetchNotifications } from "@/app/api/my-notifications-api";
-// import { useNotifications } from "@/app/react-query/notification-state";
+import {
+  useDeleteNotification,
+  useNotifications,
+} from "@/app/react-query/notification-state";
+import { LoadingIndicator } from "../indicator/loading-indicator";
+import { ErrorIndicator } from "../indicator/error-indicator";
 
 export default function UserNotifications() {
-  const mockData = {
-    totalCount: 3,
-    notifications: [
-      {
-        id: 1,
-        userId: 123,
-        content:
-          "함께하면 즐거운 스트릿 댄스(2023-01-14 15:00~18:00) 예약이 승인되었어요.",
-        createdAt: "2025-01-22T07:46:32.165Z",
-        updatedAt: "2025-01-22T23:59:32.165Z",
-        // deletedAt: "2025-01-22T07:46:32.165Z",
-        createdTime: "07:46", // 추가된 시간 정보
-        updatedTime: "07:46", // 추가된 시간 정보
-      },
-      {
-        id: 2,
-        userId: 124,
-        content:
-          "함께하면 즐거운 스트릿 댄스(2023-01-14 15:00~18:00) 예약이 거절되었어요.",
-        createdAt: "2025-01-21T07:46:32.165Z",
-        updatedAt: "2025-01-22T07:46:32.165Z",
-        // deletedAt: "2025-01-21T07:46:32.165Z",
-        createdTime: "07:46",
-        updatedTime: "07:46",
-      },
-      {
-        id: 3,
-        userId: 125,
-        content:
-          "함께하면 즐거운 스트릿 댄스(2023-01-14 15:00~18:00) 예약이 새로 들어왔어요.",
-        createdAt: "2025-01-21T07:46:32.165Z",
-        updatedAt: "2025-01-21T07:46:32.165Z",
-        deletedAt: "2025-01-21T07:46:32.165Z",
-        createdTime: "07:46",
-        updatedTime: "07:46",
-      },
-    ],
-  };
-
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState(mockData.notifications);
   const ref = UseOutsideClick(() => setIsOpen(false));
 
-  // const { data, isLoading, error } = useNotifications();
+  const { data: notificationResponse, isLoading, isError } = useNotifications();
 
   // 목업 데이터를 직접 설정
 
@@ -68,38 +30,7 @@ export default function UserNotifications() {
     }
   }
 
-  // const {
-  //   data,
-  //   error,
-  //   isLoading,
-  //   isFetchingNextPage,
-  //   hasNextPage,
-  //   fetchNextPage,
-  // } = useInfiniteQuery(["notifications"], fetchNotifications, {
-  //   getNextPageParam: (lastPage, allPages) => {
-  //     return lastPage.nextPage || false;
-  //   },
-  // });
-
-  const deleteNotification = useDeleteNotification();
-
-  const handleDelete = (id: number) => {
-    deleteNotification.mutate(id, {
-      onSuccess: () => {
-        setNotifications((prevNotifications) =>
-          prevNotifications.filter((notification) => notification.id !== id)
-        );
-        alert("알림 삭제 성공");
-      },
-      onError: (error: AxiosError) => {
-        alert(`알림 삭제 실패: ${error.message}`);
-      },
-    });
-  };
-
-  // 테스트 후 목 데이터와 함께 삭제해야 함
-  const isLoading = false;
-  const error = null;
+  const { mutate: deleteNotification } = useDeleteNotification();
 
   // 알림 버튼 누를 때마다 데이터 가져오도록 설정 필요
 
@@ -124,18 +55,14 @@ export default function UserNotifications() {
         mobile:rounded-[0rem] mobile:transform-none mobile:fixed"
         >
           {isLoading ? (
-            <span className="text-lg text-center">로딩 중...</span>
-          ) : error ? (
-            <span className="text-lg text-center">
-              Error:
-              {/* {error.message} */}
-            </span>
+            <LoadingIndicator width={30} height={30} />
+          ) : isError ? (
+            <ErrorIndicator width={30} height={30} />
           ) : (
             <>
               <div className="flex-between absoulte">
                 <span className="text-xl font-bold">
-                  알림 {mockData?.totalCount}개
-                  {/* 알림 {data?.pages?.[0]?.totalCount || 0}개 */}
+                  알림 {notificationResponse?.totalCount}개
                 </span>
                 <Image
                   src="/image/btn_X.svg"
@@ -147,7 +74,7 @@ export default function UserNotifications() {
               </div>
 
               <ul className="flex flex-col gap-[0.8rem]">
-                {notifications.map((notification) => (
+                {notificationResponse?.notifications?.map((notification) => (
                   // {data?.pages?.map((page, pageIndex) => <React.Fragment key={pageIndex}>
                   <div
                     key={notification.id}
@@ -164,7 +91,7 @@ export default function UserNotifications() {
                         alt="알림 내용 닫기 버튼"
                         width={24}
                         height={24}
-                        onClick={() => handleDelete(notification.id)}
+                        onClick={() => deleteNotification(notification.id)}
                       />
                     </div>
 
