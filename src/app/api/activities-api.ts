@@ -90,7 +90,7 @@ export const uploadActivityImage = async (file: File) => {
   formData.append("image", file);
 
   const response = await instance.post<{ activityImageUrl: string }>(
-    "/api/upload", // ✅ 백엔드의 업로드 API 엔드포인트 확인
+    "/activities/image", // ✅ 백엔드의 업로드 API 엔드포인트 확인
     formData,
     {
       headers: {
