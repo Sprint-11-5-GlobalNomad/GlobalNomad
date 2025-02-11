@@ -195,6 +195,7 @@ export default function ActivityPostPage() {
               {...register("price", {
                 required: "가격을 입력해주세요.",
                 min: { value: 1, message: "가격은 1 이상이어야 합니다." },
+                valueAsNumber: true,
               })}
             />
             {errors.price && (
