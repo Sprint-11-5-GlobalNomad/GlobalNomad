@@ -5,6 +5,7 @@ import { ReservationResponseDto } from "@/app/types/reservation-schemas";
 import { ReviewModal } from "@/app/profile/my-reservations/component/review-modal";
 import Button from "@/components/common/ui/button";
 import ConfirmationModal from "@/components/common/ui/modal/confirmation-modal";
+import Link from "next/link";
 
 type ReservationCardProps = Pick<
   ReservationResponseDto,
@@ -33,7 +34,7 @@ export const MyReservationCard = forwardRef<
 
     const handleCancelReservation = () => {
       cancelReservationMutation.mutate({
-        reservationId: activity.id,
+        reservationId: id,
         status: { status: "canceled" },
       });
       setIsCancelModalOpen(false);
@@ -70,7 +71,7 @@ export const MyReservationCard = forwardRef<
     };
 
     return (
-      <>
+      <Link href={`/activity/${activity.id}`}>
         <div
           ref={ref} // ref 추가
           className="flex flex-row mobile:w-[34.4rem] mobile:h-[12.8rem] desktop:w-[80rem] desktop:h-[20.4rem] tablet:w-[42.9rem] tablet:h-[15.6rem] rounded-[2.4rem] bg-white border border-gray-200 shadow-md gap-0 p-[0.4rem]"
@@ -143,7 +144,7 @@ export const MyReservationCard = forwardRef<
           id={id}
           isOpen={isReviewModalOpen}
         />
-      </>
+      </Link>
     );
   }
 );
