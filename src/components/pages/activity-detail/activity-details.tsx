@@ -7,6 +7,10 @@ import Image from "next/image";
 import ReviewSection from "./review-section";
 import { useAuth } from "@/app/api/use-auth";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
+import Script from "next/script";
+import { useEffect } from "react";
+
+const KAKAO_MAP = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
 
 const getSatisfactionLevel = (rating?: number) => {
   if (rating === undefined || rating === 0) return "평가 없음";
@@ -23,6 +27,19 @@ export default function ActivityDetails() {
   const { user } = useAuth();
   const isOwner = user?.id === activity?.userId;
   const isRated = activity?.rating !== undefined && activity?.rating !== 0;
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.kakao) {
+      window.kakao.maps.load(() => {
+        const container = document.getElementById("map");
+        const options = {
+          center: new window.kakao.maps.LatLng(37.5665, 126.978),
+          level: 3,
+        };
+        new window.kakao.maps.Map(container, options);
+      });
+    }
+  }, []);
 
   return (
     <div className="w-[120rem] flex justify-between">
@@ -45,13 +62,13 @@ export default function ActivityDetails() {
         ></hr>
 
         <div className="w-[80rem] flex flex-col gap-[0.8rem]">
-          <Image
-            src="/image/map-sample.svg"
-            alt="카카오 맵 샘플 이미지"
-            width={790}
-            height={450}
-            className="w-[79rem] rounded-[1.6rem]"
+          <Script
+            type="text/javascript"
+            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false`}
+            strategy="beforeInteractive"
+            onLoad={() => console.log("카카오 맵 스크립트 로드 완료")}
           />
+          <div id="map" className="w-[79rem] h-[45rem] rounded-[1.6rem]"></div>
           <div className="flex items-center gap-[0.2rem]">
             <Image
               src="/image/location.svg"
