@@ -35,10 +35,13 @@ export default function ActivityDetails() {
   const isRated = activity?.rating !== undefined && activity?.rating !== 0;
 
   useEffect(() => {
+    if (!activity?.address) return;
+
     if (typeof window !== "undefined" && window.kakao) {
       window.kakao.maps.load(() => {
         const geocoder = new window.kakao.maps.services.Geocoder();
         const address = activity?.address;
+        console.log("주소", activity?.address);
 
         geocoder.addressSearch(
           address,
@@ -51,6 +54,7 @@ export default function ActivityDetails() {
               const options = {
                 center: new window.kakao.maps.LatLng(lat, lng),
                 level: 3,
+                // marker: marker,
               };
               new window.kakao.maps.Map(container, options);
             } else {
