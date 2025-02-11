@@ -7,10 +7,7 @@ import Image from "next/image";
 import ReviewSection from "./review-section";
 import { useAuth } from "@/app/api/use-auth";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
-import Script from "next/script";
-import { useEffect } from "react";
-
-const KAKAO_MAP = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
+import KakaoMaps from "./kakomaps/kakaomaps";
 
 const getSatisfactionLevel = (rating?: number) => {
   if (rating === undefined || rating === 0) return "평가 없음";
@@ -20,12 +17,6 @@ const getSatisfactionLevel = (rating?: number) => {
   return "매우 불만족";
 };
 
-interface GeocodeResult {
-  address_name: string;
-  x: string;
-  y: string;
-}
-
 export default function ActivityDetails() {
   const { id } = useParams();
   const { data: activity } = useActivityDetail(Number(id));
@@ -33,38 +24,6 @@ export default function ActivityDetails() {
   const { user } = useAuth();
   const isOwner = user?.id === activity?.userId;
   const isRated = activity?.rating !== undefined && activity?.rating !== 0;
-
-  useEffect(() => {
-    if (!activity?.address) return;
-
-    if (typeof window !== "undefined" && window.kakao) {
-      window.kakao.maps.load(() => {
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        const address = activity?.address;
-        console.log("주소", activity?.address);
-
-        geocoder.addressSearch(
-          address,
-          (result: GeocodeResult[], status: number) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              const lat = result[0].y;
-              const lng = result[0].x;
-
-              const container = document.getElementById("map");
-              const options = {
-                center: new window.kakao.maps.LatLng(lat, lng),
-                level: 3,
-                // marker: marker,
-              };
-              new window.kakao.maps.Map(container, options);
-            } else {
-              console.error("주소 변환 실패:", status);
-            }
-          }
-        );
-      });
-    }
-  }, [activity?.address]);
 
   return (
     <div className="w-[120rem] flex justify-between">
@@ -86,14 +45,9 @@ export default function ActivityDetails() {
         opacity-25 mt-[3.4rem] mb-[4rem]"
         ></hr>
 
+        {/* 지도 섹션 */}
         <div className="w-[80rem] flex flex-col gap-[0.8rem]">
-          <Script
-            type="text/javascript"
-            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
-            strategy="beforeInteractive"
-            onLoad={() => console.log("카카오 맵 스크립트 로드 완료")}
-          />
-          <div id="map" className="w-[79rem] h-[45rem] rounded-[1.6rem]"></div>
+          <KakaoMaps address={activity?.address} />
           <div className="flex items-center gap-[0.2rem]">
             <Image
               src="/image/location.svg"
