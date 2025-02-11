@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useCreateUser } from "../react-query/user-state";
@@ -8,7 +8,8 @@ import Image from "next/image";
 import Link from "next/link";
 import MessageModal from "../../components/common/ui/modal/message-modal";
 import Button from "../../components/common/ui/button";
-import { AxiosError } from "axios";
+import { useSignUpWithOauth } from "../react-query/oauth-state";
+import axios, { AxiosError } from "axios";
 
 interface SignupFormInputs {
   email: string;
@@ -26,6 +27,7 @@ export default function SignupPage() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const router = useRouter();
+  const kakaoSignUp = useSignUpWithOauth("kakao");
   const [modalState, setModalState] = useState({
     isOpen: false,
     message: "",
@@ -111,9 +113,65 @@ export default function SignupPage() {
     });
   };
 
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=f13cccc7b67c9ec0492bb9b3400c80e1&redirect_uri=http://localhost:3000/login&response_type=code`;
+
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
+
+    if (authCode) {
+      // 1️⃣ 인가 코드로 액세스 토큰 요청
+      axios
+        .post("https://kauth.kakao.com/oauth/token", {
+          grant_type: "authorization_code",
+          client_id: "YOUR_KAKAO_REST_API_KEY",
+          redirect_uri: "http://localhost:3000/auth/kakao/callback",
+          code: authCode,
+        })
+        .then((tokenResponse) => {
+          const accessToken = tokenResponse.data.access_token;
+
+          // 2️⃣ 액세스 토큰으로 사용자 정보 요청
+          return axios.get("https://kapi.kakao.com/v2/user/me", {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+        })
+        .then((userResponse) => {
+          const nickname = userResponse.data.kakao_account.profile.nickname;
+
+          // 3️⃣ 회원가입 API 호출
+          kakaoSignUp.mutate(
+            {
+              token: authCode,
+              redirectUri: "http://localhost:3000/auth/kakao/callback",
+              nickname: nickname, // ✅ 닉네임 추가
+            },
+            {
+              onSuccess: () => {
+                alert("카카오 회원가입 성공!");
+                router.push("/dashboard");
+              },
+              onError: (error) => {
+                console.error("회원가입 실패:", error);
+              },
+            }
+          );
+        })
+        .catch((error) => {
+          console.error("카카오 API 호출 중 오류 발생:", error);
+        });
+    } else {
+      console.error("카카오 로그인 실패");
+    }
+  }, []);
+
   return (
     <div>
-      <div className="flex flex-col items-center my-[11.8rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
+      <div className="flex flex-col items-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[350px] w-full mx-auto gap-[5.6rem]">
         {/* 로고 섹션 */}
         <div className="flex justify-center mb-[3.2rem] w-full">
           <Image
@@ -336,7 +394,7 @@ export default function SignupPage() {
             <div className="flex items-center justify-between my-[3.2rem]">
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
               <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
-                SNS 계정으로 로그인하기
+                SNS 계정으로 회원가입하기
               </span>
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
             </div>
@@ -355,10 +413,8 @@ export default function SignupPage() {
                   objectFit="cover"
                 />
               </Link>
-              <Link
-                href="https://developers.kakao.com/docs/latest/ko/message/rest-api"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={handleKakaoLogin} // ✅ 카카오 로그인 실행
                 className="w-[7.2rem] h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
               >
                 <Image
@@ -368,7 +424,7 @@ export default function SignupPage() {
                   height={27}
                   objectFit="cover"
                 />
-              </Link>
+              </button>
             </div>
           </div>
         </div>

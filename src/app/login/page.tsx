@@ -9,6 +9,7 @@ import Link from "next/link";
 import MessageModal from "../../components/common/ui/modal/message-modal";
 import Button from "../../components/common/ui/button";
 import { AxiosError } from "axios";
+// import axios,{ useSignInWithOauth } from "../../../react-query/oauth-state";
 
 interface LoginFormInputs {
   email: string;
@@ -26,6 +27,7 @@ export default function LoginPage() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const loginMutation = useLogin();
   const router = useRouter();
+  // const kakaoLogin = useSignInWithOauth("kakao");
 
   const {
     register,
@@ -83,9 +85,15 @@ export default function LoginPage() {
     }
   }, []);
 
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_REST_API_KEY&redirect_uri=http://localhost:3000/auth/kakao/callback&response_type=code`;
+
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
+  };
+
   return (
     <div>
-      <div className="flex flex-col items-center my-[11.8rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
+      <div className="flex flex-col items-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[350px] w-full mx-auto gap-[5.6rem]">
         {/** 로고 섹션 */}
         <div className="flex justify-center mb-[3.2rem] w-full">
           <Image
@@ -255,20 +263,17 @@ export default function LoginPage() {
                 objectFit="cover"
               />
             </Link>
-            <Link
-              href="https://developers.kakao.com/docs/latest/ko/message/rest-api"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-[7.2rem] h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
+            <button
+              onClick={handleKakaoLogin} // ✅ 카카오 로그인 실행
+              className="w-[7.2rem] h-[7.2rem] bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
             >
               <Image
                 src="/image/Kakao-Icon.svg"
                 alt="Kakao"
                 width={27}
                 height={27}
-                objectFit="cover"
               />
-            </Link>
+            </button>
           </div>
         </div>
       </div>
