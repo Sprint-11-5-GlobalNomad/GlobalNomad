@@ -34,7 +34,7 @@ export default function ReservationPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedActivity, setSelectedActivity] = useState<number | null>(1);
   const [events, setEvents] = useState<
-    { title: string; start: string; status: string }[]
+    { title: string; start: string; classNames: string[] }[]
   >([]);
   const [selectedReservations, setSelectedReservations] = useState<
     Reservation[]
@@ -95,12 +95,12 @@ export default function ReservationPage() {
       tempReservations.map((reservation) => ({
         title: `${reservation.nickname} (${reservation.count})`,
         start: reservation.date,
-        status: reservation.status,
+        classNames: [reservation.status],
       }))
     );
   }, []);
 
-  // 예약이 지나면 자동으로 완료료
+  // 예약이 지나면 자동으로 완료로 변경
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setSelectedReservations((prev) =>
@@ -109,6 +109,17 @@ export default function ReservationPage() {
       )
     );
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      document.querySelectorAll(".fc-daygrid-day").forEach((day) => {
+        const hasEvent = day.querySelector(".fc-event");
+        if (hasEvent) {
+          day.classList.add("has-event");
+        }
+      });
+    }, 500);
+  }, [events]);
 
   // 달력 이동
   const handlePrev = () => {
@@ -127,35 +138,6 @@ export default function ReservationPage() {
     }
   };
 
-  //이벤트 클릭 시 모달 열기 및 예약 정보
-  const handleEventClick = (info: EventClickArg) => {
-    setSelectedDate(info.event.startStr);
-    const filteredReservations = tempReservations
-      .filter((res) => res.date === info.event.startStr)
-      .sort((a, b) => b.id - a.id);
-    setSelectedReservations(filteredReservations);
-    setModalOpen(true);
-  };
-
-  //예약 승인/거절
-  const handleUpdateStatus = (id: number, status: "confirmed" | "declined") => {
-    setSelectedReservations((prev) => {
-      return prev.map((res) => {
-        if (res.id === id) {
-          return { ...res, status };
-        }
-        if (
-          res.status === "confirmed" &&
-          status === "confirmed" &&
-          res.startTime === prev.find((r) => r.id === id)?.startTime
-        ) {
-          return { ...res, status: "declined" };
-        }
-        return res;
-      });
-    });
-  };
-
   return (
     <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] mb-[13rem]">
       {/* 왼쪽 사이드바 */}
@@ -163,78 +145,65 @@ export default function ReservationPage() {
         <UserProfileSidebar page="/profile/activity/reservation" />
       </div>
 
-      {/* 예약 데이터가 없는 경우 */}
-      {events.length === 0 ? (
-        <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
-          <h1 className="text-[3.2rem] font-bold mb-[3.8rem] text-start mt-0">
-            예약 현황
-          </h1>
-          <div className="flex flex-col items-center">
-            <Image
-              src="/image/empty.svg"
-              alt="No reservations"
-              width={240}
-              height={240}
+      <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
+        <h1 className="text-[3.2rem] font-bold mb-[3.8rem] text-start mt-0">
+          예약 현황
+        </h1>
+
+        {/* 드롭다운 */}
+        <div className="mb-[3rem] relative w-full">
+          <label className="absolute top-[-0.6rem] left-3 px-1 text-sm font-semibold text-nomad-black bg-white z-10">
+            체험명
+          </label>
+          <div className="relative border border-gray-300 rounded-md">
+            <SelectDropdown
+              options={["함께 배우면 즐거운 스트릿 댄스"]}
+              description="함께 배우면 즐거운 스트릿 댄스"
+              onSelect={() => {}}
+              className="p-3"
             />
-            <p className="text-gray-600 text-lg mt-4">
-              아직 등록한 체험이 없어요
-            </p>
           </div>
         </div>
-      ) : (
-        <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
-          <h1 className="text-[3.2rem] font-bold mb-[3.8rem] text-start mt-0">
-            예약 현황
-          </h1>
 
-          {/* 드롭다운 */}
-          <div className="mb-[3rem] relative w-full">
-            <label className="absolute top-[-0.6rem] left-3 px-1 text-sm font-semibold text-nomad-black bg-white z-10">
-              체험명
-            </label>
-            <div className="relative border border-gray-300 rounded-md">
-              <SelectDropdown
-                options={["함께 배우면 즐거운 스트릿 댄스"]}
-                description="함께 배우면 즐거운 스트릿 댄스"
-                onSelect={() => {}}
-                className="p-3"
-              />
-            </div>
-          </div>
-
-          {/* 네비게이션 버튼 */}
-          <div className="flex justify-center items-center mb-6">
-            <button onClick={handlePrev} className="text-2xl mx-[9.6rem]">
-              «
-            </button>
-            <h2 className="text-[2rem] font-bold">
-              {currentDate.toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-              })}
-            </h2>
-            <button onClick={handleNext} className="text-2xl mx-[9.6rem]">
-              »
-            </button>
-          </div>
-
-          {/* FullCalendar */}
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            events={events}
-            eventClick={handleEventClick}
-            locale="en"
-            headerToolbar={false}
-            height="auto"
-            aspectRatio={1.35}
-            dayMaxEventRows={true}
-            fixedWeekCount={false}
-            showNonCurrentDates={false}
-          />
+        {/* 네비게이션 버튼 */}
+        <div className="flex justify-center items-center mb-6">
+          <button onClick={handlePrev} className="text-2xl mx-[9.6rem]">
+            «
+          </button>
+          <h2 className="text-[2rem] font-bold">
+            {currentDate.toLocaleDateString("ko-KR", {
+              year: "numeric",
+              month: "long",
+            })}
+          </h2>
+          <button onClick={handleNext} className="text-2xl mx-[9.6rem]">
+            »
+          </button>
         </div>
-      )}
+
+        {/* FullCalendar */}
+        <FullCalendar
+          ref={calendarRef}
+          plugins={[dayGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          events={events}
+          eventClick={(info: EventClickArg) => {
+            setSelectedDate(info.event.startStr);
+            const filteredReservations = tempReservations
+              .filter((res) => res.date === info.event.startStr)
+              .sort((a, b) => b.id - a.id);
+            setSelectedReservations(filteredReservations);
+            setModalOpen(true);
+          }}
+          locale="en"
+          headerToolbar={false}
+          height="auto"
+          aspectRatio={1.35}
+          dayMaxEventRows={true}
+          fixedWeekCount={false}
+          showNonCurrentDates={false}
+        />
+      </div>
 
       {modalOpen && (
         <ReservationModal
@@ -243,7 +212,11 @@ export default function ReservationPage() {
           activityId={selectedActivity!}
           selectedDate={selectedDate}
           reservations={selectedReservations}
-          onUpdateStatus={handleUpdateStatus}
+          onUpdateStatus={(id: number, status: "confirmed" | "declined") => {
+            setSelectedReservations((prev) =>
+              prev.map((res) => (res.id === id ? { ...res, status } : res))
+            );
+          }}
         />
       )}
     </div>
