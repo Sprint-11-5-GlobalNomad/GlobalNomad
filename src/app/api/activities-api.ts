@@ -85,15 +85,20 @@ export const fetchActivityReviews = async ({
 };
 
 // 체험 이미지 URL 생성
-export const uploadActivityImage = async (imageFile: File) => {
+export const uploadActivityImage = async (file: File) => {
   const formData = new FormData();
-  formData.append("image", imageFile);
+  formData.append("image", file);
 
   const response = await instance.post<{ activityImageUrl: string }>(
-    `/activities/image`,
+    "/api/upload", // ✅ 백엔드의 업로드 API 엔드포인트 확인
     formData,
-    { headers: { "Content-Type": "multipart/form-data" } }
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
+
   return response.data;
 };
 
