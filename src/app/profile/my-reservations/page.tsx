@@ -43,6 +43,12 @@ export default function MyReservation() {
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
+  // ✅ 모든 데이터를 확인하여 아무것도 없을 경우 처리
+  const isEmpty =
+    !data?.pages || // 데이터가 없거나
+    data.pages.length === 0 || // 페이지가 하나도 없거나
+    data.pages.every((page) => page.reservations.length === 0); // 모든 페이지의 activities가 비어 있음
+
   return (
     <div className="flex flex-row justify-center gap-[2.4rem] mt-[14.4rem] mobile:mt-[9rem] mb-[18.3rem] mobile:mb-[10rem]">
       <div className="mobile:hidden">
@@ -61,7 +67,7 @@ export default function MyReservation() {
         <div className="flex flex-col gap-[2.4rem] mt-[1.6rem] h-auto desktop:w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.4rem]">
           {isLoading ? (
             <p>로딩 중...</p>
-          ) : !data?.pages?.length ? ( // ✅ data가 존재하는지 먼저 확인하여 undefined 방지
+          ) : isEmpty ? ( // ✅ data가 존재하는지 먼저 확인하여 undefined 방지
             <div className="mt-[5rem] mb-[4.1rem]">
               <EmptyContent />
             </div>
