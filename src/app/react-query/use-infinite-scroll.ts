@@ -75,11 +75,11 @@ export const useInfiniteActivities = (filters: FindActivitiesQueryDto) => {
   };
 };
 
-export const useInfiniteMyReservations = () => {
+export const useInfiniteMyReservations = (status?: string) => {
   return useInfiniteQuery({
-    queryKey: ["infiniteMyReservations"],
+    queryKey: ["infiniteMyReservations", status], // ✅ 필터 값을 queryKey에 포함
     queryFn: async ({ pageParam }) => {
-      return fetchMyReservations(pageParam);
+      return fetchMyReservations(pageParam, 10, status); // ✅ API에 필터 전달
     },
     getNextPageParam: (lastPage) => {
       return lastPage.cursorId || undefined;
