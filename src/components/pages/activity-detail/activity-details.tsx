@@ -20,6 +20,12 @@ const getSatisfactionLevel = (rating?: number) => {
   return "매우 불만족";
 };
 
+interface GeocodeResult {
+  address_name: string;
+  x: string;
+  y: string;
+}
+
 export default function ActivityDetails() {
   const { id } = useParams();
   const { data: activity } = useActivityDetail(Number(id));
@@ -31,15 +37,30 @@ export default function ActivityDetails() {
   useEffect(() => {
     if (typeof window !== "undefined" && window.kakao) {
       window.kakao.maps.load(() => {
-        const container = document.getElementById("map");
-        const options = {
-          center: new window.kakao.maps.LatLng(37.5665, 126.978),
-          level: 3,
-        };
-        new window.kakao.maps.Map(container, options);
+        const geocoder = new window.kakao.maps.services.Geocoder();
+        const address = activity?.address;
+
+        geocoder.addressSearch(
+          address,
+          (result: GeocodeResult[], status: number) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const lat = result[0].y;
+              const lng = result[0].x;
+
+              const container = document.getElementById("map");
+              const options = {
+                center: new window.kakao.maps.LatLng(lat, lng),
+                level: 3,
+              };
+              new window.kakao.maps.Map(container, options);
+            } else {
+              console.error("주소 변환 실패:", status);
+            }
+          }
+        );
       });
     }
-  }, []);
+  }, [activity?.address]);
 
   return (
     <div className="w-[120rem] flex justify-between">
@@ -64,7 +85,7 @@ export default function ActivityDetails() {
         <div className="w-[80rem] flex flex-col gap-[0.8rem]">
           <Script
             type="text/javascript"
-            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false`}
+            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
             strategy="beforeInteractive"
             onLoad={() => console.log("카카오 맵 스크립트 로드 완료")}
           />
