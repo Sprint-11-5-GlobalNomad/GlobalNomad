@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useCreateUser } from "../react-query/user-state";
@@ -8,6 +8,8 @@ import Image from "next/image";
 import Link from "next/link";
 import MessageModal from "../../components/common/ui/modal/message-modal";
 import Button from "../../components/common/ui/button";
+import { useSignUpWithOauth } from "../react-query/oauth-state";
+import axios, { AxiosError } from "axios";
 
 interface SignupFormInputs {
   email: string;
@@ -21,8 +23,11 @@ const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const router = useRouter();
   const { mutate: createUser } = useCreateUser();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isSignupSuccess, setIsSignupSuccess] = useState(false);
+  const router = useRouter();
+  const kakaoSignUp = useSignUpWithOauth("kakao");
   const [modalState, setModalState] = useState({
     isOpen: false,
     message: "",
@@ -37,6 +42,32 @@ export default function SignupPage() {
   } = useForm<SignupFormInputs>({
     mode: "onBlur",
   });
+
+  React.useEffect(() => {
+    const email = watch("email");
+    const nickname = watch("nickname");
+    const password = watch("password");
+    const confirmPassword = watch("confirmPassword");
+
+    const isEmailValid = emailRegex.test(email);
+    const isNicknameValid = nickname.length <= 10;
+    const isPasswordValid = password.length >= 8;
+    const isConfirmPasswordValid = confirmPassword === password;
+
+    setIsButtonDisabled(
+      !(
+        isEmailValid &&
+        isNicknameValid &&
+        isPasswordValid &&
+        isConfirmPasswordValid
+      )
+    );
+  }, [
+    watch("email"),
+    watch("nickname"),
+    watch("password"),
+    watch("confirmPassword"),
+  ]);
 
   const password = watch("password");
 
@@ -58,27 +89,91 @@ export default function SignupPage() {
     setModalState({ isOpen: false, message: "" });
   };
 
+  // 모달 닫기 함수 추가
+  const closeModalAndRedirect = () => {
+    closeModal();
+    if (isSignupSuccess) {
+      router.push("/login"); // 회원가입 성공했을 때만 로그인 페이지로 이동
+    }
+  };
+
   const onSubmit = (data: SignupFormInputs) => {
     createUser(data, {
       onSuccess: () => {
+        setIsSignupSuccess(true);
         openModal("가입이 완료되었습니다!");
-        router.push("/login"); // 성공 시 로그인 페이지로 이동
+      },
+      onError: (error) => {
+        setIsSignupSuccess(false);
+        if (error instanceof AxiosError) {
+          // const errorMessage = error.response?.data?.message || "회원 가입에 실패하였습니다.";
+          openModal("이미 사용중인 이메일입니다.");
+        }
       },
     });
   };
 
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=f13cccc7b67c9ec0492bb9b3400c80e1&redirect_uri=http://localhost:3000/login&response_type=code`;
+
+  const handleKakaoSignup = () => {
+    window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
+
+    if (authCode) {
+      // 1️⃣ 인가 코드로 액세스 토큰 요청
+      axios
+        .post("https://kauth.kakao.com/oauth/token", {
+          grant_type: "authorization_code",
+          client_id: "YOUR_KAKAO_REST_API_KEY",
+          redirect_uri: "http://localhost:3000/auth/kakao/callback",
+          code: authCode,
+        })
+        .then((tokenResponse) => {
+          const accessToken = tokenResponse.data.access_token;
+
+          // 2️⃣ 액세스 토큰으로 사용자 정보 요청
+          return axios.get("https://kapi.kakao.com/v2/user/me", {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+        })
+        .then((userResponse) => {
+          const nickname = userResponse.data.kakao_account.profile.nickname;
+
+          // 3️⃣ 회원가입 API 호출
+          kakaoSignUp.mutate(
+            {
+              token: authCode,
+              redirectUri: "http://localhost:3000/auth/kakao/callback",
+              nickname: nickname, // ✅ 닉네임 추가
+            },
+            {
+              onSuccess: () => {
+                alert("카카오 회원가입 성공!");
+                router.push("/dashboard");
+              },
+              onError: (error) => {
+                console.error("회원가입 실패:", error);
+              },
+            }
+          );
+        })
+        .catch((error) => {
+          console.error("카카오 API 호출 중 오류 발생:", error);
+        });
+    } else {
+      console.error("카카오 로그인 실패");
+    }
+  }, []);
+
   return (
     <div>
-      {/* 모달 컴포넌트 */}
-      <MessageModal
-        isOpen={modalState.isOpen}
-        message={modalState.message}
-        onClose={closeModal}
-      />
-
-      <div className="flex flex-col items-center px-[1.6rem] py-[3.2rem] max-w-[64rem] w-full mx-auto gap-[5.6rem]">
-        {/* 로고 섹션 */}
-        <div className="flex justify-center mb-[3.2rem] w-full">
+      <div className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]">
+        {/** 로고 섹션 */}
+        <div className="flex justify-center mb-[3.2rem] w-full max-w-[27rem] sm:max-w-[34rem]">
           <Image
             src="/image/logo-big.svg"
             alt="Logo"
@@ -86,16 +181,16 @@ export default function SignupPage() {
             height={192}
             priority
             onClick={() => router.push("/")}
-            style={{ cursor: "pointer" }}
+            className="cursor-pointer"
           />
         </div>
 
         {/* 폼 섹션 */}
-        <div className="w-full flex flex-col gap-[4.8rem]">
-          <div className="w-full flex flex-col gap-[3.2rem]">
+        <div className="flex flex-col gap-[4rem] sm:gap-[4.8rem]">
+          <div className="w-full flex flex-col items-center justify-center gap-[3.2rem] sm:gap-[2.6rem]">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-[2.8rem]"
+              className="w-full flex flex-col max-w-[35rem] sm:max-w-[64rem] gap-[2.8rem]"
             >
               {/* 이메일 */}
               <div className="mb-[1.6rem]">
@@ -118,7 +213,7 @@ export default function SignupPage() {
                     required: "이메일을 입력해주세요.",
                     pattern: {
                       value: emailRegex,
-                      message: "잘못된 이메일입니다.",
+                      message: "이메일 형식으로 작성해주세요.",
                     },
                   })}
                   onBlur={() => trigger("email")}
@@ -149,9 +244,9 @@ export default function SignupPage() {
                   }`}
                   {...register("nickname", {
                     required: "닉네임을 입력해주세요.",
-                    minLength: {
-                      value: 2,
-                      message: "닉네임은 2자 이상이어야 합니다.",
+                    maxLength: {
+                      value: 10,
+                      message: "열 자 이하로 작성해주세요.",
                     },
                   })}
                   onBlur={() => trigger("nickname")}
@@ -185,7 +280,7 @@ export default function SignupPage() {
                       required: "비밀번호를 입력해주세요.",
                       minLength: {
                         value: 8,
-                        message: "비밀번호는 8자 이상이어야 합니다.",
+                        message: "8자 이상 입력해주세요.",
                       },
                     })}
                     onBlur={() => trigger("password")}
@@ -277,7 +372,8 @@ export default function SignupPage() {
                 ButtonType="loginSignup"
                 label="회원가입하기"
                 variant="loginSignup"
-                className={`flex items-center justify-center w-[64rem] h-[4.8rem] px-[13.6rem] 
+                disabled={isButtonDisabled}
+                className={`flex items-center justify-center w-[64rem] h-[4.8rem] px-[12rem] 
                 py-[1.4rem] gap-[0.8rem] rounded-[0.6rem] `}
               />
             </form>
@@ -294,8 +390,8 @@ export default function SignupPage() {
             </p>
           </div>
           {/* 소셜 로그인 */}
-          <div className="w-full flex flex-col gap[4rem]">
-            <div className="flex items-center justify-between my-[3.2rem]">
+          <div className="w-full flex flex-col gap-[2.4rem] sm:gap-[4rem]">
+            <div className="flex items-center justify-between">
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
               <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
                 SNS 계정으로 회원가입하기
@@ -303,28 +399,46 @@ export default function SignupPage() {
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
             </div>
             <div className="mt-[2.4rem] flex justify-center gap-[1.6rem]">
-              <button className="w-[7.2rem] h-[7.2rem] bg-[var(--color-gray-0)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
-                <Image
-                  src="/image/Google-Icon.svg"
-                  alt="Google"
-                  width={27}
-                  height={27}
-                  objectFit="cover"
-                />
-              </button>
-              <button className="w-[7.2rem] h-[7.2rem] bg-[var(--color-gray-0)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg">
-                <Image
-                  src="/image/Kakao-Icon.svg"
-                  alt="Kakao"
-                  width={27}
-                  height={27}
-                  objectFit="cover"
-                />
+              <Link
+                href="https://www.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="min-w-[4.8rem] sm:w-[7.2rem] min-h-[4.8rem] sm:h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
+              >
+                <div className="w-[1.8rem] sm:w-[2.7rem]">
+                  <Image
+                    src="/image/Google-Icon.svg"
+                    alt="Google"
+                    width={27}
+                    height={27}
+                    objectFit="cover"
+                  />
+                </div>
+              </Link>
+              <button
+                onClick={handleKakaoSignup} // ✅ 카카오 로그인 실행
+                className="min-w-[4.8rem] sm:w-[7.2rem] min-h-[4.8rem] sm:h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
+              >
+                <div className="w-[1.8rem] sm:w-[2.7rem]">
+                  <Image
+                    src="/image/Kakao-Icon.svg"
+                    alt="Kakao"
+                    width={27}
+                    height={27}
+                    objectFit="cover"
+                  />
+                </div>
               </button>
             </div>
           </div>
         </div>
       </div>
+      {/* 모달 컴포넌트 */}
+      <MessageModal
+        isOpen={modalState.isOpen}
+        message={modalState.message}
+        onClose={closeModalAndRedirect}
+      />
     </div>
   );
 }

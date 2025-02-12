@@ -19,7 +19,7 @@ const ButtonSizes: Record<
       radius: 6,
       font_size: 16,
     },
-    md: { width: 350, height: 48, radius: 6, font_size: 16 },
+    md: { width: 640, height: 48, radius: 6, font_size: 16 },
     sm: { width: 350, height: 48, radius: 6, font_size: 16 },
   },
   modal: {
