@@ -3,8 +3,8 @@
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { LoadingIndicator } from "../indicator/loading-indicator";
-import { ErrorIndicator } from "../indicator/error-indicator";
+import { LoadingIndicator } from "../../common/layout/indicator/loading-indicator";
+import { ErrorIndicator } from "../../common/layout/indicator/error-indicator";
 
 export default function ActivityImages() {
   const { id } = useParams();

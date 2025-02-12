@@ -7,6 +7,7 @@ import Image from "next/image";
 import ReviewSection from "./review-section";
 import { useAuth } from "@/app/api/use-auth";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
+import KakaoMaps from "./kakomaps/kakaomaps";
 
 const getSatisfactionLevel = (rating?: number) => {
   if (rating === undefined || rating === 0) return "평가 없음";
@@ -44,14 +45,9 @@ export default function ActivityDetails() {
         opacity-25 mt-[3.4rem] mb-[4rem]"
         ></hr>
 
+        {/* 지도 섹션 */}
         <div className="w-[80rem] flex flex-col gap-[0.8rem]">
-          <Image
-            src="/image/map-sample.svg"
-            alt="카카오 맵 샘플 이미지"
-            width={790}
-            height={450}
-            className="w-[79rem] rounded-[1.6rem]"
-          />
+          <KakaoMaps address={activity?.address} />
           <div className="flex items-center gap-[0.2rem]">
             <Image
               src="/image/location.svg"
