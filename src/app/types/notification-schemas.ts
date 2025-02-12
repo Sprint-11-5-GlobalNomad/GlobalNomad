@@ -10,6 +10,6 @@ export interface NotificationDto {
 }
 
 export interface FindMyNotificationsQueryDto {
-  cursorId?: number;
+  cursorId?: number | null | undefined;
   size?: number;
 }

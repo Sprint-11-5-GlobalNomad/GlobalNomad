@@ -3,7 +3,7 @@ import { ReservationResponseDto } from "../types/reservation-schemas";
 
 // 내 예약 리스트 조회
 export const fetchMyReservations = async (
-  cursorId?: number,
+  cursorId?: number | null,
   size = 10,
   status?: string
 ) => {

@@ -5,7 +5,7 @@ export function useCanDeleteActivity(activityId: number) {
   const { data: monthlyStats, isLoading } = useMonthlyReservationStats(
     activityId,
     new Date().getFullYear().toString(),
-    (new Date().getMonth() + 1).toString()
+    (new Date().getMonth() + 1).toString().padStart(2, "0")
   );
 
   const [canDelete, setCanDelete] = useState(false);

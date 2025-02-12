@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useUploadActivityImage } from "@/app/react-query/activity-state";
 
 interface IntroImagesUploaderProps {
   introImages: string[];
@@ -9,12 +10,24 @@ export default function IntroImagesUploader({
   introImages,
   setIntroImages,
 }: IntroImagesUploaderProps) {
+  const uploadImageMutation = useUploadActivityImage();
+
   const handleIntroUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const files = Array.from(event.target.files)
-        .map((file) => URL.createObjectURL(file))
-        .slice(0, 4); // 최대 4개 제한
-      setIntroImages((prev) => [...prev, ...files].slice(0, 4));
+      const files = Array.from(event.target.files).slice(
+        0,
+        4 - introImages.length
+      );
+
+      files.forEach((file) => {
+        uploadImageMutation.mutate(file, {
+          onSuccess: (uploadedUrl) => {
+            setIntroImages((prev) =>
+              [...prev, uploadedUrl.activityImageUrl].slice(0, 4)
+            );
+          },
+        });
+      });
     }
   };
 
