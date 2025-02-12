@@ -2,28 +2,42 @@
 
 import UseOutsideClick from "@/hooks/use-outside-click";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatTime } from "@/utils/time-utils";
 import { highlightText } from "@/utils/higlight-text";
 import { useDeleteNotification } from "@/app/react-query/notification-state";
 import { LoadingIndicator } from "../indicator/loading-indicator";
 import { ErrorIndicator } from "../indicator/error-indicator";
 import { useInfiniteNotifications } from "@/app/react-query/use-infinite-scroll";
+import { useInView } from "react-intersection-observer";
 
 export default function UserNotifications() {
   const [isOpen, setIsOpen] = useState(false);
-  const ref = UseOutsideClick(() => setIsOpen(false));
+  const outsideClickRef = UseOutsideClick(() => setIsOpen(false));
 
   const {
     data: notificationResponse,
     isLoading,
     isError,
-    // fetchNextPage,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     refetch,
   } = useInfiniteNotifications();
 
   const notifications =
     notificationResponse?.pages.flatMap((page) => page.notifications) || [];
+
+  const { ref: inViewRef, inView } = useInView({
+    threshold: 0.5,
+    triggerOnce: true,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage, isLoading]);
 
   function getNotificationStatusColor(content: string) {
     if (content.includes("승인")) {
@@ -43,7 +57,7 @@ export default function UserNotifications() {
   };
 
   return (
-    <div ref={ref} className="flex flex-col relative">
+    <div ref={outsideClickRef} className="flex flex-col relative">
       <Image
         src="/image/notification.svg"
         alt="알림 버튼"
@@ -113,6 +127,12 @@ export default function UserNotifications() {
                   </div>
                 ))}
               </ul>
+              {isFetchingNextPage && (
+                <span className="text-md flex justify-center">
+                  🌀 데이터를 더 불러오는 중이에요
+                </span>
+              )}
+              <div ref={inViewRef}></div>
             </>
           )}
         </div>
