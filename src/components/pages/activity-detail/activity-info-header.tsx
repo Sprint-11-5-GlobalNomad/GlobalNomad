@@ -60,7 +60,7 @@ export default function ActivityInfoHeader() {
       </div>
       {isOwner ? (
         <EditDeleteDropdown
-          EditRoute={`/profile/activity/${activity?.id}/edit`}
+          EditRoute={`/profile/my-activities/${activity?.id}/edit`}
           onDelete={handleDelete}
         />
       ) : (
