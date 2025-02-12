@@ -5,20 +5,25 @@ import Image from "next/image";
 import { useState } from "react";
 import { formatTime } from "@/utils/time-utils";
 import { highlightText } from "@/utils/higlight-text";
-import {
-  useDeleteNotification,
-  useNotifications,
-} from "@/app/react-query/notification-state";
+import { useDeleteNotification } from "@/app/react-query/notification-state";
 import { LoadingIndicator } from "../indicator/loading-indicator";
 import { ErrorIndicator } from "../indicator/error-indicator";
+import { useInfiniteNotifications } from "@/app/react-query/use-infinite-scroll";
 
 export default function UserNotifications() {
   const [isOpen, setIsOpen] = useState(false);
   const ref = UseOutsideClick(() => setIsOpen(false));
 
-  const { data: notificationResponse, isLoading, isError } = useNotifications();
+  const {
+    data: notificationResponse,
+    isLoading,
+    isError,
+    // fetchNextPage,
+    refetch,
+  } = useInfiniteNotifications();
 
-  // 목업 데이터를 직접 설정
+  const notifications =
+    notificationResponse?.pages.flatMap((page) => page.notifications) || [];
 
   function getNotificationStatusColor(content: string) {
     if (content.includes("승인")) {
@@ -32,7 +37,10 @@ export default function UserNotifications() {
 
   const { mutate: deleteNotification } = useDeleteNotification();
 
-  // 알림 버튼 누를 때마다 데이터 가져오도록 설정 필요
+  const handleOpen = () => {
+    setIsOpen(!isOpen);
+    if (!isOpen) refetch();
+  };
 
   return (
     <div ref={ref} className="flex flex-col relative">
@@ -41,7 +49,7 @@ export default function UserNotifications() {
         alt="알림 버튼"
         width={24}
         height={24}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleOpen}
       />
 
       {isOpen && (
@@ -49,7 +57,7 @@ export default function UserNotifications() {
         <div
           className="flex flex-col w-[36.8rem] h-[35.6rem] 
         border rounded-[1rem] border-gray-400 bg-green-light shadow-notifications 
-        px-[2rem] py-[2.4rem] gap-[1.6rem] overflow-auto
+        px-[2rem] py-[2.4rem] gap-[1.6rem] overflow-auto hide-scrollbar
         absolute left-[-2rem] transform -translate-x-1/2 top-[5.6rem]
         mobile:w-full mobile:h-full mobile:py-[4rem] mobile:top-0 mobile:left-0 
         mobile:rounded-[0rem] mobile:transform-none mobile:fixed"
@@ -62,7 +70,7 @@ export default function UserNotifications() {
             <>
               <div className="flex-between absoulte">
                 <span className="text-xl font-bold">
-                  알림 {notificationResponse?.totalCount}개
+                  알림 {notificationResponse?.pages[0].totalCount || 0}개
                 </span>
                 <Image
                   src="/image/btn_X.svg"
@@ -74,8 +82,7 @@ export default function UserNotifications() {
               </div>
 
               <ul className="flex flex-col gap-[0.8rem]">
-                {notificationResponse?.notifications?.map((notification) => (
-                  // {data?.pages?.map((page, pageIndex) => <React.Fragment key={pageIndex}>
+                {notifications?.map((notification) => (
                   <div
                     key={notification.id}
                     className="bg-white border border-gray-400 rounded-[0.5rem]
@@ -105,7 +112,6 @@ export default function UserNotifications() {
                     </div>
                   </div>
                 ))}
-                {/* </React.Fragment> */}
               </ul>
             </>
           )}
