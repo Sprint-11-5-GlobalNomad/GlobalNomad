@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TimeDropdown from "./time-dropdown";
 import Button from "@/components/common/ui/button";
-import { timeTable } from "../../../app/profile/my-activities/post/_constants/constants";
+import { TIME_TABLE } from "../../../app/profile/my-activities/post/_constants/constants";
 import DateSelector from "./date-selector";
 
 type ReservationAvailableTime = {
@@ -96,7 +96,7 @@ export default function ReservationTimeSelector({
                   시작 시간
                 </label>
                 <TimeDropdown
-                  options={timeTable}
+                  options={TIME_TABLE}
                   description="0:00"
                   selectedOption={newReservationTime.startTime}
                   onSelect={(startTime) =>
@@ -114,7 +114,7 @@ export default function ReservationTimeSelector({
                   종료 시간
                 </label>
                 <TimeDropdown
-                  options={timeTable}
+                  options={TIME_TABLE}
                   description="0:00"
                   selectedOption={newReservationTime.endTime}
                   onSelect={(endTime) =>

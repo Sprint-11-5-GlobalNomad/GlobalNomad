@@ -1,4 +1,4 @@
-export const timeTable = [
+export const TIME_TABLE = [
   "09:00",
   "09:30",
   "10:00",
