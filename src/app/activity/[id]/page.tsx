@@ -1,5 +1,5 @@
-import ActivityImages from "@/components/common/layout/activity-detail/activity-images";
 import ActivityDetails from "@/components/pages/activity-detail/activity-details";
+import ActivityImages from "@/components/pages/activity-detail/activity-images";
 import ActivityInfoHeader from "@/components/pages/activity-detail/activity-info-header";
 
 export default function ActivityDetailPage() {
