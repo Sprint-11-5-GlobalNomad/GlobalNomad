@@ -38,7 +38,7 @@ export default function TimeDropdown({
       {isOpen && (
         <ul
           className="absolute w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] mt-2 border border-gray-300 rounded-[0.6rem] bg-white z-50 p-[0.8rem] 
-          max-h-[18rem] overflow-y-auto"
+          max-h-[18rem] overflow-y-auto custom-scrollbar"
         >
           {options.map((option) => (
             <li
