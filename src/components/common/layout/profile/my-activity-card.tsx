@@ -100,6 +100,7 @@ export const MyActivityCard = forwardRef<HTMLDivElement, ActivityCardProps>(
           onClose={handleModalClose}
           onConfirm={handleDelete}
           message={"삭제하시겠습니까?"}
+          buttonMessage={"삭제하기"}
         />
       </div>
     );

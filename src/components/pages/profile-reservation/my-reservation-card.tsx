@@ -141,6 +141,7 @@ export const MyReservationCard = forwardRef<
           onClose={() => setIsCancelModalOpen(false)}
           onConfirm={handleCancelReservation}
           message="정말 예약을 취소하시겠습니까?"
+          buttonMessage="취소하기"
         />
         <ReviewModal
           activity={activity}
