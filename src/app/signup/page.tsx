@@ -115,7 +115,7 @@ export default function SignupPage() {
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=f13cccc7b67c9ec0492bb9b3400c80e1&redirect_uri=http://localhost:3000/login&response_type=code`;
 
-  const handleKakaoLogin = () => {
+  const handleKakaoSignup = () => {
     window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
   };
 
@@ -171,9 +171,9 @@ export default function SignupPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[350px] w-full mx-auto gap-[5.6rem]">
-        {/* 로고 섹션 */}
-        <div className="flex justify-center mb-[3.2rem] w-full">
+      <div className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]">
+        {/** 로고 섹션 */}
+        <div className="flex justify-center mb-[3.2rem] w-full max-w-[27rem] sm:max-w-[34rem]">
           <Image
             src="/image/logo-big.svg"
             alt="Logo"
@@ -181,16 +181,16 @@ export default function SignupPage() {
             height={192}
             priority
             onClick={() => router.push("/")}
-            style={{ cursor: "pointer" }}
+            className="cursor-pointer"
           />
         </div>
 
         {/* 폼 섹션 */}
-        <div className="w-full flex flex-col gap-[4.8rem]">
-          <div className="w-full flex flex-col gap-[3.2rem]">
+        <div className="flex flex-col gap-[4rem] sm:gap-[4.8rem]">
+          <div className="w-full flex flex-col items-center justify-center gap-[3.2rem] sm:gap-[2.6rem]">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="w-full flex flex-col gap-[2.8rem]"
+              className="w-full flex flex-col max-w-[35rem] sm:max-w-[64rem] gap-[2.8rem]"
             >
               {/* 이메일 */}
               <div className="mb-[1.6rem]">
@@ -373,7 +373,7 @@ export default function SignupPage() {
                 label="회원가입하기"
                 variant="loginSignup"
                 disabled={isButtonDisabled}
-                className={`flex items-center justify-center w-[64rem] h-[4.8rem] px-[13.6rem] 
+                className={`flex items-center justify-center w-[64rem] h-[4.8rem] px-[12rem] 
                 py-[1.4rem] gap-[0.8rem] rounded-[0.6rem] `}
               />
             </form>
@@ -390,40 +390,44 @@ export default function SignupPage() {
             </p>
           </div>
           {/* 소셜 로그인 */}
-          <div className="w-full flex flex-col gap-[4rem]">
-            <div className="flex items-center justify-between my-[3.2rem]">
+          <div className="w-full flex flex-col gap-[2.4rem] sm:gap-[4rem]">
+            <div className="flex items-center justify-between">
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
               <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
                 SNS 계정으로 회원가입하기
               </span>
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
             </div>
-            <div className="mt-[2.4rem] flex justify-center gap-4">
+            <div className="mt-[2.4rem] flex justify-center gap-[1.6rem]">
               <Link
                 href="https://www.google.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-[7.2rem] h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
+                className="min-w-[4.8rem] sm:w-[7.2rem] min-h-[4.8rem] sm:h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
               >
-                <Image
-                  src="/image/Google-Icon.svg"
-                  alt="Google"
-                  width={27}
-                  height={27}
-                  objectFit="cover"
-                />
+                <div className="w-[1.8rem] sm:w-[2.7rem]">
+                  <Image
+                    src="/image/Google-Icon.svg"
+                    alt="Google"
+                    width={27}
+                    height={27}
+                    objectFit="cover"
+                  />
+                </div>
               </Link>
               <button
-                onClick={handleKakaoLogin} // ✅ 카카오 로그인 실행
-                className="w-[7.2rem] h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
+                onClick={handleKakaoSignup} // ✅ 카카오 로그인 실행
+                className="min-w-[4.8rem] sm:w-[7.2rem] min-h-[4.8rem] sm:h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
               >
-                <Image
-                  src="/image/Kakao-Icon.svg"
-                  alt="Kakao"
-                  width={27}
-                  height={27}
-                  objectFit="cover"
-                />
+                <div className="w-[1.8rem] sm:w-[2.7rem]">
+                  <Image
+                    src="/image/Kakao-Icon.svg"
+                    alt="Kakao"
+                    width={27}
+                    height={27}
+                    objectFit="cover"
+                  />
+                </div>
               </button>
             </div>
           </div>
