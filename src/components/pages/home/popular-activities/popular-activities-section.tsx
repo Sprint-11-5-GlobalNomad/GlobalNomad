@@ -9,7 +9,14 @@ import Link from "next/link";
 const SIZE = 9;
 
 export default function PopularActivitiesSection() {
-  const { data, isLoading, isError } = useInfiniteActivities({
+  const {
+    data,
+    isLoading,
+    isError,
+    // fetchNextPage,
+    // hasNextPage,
+    // isFetchingNextPage,
+  } = useInfiniteActivities({
     method: "cursor",
     cursorId: null,
     size: SIZE,
