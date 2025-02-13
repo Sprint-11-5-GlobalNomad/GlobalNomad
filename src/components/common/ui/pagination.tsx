@@ -37,10 +37,18 @@ export default function Pagination({
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
           rounded-[1.5rem] border border-solid bg-white
-          ${currentPage === 1 ? "border-gray-300 cursor-not-allowed" : "border-green-dark hover:bg-green-dark"}`}
+          ${
+            currentPage === 1
+              ? "border-gray-300 cursor-not-allowed"
+              : "border-green-dark hover:bg-green-light"
+          }`}
       >
         <Image
-          src={`${currentPage === 1 ? "/image/previous-page-gray.svg" : "/image/previous-page-green.svg"}`}
+          src={`${
+            currentPage === 1
+              ? "/image/previous-page-gray.svg"
+              : "/image/previous-page-green.svg"
+          }`}
           alt="이전 페이지 버튼"
           width={21}
           height={21}
@@ -56,14 +64,12 @@ export default function Pagination({
               handlePageChange(page);
               window.history.pushState({}, "", `?page=${page}`);
             }}
-            className={`w-[5.5rem] h-[5.5rem] bg-white px-[1.5rem] py-[1.5rem]
+            className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
         flex items-center justify-center rounded-[1.5rem]
         border border-solid border-green-dark hover:bg-green-dark
-         ${currentPage === page ? "bg-green-drak" : ""}`}
+         ${currentPage === page ? "bg-green-dark text-white" : "bg-white"}`}
           >
-            <span className="color-green-dark font-regular text-2lg text-center">
-              {page}
-            </span>
+            <span className="font-regular text-2lg text-center">{page}</span>
           </Link>
         </div>
       ))}
@@ -77,10 +83,18 @@ export default function Pagination({
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
       rounded-[1.5rem] border border-solid bg-white
-      ${currentPage === totalPages ? "border-gray-300 cursor-not-allowed" : "border-green-dark hover:bg-green-dark"}`}
+      ${
+        currentPage === totalPages
+          ? "border-gray-300 cursor-not-allowed"
+          : "border-green-dark hover:bg-green-light"
+      }`}
       >
         <Image
-          src={`${currentPage === totalPages ? "/image/next-page-gray.svg" : "/image/next-page-green.svg"}`}
+          src={`${
+            currentPage === totalPages
+              ? "/image/next-page-gray.svg"
+              : "/image/next-page-green.svg"
+          }`}
           alt="다음 페이지 버튼"
           width={21}
           height={21}
