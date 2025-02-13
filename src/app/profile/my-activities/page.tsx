@@ -5,7 +5,7 @@ import { MyActivityCard } from "@/components/common/layout/profile/my-activity-c
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import { useRouter } from "next/navigation";
-import { useInView } from "react-intersection-observer";
+// import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { useInfinityMyActivities } from "@/app/react-query/use-infinite-scroll";
 
