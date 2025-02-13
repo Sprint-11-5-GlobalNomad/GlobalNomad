@@ -1,5 +1,3 @@
-// "use client";
-
 import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { useInfiniteActivities } from "@/app/react-query/use-infinite-scroll";
@@ -140,7 +138,14 @@ export default function PopularActivitiesSection() {
               </li>
             );
           })}
-          {isFetchingNextPage && <LoadingIndicator width={384} height={384} />}
+          {isFetchingNextPage && (
+            <li
+              className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
+    mobile:w-[18.4rem] mobile:h-[18.4rem] flex items-center justify-center"
+            >
+              <LoadingIndicator width={80} height={80} />
+            </li>
+          )}
         </ul>
       )}
     </>
