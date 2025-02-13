@@ -5,11 +5,20 @@ import { ErrorIndicator } from "@/components/common/layout/indicator/error-indic
 import { useInfiniteActivities } from "@/app/react-query/use-infinite-scroll";
 import Image from "next/image";
 import Link from "next/link";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 const SIZE = 9;
 
 export default function PopularActivitiesSection() {
-  const { data, isLoading, isError } = useInfiniteActivities({
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteActivities({
     method: "cursor",
     cursorId: null,
     size: SIZE,
@@ -18,7 +27,16 @@ export default function PopularActivitiesSection() {
 
   const activities = data?.pages.flatMap((page) => page.activities) || [];
 
-  console.log("data", data);
+  const { ref, inView } = useInView({
+    threshold: 0.25,
+    triggerOnce: true,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage, isLoading]);
 
   return (
     <>
@@ -70,53 +88,59 @@ export default function PopularActivitiesSection() {
     tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
         >
-          {activities.map((activity) => (
-            <li
-              key={activity.id}
-              className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
+          {activities.map((activity, index) => {
+            const isLastItem = index === activities.length - 1;
+
+            return (
+              <li
+                key={activity.id}
+                ref={isLastItem ? ref : null}
+                className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
-            >
-              <Link href={`/activity/${activity.id}`}>
-                <Image
-                  src={activity.bannerImageUrl}
-                  alt={activity.title}
-                  width={384}
-                  height={384}
-                  className="absolute inset-0 w-full h-full rounded-[2rem] object-cover"
-                />
-                <div
-                  className="flex-column items-start w-full gap-[2rem] px-[2rem] py-[3rem]
+              >
+                <Link href={`/activity/${activity.id}`}>
+                  <Image
+                    src={activity.bannerImageUrl}
+                    alt={activity.title}
+                    width={384}
+                    height={384}
+                    className="absolute inset-0 w-full h-full rounded-[2rem] object-cover"
+                  />
+                  <div
+                    className="flex-column items-start w-full gap-[2rem] px-[2rem] py-[3rem]
           absolute transform -translate-x-1/2 translate-y-0 bottom-0 left-1/2 text-white
           mobile:pt-[3rem] mobile:pr-[2rem] mobile:pb-[1.2rem] mobile:gap-[0.5rem]"
-                >
-                  <div className="flex-between gap-[0.5rem]">
-                    <Image
-                      src="/image/rating-star.svg"
-                      alt="평균 별점 아이콘"
-                      width={18}
-                      height={18}
-                    />
-                    <p className="text-md font-semiBold">
-                      {activity.rating} (
-                      {Number(activity.reviewCount).toLocaleString("ko-KR")})
+                  >
+                    <div className="flex-between gap-[0.5rem]">
+                      <Image
+                        src="/image/rating-star.svg"
+                        alt="평균 별점 아이콘"
+                        width={18}
+                        height={18}
+                      />
+                      <p className="text-md font-semiBold">
+                        {activity.rating} (
+                        {Number(activity.reviewCount).toLocaleString("ko-KR")})
+                      </p>
+                    </div>
+                    <p
+                      className="w-[25.1rem] text-3xl font-bold break-keep
+              mobile:text-[1.8rem] mobile:leading-[2.6rem]"
+                    >
+                      {activity.title}
+                    </p>
+                    <p className="text-xl font-bold flex-between gap-[0.5rem]">
+                      ₩ {Number(activity.price).toLocaleString("ko-KR")}
+                      <span className="text-md font-regular text-gray-700">
+                        /인
+                      </span>
                     </p>
                   </div>
-                  <p
-                    className="w-[25.1rem] text-3xl font-bold break-keep
-              mobile:text-[1.8rem] mobile:leading-[2.6rem]"
-                  >
-                    {activity.title}
-                  </p>
-                  <p className="text-xl font-bold flex-between gap-[0.5rem]">
-                    ₩ {Number(activity.price).toLocaleString("ko-KR")}
-                    <span className="text-md font-regular text-gray-700">
-                      /인
-                    </span>
-                  </p>
-                </div>
-              </Link>
-            </li>
-          ))}
+                </Link>
+              </li>
+            );
+          })}
+          {isFetchingNextPage && <LoadingIndicator width={384} height={384} />}
         </ul>
       )}
     </>

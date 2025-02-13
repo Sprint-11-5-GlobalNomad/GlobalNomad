@@ -26,6 +26,7 @@ export default function UserMenu() {
               alt="프로필 이미지"
               width={32}
               height={32}
+              className="rounded-full border border-solid border-gray-300 w-[3.2rem] h-[3.2rem]"
             />
             <span className="text-md">{user?.nickname || "닉네임"}</span>
             {isOpen && (

@@ -7,6 +7,7 @@ import {
   FindActivitiesQueryDto,
 } from "../types/activity-schemas";
 import Error from "next/error";
+import { fetchNotifications } from "../api/my-notifications-api";
 
 export function useInfinityMyActivities() {
   return useInfiniteQuery({
@@ -75,6 +76,23 @@ export const useInfiniteActivities = (filters: FindActivitiesQueryDto) => {
     isLoading,
     isError,
   };
+};
+
+export const useInfiniteNotifications = () => {
+  return useInfiniteQuery({
+    queryKey: ["infiniteNotifications"],
+    queryFn: async ({
+      pageParam = null,
+    }: {
+      pageParam: number | null | undefined;
+    }) => {
+      return fetchNotifications(pageParam, 10);
+    },
+    getNextPageParam: (lastpage) => {
+      return lastpage.cursorId ?? undefined;
+    },
+    initialPageParam: null,
+  });
 };
 
 export const useInfiniteMyReservations = (status?: string) => {
