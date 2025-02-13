@@ -4,11 +4,15 @@ import { useInfiniteActivities } from "@/app/react-query/use-infinite-scroll";
 import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SIZE = 9;
 
 export default function PopularActivitiesSection() {
+  const [startIndex, setStartIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLUListElement | null>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+
   const {
     data,
     isLoading,
@@ -36,6 +40,61 @@ export default function PopularActivitiesSection() {
     }
   }, [inView, fetchNextPage, hasNextPage, isLoading]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollContainerRef.current) {
+        const scrollContainer = scrollContainerRef.current;
+        const itemWidth = itemRefs.current[0]?.offsetWidth || 0;
+        const newStartIndex = Math.floor(
+          scrollContainer.scrollLeft / itemWidth
+        );
+
+        setStartIndex(newStartIndex);
+      }
+    };
+
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      scrollContainer?.removeEventListener("scroll", handleScroll);
+    };
+  }, [activities]);
+
+  const scrollToIndex = (index: number) => {
+    const targetElement = itemRefs.current[index];
+
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
+  };
+
+  const handleNext = () => {
+    if (scrollContainerRef.current && startIndex < activities.length - 1) {
+      const nextIndex = startIndex + 1;
+      setStartIndex(nextIndex);
+      scrollToIndex(nextIndex);
+    }
+  };
+
+  const handlePrev = () => {
+    if (scrollContainerRef.current && startIndex > 0) {
+      const prevIndex = startIndex - 1;
+      setStartIndex(prevIndex);
+      scrollToIndex(prevIndex);
+    }
+  };
+
+  const setCombinedRef = (index: number, el: HTMLLIElement | null) => {
+    itemRefs.current[index] = el;
+    ref(el);
+    // }
+  };
+
   return (
     <>
       <div
@@ -51,21 +110,17 @@ export default function PopularActivitiesSection() {
         <div className="flex gap-[1.2rem]">
           <button
             className="tablet:hidden mobile:hidden"
-            // onClick={handlePrevCursor}
-            // disabled={pageIndex === 0}
+            onClick={handlePrev}
+            disabled={startIndex === 0}
           >
             <Image
-              src="/image/unactivated_left_arrow.svg"
+              src={`${startIndex === 0 ? "/image/unactivated_left_arrow.svg" : "/image/activated_left_arrow.svg"}`}
               alt="인기체험 이전 목록"
               width={44}
               height={44}
             />
           </button>
-          <button
-            className="tablet:hidden mobile:hidden"
-            // onClick={handleNextCursor}
-            // disabled={!hasNextPage}
-          >
+          <button className="tablet:hidden mobile:hidden" onClick={handleNext}>
             <Image
               src="/image/activated_right_arrow.svg"
               alt="인기체험 다음 목록"
@@ -82,17 +137,16 @@ export default function PopularActivitiesSection() {
         <ErrorIndicator width={80} height={80} />
       ) : (
         <ul
+          ref={scrollContainerRef}
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
     tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
         >
           {activities.map((activity, index) => {
-            const isLastItem = index === activities.length - 1;
-
             return (
               <li
                 key={activity.id}
-                ref={isLastItem ? ref : null}
+                ref={(el) => setCombinedRef(index, el)}
                 className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
               >
