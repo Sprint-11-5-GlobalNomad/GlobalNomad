@@ -46,6 +46,9 @@ export default function ActivityPostPage() {
   const [reservationTimes, setReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
+  const [removedReservationIds, setRemovedReservationIds] = useState<number[]>(
+    []
+  );
 
   const {
     register,
@@ -65,6 +68,7 @@ export default function ActivityPostPage() {
       setIntroImages(activityDetail.subImages.map((img) => img.imageUrl));
       setReservationTimes(
         activityDetail.schedules.map((schedule) => ({
+          id: schedule.id,
           date: schedule.date,
           startTime: schedule.startTime,
           endTime: schedule.endTime,
@@ -73,7 +77,7 @@ export default function ActivityPostPage() {
     }
   }, [activityDetail, setValue]);
 
-  const onSubmit = (data: CreateActivityBodyDto) => {
+  const onSubmit = async (data: CreateActivityBodyDto) => {
     if (!bannerImage) {
       alert("배너 이미지를 등록해주세요.");
       return;
@@ -96,6 +100,7 @@ export default function ActivityPostPage() {
         startTime,
         endTime,
       })),
+      scheduleIdsToRemove: removedReservationIds,
     };
 
     updateActivityMutation.mutate(
@@ -207,6 +212,7 @@ export default function ActivityPostPage() {
             <ReservationTimeSelector
               reservationTimes={reservationTimes}
               setReservationTimes={setReservationTimes}
+              setRemovedReservationIds={setRemovedReservationIds}
             />
           </div>
 
