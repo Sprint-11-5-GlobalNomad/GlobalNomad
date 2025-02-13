@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
 
-interface EditDeleteDropdown {
+interface EditDeleteDropdownProps {
   EditRoute: string;
   onDelete: () => void;
 }
@@ -12,12 +12,20 @@ interface EditDeleteDropdown {
 export default function EditDeleteDropdown({
   EditRoute,
   onDelete,
-}: EditDeleteDropdown) {
+}: EditDeleteDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  };
+
   return (
-    <div className="relative inline-block" onClick={() => setIsOpen(!isOpen)}>
-      <button className="p-2 hover:bg-gray-100 rounded-full mobile:w-[3.2rem] mobile:h-[3.2rem]">
+    <div className="relative inline-block">
+      <button
+        className="p-2 hover:bg-gray-100 rounded-full mobile:w-[3.2rem] mobile:h-[3.2rem]"
+        onClick={toggleDropdown}
+      >
         <Image
           src="/image/meatball.svg"
           alt="수정하기 삭제하기 드롭다운"
@@ -33,6 +41,7 @@ export default function EditDeleteDropdown({
           <ul className="flex flex-col">
             <Link href={EditRoute}>
               <li
+                onClick={(e) => e.stopPropagation()} // 클릭 시 드롭다운 닫히지 않도록 방지
                 className="w-full text-lg font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
               border-b-[0.1rem] border-solid border-gray-200 py-[1.8rem]"
               >
