@@ -92,7 +92,6 @@ export default function PopularActivitiesSection() {
   const setCombinedRef = (index: number, el: HTMLLIElement | null) => {
     itemRefs.current[index] = el;
     ref(el);
-    // }
   };
 
   return (
@@ -192,7 +191,7 @@ export default function PopularActivitiesSection() {
               </li>
             );
           })}
-          {isFetchingNextPage && (
+          {(isFetchingNextPage || isLoading) && (
             <li
               className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
     mobile:w-[18.4rem] mobile:h-[18.4rem] flex items-center justify-center"
