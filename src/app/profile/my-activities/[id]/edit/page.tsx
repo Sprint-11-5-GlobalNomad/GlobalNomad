@@ -54,7 +54,7 @@ export default function ActivityPostPage() {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors },
   } = methods;
 
   useEffect(() => {
@@ -66,14 +66,22 @@ export default function ActivityPostPage() {
       setValue("address", activityDetail.address);
       setBannerImage(activityDetail.bannerImageUrl);
       setIntroImages(activityDetail.subImages.map((img) => img.imageUrl));
-      setReservationTimes(
-        activityDetail.schedules.map((schedule) => ({
+
+      const initialReservationTimes = activityDetail.schedules.map(
+        (schedule) => ({
           id: schedule.id,
           date: schedule.date,
           startTime: schedule.startTime,
           endTime: schedule.endTime,
-        }))
+        })
       );
+
+      setReservationTimes(initialReservationTimes);
+
+      const initialRemovedIds = initialReservationTimes
+        .map((time) => time.id)
+        .filter((id): id is number => id !== undefined);
+      setRemovedReservationIds(initialRemovedIds);
     }
   }, [activityDetail, setValue]);
 
@@ -140,9 +148,7 @@ export default function ActivityPostPage() {
               ButtonType="profileSave"
               label="수정하기"
               type="submit"
-              disabled={
-                !isValid || !bannerImage || reservationTimes.length === 0
-              }
+              disabled={!bannerImage || reservationTimes.length === 0}
             />
           </div>
 
