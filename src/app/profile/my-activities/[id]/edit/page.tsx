@@ -85,7 +85,7 @@ export default function ActivityPostPage() {
     }
   }, [activityDetail, setValue]);
 
-  const onSubmit = async (data: CreateActivityBodyDto) => {
+  const onSubmit = (data: CreateActivityBodyDto) => {
     if (!bannerImage) {
       alert("배너 이미지를 등록해주세요.");
       return;
