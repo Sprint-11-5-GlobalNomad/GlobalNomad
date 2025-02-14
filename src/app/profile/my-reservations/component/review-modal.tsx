@@ -4,7 +4,6 @@ import Button from "@/components/common/ui/button";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { AxiosError } from "axios";
 import { useSubmitReservationReview } from "@/app/react-query/reservation-state";
 
 type ReviewModalProps = Pick<
@@ -68,36 +67,6 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
         onSuccess: () => {
           alert("리뷰가 성공적으로 작성되었습니다!");
           onClose();
-        },
-        onError: (error) => {
-          if (error instanceof AxiosError && error.response) {
-            const { status, data } = error.response;
-            switch (status) {
-              case 400:
-                alert(
-                  data.message || "잘못된 요청입니다. 내용을 확인해주세요."
-                );
-                break;
-              case 401:
-                alert("인증에 실패했습니다. 다시 로그인해주세요.");
-                break;
-              case 403:
-                alert(data.message || "리뷰 작성 권한이 없습니다.");
-                break;
-              case 404:
-                alert(data.message || "예약 정보를 찾을 수 없습니다.");
-                break;
-              case 409:
-                alert(data.message || "이미 리뷰를 작성한 예약입니다.");
-                break;
-              default:
-                alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
-                break;
-            }
-          } else {
-            console.error("Unexpected error:", error);
-            alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
-          }
         },
       }
     );
@@ -165,7 +134,7 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
             ))}
           </div>
           <textarea
-            className="font-pretendard text-4xl w-[432px] h-[240px] p-2 border rounded-md resize-none mobile:w-[351px] mobile:h-[346px] mobile:rounded-[4px]"
+            className="font-pretendard text-4xl w-[432px] h-[240px] p-2 border border-solid border-black rounded-md resize-none mobile:w-[351px] mobile:h-[346px] mobile:rounded-[4px]"
             placeholder="후기를 작성해주세요"
             onChange={onChangeContent}
           />
