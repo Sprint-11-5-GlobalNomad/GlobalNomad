@@ -16,7 +16,7 @@ type Props = {
   setReservationTimes: React.Dispatch<
     React.SetStateAction<ReservationAvailableTime[]>
   >;
-  setRemovedReservationIds: React.Dispatch<React.SetStateAction<number[]>>;
+  setRemovedReservationIds?: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export default function ReservationTimeSelector({
@@ -76,13 +76,15 @@ export default function ReservationTimeSelector({
   };
 
   const removeReservationTime = (index: number) => {
-    const removedTime = reservationTimes[index];
-    if (removedTime.id) {
-      setRemovedReservationIds((prev) =>
-        [...prev, removedTime.id!].filter(
-          (id): id is number => id !== undefined
-        )
-      );
+    if (setRemovedReservationIds) {
+      const removedTime = reservationTimes[index];
+      if (removedTime.id) {
+        setRemovedReservationIds((prev) =>
+          [...prev, removedTime.id!].filter(
+            (id): id is number => id !== undefined
+          )
+        );
+      }
     }
     setReservationTimes((prev) => prev.filter((_, i) => i !== index));
   };
