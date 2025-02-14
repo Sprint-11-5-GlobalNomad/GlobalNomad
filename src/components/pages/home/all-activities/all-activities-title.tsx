@@ -1,4 +1,12 @@
-export default function AllActivitiesTitle() {
+import { CategoryType } from "@/app/types/activity-schemas";
+
+interface AllActivitiesTitleProps {
+  category: CategoryType | undefined;
+}
+
+export default function AllActivitiesTitle({
+  category,
+}: AllActivitiesTitleProps) {
   return (
     <div
       className="flex-between w-[120rem] mt-[3.5rem] mb-[3.2rem]
@@ -8,7 +16,7 @@ export default function AllActivitiesTitle() {
         className="text-3xl font-bold mobile:text-[1.8rem]
       mobile:leading-[2.1rem]"
       >
-        🛼 모든 체험
+        {category || "🛼 모든 체험"}
       </h2>
     </div>
   );

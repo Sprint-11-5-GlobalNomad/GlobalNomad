@@ -138,8 +138,8 @@ export default function PopularActivitiesSection() {
         <ul
           ref={scrollContainerRef}
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
-    tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
-    mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
+    tablet:w-full tablet:pl-[3rem] tablet:gap-[3.2rem]
+    mobile:w-full mobile:mb-[4.6rem] mobile:pl-[2rem] mobile:gap-[1.6rem]"
         >
           {activities.map((activity, index) => {
             return (
