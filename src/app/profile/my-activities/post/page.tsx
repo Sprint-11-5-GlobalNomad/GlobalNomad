@@ -102,7 +102,9 @@ export default function ActivityPostPage() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-row gap-[51.9rem] tablet:gap-[15.5rem] mobile:gap-[6.9rem] items-center">
-            <h2 className="text-3xl font-bold font-pretendard">내 체험 등록</h2>
+            <h2 className="text-3xl font-bold font-pretendard w-[16rem]">
+              내 체험 등록
+            </h2>
             <Button
               ButtonType="profileSave"
               label={isPending ? "등록 중..." : "등록하기"}
