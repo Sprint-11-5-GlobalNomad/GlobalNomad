@@ -38,6 +38,7 @@ export const MyReservationCard = forwardRef<
         status: { status: "canceled" },
       });
       setIsCancelModalOpen(false);
+      window.location.reload();
     };
 
     const getStatusClasses = (status: string) => {
