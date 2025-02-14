@@ -5,7 +5,7 @@ import FilterDropdown from "@/components/common/ui/dropdown/filter-dropdown";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import { MyReservationCard } from "@/components/pages/profile-reservation/my-reservation-card";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
-// import { useInView } from "react-intersection-observer";
+import { useInView } from "react-intersection-observer";
 import { useInfiniteMyReservations } from "@/app/react-query/use-infinite-scroll";
 
 const filterOption: string[] = [
