@@ -68,7 +68,7 @@ export default function IntroImagesUploader({
             />
             <button
               onClick={() => removeIntroImage(index)}
-              className="absolute top-[-2rem] tablet:top-[-1rem] mobile:top-[-0.8rem] right-[-2rem] tablet:right-[-1rem] mobile:right-[-0.8rem] bg-black bg-opacity-80 text-white w-[4rem] tablet:w-[3.2rem] mobile:w-[2.4rem] h-[4rem] tablet:h-[3.2rem] mobile:h-[2.4rem] text-xl tablet:text-lg mobile:text-base px-3 py-1 rounded-full"
+              className="absolute top-[-2rem] tablet:top-[-1rem] mobile:top-[-0.8rem] right-[-2rem] tablet:right-[-1rem] mobile:right-[-0.8rem] bg-[rgba(0,0,0,0.8)] text-white w-[4rem] tablet:w-[3.2rem] mobile:w-[2.4rem] h-[4rem] tablet:h-[3.2rem] mobile:h-[2.4rem] text-xl tablet:text-lg mobile:text-base px-3 py-1 rounded-full"
               type="button"
             >
               X

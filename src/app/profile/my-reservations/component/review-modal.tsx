@@ -76,7 +76,7 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
 
   return (
     <div
-      className="flex justify-center items-center fixed inset-0 bg-black bg-opacity-50 z-50"
+      className="flex justify-center items-center fixed inset-0 bg-[rgba(0,0,0,0.7)] z-50"
       onClick={onClose}
     >
       <div
