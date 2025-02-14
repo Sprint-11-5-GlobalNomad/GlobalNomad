@@ -41,7 +41,7 @@ export default function AllActivitiesSection() {
     <>
       <CategoryPriceFilter onFilterChange={handleFilterChange} />
 
-      <AllActivitiesTitle />
+      <AllActivitiesTitle category={category} />
       {isLoading ? (
         <LoadingIndicator width={80} height={80} />
       ) : isError ? (
