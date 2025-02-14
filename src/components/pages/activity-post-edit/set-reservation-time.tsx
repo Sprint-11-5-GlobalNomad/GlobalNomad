@@ -5,6 +5,7 @@ import { TIME_TABLE } from "../../../app/profile/my-activities/post/_constants/c
 import DateSelector from "./date-selector";
 
 type ReservationAvailableTime = {
+  id?: number;
   date: string;
   startTime: string;
   endTime: string;
@@ -15,11 +16,13 @@ type Props = {
   setReservationTimes: React.Dispatch<
     React.SetStateAction<ReservationAvailableTime[]>
   >;
+  setRemovedReservationIds?: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export default function ReservationTimeSelector({
   reservationTimes,
   setReservationTimes,
+  setRemovedReservationIds,
 }: Props) {
   const [newReservationTime, setNewReservationTime] =
     useState<ReservationAvailableTime>({
@@ -40,13 +43,11 @@ export default function ReservationTimeSelector({
       return;
     }
 
-    // 시작 시간이 종료 시간보다 크거나 같으면 오류
     if (newReservationTime.startTime >= newReservationTime.endTime) {
       setErrorMessage("시작 시간은 종료 시간보다 이전이어야 합니다.");
       return;
     }
 
-    // 시간 범위 겹침 확인
     const isOverlapping = reservationTimes.some((time) => {
       if (time.date !== newReservationTime.date) return false;
 
@@ -58,9 +59,9 @@ export default function ReservationTimeSelector({
       const existingEnd = new Date(`1970-01-01T${time.endTime}:00`);
 
       return (
-        (newStart >= existingStart && newStart < existingEnd) || // 새로운 시작이 기존 범위 안에 있는 경우
-        (newEnd > existingStart && newEnd <= existingEnd) || // 새로운 종료가 기존 범위 안에 있는 경우
-        (newStart <= existingStart && newEnd >= existingEnd) // 새로운 범위가 기존 범위를 완전히 포함하는 경우
+        (newStart >= existingStart && newStart < existingEnd) ||
+        (newEnd > existingStart && newEnd <= existingEnd) ||
+        (newStart <= existingStart && newEnd >= existingEnd)
       );
     });
 
@@ -71,10 +72,20 @@ export default function ReservationTimeSelector({
 
     setReservationTimes((prev) => [...prev, newReservationTime]);
     setNewReservationTime({ date: "", startTime: "", endTime: "" });
-    setErrorMessage(""); // 오류 메시지 초기화
+    setErrorMessage("");
   };
 
   const removeReservationTime = (index: number) => {
+    if (setRemovedReservationIds) {
+      const removedTime = reservationTimes[index];
+      if (removedTime.id) {
+        setRemovedReservationIds((prev) =>
+          [...prev, removedTime.id!].filter(
+            (id): id is number => id !== undefined
+          )
+        );
+      }
+    }
     setReservationTimes((prev) => prev.filter((_, i) => i !== index));
   };
 

@@ -19,7 +19,6 @@ type ReservationCardProps = Pick<
   | "id"
 >;
 
-// forwardRef를 사용하여 ref를 받을 수 있도록 수정
 export const MyReservationCard = forwardRef<
   HTMLDivElement,
   ReservationCardProps
@@ -38,6 +37,7 @@ export const MyReservationCard = forwardRef<
         status: { status: "canceled" },
       });
       setIsCancelModalOpen(false);
+      window.location.reload();
     };
 
     const getStatusClasses = (status: string) => {
@@ -71,7 +71,7 @@ export const MyReservationCard = forwardRef<
     };
 
     return (
-      <div>
+      <div className="relative">
         <Link href={`/activity/${activity.id}`} passHref>
           <div
             ref={ref}
@@ -87,7 +87,7 @@ export const MyReservationCard = forwardRef<
               />
             </div>
 
-            <div className="flex flex-col justify-between flex-1 desktop:py-[2.1rem] desktop:px-[2.4rem] tablet:py-[1.2rem] tablet:pl-[1.2rem] tablet:pr-[1.8rem] mobile:py-[1.1rem] mobile:pl-[0.8rem] mobile:pr-[1.5rem]">
+            <div className="flex flex-col justify-between flex-1 desktop:pt-[2.1rem] desktop:pb-[2.6rem] desktop:px-[2.4rem] tablet:pt-[1.2rem] tablet:pb-[1.6rem] tablet:pl-[1.2rem] tablet:pr-[1.8rem] mobile:pt-[1.1rem] mobile:pb-[1.5rem] mobile:pl-[0.8rem] mobile:pr-[1.5rem]">
               <div className="flex flex-col desktop:gap-[0.8rem]">
                 <div
                   className={`font-bold text-[1.6rem] mobile:text-[1.4rem] ${getStatusClasses(
@@ -106,35 +106,36 @@ export const MyReservationCard = forwardRef<
                 </div>
               </div>
 
-              <div className="flex justify-between items-center">
-                <div className="desktop:text-[2.4rem] tablet:text-[2rem] mobile:text-[1.6rem] font-medium text-right">
-                  ₩{totalPrice.toLocaleString()}
-                </div>
-                {status === "pending" && (
-                  <Button
-                    ButtonType="review"
-                    label="예약 취소"
-                    variant="outlined"
-                    onClick={(event) => {
-                      event.stopPropagation(); // Link 이동 방지
-                      setIsCancelModalOpen(true);
-                    }}
-                  />
-                )}
-                {status === "completed" && (
-                  <Button
-                    ButtonType="review"
-                    label="후기 작성"
-                    onClick={(event) => {
-                      event.stopPropagation(); // Link 이동 방지
-                      setIsReviewModalOpen(true);
-                    }}
-                  />
-                )}
+              <div className="desktop:text-[2.4rem] tablet:text-[2rem] mobile:text-[1.6rem] font-medium text-left">
+                ₩{totalPrice.toLocaleString()}
               </div>
             </div>
           </div>
         </Link>
+
+        <div className="absolute desktop:bottom-[2rem] desktop:right-[2.3rem] tablet:bottom-[1.2rem] tablet:right-[1.6rem] mobile:bottom-[0.9rem] mobile:right-[1.4rem]">
+          {status === "pending" && (
+            <Button
+              ButtonType="review"
+              label="예약 취소"
+              variant="outlined"
+              onClick={(event) => {
+                event.stopPropagation();
+                setIsCancelModalOpen(true);
+              }}
+            />
+          )}
+          {status === "completed" && (
+            <Button
+              ButtonType="review"
+              label="후기 작성"
+              onClick={(event) => {
+                event.stopPropagation();
+                setIsReviewModalOpen(true);
+              }}
+            />
+          )}
+        </div>
 
         <ConfirmationModal
           isOpen={isCancelModalOpen}

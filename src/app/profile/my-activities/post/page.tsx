@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
@@ -21,9 +21,7 @@ type ReservationAvailableTime = {
 };
 
 export default function ActivityPostPage() {
-  const methods = useForm<CreateActivityBodyDto>({
-    mode: "onBlur", // 필드에서 포커스가 벗어날 때 검증
-  });
+  const methods = useForm<CreateActivityBodyDto>({ mode: "onBlur" });
 
   const {
     register,
@@ -37,10 +35,35 @@ export default function ActivityPostPage() {
     ReservationAvailableTime[]
   >([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  // refs for focus
+  const reservationRef = useRef<HTMLDivElement>(null);
+  const bannerImageRef = useRef<HTMLDivElement>(null);
 
   const { mutate, isPending } = useCreateActivity();
 
   const onSubmit = (data: CreateActivityBodyDto) => {
+    setShowError(true);
+
+    if (reservationTimes.length === 0) {
+      reservationRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      reservationRef.current?.focus();
+      return;
+    }
+
+    if (!bannerImage) {
+      bannerImageRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      bannerImageRef.current?.focus();
+      return;
+    }
+
     const activityData: CreateActivityBodyDto = {
       title: data.title,
       category: data.category,
@@ -55,6 +78,7 @@ export default function ActivityPostPage() {
         endTime,
       })),
     };
+
     mutate(activityData, {
       onSuccess: () => {
         setModalIsOpen(true);
@@ -68,13 +92,13 @@ export default function ActivityPostPage() {
   }
 
   return (
-    <div className="flex flex-row justify-center mt-[14.4rem] mb-[14.4rem] ">
+    <div className="flex flex-row justify-center mt-[14.4rem] mb-[14.4rem]">
       <div className="mobile:hidden tablet:ml-[2.4rem]">
         <UserProfileSidebar page={"/profile/my-activities"} />
       </div>
       <FormProvider {...methods}>
         <form
-          className="flex flex-col w-[79.2rem] gap-[2.4rem] desktop:ml-[2.4rem] ml-[1.6rem] "
+          className="flex flex-col w-[79.2rem] gap-[2.4rem] desktop:ml-[2.4rem] ml-[1.6rem]"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-row gap-[51.9rem] tablet:gap-[15.5rem] mobile:gap-[6.9rem] items-center">
@@ -83,9 +107,7 @@ export default function ActivityPostPage() {
               ButtonType="profileSave"
               label={isPending ? "등록 중..." : "등록하기"}
               type="submit"
-              disabled={
-                !isValid || !bannerImage || reservationTimes.length === 0
-              }
+              disabled={!isValid}
             />
           </div>
 
@@ -138,7 +160,7 @@ export default function ActivityPostPage() {
             )}
           </div>
 
-          <label className="flex flex-col gap-[1.6rem] ">
+          <label className="flex flex-col gap-[1.6rem]">
             <div className="font-pretendard text-2xl font-bold">가격</div>
             <div>
               <input
@@ -176,24 +198,24 @@ export default function ActivityPostPage() {
             </div>
           </label>
 
-          <div>
+          <div ref={reservationRef} tabIndex={-1}>
             <ReservationTimeSelector
               reservationTimes={reservationTimes}
               setReservationTimes={setReservationTimes}
             />
-            {reservationTimes.length === 0 && (
+            {showError && reservationTimes.length === 0 && (
               <p className="text-red-500 text-sm mt-2">
                 최소 한 개 이상의 예약 가능한 시간을 추가해주세요.
               </p>
             )}
           </div>
 
-          <div>
+          <div ref={bannerImageRef} tabIndex={-1}>
             <BannerImageUploader
               bannerImage={bannerImage}
               setBannerImage={setBannerImage}
             />
-            {!bannerImage && (
+            {showError && !bannerImage && (
               <p className="text-red-500 text-sm mt-2">
                 배너 이미지를 등록해주세요.
               </p>
