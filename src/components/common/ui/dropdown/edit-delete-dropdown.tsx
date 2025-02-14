@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import UseOutsideClick from "@/hooks/use-outside-click";
 
 interface EditDeleteDropdownProps {
   EditRoute: string;
@@ -15,13 +16,16 @@ export default function EditDeleteDropdown({
 }: EditDeleteDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  // 외부 클릭 감지 훅 사용
+  const dropdownRef = UseOutsideClick(() => setIsOpen(false));
+
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
   };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={dropdownRef}>
       <button
         className="p-2 hover:bg-gray-100 rounded-full mobile:w-[3.2rem] mobile:h-[3.2rem]"
         onClick={toggleDropdown}
