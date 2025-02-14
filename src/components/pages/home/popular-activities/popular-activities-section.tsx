@@ -139,7 +139,7 @@ export default function PopularActivitiesSection() {
           ref={scrollContainerRef}
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
     tablet:w-full tablet:pl-[3rem] tablet:gap-[3.2rem]
-    mobile:w-full mobile:mb-[4.6rem] mobile:pl-[2rem] mobile:gap-[1.6rem]"
+    mobile:w-full mobile:mb-[4rem] mobile:pl-[2rem] mobile:gap-[1.6rem]"
         >
           {activities.map((activity, index) => {
             return (

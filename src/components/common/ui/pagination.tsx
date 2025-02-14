@@ -37,6 +37,7 @@ export default function Pagination({
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
           rounded-[1.5rem] border border-solid bg-white
+          mobile:w-[4rem] mobile:h-[4rem] mobile:p-[1.15rem]
           ${
             currentPage === 1
               ? "border-gray-300 cursor-not-allowed"
@@ -67,6 +68,7 @@ export default function Pagination({
             className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
         flex items-center justify-center rounded-[1.5rem]
         border border-solid border-green-dark hover:bg-green-dark
+        mobile:w-[4rem] mobile:h-[4rem]
          ${currentPage === page ? "bg-green-dark text-white" : "bg-white"}`}
           >
             <span className="font-regular text-2lg text-center">{page}</span>
@@ -83,6 +85,7 @@ export default function Pagination({
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
       rounded-[1.5rem] border border-solid bg-white
+      mobile:w-[4rem] mobile:h-[4rem] mobile:p-[1.15rem]
       ${
         currentPage === totalPages
           ? "border-gray-300 cursor-not-allowed"

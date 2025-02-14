@@ -41,28 +41,29 @@ export default function CategoryPriceFilter({
   return (
     <div
       className="flex-between gap-[1rem] w-[120rem] tablet:w-[69.6rem]
-    mobile:w-full"
+    mobile:w-[34.3rem]"
     >
       <div
         className="flex-between gap-[2.4rem] tablet:w-[52.2rem]
-      tablet:gap-[1.4rem] tablet:overflow-x-auto hide-scrollbar
-      mobile:w-full mobile:mx-[1.6rem]"
+      tablet:gap-[1.4rem] overflow-x-auto hide-scrollbar
+      mobile:w-[25.6rem] mobile:gap-[0.8rem] mobile:bg-custom-gradient"
       >
         {CATEGORY_TYPES.map((category, index) => (
           <Button
             key={index}
+            type="button"
             ButtonType="category"
             label={category}
             variant={category === selectedCategory ? "selected" : "category"}
             onClick={() => handleCategoryChange(category as CategoryType)}
-            // className="shrink-0"
+            className="shrink-0"
           />
         ))}
       </div>
 
       <div
         // onClick={() => setIsClicked(true)}
-        className="desktop:hidden w-[3.2rem] h-[3.2rem]"
+        className="desktop:hidden mobile:hidden w-[3.2rem] h-[3.2rem]"
       >
         <Image
           src="/image/btn_arrow.svg"
