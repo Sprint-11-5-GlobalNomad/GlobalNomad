@@ -1,16 +1,34 @@
 import { ActivityBasicDto } from "@/app/types/activity-schemas";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface AllActivitiesProps {
   activities: ActivityBasicDto[];
 }
 
 export default function AllActivities({ activities }: AllActivitiesProps) {
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    setWindowWidth(window.innerWidth);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const displayedActivities =
-    typeof window !== "undefined" && window.innerWidth <= 768
-      ? activities.slice(0, 4)
-      : activities;
+    windowWidth >= 1024
+      ? activities.slice(0, 8)
+      : windowWidth < 744
+        ? activities.slice(0, 4)
+        : activities;
 
   return (
     <ul

@@ -15,7 +15,10 @@ export default function ActivityImages() {
   if (isError) return <ErrorIndicator width={100} height={100} />;
 
   return (
-    <div className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]">
+    <div
+      className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]
+    tablet:w-[69.6rem] tablet:h-[31rem] tablet:mb-[3.2rem]"
+    >
       {subImageCount === 0 ? (
         <Image
           src={activity!.bannerImageUrl}
@@ -25,13 +28,16 @@ export default function ActivityImages() {
           className="rounded-[1.2rem] w-full h-full object-cover"
         />
       ) : (
-        <div className="w-[119.8rem] h-[53.4rem] flex gap-[0.8rem] mb-[8.5rem]">
+        <div
+          className="w-[119.8rem] h-[53.4rem] flex gap-[0.8rem] mb-[8.5rem]
+        tablet:w-[69.6rem] tablet:h-[31rem]"
+        >
           <Image
             src={activity!.bannerImageUrl}
             alt={`${activity?.title} 배너 이미지`}
             width={595}
             height={534}
-            className="rounded-[1.2rem]"
+            className="rounded-[1.2rem] tablet:w-[34.5rem] tablet:h-[31rem]"
           />
           <div
             className={`grid gap-[0.8rem] ${

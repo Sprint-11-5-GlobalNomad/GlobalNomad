@@ -26,27 +26,36 @@ export default function ActivityDetails() {
   const isRated = activity?.rating !== undefined && activity?.rating !== 0;
 
   return (
-    <div className="w-[120rem] flex justify-between">
-      <div>
+    <div
+      className="w-[120rem] flex justify-between
+    tablet:w-full tablet:justify-normal"
+    >
+      <div className="tablet:w-[48rem]">
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mb-[4rem]"
+        opacity-25 mb-[4rem] tablet:w-[46.9rem]"
         ></hr>
 
-        <div className="w-[79rem] h-auto flex flex-col justify-start">
+        <div
+          className="w-[79rem] h-auto flex flex-col justify-start
+        tablet:w-[45.5rem] tablet:ml-[2.4rem]"
+        >
           <h2 className="text-xl font-bold mb-[1.6rem]">체험 설명</h2>
-          <p className="text-lg font-regular opacity-75">
+          <p className="text-lg font-regular opacity-75 tablet:w-[42.8rem]">
             {activity?.description}
           </p>
         </div>
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[3.4rem] mb-[4rem]"
+        opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[46.9rem]"
         ></hr>
 
         {/* 지도 섹션 */}
-        <div className="w-[80rem] flex flex-col gap-[0.8rem]">
+        <div
+          className="w-[80rem] flex flex-col gap-[0.8rem]
+        tablet:w-[42.9rem] tablet:ml-[2.4rem]"
+        >
           <KakaoMaps address={activity?.address} />
           <div className="flex items-center gap-[0.2rem]">
             <Image
@@ -63,12 +72,15 @@ export default function ActivityDetails() {
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[4rem] mb-[4rem]"
+        opacity-25 mt-[4rem] mb-[4rem] tablet:w-[46.9rem]"
         ></hr>
 
-        <div className="w-[80rem]">
-          <div className="flex flex-col gap-[2.4rem] mb-[2.4rem]">
-            <h2 className="text-xl font-bold mb-[1.6rem]">후기</h2>
+        <div className="w-[80rem] tablet:w-[46.9rem]">
+          <div
+            className="flex flex-col gap-[2.4rem] mb-[2.4rem]
+            tablet:gap-[1.8rem] tablet:ml-[2.4rem]"
+          >
+            <h2 className="text-xl font-bold mb-[1.6rem] tablet:mb-0">후기</h2>
             <div className="flex items-center gap-[1.6rem]">
               <span className="text-[5rem] leading-[6rem] font-semiBold">
                 {activity?.rating}
@@ -95,7 +107,7 @@ export default function ActivityDetails() {
           ) : (
             <EmptyContent
               description="아직 등록한 리뷰가 없어요"
-              className="my-[30rem] w-[80rem]"
+              className="my-[10rem] w-[80rem] tablet:w-[46.9rem]"
             />
           )}
         </div>
