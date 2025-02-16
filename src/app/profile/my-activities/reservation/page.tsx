@@ -4,124 +4,71 @@ import React, { useRef, useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { useSearchParams } from "next/navigation";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
 import "@/styles/fullcalendar.css";
 import Image from "next/image";
 import ReservationModal from "./reservation-modal";
 import { EventClickArg } from "@fullcalendar/core";
-
-interface ActivityBasicDto {
-  //임시데이터사용
-  id: number;
-  name?: string;
-}
-
-interface Reservation {
-  id: number;
-  nickname: string;
-  status: "pending" | "confirmed" | "declined" | "completed";
-  count: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-}
+import {
+  useMonthlyReservationStats,
+  useMyActivities,
+} from "@/app/react-query/my-activity-state";
 
 export default function ReservationPage() {
-  const searchParams = useSearchParams();
   const calendarRef = useRef<FullCalendar | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedActivity, setSelectedActivity] = useState<number | null>(1);
+  const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
   const [events, setEvents] = useState<
     { title: string; start: string; classNames: string[] }[]
-  >([]);
-  const [selectedReservations, setSelectedReservations] = useState<
-    Reservation[]
   >([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
 
-  // 임시 데이터
-  const tempReservations: Reservation[] = [
-    {
-      id: 1,
-      nickname: "사용자1",
-      status: "pending",
-      count: 10,
-      date: "2025-02-09",
-      startTime: "10:00",
-      endTime: "11:00",
-    },
-    {
-      id: 2,
-      nickname: "사용자2",
-      status: "confirmed",
-      count: 5,
-      date: "2025-02-10",
-      startTime: "14:00",
-      endTime: "15:00",
-    },
-    {
-      id: 3,
-      nickname: "사용자3",
-      status: "pending",
-      count: 8,
-      date: "2025-02-11",
-      startTime: "16:00",
-      endTime: "17:00",
-    },
-    {
-      id: 4,
-      nickname: "사용자4",
-      status: "confirmed",
-      count: 6,
-      date: "2025-02-12",
-      startTime: "09:00",
-      endTime: "10:00",
-    },
-  ];
+  const year = currentDate.getFullYear().toString();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
 
+  // 🎯 체험 목록 불러오기
+  const {
+    data: activitiesData,
+    isLoading: isActivitiesLoading,
+    error: activitiesError,
+  } = useMyActivities();
+
+  const activities = activitiesData?.activities ?? [];
+
+  // 🎯 체험 선택 후 월별 예약 현황 불러오기
+  const {
+    data: monthlyReservations,
+    isLoading: isMonthlyLoading,
+    refetch,
+    error: reservationsError,
+  } = useMonthlyReservationStats(selectedActivity ?? 0, year, month, {
+    enabled: !!selectedActivity, // 체험 선택 후 API 호출
+  });
+
+  // 🎯 체험 선택 시 예약 데이터 갱신
+  const handleActivityChange = (activityId: number) => {
+    setSelectedActivity(activityId);
+    refetch();
+  };
+
+  // 🎯 월별 예약 데이터를 FullCalendar에 반영
   useEffect(() => {
-    const activityId = searchParams.get("activityId");
-    if (activityId) {
-      setSelectedActivity(Number(activityId));
+    if (monthlyReservations) {
+      setEvents(
+        monthlyReservations.map((reservation) => ({
+          title: `예약 ${reservation.reservations.pending}, 승인 ${reservation.reservations.confirmed}, 완료 ${reservation.reservations.completed}`,
+          start: reservation.date,
+          classNames: ["reservation-event"],
+        }))
+      );
+    } else {
+      setEvents([]);
     }
-  }, [searchParams]);
+  }, [monthlyReservations]);
 
-  // 이벤트 데이터 설정
-  useEffect(() => {
-    setEvents(
-      tempReservations.map((reservation) => ({
-        title: `${reservation.nickname} (${reservation.count})`,
-        start: reservation.date,
-        classNames: [reservation.status],
-      }))
-    );
-  }, []);
-
-  // 예약이 지나면 자동으로 완료로 변경
-  useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    setSelectedReservations((prev) =>
-      prev.map((res) =>
-        res.date < today ? { ...res, status: "completed" } : res
-      )
-    );
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      document.querySelectorAll(".fc-daygrid-day").forEach((day) => {
-        const hasEvent = day.querySelector(".fc-event");
-        if (hasEvent) {
-          day.classList.add("has-event");
-        }
-      });
-    }, 500);
-  }, [events]);
-
-  // 달력 이동
+  // 🎯 달력 이전/다음 월 이동
   const handlePrev = () => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -150,18 +97,35 @@ export default function ReservationPage() {
           예약 현황
         </h1>
 
-        {/* 드롭다운 */}
+        {/* 드롭다운 - 체험 선택 */}
         <div className="mb-[3rem] relative w-full">
           <label className="absolute top-[-0.6rem] left-3 px-1 text-sm font-semibold text-nomad-black bg-white z-10">
             체험명
           </label>
           <div className="relative border border-gray-300 rounded-md">
-            <SelectDropdown
-              options={["함께 배우면 즐거운 스트릿 댄스"]}
-              description="함께 배우면 즐거운 스트릿 댄스"
-              onSelect={() => {}}
-              className="p-3"
-            />
+            {isActivitiesLoading ? (
+              <p className="text-center p-3 text-gray-500">
+                체험 정보를 불러오는 중...
+              </p>
+            ) : activities.length > 0 ? (
+              <SelectDropdown
+                options={activities.map((activity) => ({
+                  value: activity.id,
+                  label: activity.title,
+                }))}
+                description={
+                  selectedActivity
+                    ? activities.find((a) => a.id === selectedActivity)?.title
+                    : "체험을 선택하세요"
+                }
+                onSelect={(value) => handleActivityChange(value)}
+                className="p-3"
+              />
+            ) : (
+              <p className="text-center p-3 text-gray-500">
+                등록된 체험이 없습니다.
+              </p>
+            )}
           </div>
         </div>
 
@@ -181,28 +145,51 @@ export default function ReservationPage() {
           </button>
         </div>
 
-        {/* FullCalendar */}
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          events={events}
-          eventClick={(info: EventClickArg) => {
-            setSelectedDate(info.event.startStr);
-            const filteredReservations = tempReservations
-              .filter((res) => res.date === info.event.startStr)
-              .sort((a, b) => b.id - a.id);
-            setSelectedReservations(filteredReservations);
-            setModalOpen(true);
-          }}
-          locale="en"
-          headerToolbar={false}
-          height="auto"
-          aspectRatio={1.35}
-          dayMaxEventRows={true}
-          fixedWeekCount={false}
-          showNonCurrentDates={false}
-        />
+        {/* FullCalendar - 예약 현황 */}
+        {selectedActivity === null ? (
+          <p className="text-center text-gray-500">
+            체험을 선택하면 예약 현황이 표시됩니다.
+          </p>
+        ) : isMonthlyLoading ? (
+          <p className="text-center text-gray-500">
+            예약 정보를 불러오는 중...
+          </p>
+        ) : reservationsError ? (
+          <p className="text-center text-red-500">
+            월별 예약 현황을 가져오는 중 오류가 발생했습니다.
+          </p>
+        ) : events.length > 0 ? (
+          <FullCalendar
+            ref={calendarRef}
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={events}
+            eventClick={(info: EventClickArg) => {
+              setSelectedDate(info.event.startStr);
+              setModalOpen(true);
+            }}
+            locale="ko"
+            headerToolbar={false}
+            height="auto"
+            aspectRatio={1.35}
+            dayMaxEventRows={true}
+            fixedWeekCount={false}
+            showNonCurrentDates={false}
+          />
+        ) : (
+          <div className="flex flex-col items-center mt-10">
+            <Image
+              src="/image/empty.svg"
+              alt="등록된 체험 없음"
+              className="w-40 h-40"
+              width={160}
+              height={160}
+            />
+            <p className="text-gray-500 text-lg mt-4">
+              아직 등록된 체험이 없어요
+            </p>
+          </div>
+        )}
       </div>
 
       {modalOpen && (
@@ -211,12 +198,6 @@ export default function ReservationPage() {
           onClose={() => setModalOpen(false)}
           activityId={selectedActivity!}
           selectedDate={selectedDate}
-          reservations={selectedReservations}
-          onUpdateStatus={(id: number, status: "confirmed" | "declined") => {
-            setSelectedReservations((prev) =>
-              prev.map((res) => (res.id === id ? { ...res, status } : res))
-            );
-          }}
         />
       )}
     </div>

@@ -90,30 +90,39 @@ export default function ReservationModal({
         </div>
 
         {/* 탭 네비게이션 */}
-        <div className="flex border-b mb-4 text-lg font-semibold">
-          {["pending", "confirmed", "declined"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() =>
-                setActiveTab(tab as "pending" | "confirmed" | "declined")
-              }
-              className={`flex pl-[1.2rem] py-3 text-start ${
-                activeTab === tab
-                  ? "border-b-2 border-black text-nomad-black"
-                  : "text-gray-400"
-              }`}
-            >
-              {tab === "pending"
-                ? `신청 ${filteredReservations.filter((r) => r.status === "pending").length}`
-                : tab === "confirmed"
-                  ? `승인 ${filteredReservations.filter((r) => r.status === "confirmed").length}`
-                  : `거절 ${filteredReservations.filter((r) => r.status === "declined").length}`}
-            </button>
-          ))}
+        <div className="relative border-b border-gray-200 mb-4 text-lg font-semibold">
+          <div className="flex">
+            {["pending", "confirmed", "declined"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() =>
+                  setActiveTab(tab as "pending" | "confirmed" | "declined")
+                }
+                className={`relative py-3 px-4 text-[2rem] transition-colors duration-200 ${
+                  activeTab === tab
+                    ? "text-nomad-black font-bold"
+                    : "text-gray-400"
+                }`}
+              >
+                {tab === "pending"
+                  ? `신청 ${filteredReservations.filter((r) => r.status === "pending").length}`
+                  : tab === "confirmed"
+                    ? `승인 ${filteredReservations.filter((r) => r.status === "confirmed").length}`
+                    : `거절 ${filteredReservations.filter((r) => r.status === "declined").length}`}
+
+                {activeTab === tab && (
+                  <span className="absolute bottom-0 left-0 w-full h-[3px] bg-nomad-black z-10"></span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* 전체 밑줄 */}
+          <span className="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200 z-0"></span>
         </div>
 
         {/* 예약 날짜 */}
-        <div className="text-left text-nomad-black font-semi-bold text-[2rem] mb-[1.6rem] px-4">
+        <div className="text-left text-nomad-black font-semi-bold text-[2rem] mb-[1.6rem] px-4 mt-[2.7rem]">
           예약 날짜
         </div>
         <div className="text-left text-nomad-black font-regular text-[2rem] mb-3 px-4">
@@ -122,7 +131,7 @@ export default function ReservationModal({
 
         {/* 시간 선택 */}
         <div className="mb-4 px-4">
-          <select className="border p-2 w-full h-[5.6rem] rounded-md bg-gray-100 text-nomad-black">
+          <select className="border p-2 w-full h-[5.6rem] rounded-md bg-gray-100 text-nomad-black text-[1.6rem] font-regular">
             {timeSlots.map((slot) => (
               <option key={slot} value={slot}>
                 {slot}
