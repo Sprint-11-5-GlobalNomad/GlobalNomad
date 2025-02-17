@@ -81,7 +81,7 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
       <Script
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
-        strategy="beforeInteractive"
+        // strategy="beforeInteractive"
         onLoad={() => console.log("카카오 맵 스크립트 로드 완료")}
       />
       <div id="map" className="w-[79rem] h-[45rem] rounded-[1.6rem]"></div>

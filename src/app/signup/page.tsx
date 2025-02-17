@@ -62,12 +62,7 @@ export default function SignupPage() {
         isConfirmPasswordValid
       )
     );
-  }, [
-    watch("email"),
-    watch("nickname"),
-    watch("password"),
-    watch("confirmPassword"),
-  ]);
+  }, [watch]);
 
   const password = watch("password");
 
@@ -167,7 +162,7 @@ export default function SignupPage() {
     } else {
       console.error("카카오 로그인 실패");
     }
-  }, []);
+  }, [kakaoSignUp, router]);
 
   return (
     <div>
