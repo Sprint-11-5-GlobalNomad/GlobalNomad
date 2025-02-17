@@ -120,7 +120,7 @@ export default function ReservationTimeSelector({
           <div className="flex flex-row gap-[2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
             <DateSelector
               selectedDate={newReservationTime.date}
-              onDateChange={(formattedDate, rawDate) =>
+              onDateChange={(rawDate) =>
                 setNewReservationTime({ ...newReservationTime, date: rawDate })
               }
             />
