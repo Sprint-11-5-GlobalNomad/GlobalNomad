@@ -13,6 +13,7 @@ import BannerImageUploader from "../../../../components/pages/activity-post-edit
 import IntroImagesUploader from "../../../../components/pages/activity-post-edit/intro-image-uploader";
 import { useCreateActivity } from "@/app/react-query/activity-state";
 import MessageModal from "@/components/common/ui/modal/message-modal";
+import KakaoMapAddress from "@/components/pages/activity-post-edit/kakao-map-address";
 
 type ReservationAvailableTime = {
   date: string;
@@ -198,19 +199,7 @@ export default function ActivityPostPage() {
 
           <label className="flex flex-col gap-[1.6rem]">
             <div className="font-pretendard text-2xl font-bold">주소</div>
-            <div>
-              <input
-                type="text"
-                placeholder="주소를 입력해주세요."
-                className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                {...register("address", { required: "주소를 입력해주세요." })}
-              />
-              {errors.address && (
-                <p className="text-red-500 text-sm mt-2">
-                  {errors.address.message}
-                </p>
-              )}
-            </div>
+            <KakaoMapAddress />
           </label>
 
           <div ref={reservationRef} tabIndex={-1}>
