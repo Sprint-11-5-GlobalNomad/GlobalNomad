@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { FiCalendar } from "react-icons/fi"; // 캘린더 아이콘
+import Image from "next/image";
 
 type DateSelectorProps = {
   selectedDate: string;
@@ -49,7 +49,14 @@ const DateSelector: React.FC<DateSelectorProps> = ({
         </span>
 
         {/* 달력 아이콘 */}
-        <FiCalendar className="absolute right-[1.2rem] text-gray-500 text-2xl" />
+        <div className="absolute right-[1.2rem] mobile:right-[0.8rem] text-gray-500 text-2xl mobile:w-[2rem] mobile:h-[2rem]">
+          <Image
+            src="/image/mini-calendar.svg"
+            alt="달력 아이콘"
+            width={24}
+            height={24}
+          />
+        </div>
 
         {/* ✅ input을 absolute + full size로 변경해 어디를 클릭해도 작동하도록 수정 */}
         <input
