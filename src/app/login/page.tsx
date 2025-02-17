@@ -45,7 +45,7 @@ export default function LoginPage() {
     const isEmailValid = emailRegex.test(email); // 이메일 유효성 체크
     const isPasswordValid = password.length >= 8; // 비밀번호 유효성 체크
     setIsButtonDisabled(!(isEmailValid && isPasswordValid)); // 둘 다 유효하면 버튼 활성화
-  }, [watch("email"), watch("password")]);
+  }, [watch]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
