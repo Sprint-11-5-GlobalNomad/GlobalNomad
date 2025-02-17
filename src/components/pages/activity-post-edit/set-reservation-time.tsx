@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TimeDropdown from "./time-dropdown";
 import Button from "@/components/common/ui/button";
 import { TIME_TABLE } from "../../../app/profile/my-activities/post/_constants/constants";
@@ -31,7 +31,28 @@ export default function ReservationTimeSelector({
       endTime: "",
     });
 
+  const [filteredEndTimeOptions, setFilteredEndTimeOptions] =
+    useState<string[]>(TIME_TABLE);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // 시작 시간 선택 시, 종료 시간 옵션 필터링
+  useEffect(() => {
+    if (newReservationTime.startTime) {
+      const startTimeIndex = TIME_TABLE.indexOf(newReservationTime.startTime);
+      const filteredOptions = TIME_TABLE.slice(startTimeIndex + 1);
+      setFilteredEndTimeOptions(filteredOptions);
+
+      if (
+        newReservationTime.endTime &&
+        !filteredOptions.includes(newReservationTime.endTime)
+      ) {
+        setNewReservationTime((prev) => ({ ...prev, endTime: "" }));
+      }
+    } else {
+      setFilteredEndTimeOptions(TIME_TABLE);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newReservationTime.startTime]);
 
   const addReservationTime = () => {
     if (
@@ -125,7 +146,7 @@ export default function ReservationTimeSelector({
                   종료 시간
                 </label>
                 <TimeDropdown
-                  options={TIME_TABLE}
+                  options={filteredEndTimeOptions} // 필터링된 옵션 전달
                   description="0:00"
                   selectedOption={newReservationTime.endTime}
                   onSelect={(endTime) =>
@@ -164,7 +185,6 @@ export default function ReservationTimeSelector({
                   : ""
               }
             />
-
             <div className="flex flex-row gap-[1.2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
               <input
                 type="text"
@@ -177,7 +197,6 @@ export default function ReservationTimeSelector({
                   ~
                 </div>
               </div>
-
               <input
                 type="text"
                 className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
