@@ -3,7 +3,7 @@ import Image from "next/image";
 
 type DateSelectorProps = {
   selectedDate: string;
-  onDateChange: (formattedDate: string, rawDate: string) => void;
+  onDateChange: (rawDate: string) => void;
 };
 
 const DateSelector: React.FC<DateSelectorProps> = ({
@@ -22,12 +22,8 @@ const DateSelector: React.FC<DateSelectorProps> = ({
     const dateValue = e.target.value;
     if (!dateValue) return;
 
-    const [year, month, day] = dateValue.split("-");
-    const shortYear = year.slice(2);
-    const formattedDate = `${shortYear}/${month}/${day}`;
-
     setRawDate(dateValue);
-    onDateChange(formattedDate, dateValue);
+    onDateChange(dateValue);
   };
 
   return (
