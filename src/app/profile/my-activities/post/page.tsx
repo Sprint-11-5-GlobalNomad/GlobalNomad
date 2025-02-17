@@ -171,7 +171,14 @@ export default function ActivityPostPage() {
                 className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
                 {...register("price", {
                   required: "가격을 입력해주세요.",
-                  min: { value: 1, message: "가격은 1 이상이어야 합니다." },
+                  min: {
+                    value: 1000,
+                    message: "가격은 1000원 이상이어야 합니다.",
+                  },
+                  max: {
+                    value: 1000000,
+                    message: "가격은 100만원 이하이어야 합니다.",
+                  },
                   valueAsNumber: true,
                 })}
               />
