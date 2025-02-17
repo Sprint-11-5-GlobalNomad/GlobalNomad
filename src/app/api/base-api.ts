@@ -48,8 +48,9 @@ instance.interceptors.response.use(
         console.log("🔄 토큰 만료됨, refreshToken으로 재발급 시도");
 
         // ✅ 리프레시 토큰으로 새 accessToken 발급
-        const { accessToken } = await refreshTokenAPI();
+        const { accessToken, refreshToken } = await refreshTokenAPI();
         localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
 
         // ✅ 대기 중이던 요청들 처리
         refreshSubscribers.forEach((callback) => callback(accessToken));

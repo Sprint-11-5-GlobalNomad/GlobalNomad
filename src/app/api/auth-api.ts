@@ -39,7 +39,7 @@ export const refreshToken = async () => {
   const response = await instance.post<{
     refreshToken: string;
     accessToken: string;
-  }>(`/auth/tokens`, { refreshToken: token });
+  }>(`/auth/tokens`);
 
   return response.data;
 };
