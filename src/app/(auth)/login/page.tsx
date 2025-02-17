@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useLogin } from "../react-query/oauth-state";
 import Image from "next/image";
 import Link from "next/link";
-import MessageModal from "../../components/common/ui/modal/message-modal";
-import Button from "../../components/common/ui/button";
 import { AxiosError } from "axios";
+import { useLogin } from "@/app/react-query/oauth-state";
+import Button from "@/components/common/ui/button";
+import MessageModal from "@/components/common/ui/modal/message-modal";
 // import axios,{ useSignInWithOauth } from "../../../react-query/oauth-state";
 
 interface LoginFormInputs {
@@ -45,7 +45,7 @@ export default function LoginPage() {
     const isEmailValid = emailRegex.test(email); // 이메일 유효성 체크
     const isPasswordValid = password.length >= 8; // 비밀번호 유효성 체크
     setIsButtonDisabled(!(isEmailValid && isPasswordValid)); // 둘 다 유효하면 버튼 활성화
-  }, [watch("email"), watch("password")]);
+  }, [watch]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -83,7 +83,7 @@ export default function LoginPage() {
     if (token) {
       router.replace("/"); // 로그인 상태면 메인 페이지로 리디렉션
     }
-  }, []);
+  }, [router]);
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_REST_API_KEY&redirect_uri=http://localhost:3000/auth/kakao/callback&response_type=code`;
 

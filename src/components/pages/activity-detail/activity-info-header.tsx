@@ -26,7 +26,7 @@ export default function ActivityInfoHeader() {
   return (
     <div
       className="w-[120rem] flex-between mt-[14.8rem] mb-[2.5rem]
-    tablet:w-[69.6rem]"
+    tablet:w-[72rem]"
     >
       <div className="flex flex-col justify-start gap-[1rem]">
         <span className="font-regular text-md text-nomad-black opacity-75">

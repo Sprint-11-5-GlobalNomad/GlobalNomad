@@ -9,6 +9,7 @@ import MessageModal from "@/components/common/ui/modal/message-modal";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import BookingModal from "./booking-modal";
 
 export default function BookingSection() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ export default function BookingSection() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const handleDateChange = (day: Date) => {
     setSelectedDate(day);
@@ -92,6 +94,16 @@ export default function BookingSection() {
                 onSelectDate={handleDateChange}
               />
             </div>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsCalendarOpen(true);
+              }}
+              className="desktop:hidden text-lg font-semiBold cursor-pointer mt-[0.5rem]"
+            >
+              날짜 선택하기
+            </button>
           </div>
         </div>
 
@@ -106,7 +118,7 @@ export default function BookingSection() {
                 <div
                   className="flex flex-col gap-[0.8rem]
               border-b border-solid border-gray-300 pb-[1.6rem]
-              tablet:w-full"
+              tablet:w-full tablet:hidden"
                 >
                   <div className="flex flex-col gap-[1.4rem]">
                     <h3 className="text-2lg font-bold">예약 가능한 시간</h3>
@@ -117,6 +129,7 @@ export default function BookingSection() {
                             <Button
                               key={time.id}
                               ButtonType="availableTime"
+                              type="button"
                               variant={
                                 selectedTime === time.id
                                   ? "selected"
@@ -213,6 +226,20 @@ export default function BookingSection() {
           </div>
         </div>
       </form>
+
+      {isCalendarOpen && (
+        <BookingModal
+          schedules={schedules}
+          selectedDate={selectedDate}
+          handleDateChange={handleDateChange}
+          availableTimes={availableTimes}
+          selectedTime={selectedTime}
+          onSelectTime={setSelectedTime}
+          handleBooking={handleBooking}
+          onClose={() => setIsCalendarOpen(false)}
+        />
+      )}
+
       {isModalOpen && (
         <MessageModal
           onClose={() => setIsModalOpen(false)}

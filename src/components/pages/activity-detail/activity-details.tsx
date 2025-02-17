@@ -27,13 +27,13 @@ export default function ActivityDetails() {
 
   return (
     <div
-      className="w-[120rem] flex justify-between
-    tablet:w-full tablet:justify-normal"
+      className="w-[120rem] flex justify-center
+    tablet:w-full tablet:mr-[2rem]"
     >
-      <div className="tablet:w-[48rem]">
+      <div className="tablet:w-[49.3rem]">
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mb-[4rem] tablet:w-[46.9rem]"
+        opacity-25 mb-[4rem] tablet:w-[49.3rem]"
         ></hr>
 
         <div
@@ -48,7 +48,7 @@ export default function ActivityDetails() {
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[46.9rem]"
+        opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[49.3rem]"
         ></hr>
 
         {/* 지도 섹션 */}
@@ -72,10 +72,10 @@ export default function ActivityDetails() {
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[4rem] mb-[4rem] tablet:w-[46.9rem]"
+        opacity-25 mt-[4rem] mb-[4rem] tablet:w-[49.3rem]"
         ></hr>
 
-        <div className="w-[80rem] tablet:w-[46.9rem]">
+        <div className="w-[80rem] tablet:w-[49.3rem]">
           <div
             className="flex flex-col gap-[2.4rem] mb-[2.4rem]
             tablet:gap-[1.8rem] tablet:ml-[2.4rem]"
@@ -107,7 +107,7 @@ export default function ActivityDetails() {
           ) : (
             <EmptyContent
               description="아직 등록한 리뷰가 없어요"
-              className="my-[10rem] w-[80rem] tablet:w-[46.9rem]"
+              className="my-[10rem] w-[80rem] tablet:w-[49.3rem]"
             />
           )}
         </div>

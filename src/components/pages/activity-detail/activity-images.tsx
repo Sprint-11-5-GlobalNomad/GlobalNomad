@@ -17,7 +17,7 @@ export default function ActivityImages() {
   return (
     <div
       className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]
-    tablet:w-[69.6rem] tablet:h-[31rem] tablet:mb-[3.2rem]"
+    tablet:w-[72rem] tablet:h-[31rem] tablet:mb-[3.2rem]"
     >
       {subImageCount === 0 ? (
         <Image
@@ -30,14 +30,14 @@ export default function ActivityImages() {
       ) : (
         <div
           className="w-[119.8rem] h-[53.4rem] flex gap-[0.8rem] mb-[8.5rem]
-        tablet:w-[69.6rem] tablet:h-[31rem]"
+        tablet:w-[72rem] tablet:h-[31rem] tablet:mb-[3.2rem]"
         >
           <Image
             src={activity!.bannerImageUrl}
             alt={`${activity?.title} 배너 이미지`}
             width={595}
             height={534}
-            className="rounded-[1.2rem] tablet:w-[34.5rem] tablet:h-[31rem]"
+            className="rounded-[1.2rem] tablet:w-[40vw] tablet:h-[31rem]"
           />
           <div
             className={`grid gap-[0.8rem] ${
