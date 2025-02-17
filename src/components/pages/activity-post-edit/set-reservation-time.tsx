@@ -35,6 +35,8 @@ export default function ReservationTimeSelector({
     useState<string[]>(TIME_TABLE);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const filterStartTimeOptions = TIME_TABLE.slice(0, -1);
+
   // 시작 시간 선택 시, 종료 시간 옵션 필터링
   useEffect(() => {
     if (newReservationTime.startTime) {
@@ -128,7 +130,7 @@ export default function ReservationTimeSelector({
                   시작 시간
                 </label>
                 <TimeDropdown
-                  options={TIME_TABLE}
+                  options={filterStartTimeOptions}
                   description="0:00"
                   selectedOption={newReservationTime.startTime}
                   onSelect={(startTime) =>
