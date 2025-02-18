@@ -1,30 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchMonthlyReservationStats } from "@/app/api/my-activities-api";
 
-async function fetchSixMonthsStats(activityId: number) {
-  const promises = [];
+async function fetchOneMonthStats(activityId: number) {
   const currentDate = new Date();
+  const year = currentDate.getFullYear().toString();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
 
-  for (let i = 0; i < 6; i++) {
-    const date = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth() - i,
-      1
-    );
-    const year = date.getFullYear().toString();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-
-    promises.push(fetchMonthlyReservationStats(activityId, year, month));
+  try {
+    const stats = await fetchMonthlyReservationStats(activityId, year, month);
+    return stats;
+  } catch (error) {
+    console.error("Failed to fetch reservation stats:", error);
+    return [];
   }
-
-  const results = await Promise.all(promises);
-  return results.flat();
 }
 
 export function useCanDeleteActivity(activityId: number) {
   const { data: canDelete, isLoading } = useQuery({
-    queryKey: ["reservationStats", activityId, "6months"],
-    queryFn: () => fetchSixMonthsStats(activityId),
+    queryKey: ["reservationStats", activityId, "1month"],
+    queryFn: () => fetchOneMonthStats(activityId),
     select: (stats) =>
       !stats.some(
         (stat: { reservations: { pending: number; confirmed: number } }) =>
