@@ -590,3 +590,15 @@ template {
   background: #7d7986;
   border-radius: 40px;
 }
+
+@layer utilities {
+  .animate-shimmer {
+    @apply animate-[shimmer_1.5s_infinite_linear];
+  }
+}
+
+@layer components {
+  .skeleton {
+    @apply animate-shimmer bg-gradient-custom bg-custom;
+  }
+}
