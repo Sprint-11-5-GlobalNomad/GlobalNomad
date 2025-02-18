@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import BookingModal from "./booking-modal";
 import { formatTwoDigits } from "@/utils/date-utils";
-import { formatTime } from "@/utils/time-utils";
+import { ScheduleResponseDto } from "@/app/types/schedule-schemas";
 
 export default function BookingSection() {
   const { id } = useParams();
@@ -40,13 +40,26 @@ export default function BookingSection() {
   const handleIncrease = () => setHeadCount((prev) => prev + 1);
   const handleDecrease = () => setHeadCount((prev) => Math.max(prev - 1, 1));
 
-  const availableTimes = selectedDate
-    ? schedules?.filter(
-        (schedule) =>
-          new Date(schedule.date).toLocaleDateString("sv-SE") ===
-          selectedDate.toLocaleDateString("sv-SE")
-      )
+  const availableTimes: ScheduleResponseDto[] = selectedDate
+    ? (schedules ?? [])
+        ?.filter(
+          (schedule) =>
+            new Date(schedule.date).toLocaleDateString("sv-SE") ===
+            selectedDate.toLocaleDateString("sv-SE")
+        )
+        .flatMap((schedule) => ({
+          date: schedule.date,
+          times: schedule.times.map((time) => ({
+            id: time.id,
+            startTime: time.startTime,
+            endTime: time.endTime,
+          })),
+        }))
     : [];
+
+  const selectedSchedule = availableTimes?.find((schedule) =>
+    schedule.times.some((time) => time.id === selectedTime)
+  );
 
   const totalPrice = (activity?.price ?? 1) * headCount;
 
@@ -105,7 +118,7 @@ export default function BookingSection() {
               className="desktop:hidden text-lg font-semiBold cursor-pointer mt-[0.5rem]"
             >
               {selectedTime > 0
-                ? `${formatTwoDigits(String(selectedDate))} ${formatTime(String(selectedTime))}`
+                ? `${formatTwoDigits(String(selectedDate))} ${selectedSchedule?.times[0].startTime} ~ ${selectedSchedule?.times[0].endTime}`
                 : "날짜 선택하기"}
             </button>
           </div>

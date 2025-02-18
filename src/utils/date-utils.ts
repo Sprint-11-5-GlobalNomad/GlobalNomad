@@ -16,9 +16,3 @@ export function formatTwoDigits(dateString: string) {
     .replace(/\./g, "")
     .replace(/ /g, "/");
 }
-
-export function formatTime(time: number) {
-  const startHour = time;
-  const endHour = time + 1;
-  return `${String(startHour).padStart(2, "0")}:00~${String(endHour).padStart(2, "0")}:00`;
-}
