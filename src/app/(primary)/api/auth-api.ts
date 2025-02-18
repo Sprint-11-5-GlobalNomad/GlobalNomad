@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   OauthApp,
   SignInWithOauthRequestBody,
@@ -36,10 +37,16 @@ export const refreshToken = async () => {
   const token = localStorage.getItem("refreshToken");
   if (!token) throw new Error("Refresh token이 없습니다.");
 
-  const response = await instance.post<{
+  const response = await axios.post<{
     refreshToken: string;
     accessToken: string;
-  }>(`/auth/tokens`);
+  }>(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/auth/tokens`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
 
   return response.data;
 };
