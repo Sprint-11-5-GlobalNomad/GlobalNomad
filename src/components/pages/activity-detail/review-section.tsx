@@ -22,7 +22,10 @@ export default function ReviewSection() {
       <ul className="flex flex-col gap-[2.4rem] mb-[7.2rem]">
         {data?.reviews.map((review, index) => (
           <div key={review.id}>
-            <li className="flex items-start gap-[1.6rem] mb-[2.4rem]">
+            <li
+              className="flex items-start gap-[1.6rem] mb-[2.4rem]
+            tablet:ml-[2.4rem]"
+            >
               <div>
                 <Image
                   src={
@@ -34,7 +37,7 @@ export default function ReviewSection() {
                   className="object-cover"
                 />
               </div>
-              <div className="flex flex-col gap-[0.8rem]">
+              <div className="flex flex-col gap-[0.8rem] tablet:w-[36.8rem]">
                 <div className="flex items-center gap-[0.8rem]">
                   <span className="text-lg font-semiBold">
                     {review.user.nickname}
@@ -54,13 +57,13 @@ export default function ReviewSection() {
             {index % 3 !== 2 && (
               <hr
                 className="w-[80rem] h-[0.1rem] bg-nomad-black
-        opacity-25"
+        opacity-25 tablet:w-[46.9rem]"
               />
             )}
           </div>
         ))}
       </ul>
-      <div className="flex gap-[1rem]">
+      <div className="flex gap-[1rem] tablet:translate-x-1/2">
         <Pagination
           totalPages={totlaPages}
           currentPage={page}

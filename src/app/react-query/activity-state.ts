@@ -8,7 +8,7 @@ import {
   fetchActivityReviews,
   fetchAvailableSchedules,
   uploadActivityImage,
-} from "../api/activities-api";
+} from "../(primary)/api/activities-api";
 import {
   ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,

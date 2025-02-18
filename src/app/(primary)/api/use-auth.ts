@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchMyDetails } from "../api/user-api";
+import { fetchMyDetails } from "./user-api";
 import { removeTokens } from "@/utils/remove-tokens";
 
 // ✅ 유저 타입 정의

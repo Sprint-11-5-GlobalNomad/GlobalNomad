@@ -11,7 +11,7 @@ import { ErrorIndicator } from "@/components/common/layout/indicator/error-indic
 import { CategoryType, SortType } from "@/app/types/activity-schemas";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
-const SIZE = 8;
+const SIZE = 9;
 
 export default function AllActivitiesSection() {
   const [page, setPage] = useState(1);

@@ -1,5 +1,5 @@
 import { instance } from "./base-api";
-import { NotificationDto } from "../types/notification-schemas";
+import { NotificationDto } from "../../types/notification-schemas";
 
 // 내 알림 리스트 조회
 export const fetchNotifications = async (

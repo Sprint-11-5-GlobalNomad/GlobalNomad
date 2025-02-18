@@ -8,9 +8,9 @@ import {
   CATEGORY_TYPES,
   CreateActivityBodyDto,
 } from "@/app/types/activity-schemas";
-import ReservationTimeSelector from "../../../../components/pages/activity-post-edit/set-reservation-time";
-import BannerImageUploader from "../../../../components/pages/activity-post-edit/banner-image-uploader";
-import IntroImagesUploader from "../../../../components/pages/activity-post-edit/intro-image-uploader";
+import ReservationTimeSelector from "../../../../../components/pages/activity-post-edit/set-reservation-time";
+import BannerImageUploader from "../../../../../components/pages/activity-post-edit/banner-image-uploader";
+import IntroImagesUploader from "../../../../../components/pages/activity-post-edit/intro-image-uploader";
 import { useCreateActivity } from "@/app/react-query/activity-state";
 import MessageModal from "@/components/common/ui/modal/message-modal";
 import KakaoMapAddress from "@/components/pages/activity-post-edit/kakao-map-address";
