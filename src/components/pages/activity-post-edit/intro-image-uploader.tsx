@@ -42,7 +42,7 @@ export default function IntroImagesUploader({
         <label className="cursor-pointer w-[18rem] tablet:w-[20.4rem] mobile:w-[16.7rem] h-[18rem] tablet:h-[20.4rem] mobile:h-[16.7rem]">
           <input
             type="file"
-            accept="image/*"
+            accept="image/png, image/jpg"
             multiple
             onChange={handleIntroUpload}
             className="hidden"

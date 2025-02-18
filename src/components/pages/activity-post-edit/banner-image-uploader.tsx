@@ -65,7 +65,7 @@ export default function BannerImageUploader({
           <label className="cursor-pointer w-[18rem] tablet:w-[20.4rem] mobile:w-[16.7rem] h-[18rem] tablet:h-[20.4rem] mobile:h-[16.7rem]">
             <input
               type="file"
-              accept="image/*"
+              accept="image/png, image/jpg"
               onChange={handleBannerUpload}
               className="hidden"
             />
@@ -78,6 +78,9 @@ export default function BannerImageUploader({
           </label>
         )}
       </div>
+      <p className="text-sm text-gray-500">
+        *이미지는 png, jpg, jpeg 확장자만 등록 가능합니다.
+      </p>
     </div>
   );
 }
