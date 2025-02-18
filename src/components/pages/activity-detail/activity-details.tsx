@@ -5,7 +5,7 @@ import BookingSection from "./booking-section";
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import ReviewSection from "./review-section";
-import { useAuth } from "@/app/api/use-auth";
+import { useAuth } from "@/app/(primary)/api/use-auth";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 import KakaoMaps from "./kakomaps/kakaomaps";
 

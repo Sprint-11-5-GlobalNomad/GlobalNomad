@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/app/api/use-auth";
+import { useAuth } from "@/app/(primary)/api/use-auth";
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
 import EditDeleteDropdown from "@/components/common/ui/dropdown/edit-delete-dropdown";

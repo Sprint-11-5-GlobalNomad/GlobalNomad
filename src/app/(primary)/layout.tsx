@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import Footer from "@/components/common/layout/footer";
-import QueryProvider from "./react-query/query-provider";
+import QueryProvider from "../react-query/query-provider";
 import Navbar from "@/components/common/layout/navbar";
 
 export const metadata: Metadata = {

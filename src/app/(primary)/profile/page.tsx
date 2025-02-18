@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
-import { useUpdateMyDetails, useMyDetails } from "../react-query/user-state";
+import { useUpdateMyDetails, useMyDetails } from "../../react-query/user-state";
 import { uploadProfileImage } from "../api/user-api";
 import { useQueryClient } from "@tanstack/react-query";
 
