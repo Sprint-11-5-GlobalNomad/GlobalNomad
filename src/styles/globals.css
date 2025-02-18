@@ -567,4 +567,38 @@ template {
   .hide-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari, and Opera */
   }
+  .bg-custom-gradient {
+    background: linear-gradient(
+      270deg,
+      #fafbfc 0%,
+      #fafbfc 71.87%,
+      rgba(250, 251, 252, 0) 100%
+    );
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin-right: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #7d7986;
+  border-radius: 40px;
+}
+
+@layer utilities {
+  .animate-shimmer {
+    @apply animate-[shimmer_1.5s_infinite_linear];
+  }
+}
+
+@layer components {
+  .skeleton {
+    @apply animate-shimmer bg-gradient-custom bg-custom;
+  }
 }

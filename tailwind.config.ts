@@ -9,6 +9,22 @@ export default {
   safelist: ["text-blue", "text-red", "text-green"],
   theme: {
     extend: {
+      animation: {
+        shimmer: "shimmer 1.5s infinite linear",
+      },
+      keyframes: {
+        shimmer: {
+          "0%": { backgroundPosition: "200%" },
+          100: { backgroundPosition: "-200%" },
+        },
+      },
+      backgroundImage: {
+        "gradient-custom":
+          "linear-gradient(to right, #D9D9D9 0%, #EDEEF1 50%, #D9D9D9 100%)",
+      },
+      backgroundSize: {
+        custom: "300% 100%",
+      },
       screens: {
         desktop: { min: "1024px" },
         tablet: { min: "744px", max: "1023px" },
@@ -71,7 +87,6 @@ export default {
       boxShadow: {
         notifications: "0px 2px 8px 0px rgba(120, 116, 134, 0.25)",
         container: "0px 4px 16px 0px  rgba(17, 34, 17, 0.05)",
-        stepper: "0px 2px 4px 0px rgba(5, 16, 55, 0.06)",
         stepperInset: "inset 0px 0px 0px 1px rgba(205, 208, 220, 1)",
       },
     },

@@ -7,6 +7,7 @@ interface ConfirmationModalProps {
   onClose: () => void;
   onConfirm: () => void;
   message: string;
+  buttonMessage: string;
 }
 
 export function ConfirmationModal({
@@ -14,12 +15,13 @@ export function ConfirmationModal({
   onClose,
   onConfirm,
   message,
+  buttonMessage,
 }: ConfirmationModalProps) {
   if (!isOpen) return null;
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.7)]"
       onClick={onClose}
     >
       <div
@@ -49,7 +51,7 @@ export function ConfirmationModal({
             className="w-[8rem] h-[3.8rem] bg-nomad-black text-white rounded-[0.375rem] text-[1.4rem]"
             onClick={onConfirm}
           >
-            취소하기
+            {buttonMessage}
           </button>
         </div>
       </div>

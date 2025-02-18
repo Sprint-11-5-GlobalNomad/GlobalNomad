@@ -1,29 +1,55 @@
 import { ActivityBasicDto } from "@/app/types/activity-schemas";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface AllActivitiesProps {
   activities: ActivityBasicDto[];
 }
 
 export default function AllActivities({ activities }: AllActivitiesProps) {
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    setWindowWidth(window.innerWidth);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const displayedActivities =
+    windowWidth >= 1024
+      ? activities.slice(0, 8)
+      : windowWidth < 744
+        ? activities.slice(0, 4)
+        : activities;
+
   return (
     <ul
       className="grid grid-cols-4 gap-[2rem] w-[120rem] mb-[6rem]
-    tablet:w-[80rem] tablet:px-[4rem] tablet:gap-[3.2rem]
+    tablet:w-[69.5rem] tablet:mx-[2rem] tablet:gap-[3.2rem] tablet:grid-cols-3
+    mobile:grid-cols-2 mobile:grid-rows-2 mobile:grid-auto-rows-[1fr]
     mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
     >
-      {activities.map((activity) => (
+      {displayedActivities.map((activity) => (
         <li
           key={activity.id}
-          className="border rounded-[2rem] flex-column gap-[1.6rem]
-          mobile:w-[18.4rem] mobile:h-[18.4rem]"
+          className="rounded-[2rem] flex-column gap-[1.6rem]"
         >
           <Link
             href={`/activity/${activity.id}`}
             className="flex-column gap-[1.6rem]"
           >
-            <div className="h-[28.3rem] w-[28.3rem]">
+            <div
+              className="h-[28.3rem] w-[28.3rem] tablet:w-[22.1rem]
+            tablet:h-[22.1rem] mobile:w-[16.8rem] mobile:h-[16.8rem]"
+            >
               <Image
                 src={activity.bannerImageUrl}
                 alt={activity.title}
@@ -35,7 +61,7 @@ export default function AllActivities({ activities }: AllActivitiesProps) {
 
             <div
               className="flex-column items-start w-[28.3rem] gap-[1.5rem]
-          mobile:pt-[3rem] mobile:pr-[2rem] mobile:pb-[1.2rem] mobile:gap-[0.5rem]"
+              tablet:w-[22.1rem] tablet:gap-[1rem] mobile:w-[16.4rem] mobile:gap-[0.5rem]"
             >
               <div className="flex-column items-start gap-[1rem]">
                 <div className="flex-between gap-[0.5rem]">
@@ -52,13 +78,15 @@ export default function AllActivities({ activities }: AllActivitiesProps) {
                     </span>
                   </p>
                 </div>
-                <p className="text-[2.4rem] leading-[3.2rem] font-semiBold break-keep">
+                <p className="text-2xl font-semiBold break-keep mobile:text-2lg">
                   {activity.title}
                 </p>
               </div>
               <p className="text-xl font-bold flex-between gap-[0.5rem]">
                 ₩ {Number(activity.price).toLocaleString("ko-KR")}
-                <span className="text-xl font-regular text-gray-900">/인</span>
+                <span className="text-xl font-regular text-gray-900 mobile:text-lg">
+                  /인
+                </span>
               </p>
             </div>
           </Link>

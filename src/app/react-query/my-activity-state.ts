@@ -1,16 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
-  fetchMyActivities,
+  // fetchMyActivities,
   fetchMonthlyReservationStats,
   fetchDailyReservationStats,
   fetchReservationsBySchedule,
   updateReservationStatus,
   deleteMyActivity,
   updateMyActivity,
-} from "../api/my-activities-api";
+} from "../(primary)/api/my-activities-api";
 import {
-  ActivityBasicDto,
+  // ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,
   UpdateMyActivityBodyDto,
 } from "../types/activity-schemas";
@@ -39,38 +39,38 @@ interface DailyReservationStat {
 }
 
 // 내 체험 리스트 조회
-export const useMyActivities = (cursorId?: number, size = 20) =>
-  useQuery<{
-    cursorId: number;
-    totalCount: number;
-    activities: ActivityBasicDto[];
-  }>({
-    queryKey: ["myActivities", cursorId],
-    queryFn: async () => {
-      try {
-        return await fetchMyActivities(cursorId, size);
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          switch (error.response?.status) {
-            case 400:
-              console.error(error.message);
-              alert(error.message);
-              break;
-            case 401:
-              console.error(
-                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
-              );
-              alert(error.message);
-              break;
-            default:
-              console.error("체험 리스트를 가져오는 중 오류가 발생했습니다.");
-              alert(error.message);
-          }
-        }
-        throw error;
-      }
-    },
-  });
+// export const useMyActivities = (cursorId?: number, size = 20) =>
+//   useQuery<{
+//     cursorId: number;
+//     totalCount: number;
+//     activities: ActivityBasicDto[];
+//   }>({
+//     queryKey: ["myActivities", cursorId],
+//     queryFn: async () => {
+//       try {
+//         return await fetchMyActivities(cursorId, size);
+//       } catch (error) {
+//         if (error instanceof AxiosError) {
+//           switch (error.response?.status) {
+//             case 400:
+//               console.error(error.message);
+//               alert(error.message);
+//               break;
+//             case 401:
+//               console.error(
+//                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+//               );
+//               alert(error.message);
+//               break;
+//             default:
+//               console.error("체험 리스트를 가져오는 중 오류가 발생했습니다.");
+//               alert(error.message);
+//           }
+//         }
+//         throw error;
+//       }
+//     },
+//   });
 
 // 월별 예약 현황 조회
 export const useMonthlyReservationStats = (

@@ -5,7 +5,7 @@ import {
   fetchMyDetails,
   updateMyDetails,
   uploadProfileImage,
-} from "../api/user-api";
+} from "../(primary)/api/user-api";
 import {
   CreateUserBodyDto,
   UpdateUserBodyDto,

@@ -7,7 +7,8 @@ import {
   createReservation,
   fetchActivityReviews,
   fetchAvailableSchedules,
-} from "../api/activities-api";
+  uploadActivityImage,
+} from "../(primary)/api/activities-api";
 import {
   ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,
@@ -159,7 +160,7 @@ export const useAvailableSchedules = ({
   return query;
 };
 
-// 체험 예약 생성
+// 체험 예약 신청
 export const useCreateReservation = () => {
   const queryClient = useQueryClient();
   return useMutation<
@@ -200,6 +201,18 @@ export const useCreateReservation = () => {
             alert(error.message);
         }
       }
+    },
+  });
+};
+
+export const useUploadActivityImage = () => {
+  return useMutation({
+    mutationFn: uploadActivityImage,
+    onSuccess: (data) => {
+      console.log("✅ 이미지 업로드 성공:", data.activityImageUrl);
+    },
+    onError: (error) => {
+      console.error("❌ 이미지 업로드 실패:", error);
     },
   });
 };

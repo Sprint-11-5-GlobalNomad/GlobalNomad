@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TimeDropdown from "./time-dropdown";
 import Button from "@/components/common/ui/button";
-import { timeTable } from "../../../app/profile/my-activities/post/_constants/constants";
+import { TIME_TABLE } from "../../../app/(primary)/profile/my-activities/post/_constants/constants";
 import DateSelector from "./date-selector";
 
 type ReservationAvailableTime = {
+  id?: number;
   date: string;
   startTime: string;
   endTime: string;
@@ -15,11 +16,13 @@ type Props = {
   setReservationTimes: React.Dispatch<
     React.SetStateAction<ReservationAvailableTime[]>
   >;
+  setRemovedReservationIds?: React.Dispatch<React.SetStateAction<number[]>>;
 };
 
 export default function ReservationTimeSelector({
   reservationTimes,
   setReservationTimes,
+  setRemovedReservationIds,
 }: Props) {
   const [newReservationTime, setNewReservationTime] =
     useState<ReservationAvailableTime>({
@@ -28,7 +31,30 @@ export default function ReservationTimeSelector({
       endTime: "",
     });
 
+  const [filteredEndTimeOptions, setFilteredEndTimeOptions] =
+    useState<string[]>(TIME_TABLE);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const filterStartTimeOptions = TIME_TABLE.slice(0, -1);
+
+  // 시작 시간 선택 시, 종료 시간 옵션 필터링
+  useEffect(() => {
+    if (newReservationTime.startTime) {
+      const startTimeIndex = TIME_TABLE.indexOf(newReservationTime.startTime);
+      const filteredOptions = TIME_TABLE.slice(startTimeIndex + 1);
+      setFilteredEndTimeOptions(filteredOptions);
+
+      if (
+        newReservationTime.endTime &&
+        !filteredOptions.includes(newReservationTime.endTime)
+      ) {
+        setNewReservationTime((prev) => ({ ...prev, endTime: "" }));
+      }
+    } else {
+      setFilteredEndTimeOptions(TIME_TABLE);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newReservationTime.startTime]);
 
   const addReservationTime = () => {
     if (
@@ -40,13 +66,11 @@ export default function ReservationTimeSelector({
       return;
     }
 
-    // 시작 시간이 종료 시간보다 크거나 같으면 오류
     if (newReservationTime.startTime >= newReservationTime.endTime) {
       setErrorMessage("시작 시간은 종료 시간보다 이전이어야 합니다.");
       return;
     }
 
-    // 시간 범위 겹침 확인
     const isOverlapping = reservationTimes.some((time) => {
       if (time.date !== newReservationTime.date) return false;
 
@@ -58,9 +82,9 @@ export default function ReservationTimeSelector({
       const existingEnd = new Date(`1970-01-01T${time.endTime}:00`);
 
       return (
-        (newStart >= existingStart && newStart < existingEnd) || // 새로운 시작이 기존 범위 안에 있는 경우
-        (newEnd > existingStart && newEnd <= existingEnd) || // 새로운 종료가 기존 범위 안에 있는 경우
-        (newStart <= existingStart && newEnd >= existingEnd) // 새로운 범위가 기존 범위를 완전히 포함하는 경우
+        (newStart >= existingStart && newStart < existingEnd) ||
+        (newEnd > existingStart && newEnd <= existingEnd) ||
+        (newStart <= existingStart && newEnd >= existingEnd)
       );
     });
 
@@ -71,10 +95,20 @@ export default function ReservationTimeSelector({
 
     setReservationTimes((prev) => [...prev, newReservationTime]);
     setNewReservationTime({ date: "", startTime: "", endTime: "" });
-    setErrorMessage(""); // 오류 메시지 초기화
+    setErrorMessage("");
   };
 
   const removeReservationTime = (index: number) => {
+    if (setRemovedReservationIds) {
+      const removedTime = reservationTimes[index];
+      if (removedTime.id) {
+        setRemovedReservationIds((prev) =>
+          [...prev, removedTime.id!].filter(
+            (id): id is number => id !== undefined
+          )
+        );
+      }
+    }
     setReservationTimes((prev) => prev.filter((_, i) => i !== index));
   };
 
@@ -86,7 +120,7 @@ export default function ReservationTimeSelector({
           <div className="flex flex-row gap-[2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
             <DateSelector
               selectedDate={newReservationTime.date}
-              onDateChange={(formattedDate, rawDate) =>
+              onDateChange={(rawDate) =>
                 setNewReservationTime({ ...newReservationTime, date: rawDate })
               }
             />
@@ -96,7 +130,7 @@ export default function ReservationTimeSelector({
                   시작 시간
                 </label>
                 <TimeDropdown
-                  options={timeTable}
+                  options={filterStartTimeOptions}
                   description="0:00"
                   selectedOption={newReservationTime.startTime}
                   onSelect={(startTime) =>
@@ -114,7 +148,7 @@ export default function ReservationTimeSelector({
                   종료 시간
                 </label>
                 <TimeDropdown
-                  options={timeTable}
+                  options={filteredEndTimeOptions} // 필터링된 옵션 전달
                   description="0:00"
                   selectedOption={newReservationTime.endTime}
                   onSelect={(endTime) =>
@@ -153,7 +187,6 @@ export default function ReservationTimeSelector({
                   : ""
               }
             />
-
             <div className="flex flex-row gap-[1.2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
               <input
                 type="text"
@@ -166,7 +199,6 @@ export default function ReservationTimeSelector({
                   ~
                 </div>
               </div>
-
               <input
                 type="text"
                 className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"

@@ -5,7 +5,7 @@ import UserNotifications from "@/components/common/layout/navigation/user-notifi
 import Image from "next/image";
 import { useState } from "react";
 import UseOutsideClick from "@/hooks/use-outside-click";
-import { useAuth } from "@/app/api/use-auth";
+import { useAuth } from "@/app/(primary)/api/use-auth";
 
 export default function UserMenu() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -26,6 +26,7 @@ export default function UserMenu() {
               alt="프로필 이미지"
               width={32}
               height={32}
+              className="rounded-full border border-solid border-gray-300 w-[3.2rem] h-[3.2rem]"
             />
             <span className="text-md">{user?.nickname || "닉네임"}</span>
             {isOpen && (
