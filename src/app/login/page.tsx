@@ -24,7 +24,7 @@ export default function LoginPage() {
     isOpen: false,
     message: "",
   });
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  // const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const loginMutation = useLogin();
   const router = useRouter();
   // const kakaoLogin = useSignInWithOauth("kakao");
@@ -39,13 +39,33 @@ export default function LoginPage() {
     mode: "onBlur",
   });
 
-  React.useEffect(() => {
-    const email = watch("email");
-    const password = watch("password");
-    const isEmailValid = emailRegex.test(email); // 이메일 유효성 체크
-    const isPasswordValid = password.length >= 8; // 비밀번호 유효성 체크
-    setIsButtonDisabled(!(isEmailValid && isPasswordValid)); // 둘 다 유효하면 버튼 활성화
-  }, [watch("email"), watch("password")]);
+  const watchEmail = watch("email");
+  const watchPassword = watch("password");
+
+  const isValidForm = !(
+    emailRegex.test(watchEmail) && watchPassword.length >= 8
+  );
+
+  // React.useEffect(() => {
+  //   if (!watchEmail || !watchPassword) {
+  //     setIsButtonDisabled(true);
+  //     return;
+  //   }
+  //   const isEmailValid = emailRegex.test(watchEmail); // 이메일 유효성 체크
+  //   const isPasswordValid = watchPassword.length >= 8; // 비밀번호 유효성 체크
+  //   console.log(
+  //     "$$ email:",
+  //     watchEmail,
+  //     "password:",
+  //     watchPassword,
+  //     "isEmailValid:",
+  //     isEmailValid,
+  //     "isPasswordValid:",
+  //     isPasswordValid
+  //   );
+  // setIsButtonDisabled(!(isEmailValid && isPasswordValid)); // 둘 다 유효하면 버튼 활성화
+  // setIsButtonDisabled(!(emailRegex.test(watchEmail) && watchPassword.length >= 8)); // 둘 다 유효하면 버튼 활성화
+  // }, [watchEmail, watchPassword]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -83,7 +103,7 @@ export default function LoginPage() {
     if (token) {
       router.replace("/"); // 로그인 상태면 메인 페이지로 리디렉션
     }
-  }, []);
+  }, [router]);
 
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_REST_API_KEY&redirect_uri=http://localhost:3000/auth/kakao/callback&response_type=code`;
 
@@ -222,7 +242,7 @@ export default function LoginPage() {
                 ButtonType="loginSignup"
                 label="로그인 하기"
                 variant="loginSignup"
-                disabled={isButtonDisabled}
+                disabled={isValidForm}
                 className={`flex items-center justify-center w-[64rem] h-[4.8rem] px-[13.6rem] 
                 py-[1.4rem] gap-[0.8rem] rounded-[0.6rem] `}
               />

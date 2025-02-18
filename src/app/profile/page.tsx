@@ -49,6 +49,7 @@ export default function ProfilePage() {
 
         setProfileImageUrl(response.profileImageUrl);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         queryClient.setQueryData(["userDetails"], (oldData: any) => ({
           ...oldData,
           profileImageUrl: response.profileImageUrl,

@@ -2,21 +2,61 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { useSearchParams } from "next/navigation";
+// import dayGridPlugin from "@fullcalendar/daygrid";
+// import interactionPlugin from "@fullcalendar/interaction";
+// import { useSearchParams } from "next/navigation";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
 import "@/styles/fullcalendar.css";
-import Image from "next/image";
-import ReservationModal from "./reservation-modal";
-import { EventClickArg } from "@fullcalendar/core";
+// import Image from "next/image";
+// import ReservationModal from "./reservation-modal";
+// import { EventClickArg } from "@fullcalendar/core";
 
-interface ActivityBasicDto {
-  //임시데이터사용
-  id: number;
-  name?: string;
-}
+// interface ActivityBasicDto {
+//   //임시데이터사용
+//   id: number;
+//   name?: string;
+// }
+
+// 임시 데이터
+const tempReservations: Reservation[] = [
+  {
+    id: 1,
+    nickname: "사용자1",
+    status: "pending",
+    count: 10,
+    date: "2025-02-09",
+    startTime: "10:00",
+    endTime: "11:00",
+  },
+  {
+    id: 2,
+    nickname: "사용자2",
+    status: "confirmed",
+    count: 5,
+    date: "2025-02-10",
+    startTime: "14:00",
+    endTime: "15:00",
+  },
+  {
+    id: 3,
+    nickname: "사용자3",
+    status: "pending",
+    count: 8,
+    date: "2025-02-11",
+    startTime: "16:00",
+    endTime: "17:00",
+  },
+  {
+    id: 4,
+    nickname: "사용자4",
+    status: "confirmed",
+    count: 6,
+    date: "2025-02-12",
+    startTime: "09:00",
+    endTime: "10:00",
+  },
+];
 
 interface Reservation {
   id: number;
@@ -29,65 +69,25 @@ interface Reservation {
 }
 
 export default function ReservationPage() {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const calendarRef = useRef<FullCalendar | null>(null);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedActivity, setSelectedActivity] = useState<number | null>(1);
+  // const [selectedActivity, setSelectedActivity] = useState<number | null>(1);
   const [events, setEvents] = useState<
     { title: string; start: string; classNames: string[] }[]
   >([]);
-  const [selectedReservations, setSelectedReservations] = useState<
-    Reservation[]
-  >([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  // const [selectedReservations, setSelectedReservations] = useState<
+  //   Reservation[]
+  // >([]);
+  // const [modalOpen, setModalOpen] = useState(false);
+  // const [selectedDate, setSelectedDate] = useState<string>("");
 
-  // 임시 데이터
-  const tempReservations: Reservation[] = [
-    {
-      id: 1,
-      nickname: "사용자1",
-      status: "pending",
-      count: 10,
-      date: "2025-02-09",
-      startTime: "10:00",
-      endTime: "11:00",
-    },
-    {
-      id: 2,
-      nickname: "사용자2",
-      status: "confirmed",
-      count: 5,
-      date: "2025-02-10",
-      startTime: "14:00",
-      endTime: "15:00",
-    },
-    {
-      id: 3,
-      nickname: "사용자3",
-      status: "pending",
-      count: 8,
-      date: "2025-02-11",
-      startTime: "16:00",
-      endTime: "17:00",
-    },
-    {
-      id: 4,
-      nickname: "사용자4",
-      status: "confirmed",
-      count: 6,
-      date: "2025-02-12",
-      startTime: "09:00",
-      endTime: "10:00",
-    },
-  ];
-
-  useEffect(() => {
-    const activityId = searchParams.get("activityId");
-    if (activityId) {
-      setSelectedActivity(Number(activityId));
-    }
-  }, [searchParams]);
+  // useEffect(() => {
+  //   const activityId = searchParams.get("activityId");
+  //   if (activityId) {
+  //     setSelectedActivity(Number(activityId));
+  //   }
+  // }, [searchParams]);
 
   // 이벤트 데이터 설정
   useEffect(() => {
@@ -102,12 +102,13 @@ export default function ReservationPage() {
 
   // 예약이 지나면 자동으로 완료로 변경
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const today = new Date().toISOString().split("T")[0];
-    setSelectedReservations((prev) =>
-      prev.map((res) =>
-        res.date < today ? { ...res, status: "completed" } : res
-      )
-    );
+    // setSelectedReservations((prev) =>
+    //   prev.map((res) =>
+    //     res.date < today ? { ...res, status: "completed" } : res
+    //   )
+    // );
   }, []);
 
   useEffect(() => {
@@ -159,8 +160,8 @@ export default function ReservationPage() {
             <SelectDropdown
               options={["함께 배우면 즐거운 스트릿 댄스"]}
               description="함께 배우면 즐거운 스트릿 댄스"
-              onSelect={() => {}}
-              className="p-3"
+              // onSelect={() => {}}
+              // className="p-3"
             />
           </div>
         </div>
@@ -182,17 +183,17 @@ export default function ReservationPage() {
         </div>
 
         {/* FullCalendar */}
-        <FullCalendar
+        {/* <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           events={events}
           eventClick={(info: EventClickArg) => {
             setSelectedDate(info.event.startStr);
-            const filteredReservations = tempReservations
-              .filter((res) => res.date === info.event.startStr)
-              .sort((a, b) => b.id - a.id);
-            setSelectedReservations(filteredReservations);
+            // const filteredReservations = tempReservations
+            //   .filter((res) => res.date === info.event.startStr)
+            //   .sort((a, b) => b.id - a.id);
+            // setSelectedReservations(filteredReservations);
             setModalOpen(true);
           }}
           locale="en"
@@ -202,23 +203,23 @@ export default function ReservationPage() {
           dayMaxEventRows={true}
           fixedWeekCount={false}
           showNonCurrentDates={false}
-        />
+        /> */}
       </div>
 
-      {modalOpen && (
+      {/* {modalOpen && (
         <ReservationModal
           isOpen={modalOpen}
           onClose={() => setModalOpen(false)}
           activityId={selectedActivity!}
           selectedDate={selectedDate}
-          reservations={selectedReservations}
-          onUpdateStatus={(id: number, status: "confirmed" | "declined") => {
-            setSelectedReservations((prev) =>
-              prev.map((res) => (res.id === id ? { ...res, status } : res))
-            );
-          }}
+          // reservations={selectedReservations}
+          // onUpdateStatus={(id: number, status: "confirmed" | "declined") => {
+          //   setSelectedReservations((prev) =>
+          //     prev.map((res) => (res.id === id ? { ...res, status } : res))
+          //   );
+          // }}
         />
-      )}
+      )} */}
     </div>
   );
 }
