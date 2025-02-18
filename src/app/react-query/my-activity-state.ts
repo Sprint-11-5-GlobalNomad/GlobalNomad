@@ -72,80 +72,84 @@ export const useMyActivities = (cursorId?: number, size = 20) =>
     },
   });
 
-// 월별 예약 현황 조회
+// 월별 예약 현황 조회 (초기 API 요청 차단 + 오류 처리 추가)
 export const useMonthlyReservationStats = (
-  activityId: number,
-  year: string,
-  month: string
+  activityId?: number,
+  year?: string,
+  month?: string
 ) =>
   useQuery<MonthlyReservationStat[], unknown>({
     queryKey: ["monthlyReservationStats", activityId, year, month],
     queryFn: async () => {
       try {
-        return await fetchMonthlyReservationStats(activityId, year, month);
+        return await fetchMonthlyReservationStats(activityId!, year!, month!);
       } catch (error) {
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error(error.message);
-              alert(error.message);
+              console.error("잘못된 요청: ", error.message);
+              alert("잘못된 요청입니다.");
               break;
             case 401:
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
-              alert(error.message);
+              alert("인증되지 않은 요청입니다. 로그인 후 다시 시도하세요.");
               break;
             case 403:
               console.error("본인의 체험만 조회할 수 있습니다.");
-              alert(error.message);
+              alert("본인의 체험만 조회할 수 있습니다.");
               break;
             default:
               console.error(
-                "월별 예약 현황을 가져오는 중 오류가 발생했습니다."
+                "월별 예약 현황을 가져오는 중 오류 발생: ",
+                error.message
               );
-              alert(error.message);
+              alert("월별 예약 현황을 가져오는 중 오류가 발생했습니다.");
           }
         }
         throw error;
       }
     },
+    enabled: !!activityId && !!year && !!month, // ✅ 체험이 선택되지 않으면 실행 안 함
   });
 
-// 날짜별 예약 정보 조회
-export const useDailyReservationStats = (activityId: number, date: string) =>
+// 날짜별 예약 정보 조회 (초기 API 요청 차단 + 오류 처리 추가)
+export const useDailyReservationStats = (activityId?: number, date?: string) =>
   useQuery<DailyReservationStat[], unknown>({
     queryKey: ["dailyReservationStats", activityId, date],
     queryFn: async () => {
       try {
-        return await fetchDailyReservationStats(activityId, date);
+        return await fetchDailyReservationStats(activityId!, date!);
       } catch (error) {
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error(error.message);
-              alert(error.message);
+              console.error("잘못된 요청: ", error.message);
+              alert("잘못된 요청입니다.");
               break;
             case 401:
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
-              alert(error.message);
+              alert("인증되지 않은 요청입니다. 로그인 후 다시 시도하세요.");
               break;
             case 403:
               console.error("본인의 체험만 조회할 수 있습니다.");
-              alert(error.message);
+              alert("본인의 체험만 조회할 수 있습니다.");
               break;
             default:
               console.error(
-                "날짜별 예약 정보를 가져오는 중 오류가 발생했습니다."
+                "날짜별 예약 정보를 가져오는 중 오류 발생: ",
+                error.message
               );
-              alert(error.message);
+              alert("날짜별 예약 정보를 가져오는 중 오류가 발생했습니다.");
           }
         }
         throw error;
       }
     },
+    enabled: !!activityId && !!date, // ✅ 체험이 선택되지 않으면 실행 안 함
   });
 
 // 예약 시간대별 예약 내역 조회

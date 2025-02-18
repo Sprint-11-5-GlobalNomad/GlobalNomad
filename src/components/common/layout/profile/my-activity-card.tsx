@@ -40,6 +40,7 @@ export const MyActivityCard = forwardRef<HTMLDivElement, ActivityCardProps>(
       deleteMyActivity.mutate(ActivityProps.id, {
         onSuccess: () => {
           alert("체험이 성공적으로 삭제되었습니다.");
+          window.location.reload();
         },
         onSettled: () => {
           setIsDeleteAble(false);

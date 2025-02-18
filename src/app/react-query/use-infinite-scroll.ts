@@ -24,20 +24,6 @@ export function useInfinityMyActivities() {
   });
 }
 
-// export const useInfiniteActivities = (filters: FindActivitiesQueryDto) => {
-//   return useInfiniteQuery({
-//     queryKey: ["activities", filters],
-//     queryFn: ({ pageParam = 0 }) => {
-//       const params = { ...filters, cursorId: pageParam };
-//       return fetchActivities(params);
-//     },
-//     getNextPageParam: (lastPage) => {
-//       return lastPage.cursorId || undefined;
-//     },
-//     initialPageParam: 0,
-//   });
-// };
-
 export const useInfiniteActivities = (filters: FindActivitiesQueryDto) => {
   const {
     data,

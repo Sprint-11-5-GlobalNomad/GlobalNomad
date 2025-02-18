@@ -46,12 +46,15 @@ export default function ActivityPostPage() {
   const [reservationTimes, setReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
+  const [removedReservationIds, setRemovedReservationIds] = useState<number[]>(
+    []
+  );
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors },
   } = methods;
 
   useEffect(() => {
@@ -63,13 +66,22 @@ export default function ActivityPostPage() {
       setValue("address", activityDetail.address);
       setBannerImage(activityDetail.bannerImageUrl);
       setIntroImages(activityDetail.subImages.map((img) => img.imageUrl));
-      setReservationTimes(
-        activityDetail.schedules.map((schedule) => ({
+
+      const initialReservationTimes = activityDetail.schedules.map(
+        (schedule) => ({
+          id: schedule.id,
           date: schedule.date,
           startTime: schedule.startTime,
           endTime: schedule.endTime,
-        }))
+        })
       );
+
+      setReservationTimes(initialReservationTimes);
+
+      const initialRemovedIds = initialReservationTimes
+        .map((time) => time.id)
+        .filter((id): id is number => id !== undefined);
+      setRemovedReservationIds(initialRemovedIds);
     }
   }, [activityDetail, setValue]);
 
@@ -96,6 +108,7 @@ export default function ActivityPostPage() {
         startTime,
         endTime,
       })),
+      scheduleIdsToRemove: removedReservationIds,
     };
 
     updateActivityMutation.mutate(
@@ -130,14 +143,14 @@ export default function ActivityPostPage() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-row gap-[51.9rem] tablet:gap-[15.5rem] mobile:gap-[6.9rem] items-center">
-            <h2 className="text-3xl font-bold font-pretendard">내 체험 수정</h2>
+            <h2 className="text-3xl font-bold font-pretendard w-[16rem]">
+              내 체험 수정
+            </h2>
             <Button
               ButtonType="profileSave"
               label="수정하기"
               type="submit"
-              disabled={
-                !isValid || !bannerImage || reservationTimes.length === 0
-              }
+              disabled={!bannerImage || reservationTimes.length === 0}
             />
           </div>
 
@@ -207,6 +220,7 @@ export default function ActivityPostPage() {
             <ReservationTimeSelector
               reservationTimes={reservationTimes}
               setReservationTimes={setReservationTimes}
+              setRemovedReservationIds={setRemovedReservationIds}
             />
           </div>
 

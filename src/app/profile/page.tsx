@@ -49,10 +49,13 @@ export default function ProfilePage() {
 
         setProfileImageUrl(response.profileImageUrl);
 
-        queryClient.setQueryData(["userDetails"], (oldData: any) => ({
-          ...oldData,
-          profileImageUrl: response.profileImageUrl,
-        }));
+        queryClient.setQueryData<UserDetails>(
+          ["userDetails"],
+          (oldData: UserDetails | undefined) => ({
+            ...oldData,
+            profileImageUrl: response.profileImageUrl,
+          })
+        );
 
         updateMyDetails(
           { profileImageUrl: response.profileImageUrl },

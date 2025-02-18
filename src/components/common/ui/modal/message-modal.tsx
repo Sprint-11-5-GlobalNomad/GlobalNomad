@@ -13,7 +13,7 @@ export function MessageModal({ isOpen, onClose, message }: ModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.7)]"
       onClick={onClose}
     >
       <div

@@ -12,6 +12,7 @@ interface ReservationModalProps {
   onClose: () => void;
   activityId: number;
   selectedDate: string;
+  scheduleId: number; // 🔥 예약 시간대 ID 추가
 }
 
 interface Reservation {
@@ -19,8 +20,8 @@ interface Reservation {
   nickname: string;
   status: "pending" | "confirmed" | "declined";
   count: number;
-  startTime?: string;
-  endTime?: string;
+  startTime: string;
+  endTime: string;
 }
 
 export default function ReservationModal({
@@ -28,43 +29,33 @@ export default function ReservationModal({
   onClose,
   activityId,
   selectedDate,
+  scheduleId, // 🔥 예약 시간대 ID 추가
 }: ReservationModalProps) {
   const updateReservationStatus = useUpdateReservationStatus();
-
-  // 예약 상태
   const [activeTab, setActiveTab] = useState<
     "pending" | "confirmed" | "declined"
   >("pending");
 
   // 날짜 변환
-  const parsedDate = useMemo(() => {
-    return selectedDate ? parseISO(selectedDate) : null;
-  }, [selectedDate]);
-
+  const parsedDate = useMemo(
+    () => (selectedDate ? parseISO(selectedDate) : null),
+    [selectedDate]
+  );
   const formattedDate =
     parsedDate && isValid(parsedDate)
-      ? format(parsedDate, "yyyy년 MM월 dd일")
+      ? format(parsedDate, "yyyy-MM-dd")
       : "유효하지 않은 날짜";
 
-  const scheduleId = parseInt(selectedDate, 10) || 0;
+  const {
+    data: reservations,
+    isLoading,
+    refetch,
+  } = useReservationsBySchedule(activityId ?? 0, scheduleId, activeTab); // 🔥 scheduleId 추가
 
-  const { data: reservations, isLoading } = useReservationsBySchedule(
-    activityId ?? 0,
-    scheduleId,
-    activeTab
-  );
   if (!isOpen) return null;
 
-  // 1시간 단위 예약 리스트
-  const timeSlots = [...Array(24)].map(
-    (_, hour) => `${hour}:00 ~ ${hour + 1}:00`
-  );
-
   // 현재 선택된 예약 리스트 필터링
-  const filteredReservations: Reservation[] =
-    reservations && Array.isArray(reservations)
-      ? reservations.filter((r: Reservation) => r.status === activeTab)
-      : [];
+  const filteredReservations: Reservation[] = reservations ?? [];
 
   // 예약 상태 업데이트 함수
   const handleUpdateStatus = async (
@@ -76,6 +67,20 @@ export default function ReservationModal({
       reservationId: id,
       status,
     });
+    refetch(); // 업데이트 후 데이터 새로고침
+  };
+
+  // 확정하기 버튼 클릭 시 다른 예약 자동 거절
+  const handleConfirmReservation = async (reservationId: number) => {
+    await handleUpdateStatus(reservationId, "confirmed");
+
+    // 해당 시간대의 다른 예약들을 거절 처리
+    const otherReservations = filteredReservations.filter(
+      (res) => res.id !== reservationId
+    );
+    for (const res of otherReservations) {
+      await handleUpdateStatus(res.id, "declined");
+    }
   };
 
   return (
@@ -105,10 +110,10 @@ export default function ReservationModal({
                 }`}
               >
                 {tab === "pending"
-                  ? `신청 ${filteredReservations.filter((r) => r.status === "pending").length}`
+                  ? `신청 ${filteredReservations.length}`
                   : tab === "confirmed"
-                    ? `승인 ${filteredReservations.filter((r) => r.status === "confirmed").length}`
-                    : `거절 ${filteredReservations.filter((r) => r.status === "declined").length}`}
+                    ? `승인 ${filteredReservations.length}`
+                    : `거절 ${filteredReservations.length}`}
 
                 {activeTab === tab && (
                   <span className="absolute bottom-0 left-0 w-full h-[3px] bg-nomad-black z-10"></span>
@@ -116,8 +121,6 @@ export default function ReservationModal({
               </button>
             ))}
           </div>
-
-          {/* 전체 밑줄 */}
           <span className="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200 z-0"></span>
         </div>
 
@@ -127,17 +130,6 @@ export default function ReservationModal({
         </div>
         <div className="text-left text-nomad-black font-regular text-[2rem] mb-3 px-4">
           {formattedDate}
-        </div>
-
-        {/* 시간 선택 */}
-        <div className="mb-4 px-4">
-          <select className="border p-2 w-full h-[5.6rem] rounded-md bg-gray-100 text-nomad-black text-[1.6rem] font-regular">
-            {timeSlots.map((slot) => (
-              <option key={slot} value={slot}>
-                {slot}
-              </option>
-            ))}
-          </select>
         </div>
 
         {/* 예약 내역 */}
@@ -171,12 +163,10 @@ export default function ReservationModal({
                 {activeTab === "pending" && (
                   <div className="flex gap-2 mt-3">
                     <button
-                      onClick={() =>
-                        handleUpdateStatus(reservation.id, "confirmed")
-                      }
+                      onClick={() => handleConfirmReservation(reservation.id)}
                       className="flex-1 py-2 bg-nomad-black text-white rounded-md hover:bg-nomad-black"
                     >
-                      승인하기
+                      확정하기
                     </button>
                     <button
                       onClick={() =>

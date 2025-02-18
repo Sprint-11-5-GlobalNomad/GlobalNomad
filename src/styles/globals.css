@@ -567,6 +567,14 @@ template {
   .hide-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari, and Opera */
   }
+  .bg-custom-gradient {
+    background: linear-gradient(
+      270deg,
+      #fafbfc 0%,
+      #fafbfc 71.87%,
+      rgba(250, 251, 252, 0) 100%
+    );
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {
