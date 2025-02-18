@@ -162,7 +162,7 @@ export default function SignupPage() {
   //   } else {
   //     console.error("카카오 로그인 실패");
   //   }
-  // }, []);
+  // }, [kakaoSignUp, router]);
 
   return (
     <div>
