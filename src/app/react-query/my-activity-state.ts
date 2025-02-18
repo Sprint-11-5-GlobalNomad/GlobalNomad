@@ -24,6 +24,7 @@ interface MonthlyReservationStat {
     confirmed: number;
     pending: number;
   };
+  activityId?: number;
 }
 
 // 날짜별 예약 현황 타입
@@ -72,7 +73,7 @@ export const useMyActivities = (cursorId?: number, size = 20) =>
     },
   });
 
-// 월별 예약 현황 조회 (초기 API 요청 차단 + 오류 처리 추가)
+// 월별 예약 현황 조회
 export const useMonthlyReservationStats = (
   activityId?: number,
   year?: string,
@@ -111,16 +112,24 @@ export const useMonthlyReservationStats = (
         throw error;
       }
     },
-    enabled: !!activityId && !!year && !!month, // ✅ 체험이 선택되지 않으면 실행 안 함
+    enabled: !!activityId && !!year && !!month,
   });
 
-// 날짜별 예약 정보 조회 (초기 API 요청 차단 + 오류 처리 추가)
+// 날짜별 예약 정보 조회
 export const useDailyReservationStats = (activityId?: number, date?: string) =>
   useQuery<DailyReservationStat[], unknown>({
     queryKey: ["dailyReservationStats", activityId, date],
     queryFn: async () => {
+      if (!activityId || !date) {
+        console.warn("API 요청이 실행되지 않음 - activityId 또는 date 없음.");
+        return [];
+      }
+
       try {
-        return await fetchDailyReservationStats(activityId!, date!);
+        console.log("API 요청 실행: activityId =", activityId, "date =", date);
+        const response = await fetchDailyReservationStats(activityId, date);
+        console.log("📡 API 응답 데이터:", response);
+        return response;
       } catch (error) {
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
@@ -135,7 +144,7 @@ export const useDailyReservationStats = (activityId?: number, date?: string) =>
               alert("인증되지 않은 요청입니다. 로그인 후 다시 시도하세요.");
               break;
             case 403:
-              console.error("본인의 체험만 조회할 수 있습니다.");
+              console.error(" 본인의 체험만 조회할 수 있습니다.");
               alert("본인의 체험만 조회할 수 있습니다.");
               break;
             default:
@@ -149,7 +158,6 @@ export const useDailyReservationStats = (activityId?: number, date?: string) =>
         throw error;
       }
     },
-    enabled: !!activityId && !!date, // ✅ 체험이 선택되지 않으면 실행 안 함
   });
 
 // 예약 시간대별 예약 내역 조회

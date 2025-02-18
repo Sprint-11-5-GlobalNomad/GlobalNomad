@@ -9,6 +9,10 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const currentPage = "/profile";
 
+interface UserDetails {
+  profileImageUrl: string;
+}
+
 export default function ProfilePage() {
   const { data: userDetails, isLoading: isFetching } = useMyDetails();
   const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();

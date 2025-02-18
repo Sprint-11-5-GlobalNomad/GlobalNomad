@@ -66,7 +66,14 @@ export default function MyReservation() {
         </div>
         <div className="flex flex-col gap-[2.4rem] mt-[1.6rem] h-auto desktop:w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.4rem]">
           {isLoading ? (
-            <p>로딩 중...</p>
+            <div className="flex flex-col gap-[2.4rem]">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="mobile:w-[34.4rem] mobile:h-[12.8rem] desktop:w-[80rem] desktop:h-[20.4rem] tablet:w-[42.9rem] tablet:h-[15.6rem] rounded-[2.4rem] skeleton"
+                />
+              ))}
+            </div>
           ) : isEmpty ? ( // ✅ data가 존재하는지 먼저 확인하여 undefined 방지
             <div className="mt-[5rem] mb-[4.1rem]">
               <EmptyContent />
@@ -96,7 +103,16 @@ export default function MyReservation() {
             )
           )}
 
-          {isFetchingNextPage && <p>추가 로딩 중...</p>}
+          {isFetchingNextPage && (
+            <div className="flex flex-col gap-[2.4rem]">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="mobile:w-[34.4rem] mobile:h-[12.8rem] desktop:w-[80rem] desktop:h-[20.4rem] tablet:w-[42.9rem] tablet:h-[15.6rem] rounded-[2.4rem] skeleton"
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
