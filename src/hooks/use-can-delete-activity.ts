@@ -1,36 +1,36 @@
-import { useState, useEffect } from "react";
-import { useMonthlyReservationStats } from "@/app/react-query/my-activity-state";
+import { useQuery } from "@tanstack/react-query";
+import { fetchMonthlyReservationStats } from "@/app/api/my-activities-api";
+
+async function fetchSixMonthsStats(activityId: number) {
+  const promises = [];
+  const currentDate = new Date();
+
+  for (let i = 0; i < 6; i++) {
+    const date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() - i,
+      1
+    );
+    const year = date.getFullYear().toString();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+
+    promises.push(fetchMonthlyReservationStats(activityId, year, month));
+  }
+
+  const results = await Promise.all(promises);
+  return results.flat();
+}
 
 export function useCanDeleteActivity(activityId: number) {
-  const { data: monthlyStats, isLoading } = useMonthlyReservationStats(
-    activityId,
-    new Date().getFullYear().toString(),
-    (new Date().getMonth() + 1).toString().padStart(2, "0")
-  );
-
-  const [canDelete, setCanDelete] = useState(false);
-
-  useEffect(() => {
-    if (!monthlyStats) return;
-
-    let hasPending = false;
-    let hasApproved = false;
-
-    monthlyStats.forEach((stat) => {
-      if (stat.reservations.pending > 0) {
-        hasPending = true;
-      }
-      if (stat.reservations.confirmed > 0) {
-        hasApproved = true;
-      }
-    });
-
-    if (hasPending || hasApproved) {
-      setCanDelete(false); // 삭제 불가능
-    } else {
-      setCanDelete(true); // 삭제 가능
-    }
-  }, [monthlyStats]);
+  const { data: canDelete, isLoading } = useQuery({
+    queryKey: ["reservationStats", activityId, "6months"],
+    queryFn: () => fetchSixMonthsStats(activityId),
+    select: (stats) =>
+      !stats.some(
+        (stat: { reservations: { pending: number; confirmed: number } }) =>
+          stat.reservations.pending > 0 || stat.reservations.confirmed > 0
+      ),
+  });
 
   return { canDelete, isLoading };
 }
