@@ -22,7 +22,6 @@ export default function BookingModal({
   availableTimes,
   selectedTime,
   onSelectTime,
-  handleBooking,
   onClose,
 }: BookingModalProps) {
   const outsideClickRef = UseOutsideClick(onClose);
@@ -105,7 +104,6 @@ export default function BookingModal({
               label="예약하기"
               onClick={(e) => {
                 e.preventDefault();
-                handleBooking();
               }}
               disabled={selectedTime === 0}
             />

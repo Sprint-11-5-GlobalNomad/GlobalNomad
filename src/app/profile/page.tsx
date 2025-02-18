@@ -7,6 +7,10 @@ import { useUpdateMyDetails, useMyDetails } from "../react-query/user-state";
 import { uploadProfileImage } from "../api/user-api";
 import { useQueryClient } from "@tanstack/react-query";
 
+interface UserDetails {
+  profileImageUrl: string;
+}
+
 const currentPage = "/profile";
 
 export default function ProfilePage() {
@@ -17,7 +21,7 @@ export default function ProfilePage() {
   const [nickname, setNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -49,7 +53,7 @@ export default function ProfilePage() {
 
         setProfileImageUrl(response.profileImageUrl);
 
-        queryClient.setQueryData(["userDetails"], (oldData: any) => ({
+        queryClient.setQueryData<UserDetails>(["userDetails"], (oldData) => ({
           ...oldData,
           profileImageUrl: response.profileImageUrl,
         }));

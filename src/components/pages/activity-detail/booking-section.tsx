@@ -10,6 +10,8 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import BookingModal from "./booking-modal";
+import { formatTwoDigits } from "@/utils/date-utils";
+import { formatTime } from "@/utils/time-utils";
 
 export default function BookingSection() {
   const { id } = useParams();
@@ -102,7 +104,9 @@ export default function BookingSection() {
               }}
               className="desktop:hidden text-lg font-semiBold cursor-pointer mt-[0.5rem]"
             >
-              날짜 선택하기
+              {selectedTime > 0
+                ? `${formatTwoDigits(String(selectedDate))} ${formatTime(String(selectedTime))}`
+                : "날짜 선택하기"}
             </button>
           </div>
         </div>
@@ -161,7 +165,7 @@ export default function BookingSection() {
                   {/* 참여 인원 수 선택 */}
                   <div
                     className="border border-solid border-gray-500 rounded-[0.6rem]
-                  w-[12rem] flex-between shadow-stepper shadow-stepperInset"
+                  w-[12rem] flex-between shadow-stepperInset"
                   >
                     <button
                       onClick={(e) => {
