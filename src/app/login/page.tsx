@@ -93,7 +93,7 @@ export default function LoginPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]">
+      <div className="flex flex-col items-center justify-center my-[2rem] py-[3.2rem] max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]">
         {/** 로고 섹션 */}
         <div className="flex justify-center mb-[3.2rem] w-full max-w-[27rem] sm:max-w-[34rem]">
           <Image
@@ -108,7 +108,7 @@ export default function LoginPage() {
         </div>
         {/** 폼 섹션 */}
         <div className="flex flex-col gap-[4rem] sm:gap-[4.8rem]">
-          <div className="w-full flex items-center justify-center flex-col gap-[3.2rem] sm:gap-[2.6rem]">
+          <div className="w-full flex items-center justify-center flex-col gap-[3.2rem] sm:gap-[2.4rem]">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="w-full flex flex-col max-w-[35rem] sm:max-w-[64rem] gap-[2.8rem]"
@@ -233,7 +233,7 @@ export default function LoginPage() {
               회원이 아니신가요?{" "}
               <Link
                 href="/signup"
-                className=" text-[1.6rem] font-normal text-[var(--color-green-dark)] cursor-pointer"
+                className="text-[1.6rem] font-normal text-[var(--color-green-dark)] cursor-pointer underline"
               >
                 회원가입하기
               </Link>
@@ -243,7 +243,7 @@ export default function LoginPage() {
           <div className="w-full flex flex-col gap-[2.4rem] sm:gap-[4rem]">
             <div className="flex items-center justify-between">
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
-              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
+              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.4rem] sm:text-[2rem] leading-[2.4rem] font-normal">
                 SNS 계정으로 로그인하기
               </span>
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>

@@ -187,7 +187,7 @@ export default function SignupPage() {
 
         {/* 폼 섹션 */}
         <div className="flex flex-col gap-[4rem] sm:gap-[4.8rem]">
-          <div className="w-full flex flex-col items-center justify-center gap-[3.2rem] sm:gap-[2.6rem]">
+          <div className="w-full flex flex-col items-center justify-center gap-[3.2rem] sm:gap-[2.4rem]">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="w-full flex flex-col max-w-[35rem] sm:max-w-[64rem] gap-[2.8rem]"
@@ -383,7 +383,7 @@ export default function SignupPage() {
               회원이신가요?{" "}
               <Link
                 href="/login"
-                className="text-[1.6rem] font-normal text-[var(--color-green)] cursor-pointer"
+                className="text-[1.6rem] font-normal text-[var(--color-green-dark)] cursor-pointer underline"
               >
                 로그인하기
               </Link>
@@ -393,7 +393,7 @@ export default function SignupPage() {
           <div className="w-full flex flex-col gap-[2.4rem] sm:gap-[4rem]">
             <div className="flex items-center justify-between">
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
-              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
+              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.4rem] sm:text-[2rem] leading-[2.4rem] font-normal">
                 SNS 계정으로 회원가입하기
               </span>
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
