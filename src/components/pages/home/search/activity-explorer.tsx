@@ -7,10 +7,10 @@ import PopularActivitiesSection from "../popular-activities/popular-activities-s
 import AllActivitiesSection from "../all-activities/all-activities-section";
 import Pagination from "@/components/common/ui/pagination";
 import AllActivities from "../all-activities/all-activities";
-import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { useDebounce } from "use-debounce";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
+import AllActivitiesSkeletonSection from "../all-activities/all-activites-skeleton-section";
 
 const isLastCharHasBatchim = (text: string): boolean => {
   if (!text) return false;
@@ -77,7 +77,7 @@ export default function ActivityExplorer() {
             </h3>
           </div>
 
-          {isLoading && <LoadingIndicator width={80} height={80} />}
+          {isLoading && <AllActivitiesSkeletonSection />}
           {isError && <ErrorIndicator width={80} height={80} />}
 
           {activities.length > 0 ? (
