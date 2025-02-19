@@ -166,9 +166,16 @@ export default function SignupPage() {
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]">
+      <div
+        className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem]
+      max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]
+      mobile:mt-[9rem] mobile:mb-[1.5rem] mobile:p-0"
+      >
         {/** 로고 섹션 */}
-        <div className="flex justify-center mb-[3.2rem] w-full max-w-[27rem] sm:max-w-[34rem]">
+        <div
+          className="flex justify-center mb-[3.2rem] w-full max-w-[27rem]
+        mobile:w-[24.5rem] mobile:[13.8rem]"
+        >
           <Image
             src="/image/logo-big.svg"
             alt="Logo"
@@ -394,7 +401,7 @@ export default function SignupPage() {
               </span>
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
             </div>
-            <div className="mt-[2.4rem] flex justify-center gap-[1.6rem]">
+            <div className="mt-[2.4rem] flex justify-center gap-[1.6rem] mobile:mt-0">
               <Link
                 href="https://www.google.com"
                 target="_blank"

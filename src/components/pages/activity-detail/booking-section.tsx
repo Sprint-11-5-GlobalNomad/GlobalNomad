@@ -9,9 +9,10 @@ import MessageModal from "@/components/common/ui/modal/message-modal";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import BookingModal from "./booking-modal";
+import BookingModal from "./media-components/booking-modal";
 import { formatTwoDigits } from "@/utils/date-utils";
 import { ScheduleResponseDto } from "@/app/types/schedule-schemas";
+import HeadcountSelectModal from "./media-components/headcount-select-modal";
 
 export default function BookingSection() {
   const { id } = useParams();
@@ -22,9 +23,12 @@ export default function BookingSection() {
   const [selectedTime, setSelectedTime] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isHeadcountSelectModalOpen, setIsHeadcountSelectModalOpen] =
+    useState(false);
 
   const handleDateChange = (day: Date) => {
     setSelectedDate(day);
+    setSelectedTime(0);
   };
 
   const { data: schedules } = useAvailableSchedules({
@@ -84,9 +88,9 @@ export default function BookingSection() {
       className="border border-solid border-gray-300 rounded-[1.2rem]
     bg-white w-[38.4rem] h-[78rem] shadow-container
     flex flex-col items-start px-[2.4rem] pt-[2.4rem] pb-[1.8rem]
-    tablet:w-[25.1rem] tablet:h-[43rem]"
+    tablet:w-[25.1rem] tablet:h-[43rem] mobile:w-0 mobile:h-0 mobile:p-0"
     >
-      <form className="flex flex-col gap-[1.6rem]">
+      <form className="flex flex-col gap-[1.6rem] mobile:hidden">
         <div className="flex flex-col gap-[1.6rem]">
           {/* 가격 섹션 */}
           <div>
@@ -244,6 +248,52 @@ export default function BookingSection() {
         </div>
       </form>
 
+      {/* 모바일 전용 예약 섹션 */}
+      <form
+        className="desktop:hidden tablet:hidden bg-white
+      w-full h-[8.3rem] border-t border-solid border-gray-700
+      fixed left-0 bottom-0 z-10 flex-between p-[1.6rem] pb-[0.3rem]"
+      >
+        <div className="flex flex-col gap-[0.8rem]">
+          <span className="text-2lg font-bold text-center">
+            ₩ {Number(totalPrice).toLocaleString("ko-KR")}
+            <span className="text-2lg font-semiBold"> / </span>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                setIsHeadcountSelectModalOpen(true);
+              }}
+              className="text-2lg text-green-dark font-medium"
+            >
+              {`${headCount > 1 ? `총 ${headCount} 인` : "1명"}`}
+            </button>
+          </span>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsCalendarOpen(true);
+            }}
+            className="text-md font-semiBold cursor-pointer underline
+            text-green-dark flex justify-start"
+          >
+            {selectedTime > 0
+              ? `${formatTwoDigits(String(selectedDate))} ${selectedSchedule?.times[0].startTime} ~ ${selectedSchedule?.times[0].endTime}`
+              : "날짜 선택하기"}
+          </button>
+        </div>
+        <Button
+          ButtonType="reservation"
+          type="submit"
+          label="예약하기"
+          onClick={(e) => {
+            e.preventDefault();
+            handleBooking();
+          }}
+          disabled={!isReservationAvailable}
+        />
+      </form>
+
       {isCalendarOpen && (
         <BookingModal
           schedules={schedules}
@@ -252,8 +302,13 @@ export default function BookingSection() {
           availableTimes={availableTimes}
           selectedTime={selectedTime}
           onSelectTime={setSelectedTime}
-          handleBooking={handleBooking}
           onClose={() => setIsCalendarOpen(false)}
+        />
+      )}
+
+      {isHeadcountSelectModalOpen && (
+        <HeadcountSelectModal
+          onClose={() => setIsHeadcountSelectModalOpen(false)}
         />
       )}
 
