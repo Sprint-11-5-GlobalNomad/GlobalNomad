@@ -27,7 +27,6 @@ export default function PopularActivitiesSection() {
     sort: "most_reviewed",
   });
 
-  // const activities = data?.pages.flatMap((page) => page.activities) || [];
   const activities = useMemo(() => {
     return data?.pages.flatMap((page) => page.activities) || [];
   }, [data]);

@@ -2,7 +2,7 @@ import { useCancelReservation } from "@/app/react-query/reservation-state";
 import { useState, forwardRef } from "react";
 import Image from "next/image";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
-import { ReviewModal } from "@/app/profile/my-reservations/component/review-modal";
+import { ReviewModal } from "@/components/pages/profile-reservation/review-modal";
 import Button from "@/components/common/ui/button";
 import ConfirmationModal from "@/components/common/ui/modal/confirmation-modal";
 import Link from "next/link";

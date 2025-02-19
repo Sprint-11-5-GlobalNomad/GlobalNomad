@@ -23,7 +23,6 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
     if (typeof window !== "undefined" && window.kakao) {
       window.kakao.maps.load(() => {
         const geocoder = new window.kakao.maps.services.Geocoder();
-        // const address = address;
         console.log("주소", address);
 
         geocoder.addressSearch(
@@ -81,10 +80,13 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
       <Script
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
-        // strategy="beforeInteractive"
         onLoad={() => console.log("카카오 맵 스크립트 로드 완료")}
       />
-      <div id="map" className="w-[79rem] h-[45rem] rounded-[1.6rem]"></div>
+      <div
+        id="map"
+        className="w-[79rem] h-[45rem] rounded-[1.6rem]
+      tablet:w-[42.9rem] tablet:h-[30.8rem]"
+      ></div>
     </>
   );
 }

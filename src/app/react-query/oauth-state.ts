@@ -5,7 +5,7 @@ import {
   signUpWithOauth,
   signInWithOauth,
   refreshToken,
-} from "../api/auth-api";
+} from "../(primary)/api/auth-api";
 import {
   SignUpWithOauthRequestBody,
   SignInWithOauthRequestBody,

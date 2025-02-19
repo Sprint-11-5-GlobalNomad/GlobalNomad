@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useLogin } from "../react-query/oauth-state";
 import Image from "next/image";
 import Link from "next/link";
-import MessageModal from "../../components/common/ui/modal/message-modal";
-import Button from "../../components/common/ui/button";
 import { AxiosError } from "axios";
+import { useLogin } from "@/app/react-query/oauth-state";
+import Button from "@/components/common/ui/button";
+import MessageModal from "@/components/common/ui/modal/message-modal";
 // import axios,{ useSignInWithOauth } from "../../../react-query/oauth-state";
 
 interface LoginFormInputs {
