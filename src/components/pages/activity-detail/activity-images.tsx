@@ -3,7 +3,6 @@
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { LoadingIndicator } from "../../common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "../../common/layout/indicator/error-indicator";
 
 export default function ActivityImages() {
@@ -11,7 +10,13 @@ export default function ActivityImages() {
   const { data: activity, isLoading, isError } = useActivityDetail(Number(id));
   const subImageCount = activity?.subImages.length;
 
-  if (isLoading) return <LoadingIndicator width={100} height={100} />;
+  if (isLoading)
+    return (
+      <div
+        className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]
+    tablet:w-[72rem] tablet:h-[31rem] tablet:mb-[3.2rem] skeleton rounded-[1.2rem]"
+      />
+    );
   if (isError) return <ErrorIndicator width={100} height={100} />;
 
   return (
