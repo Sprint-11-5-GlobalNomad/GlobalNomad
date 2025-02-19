@@ -48,12 +48,11 @@ export default function ActivityImages() {
     mobile:w-full mobile:h-[31rem] mobile:mb-[1.5rem]"
     >
       {isMobile ? (
-        <>
+        <div className="relative">
           <button
             onClick={prevImage}
             className={`w-[2.4rem] h-[4.7rem]
     absolute top-1/2 translate-y-[-50%] left-[1.6rem] ${totalImages === 1 ? "hidden" : ""}`}
-            // disabled={activity?.subImages.length === 0}
           >
             <Image
               src="/image/btn_pagination_arrow_left.svg"
@@ -87,7 +86,6 @@ export default function ActivityImages() {
             onClick={nextImage}
             className={`w-[2.4rem] h-[4.7rem]
           absolute top-1/2 translate-y-[-50%] right-[1.6rem] ${totalImages === 1 ? "hidden" : ""}`}
-            disabled={activity?.subImages.length === 0}
           >
             <Image
               src="/image/btn_pagination_arrow_right.svg"
@@ -96,7 +94,7 @@ export default function ActivityImages() {
               height={47}
             />
           </button>
-        </>
+        </div>
       ) : (
         <div>
           {totalImages > 1 ? (
