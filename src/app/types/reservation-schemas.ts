@@ -8,6 +8,7 @@ export interface ReservationResponseDto {
     title: string;
     id: number;
   };
+  nickname: string;
   scheduleId: number;
   status: "pending" | "confirmed" | "declined" | "canceled" | "completed";
   reviewSubmitted: boolean;

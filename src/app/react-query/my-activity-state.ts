@@ -19,12 +19,12 @@ import { ReservationResponseDto } from "../types/reservation-schemas";
 // 월별 예약 현황 타입
 interface MonthlyReservationStat {
   date: string;
+  activityId: number;
   reservations: {
     completed: number;
     confirmed: number;
     pending: number;
   };
-  activityId?: number;
 }
 
 // 날짜별 예약 현황 타입
@@ -75,9 +75,9 @@ export const useMyActivities = (cursorId?: number, size = 20) =>
 
 // 월별 예약 현황 조회
 export const useMonthlyReservationStats = (
-  activityId?: number,
-  year?: string,
-  month?: string
+  activityId: number,
+  year: string,
+  month: string
 ) =>
   useQuery<MonthlyReservationStat[], unknown>({
     queryKey: ["monthlyReservationStats", activityId, year, month],
@@ -116,7 +116,7 @@ export const useMonthlyReservationStats = (
   });
 
 // 날짜별 예약 정보 조회
-export const useDailyReservationStats = (activityId?: number, date?: string) =>
+export const useDailyReservationStats = (activityId: number, date: string) =>
   useQuery<DailyReservationStat[], unknown>({
     queryKey: ["dailyReservationStats", activityId, date],
     queryFn: async () => {
