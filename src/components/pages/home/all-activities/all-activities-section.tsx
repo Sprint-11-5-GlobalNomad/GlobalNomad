@@ -6,10 +6,10 @@ import AllActivitiesTitle from "./all-activities-title";
 import CategoryPriceFilter from "./category-price-filter";
 import { useActivities } from "@/app/react-query/activity-state";
 import { useState } from "react";
-import { LoadingIndicator } from "@/components/common/layout/indicator/loading-indicator";
 import { ErrorIndicator } from "@/components/common/layout/indicator/error-indicator";
 import { CategoryType, SortType } from "@/app/types/activity-schemas";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
+import AllActivitiesSkeletonSection from "./all-activites-skeleton-section";
 
 const SIZE = 9;
 
@@ -43,7 +43,7 @@ export default function AllActivitiesSection() {
 
       <AllActivitiesTitle category={category} />
       {isLoading ? (
-        <LoadingIndicator width={80} height={80} />
+        <AllActivitiesSkeletonSection />
       ) : isError ? (
         <ErrorIndicator width={80} height={80} />
       ) : (data?.activities?.length ?? 0 > 0) ? (
