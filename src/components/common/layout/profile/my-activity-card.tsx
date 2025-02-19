@@ -6,7 +6,7 @@ import EditDeleteDropdown from "../../ui/dropdown/edit-delete-dropdown";
 import { useState, forwardRef } from "react";
 import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
 import ConfirmationModal from "../../ui/modal/confirmation-modal";
-import { useCanDeleteActivity } from "@/hooks/use-can-delete-activity";
+import { fetchFiveMonthsStats } from "@/hooks/use-can-delete-activity";
 import Link from "next/link";
 
 type ActivityCardProps = Pick<
@@ -16,21 +16,32 @@ type ActivityCardProps = Pick<
 
 export const MyActivityCard = forwardRef<HTMLDivElement, ActivityCardProps>(
   (ActivityProps, ref) => {
-    const { canDelete } = useCanDeleteActivity(ActivityProps.id);
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
     const [isDeleteable, setIsDeleteAble] = useState(false);
     const deleteMyActivity = useDeleteMyActivity();
 
-    function handleModalClose() {
-      setIsCancelModalOpen(false);
+    async function handleModalOpen() {
+      try {
+        const stats = await fetchFiveMonthsStats(ActivityProps.id);
+        const hasReservations = stats.some(
+          (stat: { reservations: { pending: number; confirmed: number } }) =>
+            stat.reservations.pending > 0 || stat.reservations.confirmed > 0
+        );
+
+        if (hasReservations) {
+          alert("예약 대기 또는 승인 상태의 체험은 삭제할 수 없습니다.");
+          return;
+        }
+
+        setIsCancelModalOpen(true);
+      } catch (error) {
+        console.error("예약 정보를 불러오는 중 오류 발생:", error);
+        alert("예약 정보를 확인할 수 없습니다. 나중에 다시 시도해 주세요.");
+      }
     }
 
-    function handleModalOpen() {
-      if (!canDelete) {
-        alert("예약 대기 또는 승인 상태의 체험은 삭제할 수 없습니다.");
-        return;
-      }
-      setIsCancelModalOpen(true);
+    function handleModalClose() {
+      setIsCancelModalOpen(false);
     }
 
     async function handleDelete() {
