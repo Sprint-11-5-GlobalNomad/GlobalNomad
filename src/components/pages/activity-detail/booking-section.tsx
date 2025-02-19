@@ -71,6 +71,11 @@ export default function BookingSection() {
 
   const isReservationAvailable = selectedTime > 0 && headCount > 0;
 
+  const handleConfirm = (newValue: number) => {
+    setHeadCount(newValue);
+    setIsHeadcountSelectModalOpen(false);
+  };
+
   const handleBooking = () => {
     const reservationData = {
       scheduleId: selectedTime,
@@ -308,7 +313,11 @@ export default function BookingSection() {
 
       {isHeadcountSelectModalOpen && (
         <HeadcountSelectModal
-          onClose={() => setIsHeadcountSelectModalOpen(false)}
+          onClose={() => {
+            setIsHeadcountSelectModalOpen(false);
+            setHeadCount(headCount);
+          }}
+          onConfirm={handleConfirm}
         />
       )}
 
