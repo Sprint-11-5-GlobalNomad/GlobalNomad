@@ -32,7 +32,7 @@ export const useAuth = () => {
       if (!token) return null; // ✅ 기존 코드처럼 토큰 없으면 `null` 반환
       return fetchMyDetails();
     },
-    staleTime: 1000 * 60 * 60, // ✅ 5분 동안 캐싱 유지
+    staleTime: 1000 * 60 * 15, // ✅ 5분 동안 캐싱 유지
     retry: false, // ✅ 에러 발생 시 재시도하지 않음
   });
 
