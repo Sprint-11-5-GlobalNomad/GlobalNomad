@@ -3,7 +3,7 @@ import {
   UserServiceResponseDto,
   CreateUserBodyDto,
   UpdateUserBodyDto,
-} from "../types/user-schemas";
+} from "../../types/user-schemas";
 
 // 회원가입
 export const createUser = async (userData: CreateUserBodyDto) => {

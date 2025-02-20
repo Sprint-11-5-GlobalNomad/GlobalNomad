@@ -1,5 +1,5 @@
 import { instance } from "./base-api";
-import { ReservationResponseDto } from "../types/reservation-schemas";
+import { ReservationResponseDto } from "../../types/reservation-schemas";
 
 // 내 예약 리스트 조회
 export const fetchMyReservations = async (

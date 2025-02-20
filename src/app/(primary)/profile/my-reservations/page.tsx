@@ -97,6 +97,7 @@ export default function MyReservation() {
                     totalPrice={reservation.totalPrice}
                     id={reservation.id}
                     ref={isLastItem ? ref : null} // ✅ 무한 스크롤 적용
+                    reviewSubmitted={reservation.reviewSubmitted}
                   />
                 );
               })

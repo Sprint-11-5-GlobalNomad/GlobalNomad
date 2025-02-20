@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useLogin } from "../react-query/oauth-state";
 import Image from "next/image";
 import Link from "next/link";
-import MessageModal from "../../components/common/ui/modal/message-modal";
-import Button from "../../components/common/ui/button";
 import { AxiosError } from "axios";
+import { useLogin } from "@/app/react-query/oauth-state";
+import Button from "@/components/common/ui/button";
+import MessageModal from "@/components/common/ui/modal/message-modal";
 // import axios,{ useSignInWithOauth } from "../../../react-query/oauth-state";
 
 interface LoginFormInputs {
@@ -105,17 +105,24 @@ export default function LoginPage() {
     }
   }, [router]);
 
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_REST_API_KEY&redirect_uri=http://localhost:3000/auth/kakao/callback&response_type=code`;
+  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_REST_API_KEY&redirect_uri=http://localhost:3000/auth/kakao/callback&response_type=code`;
 
-  const handleKakaoLogin = () => {
-    window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
-  };
+  // const handleKakaoLogin = () => {
+  //   window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
+  // };
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]">
+      <div
+        className="flex flex-col items-center justify-center my-[2rem] py-[3.2rem]
+      max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] mobile:gap-[4rem] md:gap-[5.6rem]
+      mobile:p-0 mobile:m-0 mobile:h-full mobile:mt-[9rem]"
+      >
         {/** 로고 섹션 */}
-        <div className="flex justify-center mb-[3.2rem] w-full max-w-[27rem] sm:max-w-[34rem]">
+        <div
+          className="flex justify-center mb-[3.2rem] w-full max-w-[27rem]
+        mobile:w-[24.5rem] mobile:h-[13.8rem] mobile:mb-0"
+        >
           <Image
             src="/image/logo-big.svg"
             alt="Logo"
@@ -127,11 +134,11 @@ export default function LoginPage() {
           />
         </div>
         {/** 폼 섹션 */}
-        <div className="flex flex-col gap-[4rem] sm:gap-[4.8rem]">
-          <div className="w-full flex items-center justify-center flex-col gap-[3.2rem] sm:gap-[2.6rem]">
+        <div className="flex flex-col gap-[4rem] mobile:gap-[4rem]">
+          <div className="w-full flex items-center justify-center flex-col gap-[3.2rem] mobile:gap-[2.4rem]">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="w-full flex flex-col max-w-[35rem] sm:max-w-[64rem] gap-[2.8rem]"
+              className="w-full flex flex-col max-w-[35rem] mobile:max-w-[64rem] gap-[2.8rem]"
             >
               {/* 이메일 */}
               <div className="mb-[1.6rem]">
@@ -249,33 +256,45 @@ export default function LoginPage() {
             </form>
 
             {/* 회원가입 이동 */}
-            <p className="mt-[1.6rem] text-center text-[1.6rem] font-normal text-[var(--color-gray-600)]">
+            <p
+              className="mt-[1.6rem] text-center text-[1.6rem] font-normal text-[var(--color-gray-600)]
+            mobile:mt-[0.8rem]"
+            >
               회원이 아니신가요?{" "}
               <Link
                 href="/signup"
-                className=" text-[1.6rem] font-normal text-[var(--color-green-dark)] cursor-pointer"
+                className="text-[1.6rem] font-regular text-green-dark cursor-pointer underline"
               >
                 회원가입하기
               </Link>
             </p>
           </div>
           {/* 소셜 로그인 */}
-          <div className="w-full flex flex-col gap-[2.4rem] sm:gap-[4rem]">
+          <div className="w-full flex flex-col gap-[2.4rem] mobile:gap-[2.4rem]">
             <div className="flex items-center justify-between">
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
-              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
+              <span
+                className="mx-[2.8rem] text-gray-800 text-[1.4rem]
+              mobile:text-[1.4rem] leading-[2.4rem] font-normal"
+              >
                 SNS 계정으로 로그인하기
               </span>
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
             </div>
-            <div className="mt-[2.4rem] flex justify-center gap-[1.6rem]">
+
+            <div
+              className="mt-[2.4rem] flex justify-center gap-[1.6rem]
+            mobile:mt-0 mobile:mb-[3.5rem]"
+            >
               <Link
                 href="https://www.google.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="min-w-[4.8rem] sm:w-[7.2rem] min-h-[4.8rem] sm:h-[7.2rem] bg-[var(--color-white)] rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
+                className="min-w-[4.8rem] min-h-[4.8rem]
+                bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg
+                mobile:w-[4.8rem] mobile:h-[4.8rem]"
               >
-                <div className="w-[1.8rem] sm:w-[2.7rem]">
+                <div className="w-[1.8rem] mobile:w-[2.7rem]">
                   <Image
                     src="/image/Google-Icon.svg"
                     alt="Google"
@@ -285,10 +304,12 @@ export default function LoginPage() {
                 </div>
               </Link>
               <button
-                onClick={handleKakaoLogin} // ✅ 카카오 로그인 실행
-                className="min-w-[4.8rem] sm:w-[7.2rem] min-h-[4.8rem] sm:h-[7.2rem] bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg"
+                // onClick={handleKakaoLogin} // ✅ 카카오 로그인 실행
+                className="min-w-[4.8rem] min-h-[4.8rem]
+                bg-white rounded-full shadow-md flex items-center justify-center hover:shadow-lg
+                mobile:w-[4.8rem] mobile:h-[4.8rem]"
               >
-                <div className="w-[1.8rem] sm:w-[2.7rem]">
+                <div className="w-[1.8rem] mobile:w-[2.7rem]">
                   <Image
                     src="/image/Kakao-Icon.svg"
                     alt="Kakao"

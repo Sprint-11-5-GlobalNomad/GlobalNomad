@@ -4,7 +4,7 @@ import {
   fetchMyReservations,
   cancelReservation,
   submitReservationReview,
-} from "../api/my-reservations-api";
+} from "../(primary)/api/my-reservations-api";
 
 // 내 예약 리스트 조회
 export const useMyReservations = (cursorId?: number, status?: string) =>

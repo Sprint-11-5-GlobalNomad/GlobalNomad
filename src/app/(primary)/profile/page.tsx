@@ -3,9 +3,13 @@
 import React, { useEffect, useState } from "react";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
-import { useUpdateMyDetails, useMyDetails } from "../react-query/user-state";
+import { useUpdateMyDetails, useMyDetails } from "../../react-query/user-state";
 import { uploadProfileImage } from "../api/user-api";
 import { useQueryClient } from "@tanstack/react-query";
+
+interface UserDetails {
+  profileImageUrl: string;
+}
 
 const currentPage = "/profile";
 
@@ -21,7 +25,7 @@ export default function ProfilePage() {
   const [nickname, setNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showDetails, setShowDetails] = useState(false);

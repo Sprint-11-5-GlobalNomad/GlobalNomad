@@ -3,7 +3,7 @@ import {
   OauthApp,
   SignInWithOauthRequestBody,
   SignUpWithOauthRequestBody,
-} from "../types/oauth-schemas";
+} from "../../types/oauth-schemas";
 
 import { instance } from "./base-api";
 
@@ -35,16 +35,18 @@ export const login = async (credentials: {
 // 토큰 재발급
 export const refreshToken = async () => {
   const token = localStorage.getItem("refreshToken");
-  if (!token) throw new Error("Refresh token이 없습니다.");
+  if (!token) alert("Refresh token이 없습니다.");
 
   const response = await axios.post<{
     refreshToken: string;
     accessToken: string;
   }>(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/auth/tokens`,
+    `https://sp-globalnomad-api.vercel.app/11-5/auth/tokens`,
     {},
     {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
   );
 

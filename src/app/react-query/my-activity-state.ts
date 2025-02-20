@@ -8,7 +8,7 @@ import {
   updateReservationStatus,
   deleteMyActivity,
   updateMyActivity,
-} from "../api/my-activities-api";
+} from "../(primary)/api/my-activities-api";
 import {
   ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,
