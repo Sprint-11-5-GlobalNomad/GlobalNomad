@@ -205,7 +205,8 @@ export default function ActivityPostPage() {
           <div ref={reservationRef} tabIndex={-1}>
             <ReservationTimeSelector
               reservationTimes={reservationTimes}
-              setReservationTimes={setReservationTimes}
+              setAddReservationTimes={setReservationTimes}
+              setExistingReservationTimes={setReservationTimes}
             />
             {showError && reservationTimes.length === 0 && (
               <p className="text-red-500 text-sm mt-2">
