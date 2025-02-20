@@ -24,15 +24,20 @@ export const fetchMonthlyReservationStats = async (
   year: string,
   month: string
 ) => {
-  const response = await instance.get<
-    {
-      date: string;
-      reservations: { completed: number; confirmed: number; pending: number };
-    }[]
-  >(`/my-activities/${activityId}/reservation-dashboard`, {
-    params: { year, month },
-  });
-  return response.data;
+  try {
+    const response = await instance.get<
+      {
+        date: string;
+        reservations: { completed: number; confirmed: number; pending: number };
+      }[]
+    >(`/my-activities/${activityId}/reservation-dashboard`, {
+      params: { year, month },
+    });
+    return response.data || [];
+  } catch (error) {
+    console.error("Failed to fetch reservation stats:", error);
+    return [];
+  }
 };
 
 // 내 체험 날짜별 예약 정보 조회
