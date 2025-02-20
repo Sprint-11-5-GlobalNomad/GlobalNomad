@@ -85,7 +85,7 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
       <div
         id="map"
         className="w-[79rem] h-[45rem] rounded-[1.6rem]
-      tablet:w-[42.9rem] tablet:h-[30.8rem]"
+      tablet:w-[42.9rem] tablet:h-[30.8rem] mobile:w-full"
       ></div>
     </>
   );

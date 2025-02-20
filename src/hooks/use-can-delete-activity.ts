@@ -1,36 +1,41 @@
-import { useState, useEffect } from "react";
-import { useMonthlyReservationStats } from "@/app/react-query/my-activity-state";
+import { useQuery } from "@tanstack/react-query";
+import { fetchMonthlyReservationStats } from "@/app/api/my-activities-api";
+
+export async function fetchFiveMonthsStats(activityId: number) {
+  const currentDate = new Date();
+  const statsArray = [];
+
+  for (let i = -2; i <= 2; i++) {
+    const date = new Date(currentDate);
+    date.setMonth(date.getMonth() + i);
+
+    const year = date.getFullYear().toString();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+
+    try {
+      const stats = await fetchMonthlyReservationStats(activityId, year, month);
+      statsArray.push(...stats);
+    } catch (error) {
+      console.error(
+        `Failed to fetch reservation stats for ${year}-${month}:`,
+        error
+      );
+    }
+  }
+
+  return statsArray;
+}
 
 export function useCanDeleteActivity(activityId: number) {
-  const { data: monthlyStats, isLoading } = useMonthlyReservationStats(
-    activityId,
-    new Date().getFullYear().toString(),
-    (new Date().getMonth() + 1).toString().padStart(2, "0")
-  );
-
-  const [canDelete, setCanDelete] = useState(false);
-
-  useEffect(() => {
-    if (!monthlyStats) return;
-
-    let hasPending = false;
-    let hasApproved = false;
-
-    monthlyStats.forEach((stat) => {
-      if (stat.reservations.pending > 0) {
-        hasPending = true;
-      }
-      if (stat.reservations.confirmed > 0) {
-        hasApproved = true;
-      }
-    });
-
-    if (hasPending || hasApproved) {
-      setCanDelete(false); // 삭제 불가능
-    } else {
-      setCanDelete(true); // 삭제 가능
-    }
-  }, [monthlyStats]);
+  const { data: canDelete, isLoading } = useQuery({
+    queryKey: ["reservationStats", activityId, "5months"],
+    queryFn: () => fetchFiveMonthsStats(activityId),
+    select: (stats) =>
+      !stats.some(
+        (stat: { reservations: { pending: number; confirmed: number } }) =>
+          stat.reservations.pending > 0 || stat.reservations.confirmed > 0
+      ),
+  });
 
   return { canDelete, isLoading };
 }

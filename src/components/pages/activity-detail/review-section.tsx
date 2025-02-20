@@ -18,76 +18,58 @@ export default function ReviewSection() {
   const totlaPages = Math.ceil((data?.totalCount || 0) / SIZE);
 
   return (
-    <div className="flex flex-col items-center">
-      <ul className="flex flex-col gap-[2.4rem] mb-[7.2rem]">
+    <div className="flex flex-col items-center mobile:w-[32.7rem]">
+      <ul className="flex flex-col gap-[2.4rem] mb-[7.2rem] mobile:w-full mobile:mb-[1.6rem]">
         {isLoading ? (
-          <div className="flex flex-col gap-[2.4rem] mb-[7.2rem]">
+          <div className="flex flex-col gap-[2.4rem] mb-[7.2rem] mobile:w-full">
             <div className="skeleton w-[79rem] h-[14rem] tablet:w-[43rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[25rem] rounded-[1.5rem]" />
-            <hr
-              className="w-[80rem] h-[0.1rem] bg-nomad-black
-                    opacity-25 tablet:w-[46.9rem]"
-            />
+            <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
             <div className="skeleton w-[79rem] h-[14rem] tablet:w-[43rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[25rem] rounded-[1.5rem]" />
-            <hr
-              className="w-[80rem] h-[0.1rem] bg-nomad-black
-                    opacity-25 tablet:w-[46.9rem]"
-            />
+            <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
             <div className="skeleton w-[79rem] h-[14rem] tablet:w-[43rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[25rem] rounded-[1.5rem]" />
           </div>
         ) : (
           <div>
-            {data?.reviews.map((review, index) => (
-              <div key={review.id}>
-                <li
-                  className="flex items-start gap-[1.6rem] mb-[2.4rem]
-            tablet:ml-[2.4rem]"
-                >
-                  <div>
-                    <Image
-                      src={
-                        review.user.profileImageUrl ||
-                        "/image/profile_default.svg"
-                      }
-                      alt="유저 프로필 이미지"
-                      width={45}
-                      height={45}
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-[0.8rem] tablet:w-[36.8rem]">
-                    <div className="flex items-center gap-[0.8rem]">
-                      <span className="text-lg font-semiBold">
-                        {review.user.nickname}
-                      </span>
-                      <span className="text-md font-regular">|</span>
-                      <time
-                        dateTime={review.updatedAt}
-                        className="text-lg font-regular text-gray-600"
-                      >
-                        {formatDate(review.updatedAt)}
-                      </time>
-                    </div>
-                    <p className="text-lg font-regular">{review.content}</p>
-                  </div>
-                </li>
-
-                {index % 3 !== 2 && (
-                  <hr
-                    className="w-[80rem] h-[0.1rem] bg-nomad-black
-        opacity-25 tablet:w-[46.9rem]"
+            data?.reviews.map((review, index) => (
+            <div key={review.id}>
+              <li className="flex items-start gap-[1.6rem] mb-[2.4rem] tablet:ml-[2.4rem] mobile:w-full">
+                <div>
+                  <Image
+                    src={review.user.profileImageUrl || "/image/profile_default.svg"}
+                    alt="유저 프로필 이미지"
+                    width={45}
+                    height={45}
+                    className="object-cover"
                   />
-                )}
-              </div>
-            ))}
+                </div>
+                <div className="flex flex-col gap-[0.8rem] tablet:w-[36.8rem]">
+                  <div className="flex items-center gap-[0.8rem]">
+                    <span className="text-lg font-semiBold">
+                      {review.user.nickname}
+                    </span>
+                    <span className="text-md font-regular">|</span>
+                    <time dateTime={review.updatedAt} className="text-lg font-regular text-gray-600">
+                      {formatDate(review.updatedAt)}
+                    </time>
+                  </div>
+                  <p className="text-lg font-regular">{review.content}</p>
+                </div>
+              </li>
+              {data?.reviews.length === 2
+                ? index === 0 && (
+                    <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
+                  )
+                : data?.reviews.length > 2 &&
+                  index % 3 !== 0 && (
+                    <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
+                  )}
+            </div>
+          ))
           </div>
         )}
       </ul>
       <div className="flex gap-[1rem] tablet:translate-x-1/2">
-        <Pagination
-          totalPages={totlaPages}
-          currentPage={page}
-          setPage={setPage}
-        />
+        <Pagination totalPages={totlaPages} currentPage={page} setPage={setPage} />
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ import BookingCalendar from "@/components/common/ui/booking-calendar";
 import Button from "@/components/common/ui/button";
 import UseOutsideClick from "@/hooks/use-outside-click";
 import Image from "next/image";
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface BookingModalProps {
   schedules?: ScheduleResponseDto[];
@@ -11,7 +13,6 @@ interface BookingModalProps {
   availableTimes?: ScheduleResponseDto[];
   selectedTime: number;
   onSelectTime: (timeId: number) => void;
-  handleBooking: () => void;
   onClose: () => void;
 }
 
@@ -25,31 +26,43 @@ export default function BookingModal({
   onClose,
 }: BookingModalProps) {
   const outsideClickRef = UseOutsideClick(onClose);
-  return (
-    <form
-      className="w-[48rem] bg-white rounded-[2.4rem] z-10 absolute top-[62.4rem] left-[35vw]
-    px-[2.4rem] pt-[2.8rem] pb-[3.2rem] flex flex-col desktop:hidden"
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  return createPortal(
+    <div
+      ref={outsideClickRef}
+      className="w-[48rem] bg-white rounded-[2.4rem] z-[999] tablet:absolute
+      top-[62.4rem] left-[35vw] px-[2.4rem] pt-[2.8rem] pb-[3.2rem]
+      flex flex-col desktop:hidden mobile:w-full mobile:h-full
+      mobile:fixed mobile:top-0 mobile:left-0"
     >
       {/* 날짜 선택 */}
-      <div ref={outsideClickRef}>
-        <div className="flex-between">
-          <h2 className="text-2xl font-bold">날짜</h2>
-          <button onClick={onClose}>
-            <Image
-              src="/image/btn_X.svg"
-              alt="예약 모달 닫기"
-              width={40}
-              height={40}
-            />
-          </button>
-        </div>
-        <div className="ml-[1.6rem] mt-[1.6rem] flex justify-center">
-          <BookingCalendar
-            schedules={schedules}
-            selectedDate={selectedDate}
-            onSelectDate={handleDateChange}
+      <div className="flex-between">
+        <h2 className="text-2xl font-bold">날짜</h2>
+        <button onClick={onClose}>
+          <Image
+            src="/image/btn_X.svg"
+            alt="예약 모달 닫기"
+            width={40}
+            height={40}
           />
-        </div>
+        </button>
+      </div>
+      <div
+        className="ml-[1.6rem] mt-[1.6rem] flex justify-center
+        mobile:ml-0 mobile:mt-[2.9rem]"
+      >
+        <BookingCalendar
+          schedules={schedules}
+          selectedDate={selectedDate}
+          onSelectDate={handleDateChange}
+        />
       </div>
 
       {/* 예약 가능한 시간 */}
@@ -79,7 +92,10 @@ export default function BookingModal({
                             }
                             label={`${time.startTime}~${time.endTime}`}
                             className="flex-shrink-0"
-                            onClick={() => onSelectTime(time.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onSelectTime(time.id);
+                            }}
                           />
                         ))
                       )
@@ -97,19 +113,22 @@ export default function BookingModal({
                 </div>
               </div>
             </div>
-            {/* 예약하기 버튼 */}
+
             <Button
               ButtonType="dateReservation"
-              type="submit"
-              label="예약하기"
+              type="button"
+              label="확인"
               onClick={(e) => {
                 e.preventDefault();
+                onClose();
               }}
               disabled={selectedTime === 0}
+              className="mobile:fixed mobile:bottom-[4rem]"
             />
           </div>
         </div>
       </div>
-    </form>
+    </div>,
+    document.body
   );
 }

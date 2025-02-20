@@ -28,17 +28,17 @@ export default function ActivityDetails() {
   return (
     <div
       className="w-[120rem] flex justify-center
-    tablet:w-full tablet:mr-[2rem]"
+    tablet:w-full tablet:mr-[2rem] mobile:w-full"
     >
-      <div className="tablet:w-[49.3rem]">
+      <div className="tablet:w-[49.3rem] mobile:w-[32.7rem]">
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mb-[4rem] tablet:w-[49.3rem]"
+        opacity-25 mb-[4rem] tablet:w-[49.3rem] mobile:hidden"
         ></hr>
 
         <div
           className="w-[79rem] h-auto flex flex-col justify-start
-        tablet:w-[45.5rem] tablet:ml-[2.4rem]"
+        tablet:w-[45.5rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
         >
           <h2 className="text-xl font-bold mb-[1.6rem]">체험 설명</h2>
           {isLoading ? (
@@ -52,13 +52,14 @@ export default function ActivityDetails() {
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[49.3rem]"
+        opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[49.3rem]
+        mobile:w-full mobile:my-[1.6rem]"
         ></hr>
 
         {/* 지도 섹션 */}
         <div
           className="w-[80rem] flex flex-col gap-[0.8rem]
-        tablet:w-[42.9rem] tablet:ml-[2.4rem]"
+        tablet:w-[42.9rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
         >
           {isLoading ? (
             <div
@@ -88,10 +89,10 @@ export default function ActivityDetails() {
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[4rem] mb-[4rem] tablet:w-[49.3rem]"
+        opacity-25 mt-[4rem] mb-[4rem] tablet:w-[49.3rem] mobile:hidden"
         ></hr>
 
-        <div className="w-[80rem] tablet:w-[49.3rem]">
+        <div className="w-[80rem] tablet:w-[49.3rem] mobile:w-full mobile:mt-[4rem]">
           <div
             className="flex flex-col gap-[2.4rem] mb-[2.4rem]
             tablet:gap-[1.8rem] tablet:ml-[2.4rem]"
@@ -138,7 +139,7 @@ export default function ActivityDetails() {
           ) : (
             <EmptyContent
               description="아직 등록한 리뷰가 없어요"
-              className="my-[10rem] w-[80rem] tablet:w-[49.3rem]"
+              className="my-[10rem] w-[80rem] tablet:w-[49.3rem] mobile:w-[32.7rem]"
             />
           )}
         </div>
