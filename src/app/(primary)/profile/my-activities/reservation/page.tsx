@@ -17,6 +17,30 @@ import { format, isValid } from "date-fns";
 import Image from "next/image";
 import "@/styles/fullcalendar.css";
 
+/** 스케줄 정보 타입 */
+type IDailyStat = {
+  scheduleId: number;
+  startTime: string;
+  endTime: string;
+  count?: {
+    pending?: number;
+    confirmed?: number;
+    completed?: number;
+    declined?: number;
+  };
+};
+
+/** 월간 예약 통계 타입 */
+interface IMonthlyStat {
+  date?: string;
+  activityId?: number;
+  reservations: {
+    confirmed: number;
+    pending: number;
+    completed: number;
+  };
+}
+
 export default function ReservationPage() {
   const calendarRef = useRef<FullCalendar | null>(null);
   const [selectedActivity, setSelectedActivity] = useState<number | null>(null);
@@ -28,34 +52,24 @@ export default function ReservationPage() {
   const [selectedScheduleId, setSelectedScheduleId] = useState<number | null>(
     null
   );
+  const [dailyStatsForModal, setDailyStatsForModal] = useState<IDailyStat[]>(
+    []
+  );
   const [currentDate, setCurrentDate] = useState(new Date());
-
-  interface ReservationStats {
-    reservations: {
-      confirmed: number;
-      pending: number;
-      completed: number;
-    };
-  }
-
-  // Activity ID 변환
   const getSafeActivityId = () => selectedActivity ?? undefined;
 
-  // 날짜 변환
   const getFormattedDate = (date: string | null) =>
     date && isValid(new Date(date))
       ? format(new Date(date), "yyyy-MM-dd")
       : null;
 
-  // API 호출
   const { data: myActivitiesData } = useMyActivities();
   const myActivities = myActivitiesData ?? { activities: [] };
-
-  const formattedSelectedDate = getFormattedDate(selectedDate);
 
   const currentYear = String(new Date().getFullYear());
   const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, "0");
 
+  // 월간 예약 통계
   const { data: monthlyStats, refetch: refetchMonthlyStats } =
     useMonthlyReservationStats(
       getSafeActivityId() ?? 0,
@@ -63,45 +77,34 @@ export default function ReservationPage() {
       currentMonth
     );
 
-  const { data: dailyStats = [], refetch: refetchDailyStats } =
-    useDailyReservationStats(
-      getSafeActivityId() ?? 0,
-      formattedSelectedDate ?? ""
-    );
+  // 일별 스케줄 조회
+  const { refetch: refetchDailyStats } = useDailyReservationStats(
+    getSafeActivityId() ?? 0,
+    getFormattedDate(selectedDate) ?? ""
+  );
 
-  useEffect(() => {
-    console.log(dailyStats);
-  }, [dailyStats]);
-
-  // 월간 예약 통계 갱신
+  // 체험 바뀌면 월별 예약불러오기기
   useEffect(() => {
     if (selectedActivity) {
       refetchMonthlyStats();
     }
   }, [selectedActivity, refetchMonthlyStats]);
 
-  // 일별 예약 통계 갱신
-  useEffect(() => {
-    if (selectedActivity && formattedSelectedDate) {
-      refetchDailyStats();
-    }
-  }, [selectedActivity, formattedSelectedDate, refetchDailyStats]);
-
-  // 이벤트 상태 라벨 처리
-  const getEventLabel = (stat: ReservationStats) => {
-    if (stat.reservations?.confirmed > 0) {
+  // 월별 예약
+  const getEventLabel = (stat: IMonthlyStat) => {
+    if (stat.reservations.confirmed > 0) {
       return {
         label: `승인 ${stat.reservations.confirmed}`,
         className: "confirmed-event",
       };
     }
-    if (stat.reservations?.pending > 0) {
+    if (stat.reservations.pending > 0) {
       return {
         label: `예약 ${stat.reservations.pending}`,
         className: "pending",
       };
     }
-    if (stat.reservations?.completed > 0) {
+    if (stat.reservations.completed > 0) {
       return {
         label: `완료 ${stat.reservations.completed}`,
         className: "completed",
@@ -110,27 +113,24 @@ export default function ReservationPage() {
     return { label: "", className: "" };
   };
 
-  // 캘린더 이벤트 업데이트
   useEffect(() => {
     if (Array.isArray(monthlyStats) && monthlyStats.length > 0) {
       const newEvents = monthlyStats.map((stat) => {
         const { label, className } = getEventLabel(stat);
         return {
           title: label,
-          start: format(new Date(stat.date), "yyyy-MM-dd"),
+          start: stat.date ? format(new Date(stat.date), "yyyy-MM-dd") : "",
           classNames: ["fc-event", className],
-          eventClassNaems: className,
           extendedProps: { activityId: stat.activityId },
         };
       });
-
       setEvents(newEvents);
     } else {
       setEvents([]);
     }
   }, [monthlyStats]);
 
-  // 체험 선택 핸들러
+  // 체험명 선택
   const handleSelectActivity = (selected: string) => {
     const activity = myActivities.activities.find((a) => a.title === selected);
     if (activity) {
@@ -138,31 +138,32 @@ export default function ReservationPage() {
       setSelectedActivityName(activity.title);
     }
   };
-  console.log("myActivities 데이터:", myActivities);
 
-  // 이벤트 클릭 핸들러
   const handleEventClick = async (info: EventClickArg) => {
     if (!selectedActivity || !info.event.start) return;
 
-    const formattedDate = format(info.event.start, "yyyy-MM-dd");
-    setSelectedDate(formattedDate);
+    const clickedDate = format(info.event.start, "yyyy-MM-dd");
+    setSelectedDate(clickedDate);
 
     const updatedDailyStats =
-      (await refetchDailyStats().then((res) => res?.data)) || [];
+      ((await refetchDailyStats().then((res) => res?.data)) as IDailyStat[]) ||
+      [];
 
-    if (!Array.isArray(updatedDailyStats)) return;
-
-    const matchedReservation = updatedDailyStats.find(
-      (stat) => stat.count?.pending > 0 || stat.count?.confirmed > 0
+    const matched = updatedDailyStats.find(
+      (stat) =>
+        (stat.count?.pending ?? 0) > 0 || (stat.count?.confirmed ?? 0) > 0
     );
-
-    if (matchedReservation) {
-      setSelectedScheduleId(matchedReservation.scheduleId);
-      setModalOpen(true);
+    if (matched) {
+      setSelectedScheduleId(matched.scheduleId);
+    } else if (updatedDailyStats.length > 0) {
+      setSelectedScheduleId(updatedDailyStats[0].scheduleId);
+    } else {
+      setSelectedScheduleId(null);
     }
+    setDailyStatsForModal(updatedDailyStats);
+    setModalOpen(true);
   };
 
-  //네비게이션 버튼
   const handlePrev = () => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -170,7 +171,6 @@ export default function ReservationPage() {
       setCurrentDate(calendarApi.getDate());
     }
   };
-
   const handleNext = () => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -186,7 +186,8 @@ export default function ReservationPage() {
       </div>
       <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
         <h1 className="text-[3.2rem] font-bold mb-[3.8rem]">예약 현황</h1>
-        {/* 드롭다운 */}
+
+        {/* 체험 드롭다운 */}
         <div className="mb-[3rem] relative w-full">
           <label className="absolute top-[-0.6rem] left-3 px-1 text-sm font-semibold text-nomad-black bg-white z-10">
             체험명
@@ -201,6 +202,7 @@ export default function ReservationPage() {
           </div>
         </div>
 
+        {/* 달력 */}
         {events.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full">
             <Image
@@ -238,11 +240,11 @@ export default function ReservationPage() {
               height="auto"
               locale="en"
               headerToolbar={false}
-              eventClick={handleEventClick}
               dayMaxEventRows={true}
               aspectRatio={1.35}
               fixedWeekCount={false}
               showNonCurrentDates={false}
+              eventClick={handleEventClick}
               eventClassNames={(arg) => {
                 return ["fc-event", arg.event.extendedProps.className];
               }}
@@ -262,6 +264,7 @@ export default function ReservationPage() {
         )}
       </div>
 
+      {/* 모달 */}
       {modalOpen && selectedActivity && selectedScheduleId !== null && (
         <ReservationModal
           isOpen={modalOpen}
@@ -269,6 +272,10 @@ export default function ReservationPage() {
           activityId={selectedActivity}
           selectedDate={selectedDate ?? ""}
           scheduleId={selectedScheduleId}
+          dailyStatsForThisDate={dailyStatsForModal}
+          onUpdated={() => {
+            refetchMonthlyStats();
+          }}
         />
       )}
     </div>

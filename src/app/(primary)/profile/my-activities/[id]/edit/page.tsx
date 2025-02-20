@@ -18,12 +18,13 @@ import MessageModal from "@/components/common/ui/modal/message-modal";
 import { useUpdateMyActivity } from "@/app/react-query/my-activity-state";
 
 type ReservationAvailableTime = {
+  id?: number;
   date: string;
   startTime: string;
   endTime: string;
 };
 
-export default function ActivityPostPage() {
+export default function ActivityEditPage() {
   const { id } = useParams();
   const activityId = Number(id);
   const { data: activityDetail, isLoading } = useActivityDetail(activityId);
@@ -40,15 +41,19 @@ export default function ActivityPostPage() {
     },
   });
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [bannerImage, setBannerImage] = useState<string | null>(null);
-  const [introImages, setIntroImages] = useState<string[]>([]);
-  const [reservationTimes, setReservationTimes] = useState<
+  // 기존 API 예약 시간과 새로 추가할 예약 시간을 분리합니다.
+  const [existingReservationTimes, setExistingReservationTimes] = useState<
+    ReservationAvailableTime[]
+  >([]);
+  const [addedReservationTimes, setAddedReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
   const [removedReservationIds, setRemovedReservationIds] = useState<number[]>(
     []
   );
+  const [bannerImage, setBannerImage] = useState<string | null>(null);
+  const [introImages, setIntroImages] = useState<string[]>([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const {
     register,
@@ -67,6 +72,7 @@ export default function ActivityPostPage() {
       setBannerImage(activityDetail.bannerImageUrl);
       setIntroImages(activityDetail.subImages.map((img) => img.imageUrl));
 
+      // 기존 예약 시간은 따로 관리
       const initialReservationTimes = activityDetail.schedules.map(
         (schedule) => ({
           id: schedule.id,
@@ -75,13 +81,7 @@ export default function ActivityPostPage() {
           endTime: schedule.endTime,
         })
       );
-
-      setReservationTimes(initialReservationTimes);
-
-      const initialRemovedIds = initialReservationTimes
-        .map((time) => time.id)
-        .filter((id): id is number => id !== undefined);
-      setRemovedReservationIds(initialRemovedIds);
+      setExistingReservationTimes(initialReservationTimes);
     }
   }, [activityDetail, setValue]);
 
@@ -90,7 +90,7 @@ export default function ActivityPostPage() {
       alert("배너 이미지를 등록해주세요.");
       return;
     }
-    if (reservationTimes.length === 0) {
+    if (existingReservationTimes.length + addedReservationTimes.length === 0) {
       alert("예약 가능한 시간대를 추가해주세요.");
       return;
     }
@@ -103,11 +103,14 @@ export default function ActivityPostPage() {
       address: data.address,
       bannerImageUrl: bannerImage,
       subImageUrlsToAdd: introImages,
-      schedulesToAdd: reservationTimes.map(({ date, startTime, endTime }) => ({
-        date,
-        startTime,
-        endTime,
-      })),
+      // 새로 추가된 예약 시간만 schedulesToAdd에 포함
+      schedulesToAdd: addedReservationTimes.map(
+        ({ date, startTime, endTime }) => ({
+          date,
+          startTime,
+          endTime,
+        })
+      ),
       scheduleIdsToRemove: removedReservationIds,
     };
 
@@ -150,7 +153,12 @@ export default function ActivityPostPage() {
               ButtonType="profileSave"
               label="수정하기"
               type="submit"
-              disabled={!bannerImage || reservationTimes.length === 0}
+              disabled={
+                !bannerImage ||
+                existingReservationTimes.length +
+                  addedReservationTimes.length ===
+                  0
+              }
             />
           </div>
 
@@ -216,11 +224,13 @@ export default function ActivityPostPage() {
             )}
           </label>
 
+          {/* 예약 시간 추가를 위한 ReservationTimeSelector에 새 배열 전달 */}
           <div>
             <ReservationTimeSelector
-              reservationTimes={reservationTimes}
-              setReservationTimes={setReservationTimes}
+              setAddReservationTimes={setAddedReservationTimes}
               setRemovedReservationIds={setRemovedReservationIds}
+              reservationTimes={existingReservationTimes}
+              setExistingReservationTimes={setExistingReservationTimes}
             />
           </div>
 

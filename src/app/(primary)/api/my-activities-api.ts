@@ -10,13 +10,23 @@ import { MonthlyReservationStat } from "@/app/react-query/my-activity-state";
 export const fetchMyActivities = async (
   cursorId?: number | null,
   size = 20
-) => {
-  const response = await instance.get<{
-    cursorId: number | null;
-    totalCount: number;
-    activities: ActivityBasicDto[];
-  }>(`/my-activities`, { params: { cursorId, size } });
-  return response.data;
+): Promise<{
+  cursorId: number | null;
+  totalCount: number;
+  activities: ActivityBasicDto[];
+}> => {
+  try {
+    const response = await instance.get<{
+      cursorId: number | null;
+      totalCount: number;
+      activities: ActivityBasicDto[];
+    }>(`/my-activities`, { params: { cursorId, size } });
+
+    return response.data ?? { cursorId: null, totalCount: 0, activities: [] }; // 기본값 보장
+  } catch (error) {
+    console.error("체험 리스트를 가져오는 중 오류 발생:", error);
+    throw error;
+  }
 };
 
 // 내 체험 월별 예약 현황 조회
