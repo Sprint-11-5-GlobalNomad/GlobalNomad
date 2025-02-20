@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import TimeDropdown from "./time-dropdown";
 import Button from "@/components/common/ui/button";
-import { TIME_TABLE } from "../../../app/profile/my-activities/post/_constants/constants";
+import { TIME_TABLE } from "../../../app/(primary)/profile/my-activities/post/_constants/constants";
 import DateSelector from "./date-selector";
 
 type ReservationAvailableTime = {

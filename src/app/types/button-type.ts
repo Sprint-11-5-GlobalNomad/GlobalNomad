@@ -54,6 +54,7 @@ const ButtonSizes: Record<
   },
   dateReservation: {
     // 날짜 예약하기
+    lg: { width: 432, height: 56, radius: 4, font_size: 16 },
     md: { width: 432, height: 56, radius: 4, font_size: 16 }, // 테블릿
     sm: { width: 327, height: 56, radius: 4, font_size: 16 }, // 모바일
   },

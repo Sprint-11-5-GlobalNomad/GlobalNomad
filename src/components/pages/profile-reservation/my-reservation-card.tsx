@@ -2,7 +2,7 @@ import { useCancelReservation } from "@/app/react-query/reservation-state";
 import { useState, forwardRef } from "react";
 import Image from "next/image";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
-import { ReviewModal } from "@/app/profile/my-reservations/component/review-modal";
+import { ReviewModal } from "@/components/pages/profile-reservation/review-modal";
 import Button from "@/components/common/ui/button";
 import ConfirmationModal from "@/components/common/ui/modal/confirmation-modal";
 import Link from "next/link";
@@ -17,6 +17,7 @@ type ReservationCardProps = Pick<
   | "headCount"
   | "totalPrice"
   | "id"
+  | "reviewSubmitted"
 >;
 
 export const MyReservationCard = forwardRef<
@@ -24,7 +25,17 @@ export const MyReservationCard = forwardRef<
   ReservationCardProps
 >(
   (
-    { activity, status, date, startTime, endTime, headCount, totalPrice, id },
+    {
+      activity,
+      status,
+      date,
+      startTime,
+      endTime,
+      headCount,
+      totalPrice,
+      id,
+      reviewSubmitted,
+    },
     ref
   ) => {
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -129,6 +140,7 @@ export const MyReservationCard = forwardRef<
             <Button
               ButtonType="review"
               label="후기 작성"
+              disabled={reviewSubmitted}
               onClick={(event) => {
                 event.stopPropagation();
                 setIsReviewModalOpen(true);

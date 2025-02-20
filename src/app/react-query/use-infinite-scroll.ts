@@ -1,13 +1,13 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchMyActivities } from "../api/my-activities-api";
-import { fetchMyReservations } from "../api/my-reservations-api";
-import { fetchActivities } from "../api/activities-api";
+import { fetchMyActivities } from "../(primary)/api/my-activities-api";
+import { fetchMyReservations } from "../(primary)/api/my-reservations-api";
+import { fetchActivities } from "../(primary)/api/activities-api";
 import {
   ActivityBasicDto,
   FindActivitiesQueryDto,
 } from "../types/activity-schemas";
 import Error from "next/error";
-import { fetchNotifications } from "../api/my-notifications-api";
+import { fetchNotifications } from "../(primary)/api/my-notifications-api";
 
 export function useInfinityMyActivities() {
   return useInfiniteQuery({

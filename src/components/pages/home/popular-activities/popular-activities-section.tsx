@@ -4,7 +4,7 @@ import { useInfiniteActivities } from "@/app/react-query/use-infinite-scroll";
 import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const SIZE = 9;
 
@@ -27,7 +27,9 @@ export default function PopularActivitiesSection() {
     sort: "most_reviewed",
   });
 
-  const activities = data?.pages.flatMap((page) => page.activities) || [];
+  const activities = useMemo(() => {
+    return data?.pages.flatMap((page) => page.activities) || [];
+  }, [data]);
 
   const { ref, inView } = useInView({
     threshold: 0.25,
