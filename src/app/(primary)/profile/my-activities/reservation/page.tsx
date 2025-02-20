@@ -247,11 +247,10 @@ export default function ReservationPage() {
                 return ["fc-event", arg.event.extendedProps.className];
               }}
               dayCellClassNames={(arg) => {
-                const dateString = format(arg.date, "yyyy-MM-dd");
                 if (
                   events.some(
                     (event) =>
-                      format(new Date(event.start), "yyyy-MM-dd") === dateString
+                      event.start === arg.date.toISOString().split("T")[0]
                   )
                 ) {
                   return ["has-event"];
