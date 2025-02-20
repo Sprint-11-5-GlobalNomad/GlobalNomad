@@ -6,96 +6,80 @@ type ButtonSize = {
   font_size: number;
 };
 
-// 버튼 크기 목록
+// 버튼 크기 목록 (모든 값은 rem 단위)
 const ButtonSizes: Record<
   string,
   { lg?: ButtonSize; md?: ButtonSize; sm?: ButtonSize }
 > = {
   loginSignup: {
-    // 로그인/회원가입
-    lg: {
-      width: 640,
-      height: 48,
-      radius: 6,
-      font_size: 16,
-    },
-    md: { width: 640, height: 48, radius: 6, font_size: 16 },
-    sm: { width: 350, height: 48, radius: 6, font_size: 16 },
+    lg: { width: 64, height: 4.8, radius: 0.6, font_size: 1.6 },
+    md: { width: 64, height: 4.8, radius: 0.6, font_size: 1.6 },
+    sm: { width: 35, height: 4.8, radius: 0.6, font_size: 1.6 },
   },
   modal: {
-    // 모달
-    lg: { width: 120, height: 48, radius: 8, font_size: 16 },
-    md: { width: 120, height: 48, radius: 8, font_size: 16 },
-    sm: { width: 138, height: 42, radius: 8, font_size: 14 },
+    lg: { width: 12, height: 4.8, radius: 0.8, font_size: 1.6 },
+    md: { width: 12, height: 4.8, radius: 0.8, font_size: 1.6 },
+    sm: { width: 13.8, height: 4.2, radius: 0.8, font_size: 1.4 },
   },
   modalDoubleButtons: {
-    // 모달 2버튼
-    lg: { width: 80, height: 38, radius: 6, font_size: 14 },
-    md: { width: 80, height: 38, radius: 6, font_size: 14 },
-    sm: { width: 80, height: 38, radius: 6, font_size: 14 },
+    lg: { width: 8, height: 3.8, radius: 0.6, font_size: 1.4 },
+    md: { width: 8, height: 3.8, radius: 0.6, font_size: 1.4 },
+    sm: { width: 8, height: 3.8, radius: 0.6, font_size: 1.4 },
   },
   search: {
-    // 검색하기
-    lg: { width: 136, height: 56, radius: 4, font_size: 16 },
-    md: { width: 136, height: 56, radius: 4, font_size: 16 },
-    sm: { width: 96, height: 56, radius: 4, font_size: 16 },
+    lg: { width: 13.6, height: 5.6, radius: 0.4, font_size: 1.6 },
+    md: { width: 13.6, height: 5.6, radius: 0.4, font_size: 1.6 },
+    sm: { width: 9.6, height: 5.6, radius: 0.4, font_size: 1.6 },
   },
   availableTime: {
-    // 예약 가능 시간
-    lg: { width: 117, height: 46, radius: 8, font_size: 16 },
-    md: { width: 117, height: 46, radius: 8, font_size: 16 },
-    sm: { width: 117, height: 46, radius: 8, font_size: 16 },
+    lg: { width: 11.7, height: 4.6, radius: 0.8, font_size: 1.6 },
+    md: { width: 11.7, height: 4.6, radius: 0.8, font_size: 1.6 },
+    sm: { width: 11.7, height: 4.6, radius: 0.8, font_size: 1.6 },
   },
   reservation: {
-    // 예약하기
-    lg: { width: 336, height: 56, radius: 4, font_size: 16 },
-    md: { width: 203, height: 56, radius: 4, font_size: 16 },
-    sm: { width: 106, height: 48, radius: 4, font_size: 16 },
+    lg: { width: 33.6, height: 5.6, radius: 0.4, font_size: 1.6 },
+    md: { width: 20.3, height: 5.6, radius: 0.4, font_size: 1.6 },
+    sm: { width: 10.6, height: 4.8, radius: 0.4, font_size: 1.6 },
   },
   dateReservation: {
-    // 날짜 예약하기
-    lg: { width: 432, height: 56, radius: 4, font_size: 16 },
-    md: { width: 432, height: 56, radius: 4, font_size: 16 }, // 테블릿
-    sm: { width: 327, height: 56, radius: 4, font_size: 16 }, // 모바일
+    lg: { width: 43.2, height: 5.6, radius: 0.4, font_size: 1.6 },
+    md: { width: 43.2, height: 5.6, radius: 0.4, font_size: 1.6 },
+    sm: { width: 32.7, height: 5.6, radius: 0.4, font_size: 1.6 },
   },
   profileSave: {
-    // 프로필 저장하기 / 체험 등록하기 / 내 체험 수정
-    lg: { width: 120, height: 48, radius: 4, font_size: 16 },
-    md: { width: 120, height: 48, radius: 4, font_size: 16 },
-    sm: { width: 120, height: 48, radius: 4, font_size: 16 },
+    lg: { width: 12, height: 4.8, radius: 0.4, font_size: 1.6 },
+    md: { width: 12, height: 4.8, radius: 0.4, font_size: 1.6 },
+    sm: { width: 12, height: 4.8, radius: 0.4, font_size: 1.6 },
   },
   review: {
-    // 후기 작성 / 예약 취소
-    lg: { width: 144, height: 43, radius: 6, font_size: 16 },
-    md: { width: 112, height: 40, radius: 6, font_size: 16 },
-    sm: { width: 80, height: 32, radius: 6, font_size: 14 },
+    lg: { width: 14.4, height: 4.3, radius: 0.6, font_size: 1.6 },
+    md: { width: 11.2, height: 4.0, radius: 0.6, font_size: 1.6 },
+    sm: { width: 8, height: 3.2, radius: 0.6, font_size: 1.4 },
   },
   reviewSubmit: {
-    // 후기 작성 제출
-    lg: { width: 432, height: 56, radius: 4, font_size: 16 },
-    md: { width: 432, height: 56, radius: 4, font_size: 16 },
-    sm: { width: 350, height: 54, radius: 4, font_size: 16 },
+    lg: { width: 43.2, height: 5.6, radius: 0.4, font_size: 1.6 },
+    md: { width: 43.2, height: 5.6, radius: 0.4, font_size: 1.6 },
+    sm: { width: 35, height: 5.4, radius: 0.4, font_size: 1.6 },
   },
   approveReject: {
-    // 승인하기 / 거절하기
-    lg: { width: 82, height: 38, radius: 6, font_size: 14 },
-    md: { width: 82, height: 38, radius: 6, font_size: 14 },
-    sm: { width: 82, height: 38, radius: 6, font_size: 14 },
+    lg: { width: 8.2, height: 3.8, radius: 0.6, font_size: 1.4 },
+    md: { width: 8.2, height: 3.8, radius: 0.6, font_size: 1.4 },
+    sm: { width: 8.2, height: 3.8, radius: 0.6, font_size: 1.4 },
   },
   category: {
-    lg: { width: 127, height: 58, radius: 15, font_size: 18 },
-    md: { width: 120, height: 58, radius: 15, font_size: 18 },
-    sm: { width: 80, height: 41, radius: 15, font_size: 16 },
+    lg: { width: 12.7, height: 5.8, radius: 1.5, font_size: 1.8 },
+    md: { width: 12, height: 5.8, radius: 1.5, font_size: 1.8 },
+    sm: { width: 8, height: 4.1, radius: 1.5, font_size: 1.6 },
   },
   page: {
-    lg: { width: 55, height: 55, radius: 15, font_size: 18 },
-    md: { width: 55, height: 55, radius: 15, font_size: 18 },
-    sm: { width: 40, height: 40, radius: 15, font_size: 18 },
+    lg: { width: 5.5, height: 5.5, radius: 1.5, font_size: 1.8 },
+    md: { width: 5.5, height: 5.5, radius: 1.5, font_size: 1.8 },
+    sm: { width: 4, height: 4, radius: 1.5, font_size: 1.8 },
   },
   reservationTime: {
-    lg: { width: 56, height: 56, radius: 9, font_size: 26 },
-    md: { width: 56, height: 56, radius: 9, font_size: 26 },
-    sm: { width: 44, height: 44, radius: 7, font_size: 20 },
+    lg: { width: 5.6, height: 5.6, radius: 0.9, font_size: 2.6 },
+    md: { width: 5.6, height: 5.6, radius: 0.9, font_size: 2.6 },
+    sm: { width: 4.4, height: 4.4, radius: 0.7, font_size: 2 },
   },
 };
 
