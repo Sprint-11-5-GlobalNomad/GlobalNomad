@@ -119,6 +119,7 @@ export default function ReservationPage() {
           title: label,
           start: format(new Date(stat.date), "yyyy-MM-dd"),
           classNames: ["fc-event", className],
+          eventClassNaems: className,
           extendedProps: { activityId: stat.activityId },
         };
       });
@@ -242,6 +243,21 @@ export default function ReservationPage() {
               aspectRatio={1.35}
               fixedWeekCount={false}
               showNonCurrentDates={false}
+              eventClassNames={(arg) => {
+                return ["fc-event", arg.event.extendedProps.className];
+              }}
+              dayCellClassNames={(arg) => {
+                const dateString = format(arg.date, "yyyy-MM-dd");
+                if (
+                  events.some(
+                    (event) =>
+                      format(new Date(event.start), "yyyy-MM-dd") === dateString
+                  )
+                ) {
+                  return ["has-event"];
+                }
+                return [];
+              }}
             />
           </>
         )}
