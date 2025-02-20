@@ -137,6 +137,7 @@ export default function ReservationPage() {
       setSelectedActivityName(activity.title);
     }
   };
+  console.log("myActivities 데이터:", myActivities);
 
   // 이벤트 클릭 핸들러
   const handleEventClick = async (info: EventClickArg) => {

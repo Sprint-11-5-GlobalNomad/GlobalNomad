@@ -4,18 +4,29 @@ import {
   ActivityWithSubImagesAndSchedulesDto,
 } from "../../types/activity-schemas";
 import { ReservationResponseDto } from "../../types/reservation-schemas";
+import { MonthlyReservationStat } from "@/app/react-query/my-activity-state";
 
 // 내 체험 리스트 조회
 export const fetchMyActivities = async (
   cursorId?: number | null,
   size = 20
-) => {
-  const response = await instance.get<{
-    cursorId: number | null;
-    totalCount: number;
-    activities: ActivityBasicDto[];
-  }>(`/my-activities`, { params: { cursorId, size } });
-  return response.data;
+): Promise<{
+  cursorId: number | null;
+  totalCount: number;
+  activities: ActivityBasicDto[];
+}> => {
+  try {
+    const response = await instance.get<{
+      cursorId: number | null;
+      totalCount: number;
+      activities: ActivityBasicDto[];
+    }>(`/my-activities`, { params: { cursorId, size } });
+
+    return response.data ?? { cursorId: null, totalCount: 0, activities: [] }; // 기본값 보장
+  } catch (error) {
+    console.error("체험 리스트를 가져오는 중 오류 발생:", error);
+    throw error;
+  }
 };
 
 // 내 체험 월별 예약 현황 조회
@@ -23,7 +34,7 @@ export const fetchMonthlyReservationStats = async (
   activityId: number,
   year: string,
   month: string
-) => {
+): Promise<MonthlyReservationStat[]> => {
   try {
     const response = await instance.get<
       {
@@ -33,7 +44,13 @@ export const fetchMonthlyReservationStats = async (
     >(`/my-activities/${activityId}/reservation-dashboard`, {
       params: { year, month },
     });
-    return response.data || [];
+
+    return (
+      response.data?.map((stat) => ({
+        ...stat,
+        activityId,
+      })) || []
+    );
   } catch (error) {
     console.error("Failed to fetch reservation stats:", error);
     return [];
