@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchMonthlyReservationStats } from "@/app/api/my-activities-api";
+import { fetchMonthlyReservationStats } from "@/app/(primary)/api/my-activities-api";
 
 export async function fetchFiveMonthsStats(activityId: number) {
   const currentDate = new Date();
