@@ -17,7 +17,7 @@ import {
 import { ReservationResponseDto } from "../types/reservation-schemas";
 
 // 월별 예약 현황 타입
-interface MonthlyReservationStat {
+export interface MonthlyReservationStat {
   date: string;
   activityId: number;
   reservations: {
@@ -40,16 +40,16 @@ interface DailyReservationStat {
 }
 
 // 내 체험 리스트 조회
-export const useMyActivities = (cursorId?: number, size = 20) =>
+export const useMyActivities = (cursorId?: number | null, size = 20) =>
   useQuery<{
-    cursorId: number;
+    cursorId: number | null;
     totalCount: number;
     activities: ActivityBasicDto[];
   }>({
-    queryKey: ["myActivities", cursorId],
+    queryKey: ["myActivities", cursorId ?? "null"],
     queryFn: async () => {
       try {
-        return await fetchMyActivities(cursorId, size);
+        return await fetchMyActivities(cursorId ?? null, size);
       } catch (error) {
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
@@ -68,7 +68,7 @@ export const useMyActivities = (cursorId?: number, size = 20) =>
               alert(error.message);
           }
         }
-        throw error;
+        return { cursorId: null, totalCount: 0, activities: [] };
       }
     },
   });
