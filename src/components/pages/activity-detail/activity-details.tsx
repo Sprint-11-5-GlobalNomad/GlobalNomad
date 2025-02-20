@@ -6,8 +6,8 @@ import { useActivityDetail } from "@/app/react-query/activity-state";
 import Image from "next/image";
 import ReviewSection from "./review-section";
 import { useAuth } from "@/app/(primary)/api/use-auth";
-import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 import KakaoMaps from "./kakomaps/kakaomaps";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
 const getSatisfactionLevel = (rating?: number) => {
   if (rating === undefined || rating === 0) return "평가 없음";
@@ -19,7 +19,7 @@ const getSatisfactionLevel = (rating?: number) => {
 
 export default function ActivityDetails() {
   const { id } = useParams();
-  const { data: activity } = useActivityDetail(Number(id));
+  const { data: activity, isLoading } = useActivityDetail(Number(id));
 
   const { user } = useAuth();
   const isOwner = user?.id === activity?.userId;
@@ -41,9 +41,13 @@ export default function ActivityDetails() {
         tablet:w-[45.5rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
         >
           <h2 className="text-xl font-bold mb-[1.6rem]">체험 설명</h2>
-          <p className="text-lg font-regular opacity-75 tablet:w-[42.8rem]">
-            {activity?.description}
-          </p>
+          {isLoading ? (
+            <div className="skeleton w-[79rem] h-[15rem] tablet:w-[42.8rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[30rem]" />
+          ) : (
+            <p className="text-lg font-regular opacity-75 tablet:w-[42.8rem]">
+              {activity?.description}
+            </p>
+          )}
         </div>
 
         <hr
@@ -57,7 +61,15 @@ export default function ActivityDetails() {
           className="w-[80rem] flex flex-col gap-[0.8rem]
         tablet:w-[42.9rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
         >
-          <KakaoMaps address={activity?.address} />
+          {isLoading ? (
+            <div
+              className="skeleton w-[79rem] h-[45rem] rounded-[1.6rem]
+      tablet:w-[42.9rem] tablet:h-[30.8rem] mobile:w-[32.7rem] mobile:h-[45rem]"
+            />
+          ) : (
+            <KakaoMaps address={activity?.address} />
+          )}
+
           <div className="flex items-center gap-[0.2rem]">
             <Image
               src="/image/location.svg"
@@ -65,9 +77,13 @@ export default function ActivityDetails() {
               width={18}
               height={18}
             />
-            <span className="font-regular text-md text-nomad-black opacity-75">
-              {activity?.address}
-            </span>
+            {isLoading ? (
+              <div className="skeleton w-[20rem] h-[2.4rem] rounded-[0.7rem]" />
+            ) : (
+              <span className="font-regular text-md text-nomad-black opacity-75">
+                {activity?.address}
+              </span>
+            )}
           </div>
         </div>
 
@@ -83,13 +99,21 @@ export default function ActivityDetails() {
           >
             <h2 className="text-xl font-bold mb-[1.6rem] tablet:mb-0">후기</h2>
             <div className="flex items-center gap-[1.6rem]">
-              <span className="text-[5rem] leading-[6rem] font-semiBold">
-                {activity?.rating}
-              </span>
-              <div className="flex flex-col gap-[0.8rem]">
-                <span className="text-2lg font-regular">
-                  {getSatisfactionLevel(activity?.rating)}
+              {isLoading ? (
+                <div className="skeleton w-[7.5rem] h-[6rem] rounded-[0.5rem]" />
+              ) : (
+                <span className="text-[5rem] leading-[6rem] font-semiBold">
+                  {activity?.rating}
                 </span>
+              )}
+              <div className="flex flex-col gap-[0.8rem]">
+                {isLoading ? (
+                  <div className="skeleton w-[7rem] h-[2.6rem] rounded-[0.5rem]" />
+                ) : (
+                  <span className="text-2lg font-regular">
+                    {getSatisfactionLevel(activity?.rating)}
+                  </span>
+                )}
                 <span className="flex items-center gap-[0.6rem]">
                   <Image
                     src="/image/rating-star.svg"
@@ -97,7 +121,14 @@ export default function ActivityDetails() {
                     width={16}
                     height={16}
                   />
-                  {Number(activity?.reviewCount).toLocaleString("ko-KR")}개 후기
+                  {isLoading ? (
+                    <div className="skeleton w-[7.4rem] h-[2.4rem] rounded-[0.5rem]" />
+                  ) : (
+                    <div>
+                      {Number(activity?.reviewCount).toLocaleString("ko-KR")}개
+                      후기
+                    </div>
+                  )}
                 </span>
               </div>
             </div>

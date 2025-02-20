@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 import { formatTime } from "@/utils/time-utils";
 import { highlightText } from "@/utils/higlight-text";
 import { useDeleteNotification } from "@/app/react-query/notification-state";
-import { LoadingIndicator } from "../indicator/loading-indicator";
 import { ErrorIndicator } from "../indicator/error-indicator";
 import { useInfiniteNotifications } from "@/app/react-query/use-infinite-scroll";
 import { useInView } from "react-intersection-observer";
+import { LoadingIndicator } from "../indicator/loading-indicator";
 
 export default function UserNotifications() {
   const [isOpen, setIsOpen] = useState(false);
@@ -128,9 +128,7 @@ export default function UserNotifications() {
                 ))}
               </ul>
               {isFetchingNextPage && (
-                <span className="text-md flex justify-center">
-                  🌀 데이터를 더 불러오는 중이에요
-                </span>
+                <div className="w-[32.8rem] h-[12.6rem] mobile:w-[33.5rem] mobile:h-[10.5rem] skeleton" />
               )}
               <div ref={inViewRef}></div>
             </>
