@@ -2,8 +2,8 @@ import { instance } from "./base-api";
 import {
   ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,
-} from "../types/activity-schemas";
-import { ReservationResponseDto } from "../types/reservation-schemas";
+} from "../../types/activity-schemas";
+import { ReservationResponseDto } from "../../types/reservation-schemas";
 
 // 내 체험 리스트 조회
 export const fetchMyActivities = async (

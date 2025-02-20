@@ -6,11 +6,11 @@ import {
   CreateActivityBodyDto,
   FindReviewsQueryDto,
   FindAvailableScheduleQueryDto,
-} from "../types/activity-schemas";
+} from "../../types/activity-schemas";
 import {
   CreateReservationBodyDto,
   ReservationResponseDto,
-} from "../types/reservation-schemas";
+} from "../../types/reservation-schemas";
 
 // 체험 리스트 조회
 export const fetchActivities = async (filters: FindActivitiesQueryDto) => {

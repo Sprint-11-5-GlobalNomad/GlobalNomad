@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/app/api/use-auth";
+import { useAuth } from "@/app/(primary)/api/use-auth";
 import { useActivityDetail } from "@/app/react-query/activity-state";
 import { useDeleteMyActivity } from "@/app/react-query/my-activity-state";
 import EditDeleteDropdown from "@/components/common/ui/dropdown/edit-delete-dropdown";
@@ -24,13 +24,20 @@ export default function ActivityInfoHeader() {
   };
 
   return (
-    <div className="w-[120rem] flex-between mt-[14.8rem] mb-[2.5rem]">
+    <div
+      className="w-[120rem] flex-between mt-[14.8rem] mb-[2.5rem]
+    tablet:w-[72rem] tablet:mt-[9.4rem] tablet:mb-[1.5rem]
+    mobile:w-[34.3rem] mobile:mt-[8.6rem] mobile:mb-0"
+    >
       <div className="flex flex-col justify-start gap-[1rem]">
         <span className="font-regular text-md text-nomad-black opacity-75">
           {activity?.category}
         </span>
         <div className="flex flex-col gap-[1.6rem]">
-          <h1 className="font-bold text-3xl text-nomad-black m-0">
+          <h1
+            className="font-bold text-3xl text-nomad-black m-0
+          mobile:text-2xl"
+          >
             {activity?.title}
           </h1>
           <div className="flex items-center gap-[0.8rem]">

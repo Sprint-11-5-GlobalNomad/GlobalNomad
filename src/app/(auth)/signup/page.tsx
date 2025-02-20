@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useCreateUser } from "../react-query/user-state";
 import Image from "next/image";
 import Link from "next/link";
-import MessageModal from "../../components/common/ui/modal/message-modal";
-import Button from "../../components/common/ui/button";
-import { useSignUpWithOauth } from "../react-query/oauth-state";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { useCreateUser } from "@/app/react-query/user-state";
+// import { useSignUpWithOauth } from "@/app/react-query/oauth-state";
+import Button from "@/components/common/ui/button";
+import MessageModal from "@/components/common/ui/modal/message-modal";
 
 interface SignupFormInputs {
   email: string;
@@ -27,7 +27,7 @@ export default function SignupPage() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const router = useRouter();
-  const kakaoSignUp = useSignUpWithOauth("kakao");
+  // const kakaoSignUp = useSignUpWithOauth("kakao");
   const [modalState, setModalState] = useState({
     isOpen: false,
     message: "",
@@ -114,61 +114,68 @@ export default function SignupPage() {
     window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
   };
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const authCode = urlParams.get("code");
+  // useEffect(() => {
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const authCode = urlParams.get("code");
 
-    if (authCode) {
-      // 1️⃣ 인가 코드로 액세스 토큰 요청
-      axios
-        .post("https://kauth.kakao.com/oauth/token", {
-          grant_type: "authorization_code",
-          client_id: "YOUR_KAKAO_REST_API_KEY",
-          redirect_uri: "http://localhost:3000/auth/kakao/callback",
-          code: authCode,
-        })
-        .then((tokenResponse) => {
-          const accessToken = tokenResponse.data.access_token;
+  //   if (authCode) {
+  //     // 1️⃣ 인가 코드로 액세스 토큰 요청
+  //     axios
+  //       .post("https://kauth.kakao.com/oauth/token", {
+  //         grant_type: "authorization_code",
+  //         client_id: "YOUR_KAKAO_REST_API_KEY",
+  //         redirect_uri: "http://localhost:3000/auth/kakao/callback",
+  //         code: authCode,
+  //       })
+  //       .then((tokenResponse) => {
+  //         const accessToken = tokenResponse.data.access_token;
 
-          // 2️⃣ 액세스 토큰으로 사용자 정보 요청
-          return axios.get("https://kapi.kakao.com/v2/user/me", {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          });
-        })
-        .then((userResponse) => {
-          const nickname = userResponse.data.kakao_account.profile.nickname;
+  //         // 2️⃣ 액세스 토큰으로 사용자 정보 요청
+  //         return axios.get("https://kapi.kakao.com/v2/user/me", {
+  //           headers: { Authorization: `Bearer ${accessToken}` },
+  //         });
+  //       })
+  //       .then((userResponse) => {
+  //         const nickname = userResponse.data.kakao_account.profile.nickname;
 
-          // 3️⃣ 회원가입 API 호출
-          kakaoSignUp.mutate(
-            {
-              token: authCode,
-              redirectUri: "http://localhost:3000/auth/kakao/callback",
-              nickname: nickname, // ✅ 닉네임 추가
-            },
-            {
-              onSuccess: () => {
-                alert("카카오 회원가입 성공!");
-                router.push("/dashboard");
-              },
-              onError: (error) => {
-                console.error("회원가입 실패:", error);
-              },
-            }
-          );
-        })
-        .catch((error) => {
-          console.error("카카오 API 호출 중 오류 발생:", error);
-        });
-    } else {
-      console.error("카카오 로그인 실패");
-    }
-  }, [kakaoSignUp, router]);
+  //         // 3️⃣ 회원가입 API 호출
+  //         kakaoSignUp.mutate(
+  //           {
+  //             token: authCode,
+  //             redirectUri: "http://localhost:3000/auth/kakao/callback",
+  //             nickname: nickname, // ✅ 닉네임 추가
+  //           },
+  //           {
+  //             onSuccess: () => {
+  //               alert("카카오 회원가입 성공!");
+  //               router.push("/dashboard");
+  //             },
+  //             onError: (error) => {
+  //               console.error("회원가입 실패:", error);
+  //             },
+  //           }
+  //         );
+  //       })
+  //       .catch((error) => {
+  //         console.error("카카오 API 호출 중 오류 발생:", error);
+  //       });
+  //   } else {
+  //     console.error("카카오 로그인 실패");
+  //   }
+  // }, [kakaoSignUp, router]);
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem] max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]">
+      <div
+        className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem]
+      max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]
+      mobile:mt-[9rem] mobile:mb-[1.5rem] mobile:p-0"
+      >
         {/** 로고 섹션 */}
-        <div className="flex justify-center mb-[3.2rem] w-full max-w-[27rem] sm:max-w-[34rem]">
+        <div
+          className="flex justify-center mb-[3.2rem] w-full max-w-[27rem]
+        mobile:w-[24.5rem] mobile:[13.8rem]"
+        >
           <Image
             src="/image/logo-big.svg"
             alt="Logo"
@@ -182,7 +189,7 @@ export default function SignupPage() {
 
         {/* 폼 섹션 */}
         <div className="flex flex-col gap-[4rem] sm:gap-[4.8rem]">
-          <div className="w-full flex flex-col items-center justify-center gap-[3.2rem] sm:gap-[2.6rem]">
+          <div className="w-full flex flex-col items-center justify-center gap-[3.2rem] sm:gap-[2.4rem]">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="w-full flex flex-col max-w-[35rem] sm:max-w-[64rem] gap-[2.8rem]"
@@ -379,7 +386,7 @@ export default function SignupPage() {
               회원이신가요?{" "}
               <Link
                 href="/login"
-                className="text-[1.6rem] font-normal text-[var(--color-green)] cursor-pointer"
+                className="text-[1.6rem] font-normal text-[var(--color-green-dark)] cursor-pointer underline"
               >
                 로그인하기
               </Link>
@@ -389,12 +396,12 @@ export default function SignupPage() {
           <div className="w-full flex flex-col gap-[2.4rem] sm:gap-[4rem]">
             <div className="flex items-center justify-between">
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
-              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.8rem] leading-[2.4rem] font-normal">
+              <span className="mx-[2.8rem] text-[var(--color-gray-800)] text-[1.4rem] sm:text-[2rem] leading-[2.4rem] font-normal">
                 SNS 계정으로 회원가입하기
               </span>
               <div className="flex-grow h-[0.1rem] bg-[var(--color-gray-300)]"></div>
             </div>
-            <div className="mt-[2.4rem] flex justify-center gap-[1.6rem]">
+            <div className="mt-[2.4rem] flex justify-center gap-[1.6rem] mobile:mt-0">
               <Link
                 href="https://www.google.com"
                 target="_blank"

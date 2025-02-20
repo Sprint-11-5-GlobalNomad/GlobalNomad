@@ -87,8 +87,8 @@ export default {
       boxShadow: {
         notifications: "0px 2px 8px 0px rgba(120, 116, 134, 0.25)",
         container: "0px 4px 16px 0px  rgba(17, 34, 17, 0.05)",
-        stepper: "0px 2px 4px 0px rgba(5, 16, 55, 0.06)",
-        stepperInset: "inset 0px 0px 0px 1px rgba(205, 208, 220, 1)",
+        stepperInset:
+          "inset 0px 0px 0px 1px rgba(205, 208, 220, 1), inset 0px 0px 0px 1px rgba(205, 208, 220, 1)",
       },
     },
   },

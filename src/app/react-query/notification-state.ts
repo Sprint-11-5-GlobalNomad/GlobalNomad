@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import {
   fetchNotifications,
   deleteNotification,
-} from "../api/my-notifications-api";
+} from "../(primary)/api/my-notifications-api";
 
 // fetchNotifications의 반환 타입 자동 추출
 type FetchNotificationsReturnType = Awaited<
