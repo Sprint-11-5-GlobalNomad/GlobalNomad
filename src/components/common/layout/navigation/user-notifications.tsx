@@ -9,6 +9,7 @@ import { useDeleteNotification } from "@/app/react-query/notification-state";
 import { ErrorIndicator } from "../indicator/error-indicator";
 import { useInfiniteNotifications } from "@/app/react-query/use-infinite-scroll";
 import { useInView } from "react-intersection-observer";
+import { LoadingIndicator } from "../indicator/loading-indicator";
 
 export default function UserNotifications() {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,23 +77,7 @@ export default function UserNotifications() {
         mobile:rounded-[0rem] mobile:transform-none mobile:fixed"
         >
           {isLoading ? (
-            <>
-              <div className="flex-between absoulte">
-                <span className="text-xl font-bold">알림 0개</span>
-                <Image
-                  src="/image/btn_X.svg"
-                  alt="알림창 닫기 버튼"
-                  width={24}
-                  height={24}
-                  onClick={() => setIsOpen(false)}
-                />
-              </div>
-              <div className="flex flex-col gap-[0.8rem]">
-                <div className="w-[32.8rem] h-[12.6rem] mobile:w-[33.5rem] mobile:h-[10.5rem] skeleton" />
-                <div className="w-[32.8rem] h-[12.6rem] mobile:w-[33.5rem] mobile:h-[10.5rem] skeleton" />
-                <div className="w-[32.8rem] h-[12.6rem] mobile:w-[33.5rem] mobile:h-[10.5rem] skeleton" />
-              </div>
-            </>
+            <LoadingIndicator width={30} height={30} />
           ) : isError ? (
             <ErrorIndicator width={30} height={30} />
           ) : (
