@@ -18,13 +18,16 @@ export default function ReviewSection() {
   const totlaPages = Math.ceil((data?.totalCount || 0) / SIZE);
 
   return (
-    <div className="flex flex-col items-center">
-      <ul className="flex flex-col gap-[2.4rem] mb-[7.2rem]">
+    <div className="flex flex-col items-center mobile:w-[32.7rem]">
+      <ul
+        className="flex flex-col gap-[2.4rem] mb-[7.2rem]
+      mobile:w-full mobile:mb-[1.6rem]"
+      >
         {data?.reviews.map((review, index) => (
           <div key={review.id}>
             <li
               className="flex items-start gap-[1.6rem] mb-[2.4rem]
-            tablet:ml-[2.4rem]"
+            tablet:ml-[2.4rem] mobile:w-full"
             >
               <div>
                 <Image
@@ -54,12 +57,20 @@ export default function ReviewSection() {
               </div>
             </li>
 
-            {index % 3 !== 2 && (
-              <hr
-                className="w-[80rem] h-[0.1rem] bg-nomad-black
-        opacity-25 tablet:w-[46.9rem]"
-              />
-            )}
+            {data?.reviews.length === 2
+              ? index === 0 && (
+                  <hr
+                    className="w-[80rem] h-[0.1rem] bg-nomad-black
+          opacity-25 tablet:w-[46.9rem] mobile:w-full"
+                  />
+                )
+              : data?.reviews.length > 2 &&
+                index % 3 !== 0 && (
+                  <hr
+                    className="w-[80rem] h-[0.1rem] bg-nomad-black
+          opacity-25 tablet:w-[46.9rem] mobile:w-full"
+                  />
+                )}
           </div>
         ))}
       </ul>
