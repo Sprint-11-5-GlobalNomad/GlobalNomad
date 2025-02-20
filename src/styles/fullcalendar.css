@@ -96,8 +96,8 @@
   background-color: #1976d2 !important;
 }
 
-.fc-event.confirmed {
-  background-color: #ff7c1d !important;
+.fc-event.confirmed-event {
+  background-color: orange !important;
   color: orange !important;
 }
 

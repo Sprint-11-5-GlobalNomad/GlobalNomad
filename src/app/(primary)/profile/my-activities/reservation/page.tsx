@@ -119,6 +119,7 @@ export default function ReservationPage() {
           title: label,
           start: format(new Date(stat.date), "yyyy-MM-dd"),
           classNames: ["fc-event", className],
+          eventClassNaems: className,
           extendedProps: { activityId: stat.activityId },
         };
       });
@@ -137,6 +138,7 @@ export default function ReservationPage() {
       setSelectedActivityName(activity.title);
     }
   };
+  console.log("myActivities 데이터:", myActivities);
 
   // 이벤트 클릭 핸들러
   const handleEventClick = async (info: EventClickArg) => {
@@ -241,6 +243,20 @@ export default function ReservationPage() {
               aspectRatio={1.35}
               fixedWeekCount={false}
               showNonCurrentDates={false}
+              eventClassNames={(arg) => {
+                return ["fc-event", arg.event.extendedProps.className];
+              }}
+              dayCellClassNames={(arg) => {
+                if (
+                  events.some(
+                    (event) =>
+                      event.start === arg.date.toISOString().split("T")[0]
+                  )
+                ) {
+                  return ["has-event"];
+                }
+                return [];
+              }}
             />
           </>
         )}
