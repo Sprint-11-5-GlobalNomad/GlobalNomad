@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
-  // fetchMyActivities,
+  fetchMyActivities,
   fetchMonthlyReservationStats,
   fetchDailyReservationStats,
   fetchReservationsBySchedule,
@@ -10,7 +10,7 @@ import {
   updateMyActivity,
 } from "../(primary)/api/my-activities-api";
 import {
-  // ActivityBasicDto,
+  ActivityBasicDto,
   ActivityWithSubImagesAndSchedulesDto,
   UpdateMyActivityBodyDto,
 } from "../types/activity-schemas";
@@ -19,6 +19,7 @@ import { ReservationResponseDto } from "../types/reservation-schemas";
 // 월별 예약 현황 타입
 interface MonthlyReservationStat {
   date: string;
+  activityId: number;
   reservations: {
     completed: number;
     confirmed: number;
@@ -39,38 +40,38 @@ interface DailyReservationStat {
 }
 
 // 내 체험 리스트 조회
-// export const useMyActivities = (cursorId?: number, size = 20) =>
-//   useQuery<{
-//     cursorId: number;
-//     totalCount: number;
-//     activities: ActivityBasicDto[];
-//   }>({
-//     queryKey: ["myActivities", cursorId],
-//     queryFn: async () => {
-//       try {
-//         return await fetchMyActivities(cursorId, size);
-//       } catch (error) {
-//         if (error instanceof AxiosError) {
-//           switch (error.response?.status) {
-//             case 400:
-//               console.error(error.message);
-//               alert(error.message);
-//               break;
-//             case 401:
-//               console.error(
-//                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
-//               );
-//               alert(error.message);
-//               break;
-//             default:
-//               console.error("체험 리스트를 가져오는 중 오류가 발생했습니다.");
-//               alert(error.message);
-//           }
-//         }
-//         throw error;
-//       }
-//     },
-//   });
+export const useMyActivities = (cursorId?: number, size = 20) =>
+  useQuery<{
+    cursorId: number;
+    totalCount: number;
+    activities: ActivityBasicDto[];
+  }>({
+    queryKey: ["myActivities", cursorId],
+    queryFn: async () => {
+      try {
+        return await fetchMyActivities(cursorId, size);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 400:
+              console.error(error.message);
+              alert(error.message);
+              break;
+            case 401:
+              console.error(
+                "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
+              );
+              alert(error.message);
+              break;
+            default:
+              console.error("체험 리스트를 가져오는 중 오류가 발생했습니다.");
+              alert(error.message);
+          }
+        }
+        throw error;
+      }
+    },
+  });
 
 // 월별 예약 현황 조회
 export const useMonthlyReservationStats = (
@@ -82,34 +83,36 @@ export const useMonthlyReservationStats = (
     queryKey: ["monthlyReservationStats", activityId, year, month],
     queryFn: async () => {
       try {
-        return await fetchMonthlyReservationStats(activityId, year, month);
+        return await fetchMonthlyReservationStats(activityId!, year!, month!);
       } catch (error) {
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error(error.message);
-              alert(error.message);
+              console.error("잘못된 요청: ", error.message);
+              alert("잘못된 요청입니다.");
               break;
             case 401:
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
-              alert(error.message);
+              alert("인증되지 않은 요청입니다. 로그인 후 다시 시도하세요.");
               break;
             case 403:
               console.error("본인의 체험만 조회할 수 있습니다.");
-              alert(error.message);
+              alert("본인의 체험만 조회할 수 있습니다.");
               break;
             default:
               console.error(
-                "월별 예약 현황을 가져오는 중 오류가 발생했습니다."
+                "월별 예약 현황을 가져오는 중 오류 발생: ",
+                error.message
               );
-              alert(error.message);
+              alert("월별 예약 현황을 가져오는 중 오류가 발생했습니다.");
           }
         }
         throw error;
       }
     },
+    enabled: !!activityId && !!year && !!month,
   });
 
 // 날짜별 예약 정보 조회
@@ -117,30 +120,39 @@ export const useDailyReservationStats = (activityId: number, date: string) =>
   useQuery<DailyReservationStat[], unknown>({
     queryKey: ["dailyReservationStats", activityId, date],
     queryFn: async () => {
+      if (!activityId || !date) {
+        console.warn("API 요청이 실행되지 않음 - activityId 또는 date 없음.");
+        return [];
+      }
+
       try {
-        return await fetchDailyReservationStats(activityId, date);
+        console.log("API 요청 실행: activityId =", activityId, "date =", date);
+        const response = await fetchDailyReservationStats(activityId, date);
+        console.log("📡 API 응답 데이터:", response);
+        return response;
       } catch (error) {
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
             case 400:
-              console.error(error.message);
-              alert(error.message);
+              console.error("잘못된 요청: ", error.message);
+              alert("잘못된 요청입니다.");
               break;
             case 401:
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
-              alert(error.message);
+              alert("인증되지 않은 요청입니다. 로그인 후 다시 시도하세요.");
               break;
             case 403:
-              console.error("본인의 체험만 조회할 수 있습니다.");
-              alert(error.message);
+              console.error(" 본인의 체험만 조회할 수 있습니다.");
+              alert("본인의 체험만 조회할 수 있습니다.");
               break;
             default:
               console.error(
-                "날짜별 예약 정보를 가져오는 중 오류가 발생했습니다."
+                "날짜별 예약 정보를 가져오는 중 오류 발생: ",
+                error.message
               );
-              alert(error.message);
+              alert("날짜별 예약 정보를 가져오는 중 오류가 발생했습니다.");
           }
         }
         throw error;

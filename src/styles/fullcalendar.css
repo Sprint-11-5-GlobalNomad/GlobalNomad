@@ -92,17 +92,18 @@
   box-shadow: none !important;
 }
 
-/* 예약 상태별 색상 적용 */
 .fc-event.pending {
   background-color: #1976d2 !important;
 }
 
 .fc-event.confirmed {
-  background-color: #ff9800 !important;
+  background-color: #ff7c1d !important;
+  color: orange !important;
 }
 
 .fc-event.completed {
-  background-color: #bdbdbd !important;
+  background-color: #dddddd !important;
+  color: #4b4b4b !important;
 }
 
 /* 오늘 날짜 스타일 */
@@ -133,4 +134,9 @@
   height: 6px !important;
   background-color: #1976d2 !important;
   border-radius: 50% !important;
+}
+
+/* 완료된 날짜 옆에 원 색상 #4B4B4B */
+.fc-daygrid-day.has-event.completed::before {
+  background-color: #4b4b4b !important;
 }

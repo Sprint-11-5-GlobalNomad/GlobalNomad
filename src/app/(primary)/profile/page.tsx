@@ -13,6 +13,10 @@ interface UserDetails {
 
 const currentPage = "/profile";
 
+interface UserDetails {
+  profileImageUrl: string;
+}
+
 export default function ProfilePage() {
   const { data: userDetails, isLoading: isFetching } = useMyDetails();
   const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
@@ -53,10 +57,13 @@ export default function ProfilePage() {
 
         setProfileImageUrl(response.profileImageUrl);
 
-        queryClient.setQueryData<UserDetails>(["userDetails"], (oldData) => ({
-          ...oldData,
-          profileImageUrl: response.profileImageUrl,
-        }));
+        queryClient.setQueryData<UserDetails>(
+          ["userDetails"],
+          (oldData: UserDetails | undefined) => ({
+            ...oldData,
+            profileImageUrl: response.profileImageUrl,
+          })
+        );
 
         updateMyDetails(
           { profileImageUrl: response.profileImageUrl },
