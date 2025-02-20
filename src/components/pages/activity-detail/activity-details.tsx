@@ -7,6 +7,7 @@ import Image from "next/image";
 import ReviewSection from "./review-section";
 import { useAuth } from "@/app/(primary)/api/use-auth";
 import KakaoMaps from "./kakomaps/kakaomaps";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
 const getSatisfactionLevel = (rating?: number) => {
   if (rating === undefined || rating === 0) return "평가 없음";
@@ -135,19 +136,10 @@ export default function ActivityDetails() {
           {isRated ? (
             <ReviewSection />
           ) : (
-            <div className="flex flex-col gap-[2.4rem] mb-[7.2rem]">
-              <div className="skeleton w-[79rem] h-[14rem] tablet:w-[43rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[25rem] rounded-[1.5rem]" />
-              <hr
-                className="w-[80rem] h-[0.1rem] bg-nomad-black
-                    opacity-25 tablet:w-[46.9rem]"
-              />
-              <div className="skeleton w-[79rem] h-[14rem] tablet:w-[43rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[25rem] rounded-[1.5rem]" />
-              <hr
-                className="w-[80rem] h-[0.1rem] bg-nomad-black
-                    opacity-25 tablet:w-[46.9rem]"
-              />
-              <div className="skeleton w-[79rem] h-[14rem] tablet:w-[43rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[25rem] rounded-[1.5rem]" />
-            </div>
+            <EmptyContent
+              description="아직 등록한 리뷰가 없어요"
+              className="my-[10rem] w-[80rem] tablet:w-[49.3rem]"
+            />
           )}
         </div>
       </div>
