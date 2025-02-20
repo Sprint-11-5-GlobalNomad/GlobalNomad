@@ -13,7 +13,10 @@ type ReservationAvailableTime = {
 
 type Props = {
   reservationTimes: ReservationAvailableTime[];
-  setReservationTimes: React.Dispatch<
+  setAddReservationTimes: React.Dispatch<
+    React.SetStateAction<ReservationAvailableTime[]>
+  >;
+  setExistingReservationTimes: React.Dispatch<
     React.SetStateAction<ReservationAvailableTime[]>
   >;
   setRemovedReservationIds?: React.Dispatch<React.SetStateAction<number[]>>;
@@ -21,7 +24,8 @@ type Props = {
 
 export default function ReservationTimeSelector({
   reservationTimes,
-  setReservationTimes,
+  setAddReservationTimes,
+  setExistingReservationTimes,
   setRemovedReservationIds,
 }: Props) {
   const [newReservationTime, setNewReservationTime] =
@@ -92,24 +96,23 @@ export default function ReservationTimeSelector({
       setErrorMessage("이미 겹치는 시간대가 있습니다.");
       return;
     }
-
-    setReservationTimes((prev) => [...prev, newReservationTime]);
+    setExistingReservationTimes((prev) => [...prev, newReservationTime]);
+    setAddReservationTimes((prev) => [...prev, newReservationTime]);
     setNewReservationTime({ date: "", startTime: "", endTime: "" });
     setErrorMessage("");
   };
 
   const removeReservationTime = (index: number) => {
-    if (setRemovedReservationIds) {
+    if (reservationTimes && setRemovedReservationIds) {
       const removedTime = reservationTimes[index];
       if (removedTime.id) {
-        setRemovedReservationIds((prev) =>
-          [...prev, removedTime.id!].filter(
-            (id): id is number => id !== undefined
-          )
+        setRemovedReservationIds((prev) => [...prev, removedTime.id!]);
+        setExistingReservationTimes((prev) =>
+          prev.filter((_, i) => i !== index)
         );
       }
     }
-    setReservationTimes((prev) => prev.filter((_, i) => i !== index));
+    setAddReservationTimes((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
