@@ -37,7 +37,7 @@ export const useActivities = (filters: FindActivitiesQueryDto) =>
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 400) {
-            console.error(error.response?.data?.message);
+            console.error(error.message);
           } else if (error.response?.status === 401) {
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
@@ -72,7 +72,7 @@ export const useCreateActivity = () => {
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(error.response?.data?.message);
+            console.error(error.message);
             alert(error.response?.data?.message);
             break;
           case 409:
@@ -177,7 +177,7 @@ export const useCreateReservation = () => {
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(error.response?.data?.message);
+            console.error(error.message);
             alert(error.response?.data?.message);
             break;
           case 409:
