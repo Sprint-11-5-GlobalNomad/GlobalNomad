@@ -19,7 +19,8 @@ export default function UserMenu() {
           <UserNotifications />
           <div
             onClick={() => setIsOpen(!isOpen)}
-            className="flex-between gap-[1rem] border-solid border-l-[0.1rem] border-gray-300 pl-[2rem]"
+            className="flex-between gap-[1rem] border-solid border-l-[0.1rem] border-gray-300 pl-[2rem]
+            cursor-pointer"
           >
             <Image
               src={user?.profileImageUrl || "/image/profile_default.svg"}

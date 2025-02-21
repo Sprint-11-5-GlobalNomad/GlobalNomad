@@ -63,7 +63,10 @@ export default function ActivityExplorer() {
       />
 
       {searchQuery ? (
-        <div className="flex flex-col gap-[2.4rem] mt-[15.8rem] w-[120rem]">
+        <div
+          className="flex flex-col gap-[2.4rem] mt-[15.8rem] w-[120rem]
+        tablet:w-[69.6rem] mobile:w-[34.3rem] mobile:mt-[9.3rem]"
+        >
           <div className="flex flex-col gap-[1.2rem]">
             <h2 className="text-[3.2rem] leading-[3.8rem] font-regular">
               <span className="text-[3.2rem] leading-[3.8rem] font-bold">

@@ -37,18 +37,18 @@ export const useActivities = (filters: FindActivitiesQueryDto) =>
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.status === 400) {
-            console.error(error.message);
+            console.error(error.response?.data?.message);
           } else if (error.response?.status === 401) {
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
           } else {
             console.error(
               "체험 리스트를 가져오는 중 알 수 없는 오류가 발생했습니다.",
               error
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
           }
         }
         throw error;
@@ -72,24 +72,24 @@ export const useCreateActivity = () => {
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(error.message);
-            alert(error.message);
+            console.error(error.response?.data?.message);
+            alert(error.response?.data?.message);
             break;
           case 409:
             console.error(
               "겹치는 예약 가능 시간대가 존재합니다. 스케줄을 확인하세요."
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
             break;
           case 401:
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
             break;
           default:
             console.error("체험 등록에 실패했습니다.", error);
-            alert(error.message);
+            alert(error.response?.data?.message);
         }
       }
     },
@@ -109,18 +109,18 @@ export const useActivityDetail = (activityId: number) =>
             console.error(
               "존재하지 않는 체험입니다. 잘못된 ID를 입력했는지 확인하세요."
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
           } else if (error.response?.status === 401) {
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
           } else {
             console.error(
               "체험 상세 정보를 가져오는 중 알 수 없는 오류가 발생했습니다.",
               error
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
           }
         }
         throw error;
@@ -177,28 +177,28 @@ export const useCreateReservation = () => {
       if (axios.isAxiosError(error)) {
         switch (error.response?.status) {
           case 400:
-            console.error(error.message);
-            alert(error.message);
+            console.error(error.response?.data?.message);
+            alert(error.response?.data?.message);
             break;
           case 409:
             console.error("해당 스케줄은 이미 확정된 예약이 존재합니다.");
-            alert(error.message);
+            alert(error.response?.data?.message);
             break;
           case 404:
             console.error(
               "존재하지 않는 체험입니다. 올바른 체험 ID를 입력하세요."
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
             break;
           case 401:
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.message);
+            alert(error.response?.data?.message);
             break;
           default:
             console.error("체험 예약에 실패했습니다.", error);
-            alert(error.message);
+            alert(error.response?.data?.message);
         }
       }
     },

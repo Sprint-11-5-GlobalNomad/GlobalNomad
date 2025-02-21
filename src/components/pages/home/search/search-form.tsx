@@ -47,7 +47,12 @@ export default function SearchForm({
           mobile:text-md"
           />
         </div>
-        <Button ButtonType="search" label="검색하기" variant="default" />
+        <Button
+          type="submit"
+          ButtonType="search"
+          label="검색하기"
+          variant="default"
+        />
       </form>
     </div>
   );

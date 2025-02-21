@@ -23,8 +23,8 @@ export default function ActivityImages() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const totalImages = activity?.subImages
-    ? activity.subImages.length + 1
+  const totalImages = activity?.subImages?.length
+    ? activity.subImages.length + (activity.bannerImageUrl ? 1 : 0)
     : activity?.bannerImageUrl
       ? 1
       : 0;
@@ -33,7 +33,8 @@ export default function ActivityImages() {
     return (
       <div
         className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]
-    tablet:w-[72rem] tablet:h-[31rem] tablet:mb-[3.2rem] skeleton rounded-[1.2rem]"
+    tablet:w-[72rem] tablet:h-[31rem] tablet:mb-[3.2rem]
+    mobile:w-full mobile:h-[31rem] mobile:mb-[1.5rem] skeleton"
       />
     );
   if (isError) return <ErrorIndicator width={100} height={100} />;
@@ -46,6 +47,8 @@ export default function ActivityImages() {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
   };
 
+  console.log("현재 인덱스", currentIndex);
+
   return (
     <div
       className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]
@@ -57,7 +60,8 @@ export default function ActivityImages() {
           <button
             onClick={prevImage}
             className={`w-[2.4rem] h-[4.7rem]
-    absolute top-1/2 translate-y-[-50%] left-[1.6rem] ${totalImages === 1 ? "hidden" : ""}`}
+              absolute top-1/2 translate-y-[-50%] left-[1.6rem]
+              ${totalImages === 1 ? "hidden" : ""}`}
           >
             <Image
               src="/image/btn_pagination_arrow_left.svg"
@@ -66,31 +70,24 @@ export default function ActivityImages() {
               height={47}
             />
           </button>
-          {currentIndex === 0 ? (
-            <div className="mobile:w-full mobile:h-[31rem]">
-              <Image
-                src={activity!.bannerImageUrl}
-                alt={`${activity?.title} 이미지 ${currentIndex + 1}`}
-                width={595}
-                height={310}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ) : (
-            <div className="mobile:w-full mobile:h-[31rem]">
-              <Image
-                src={activity?.subImages?.[currentIndex - 1]?.imageUrl || ""}
-                alt={`${activity?.title} 이미지 ${currentIndex + 1}`}
-                width={595}
-                height={310}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
+          <div className="mobile:w-full mobile:h-[31rem]">
+            <Image
+              src={
+                currentIndex === 0
+                  ? activity!.bannerImageUrl
+                  : activity?.subImages[currentIndex - 1].imageUrl || ""
+              }
+              alt={`${activity?.title} 이미지 ${currentIndex + 1}`}
+              width={595}
+              height={310}
+              className="w-full h-[31rem] object-cover"
+            />
+          </div>
           <button
             onClick={nextImage}
             className={`w-[2.4rem] h-[4.7rem]
-          absolute top-1/2 translate-y-[-50%] right-[1.6rem] ${totalImages === 1 ? "hidden" : ""}`}
+          absolute top-1/2 translate-y-[-50%] right-[1.6rem]
+          ${totalImages === 1 ? "hidden" : ""}`}
           >
             <Image
               src="/image/btn_pagination_arrow_right.svg"
@@ -102,13 +99,13 @@ export default function ActivityImages() {
         </div>
       ) : (
         <div>
-          {totalImages <= 1 ? (
+          {totalImages === 1 ? (
             <Image
               src={activity!.bannerImageUrl}
               alt={`${activity?.title} 배너 이미지`}
               width={1198}
               height={534}
-              className="rounded-[1.2rem] w-full h-[53.4rem] object-cover"
+              className="rounded-[1.2rem] w-full h-[53.4rem] tablet:h-[31rem] object-cover"
             />
           ) : (
             <div
