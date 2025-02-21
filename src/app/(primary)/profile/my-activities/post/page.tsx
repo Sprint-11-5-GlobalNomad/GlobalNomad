@@ -231,8 +231,8 @@ export default function ActivityPostPage() {
           </div>
 
           <IntroImagesUploader
-            introImages={introImages}
-            setIntroImages={setIntroImages}
+            newImages={introImages}
+            setNewImages={setIntroImages}
           />
         </form>
       </FormProvider>
