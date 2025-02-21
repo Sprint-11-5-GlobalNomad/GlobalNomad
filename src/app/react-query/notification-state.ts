@@ -49,6 +49,7 @@ export const useDeleteNotification = () => {
     mutationFn: (notificationId: number) => deleteNotification(notificationId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      alert("알림이 삭제되었습니다.");
     },
     onError: (error: AxiosError) => {
       if (error.response) {
