@@ -67,6 +67,7 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
         onSuccess: () => {
           alert("리뷰가 성공적으로 작성되었습니다!");
           onClose();
+          window.location.reload();
         },
       }
     );
