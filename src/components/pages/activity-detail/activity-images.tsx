@@ -102,13 +102,13 @@ export default function ActivityImages() {
         </div>
       ) : (
         <div>
-          {totalImages > 1 ? (
+          {totalImages <= 1 ? (
             <Image
               src={activity!.bannerImageUrl}
               alt={`${activity?.title} 배너 이미지`}
               width={1198}
               height={534}
-              className="rounded-[1.2rem] w-full h-full object-cover"
+              className="rounded-[1.2rem] w-full h-[53.4rem] object-cover"
             />
           ) : (
             <div
