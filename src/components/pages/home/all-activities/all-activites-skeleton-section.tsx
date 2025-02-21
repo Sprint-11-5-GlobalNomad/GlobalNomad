@@ -18,7 +18,7 @@ export default function AllActivitiesSkeletonSection() {
   }, []);
 
   const displayedActivities =
-    windowWidth >= 1024
+    windowWidth >= 1200
       ? [0, 1, 2, 3, 4, 5, 6, 7]
       : windowWidth < 744
         ? [0, 1, 2, 3]

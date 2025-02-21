@@ -24,7 +24,7 @@ export default function AllActivities({ activities }: AllActivitiesProps) {
   }, []);
 
   const displayedActivities =
-    windowWidth >= 1024
+    windowWidth >= 1200
       ? activities.slice(0, 8)
       : windowWidth < 744
         ? activities.slice(0, 4)

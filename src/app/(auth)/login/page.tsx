@@ -112,7 +112,7 @@ export default function LoginPage() {
   // };
 
   return (
-    <div>
+    <div className="mt-[11.8rem] mobile:w-[35rem] mobile:flex-column mobile:translate-x-1/2">
       <div
         className="flex flex-col items-center justify-center my-[2rem] py-[3.2rem]
       max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] mobile:gap-[4rem] md:gap-[5.6rem]
@@ -138,7 +138,7 @@ export default function LoginPage() {
           <div className="w-full flex items-center justify-center flex-col gap-[3.2rem] mobile:gap-[2.4rem]">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="w-full flex flex-col max-w-[35rem] mobile:max-w-[64rem] gap-[2.8rem]"
+              className="w-full flex flex-col mobile:max-w-[64rem] gap-[2.8rem]"
             >
               {/* 이메일 */}
               <div className="mb-[1.6rem]">
