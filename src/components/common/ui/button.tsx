@@ -57,27 +57,27 @@ const Button: React.FC<ButtonProps> = ({
       break;
     case "category":
       variantClasses =
-        "bg-white text-[#0B3B2D] border border-solid border-[#0B3B2D]";
+        "bg-white text-green-dark border border-solid border-green-dark";
       break;
     case "selected":
-      variantClasses = "bg-[#0B3B2D] text-white";
+      variantClasses = "bg-green-dark text-white";
       break;
     case "page":
       variantClasses = disabled
-        ? "bg-[#0B3B2D] text-[#A1A1A1] border border-solid border-[#DDDDDD]"
-        : "bg-white text-[#0B3B2D] border border-solid border-[#0B3B2D]";
+        ? "bg-green-dark text-gray-700 border border-solid border-gray-300"
+        : "bg-white text-green-dark border border-solid border-green-dark";
       break;
     case "loginSignup":
       variantClasses = disabled
-        ? "bg-[#A4A1AA] text-white"
-        : "bg-[#0B3B2D] text-white";
+        ? "bg-gray-600 text-white"
+        : "bg-green-dark text-white";
       break;
     case "reservationTimeAdd":
-      variantClasses = "bg-[#0B3B2D] text-white";
+      variantClasses = "bg-green-dark text-white";
       break;
     case "reservationTimeDelete":
       variantClasses =
-        "bg-white text-[#79747E] border border-solid border-[#dddddd]";
+        "bg-white text-gray-800 border border-solid border-gray-300";
       break;
     default:
       break;
