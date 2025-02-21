@@ -1,5 +1,6 @@
 import { DropdownArrowIcon } from "@/components/common/icons/dropdown-arrow-icon";
 import { DropdownCheckIcon } from "@/components/common/icons/dropdown-check-icon";
+import UseOutsideClick from "@/hooks/use-outside-click";
 import { useState } from "react";
 
 interface SelectDropdownProps {
@@ -16,9 +17,11 @@ export default function TimeDropdown({
   onSelect,
 }: SelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = UseOutsideClick(() => setIsOpen(false));
 
   return (
     <div
+      ref={dropdownRef}
       className="relative w-full max-w-md"
       onClick={() => setIsOpen(!isOpen)}
     >

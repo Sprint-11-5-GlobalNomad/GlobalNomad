@@ -41,7 +41,6 @@ export default function ActivityEditPage() {
     },
   });
 
-  // 기존 API 예약 시간과 새로 추가할 예약 시간을 분리합니다.
   const [existingReservationTimes, setExistingReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
@@ -52,7 +51,15 @@ export default function ActivityEditPage() {
     []
   );
   const [bannerImage, setBannerImage] = useState<string | null>(null);
-  const [introImages, setIntroImages] = useState<string[]>([]);
+
+  const [existingIntroImages, setExistingIntroImages] = useState<
+    { id: number; imageUrl: string }[]
+  >([]);
+  const [newIntroImages, setNewIntroImages] = useState<string[]>([]);
+  const [removedIntroImageIds, setRemovedIntroImageIds] = useState<number[]>(
+    []
+  );
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const {
@@ -70,9 +77,8 @@ export default function ActivityEditPage() {
       setValue("price", activityDetail.price);
       setValue("address", activityDetail.address);
       setBannerImage(activityDetail.bannerImageUrl);
-      setIntroImages(activityDetail.subImages.map((img) => img.imageUrl));
 
-      // 기존 예약 시간은 따로 관리
+      // 기존 예약 시간 설정
       const initialReservationTimes = activityDetail.schedules.map(
         (schedule) => ({
           id: schedule.id,
@@ -82,6 +88,9 @@ export default function ActivityEditPage() {
         })
       );
       setExistingReservationTimes(initialReservationTimes);
+
+      // 서버에 있는 인트로 이미지는 id와 imageUrl로 관리 (서버 데이터에 id가 있다고 가정)
+      setExistingIntroImages(activityDetail.subImages);
     }
   }, [activityDetail, setValue]);
 
@@ -102,8 +111,8 @@ export default function ActivityEditPage() {
       price: data.price,
       address: data.address,
       bannerImageUrl: bannerImage,
-      subImageUrlsToAdd: introImages,
-      // 새로 추가된 예약 시간만 schedulesToAdd에 포함
+      subImageUrlsToAdd: newIntroImages,
+      subImageIdsToRemove: removedIntroImageIds,
       schedulesToAdd: addedReservationTimes.map(
         ({ date, startTime, endTime }) => ({
           date,
@@ -224,7 +233,6 @@ export default function ActivityEditPage() {
             )}
           </label>
 
-          {/* 예약 시간 추가를 위한 ReservationTimeSelector에 새 배열 전달 */}
           <div>
             <ReservationTimeSelector
               setAddReservationTimes={setAddedReservationTimes}
@@ -241,9 +249,13 @@ export default function ActivityEditPage() {
             />
           </div>
 
+          {/* 인트로 이미지 컴포넌트에 3개의 상태를 props로 전달 */}
           <IntroImagesUploader
-            introImages={introImages}
-            setIntroImages={setIntroImages}
+            existingImages={existingIntroImages}
+            setExistingImages={setExistingIntroImages}
+            newImages={newIntroImages}
+            setNewImages={setNewIntroImages}
+            setRemovedImages={setRemovedIntroImageIds}
           />
         </form>
       </FormProvider>
