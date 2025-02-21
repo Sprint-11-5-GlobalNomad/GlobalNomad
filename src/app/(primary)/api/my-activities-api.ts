@@ -56,7 +56,6 @@ export const fetchMonthlyReservationStats = async (
     return [];
   }
 };
-
 // 내 체험 날짜별 예약 정보 조회
 export const fetchDailyReservationStats = async (
   activityId: number,
