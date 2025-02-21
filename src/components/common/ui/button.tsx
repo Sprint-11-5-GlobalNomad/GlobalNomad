@@ -32,22 +32,12 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const sizes = ButtonSizes[ButtonType];
   if (!sizes) {
-    console.error("Invalid ButtonType");
-    return null;
-  }
-  const { lg: desktop, md: tablet, sm: mobile } = sizes;
-  if (!desktop || !tablet || !mobile) {
-    console.error("Missing size definitions");
+    console.error("ButtonType이 존재하지 않음");
     return null;
   }
 
-  const sizeClasses = `
-    desktop:w-[${desktop.width}rem] desktop:h-[${desktop.height}rem] desktop:rounded-[${desktop.radius}rem] desktop:text-[${desktop.font_size}rem]
-    tablet:w-[${tablet.width}rem] tablet:h-[${tablet.height}rem] tablet:rounded-[${tablet.radius}rem] tablet:text-[${tablet.font_size}rem]
-    mobile:w-[${mobile.width}rem] mobile:h-[${mobile.height}rem] mobile:rounded-[${mobile.radius}rem] mobile:text-[${mobile.font_size}rem]
-  `
-    .replace(/\s+/g, " ")
-    .trim();
+  // 이미 breakpoints 접두사가 포함된 정적 클래스 문자열을 그대로 사용합니다.
+  const sizeClasses = sizes;
 
   const baseClasses = `inline-flex justify-center items-center transition-all ${
     disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer opacity-100"
@@ -62,30 +52,32 @@ const Button: React.FC<ButtonProps> = ({
       break;
     case "outlined":
       variantClasses =
-        "bg-white text-black font-bold border " +
+        "bg-white text-black font-bold border border-solid " +
         (disabled ? "border-[#c0c0c0]" : "border-[#000]");
       break;
     case "category":
-      variantClasses = "bg-white text-[#0B3B2D] border border-[#0B3B2D]";
+      variantClasses =
+        "bg-white text-green-dark border border-solid border-green-dark";
       break;
     case "selected":
-      variantClasses = "bg-[#0B3B2D] text-white";
+      variantClasses = "bg-green-dark text-white";
       break;
     case "page":
       variantClasses = disabled
-        ? "bg-[#0B3B2D] text-[#A1A1A1] border border-[#DDDDDD]"
-        : "bg-white text-[#0B3B2D] border border-[#0B3B2D]";
+        ? "bg-green-dark text-gray-700 border border-solid border-gray-300"
+        : "bg-white text-green-dark border border-solid border-green-dark";
       break;
     case "loginSignup":
       variantClasses = disabled
-        ? "bg-[#A4A1AA] text-white"
-        : "bg-[#0B3B2D] text-white";
+        ? "bg-gray-600 text-white"
+        : "bg-green-dark text-white";
       break;
     case "reservationTimeAdd":
-      variantClasses = "bg-[#0B3B2D] text-white";
+      variantClasses = "bg-green-dark text-white";
       break;
     case "reservationTimeDelete":
-      variantClasses = "bg-white text-[#79747E] border border-[#dddddd]";
+      variantClasses =
+        "bg-white text-gray-800 border border-solid border-gray-300";
       break;
     default:
       break;
