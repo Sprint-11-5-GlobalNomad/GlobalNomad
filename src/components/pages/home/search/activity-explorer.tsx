@@ -55,7 +55,7 @@ export default function ActivityExplorer() {
     : CONFIG.SUFFIX_WITHOUT_BATCHIM;
 
   return (
-    <>
+    <div className="flex-column desktop:w-[120rem]">
       <SearchForm
         onSubmit={handleSearchSubmit}
         onChange={handleSearchChange}
@@ -106,6 +106,6 @@ export default function ActivityExplorer() {
           <AllActivitiesSection />
         </>
       )}
-    </>
+    </div>
   );
 }
