@@ -30,7 +30,7 @@ export default function ActivityDetails() {
       className="w-[120rem] flex justify-center
     tablet:w-full tablet:mr-[2rem] mobile:w-full"
     >
-      <div className="tablet:w-[49.3rem] mobile:w-[32.7rem]">
+      <div className="tablet:w-[49.3rem] mobile:w-full mobile:mx-[2.4rem]">
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
         opacity-25 mb-[4rem] tablet:w-[49.3rem] mobile:hidden"
@@ -38,11 +38,11 @@ export default function ActivityDetails() {
 
         <div
           className="w-[79rem] h-auto flex flex-col justify-start
-        tablet:w-[45.5rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
+        tablet:w-[45.5rem] tablet:ml-[2.4rem] mobile:w-full"
         >
           <h2 className="text-xl font-bold mb-[1.6rem]">체험 설명</h2>
           {isLoading ? (
-            <div className="skeleton w-[79rem] h-[15rem] tablet:w-[42.8rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[30rem]" />
+            <div className="skeleton w-[79rem] h-[15rem] tablet:w-[42.8rem] tablet:h-[20rem] mobile:w-full mobile:h-[30rem]" />
           ) : (
             <p className="text-lg font-regular opacity-75 tablet:w-[42.8rem]">
               {activity?.description}
@@ -59,12 +59,12 @@ export default function ActivityDetails() {
         {/* 지도 섹션 */}
         <div
           className="w-[80rem] flex flex-col gap-[0.8rem]
-        tablet:w-[42.9rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
+        tablet:w-[42.9rem] tablet:ml-[2.4rem] mobile:w-full"
         >
           {isLoading ? (
             <div
               className="skeleton w-[79rem] h-[45rem] rounded-[1.6rem]
-      tablet:w-[42.9rem] tablet:h-[30.8rem] mobile:w-[32.7rem] mobile:h-[45rem]"
+      tablet:w-[42.9rem] tablet:h-[30.8rem] mobile:w-full mobile:h-[45rem]"
             />
           ) : (
             <KakaoMaps address={activity?.address} />
