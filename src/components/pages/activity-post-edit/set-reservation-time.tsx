@@ -38,7 +38,7 @@ export default function ReservationTimeSelector({
   const [filteredEndTimeOptions, setFilteredEndTimeOptions] =
     useState<string[]>(TIME_TABLE);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [buttonDisable, setButtonDisable] = useState<boolean>(false);
   const filterStartTimeOptions = TIME_TABLE.slice(0, -1);
 
   // 시작 시간 선택 시, 종료 시간 옵션 필터링
@@ -61,17 +61,20 @@ export default function ReservationTimeSelector({
   }, [newReservationTime.startTime]);
 
   const addReservationTime = () => {
+    setButtonDisable(true);
     if (
       !newReservationTime.date ||
       !newReservationTime.startTime ||
       !newReservationTime.endTime
     ) {
       setErrorMessage("모든 값을 입력해주세요.");
+      setButtonDisable(false);
       return;
     }
 
     if (newReservationTime.startTime >= newReservationTime.endTime) {
       setErrorMessage("시작 시간은 종료 시간보다 이전이어야 합니다.");
+      setButtonDisable(false);
       return;
     }
 
@@ -94,16 +97,20 @@ export default function ReservationTimeSelector({
 
     if (isOverlapping) {
       setErrorMessage("이미 겹치는 시간대가 있습니다.");
+      setButtonDisable(false);
       return;
     }
-    setExistingReservationTimes((prev) => [...prev, newReservationTime]);
+    if (setExistingReservationTimes) {
+      setExistingReservationTimes((prev) => [...prev, newReservationTime]);
+    }
     setAddReservationTimes((prev) => [...prev, newReservationTime]);
     setNewReservationTime({ date: "", startTime: "", endTime: "" });
     setErrorMessage("");
+    setButtonDisable(false);
   };
 
   const removeReservationTime = (index: number) => {
-    if (reservationTimes && setRemovedReservationIds) {
+    if (setRemovedReservationIds) {
       const removedTime = reservationTimes[index];
       if (removedTime.id) {
         setRemovedReservationIds((prev) => [...prev, removedTime.id!]);
@@ -164,6 +171,7 @@ export default function ReservationTimeSelector({
               <Button
                 ButtonType="reservationTime"
                 variant="reservationTimeAdd"
+                disabled={buttonDisable}
                 label="+"
                 onClick={addReservationTime}
               />

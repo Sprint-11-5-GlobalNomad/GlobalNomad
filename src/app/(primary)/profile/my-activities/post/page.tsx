@@ -35,6 +35,9 @@ export default function ActivityPostPage() {
   const [reservationTimes, setReservationTimes] = useState<
     ReservationAvailableTime[]
   >([]);
+  const [addReservationTimes, setAddReservationTimes] = useState<
+    ReservationAvailableTime[]
+  >([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [showError, setShowError] = useState(false);
 
@@ -73,7 +76,7 @@ export default function ActivityPostPage() {
       address: data.address,
       bannerImageUrl: bannerImage as string,
       subImageUrls: introImages.length > 0 ? introImages : undefined,
-      schedules: reservationTimes.map(({ date, startTime, endTime }) => ({
+      schedules: addReservationTimes.map(({ date, startTime, endTime }) => ({
         date,
         startTime,
         endTime,
@@ -205,7 +208,7 @@ export default function ActivityPostPage() {
           <div ref={reservationRef} tabIndex={-1}>
             <ReservationTimeSelector
               reservationTimes={reservationTimes}
-              setAddReservationTimes={setReservationTimes}
+              setAddReservationTimes={setAddReservationTimes}
               setExistingReservationTimes={setReservationTimes}
             />
             {showError && reservationTimes.length === 0 && (
@@ -228,8 +231,8 @@ export default function ActivityPostPage() {
           </div>
 
           <IntroImagesUploader
-            introImages={introImages}
-            setIntroImages={setIntroImages}
+            newImages={introImages}
+            setNewImages={setIntroImages}
           />
         </form>
       </FormProvider>

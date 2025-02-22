@@ -55,7 +55,7 @@ export default function EditDeleteDropdown({
             <li
               onClick={onDelete}
               className="w-full text-lg text-center font-medium text-gray-900 hover:bg-gray-100 flex items-center justify-center
-              py-[1.8rem]"
+              py-[1.8rem] cursor-pointer"
             >
               삭제하기
             </li>
