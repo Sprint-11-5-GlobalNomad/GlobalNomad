@@ -9,7 +9,6 @@ import { AxiosError } from "axios";
 import { useLogin } from "@/app/react-query/oauth-state";
 import Button from "@/components/common/ui/button";
 import MessageModal from "@/components/common/ui/modal/message-modal";
-// import axios,{ useSignInWithOauth } from "../../../react-query/oauth-state";
 
 interface LoginFormInputs {
   email: string;
@@ -24,10 +23,8 @@ export default function LoginPage() {
     isOpen: false,
     message: "",
   });
-  // const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const loginMutation = useLogin();
   const router = useRouter();
-  // const kakaoLogin = useSignInWithOauth("kakao");
 
   const {
     register,
@@ -45,27 +42,6 @@ export default function LoginPage() {
   const isValidForm = !(
     emailRegex.test(watchEmail) && watchPassword.length >= 8
   );
-
-  // React.useEffect(() => {
-  //   if (!watchEmail || !watchPassword) {
-  //     setIsButtonDisabled(true);
-  //     return;
-  //   }
-  //   const isEmailValid = emailRegex.test(watchEmail); // 이메일 유효성 체크
-  //   const isPasswordValid = watchPassword.length >= 8; // 비밀번호 유효성 체크
-  //   console.log(
-  //     "$$ email:",
-  //     watchEmail,
-  //     "password:",
-  //     watchPassword,
-  //     "isEmailValid:",
-  //     isEmailValid,
-  //     "isPasswordValid:",
-  //     isPasswordValid
-  //   );
-  // setIsButtonDisabled(!(isEmailValid && isPasswordValid)); // 둘 다 유효하면 버튼 활성화
-  // setIsButtonDisabled(!(emailRegex.test(watchEmail) && watchPassword.length >= 8)); // 둘 다 유효하면 버튼 활성화
-  // }, [watchEmail, watchPassword]);
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -104,12 +80,6 @@ export default function LoginPage() {
       router.replace("/"); // 로그인 상태면 메인 페이지로 리디렉션
     }
   }, [router]);
-
-  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=YOUR_KAKAO_REST_API_KEY&redirect_uri=http://localhost:3000/auth/kakao/callback&response_type=code`;
-
-  // const handleKakaoLogin = () => {
-  //   window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
-  // };
 
   return (
     <div className="mt-[11.8rem] mobile:w-[35rem] mobile:flex-column mobile:translate-x-1/2">

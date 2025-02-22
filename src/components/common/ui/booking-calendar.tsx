@@ -35,9 +35,6 @@ export default function BookingCalendar({
 
   const availableDates = schedules?.map((schedule) => schedule.date);
 
-  console.log("예약 가능일", schedules);
-  console.log("예약 가능일 배열", availableDates);
-
   // 📌 달력 데이터 생성 함수
   const generateCalendar = () => {
     const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // 이번 달 1일의 요일

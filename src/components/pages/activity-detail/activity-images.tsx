@@ -47,8 +47,6 @@ export default function ActivityImages() {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + totalImages) % totalImages);
   };
 
-  console.log("현재 인덱스", currentIndex);
-
   return (
     <div
       className="w-[119.8rem] h-[53.4rem] mb-[8.5rem]
