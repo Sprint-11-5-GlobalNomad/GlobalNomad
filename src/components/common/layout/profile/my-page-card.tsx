@@ -1,33 +1,73 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useMyDetails } from "@/app/react-query/user-state";
+import { useMyDetails, useUpdateMyDetails } from "@/app/react-query/user-state";
+import { uploadProfileImage } from "@/app/(primary)/api/user-api";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface SidebarProps {
   page: string;
   profileImageUrl?: string;
   onNavigate?: () => void;
-  onProfileImageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+interface UserDetails {
+  profileImageUrl: string;
 }
 
 export default function UserProfileSidebar({
   page,
+  profileImageUrl,
   onNavigate,
-  onProfileImageChange,
 }: SidebarProps) {
   const queryClient = useQueryClient();
   const { data: userDetails } = useMyDetails();
+  const { mutate: updateMyDetails } = useUpdateMyDetails();
 
-  const profileImageUrl =
-    userDetails?.profileImageUrl || "/image/profile_default.svg";
+  const finalProfileImageUrl =
+    userDetails?.profileImageUrl ||
+    profileImageUrl ||
+    "/image/profile_default.svg";
 
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["userDetails"] });
-  }, [profileImageUrl, queryClient]);
+  // 프로필이미지변경
+  const handleProfileImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.files && event.target.files[0]) {
+      const imageFile = event.target.files[0];
+      try {
+        const response = await uploadProfileImage(imageFile);
 
+        updateMyDetails(
+          { profileImageUrl: response.profileImageUrl },
+          {
+            onSuccess: () => {
+              // 캐시 데이터 수정
+              queryClient.setQueryData<UserDetails>(
+                ["userDetails"],
+                (oldData: UserDetails | undefined) => ({
+                  ...oldData,
+                  profileImageUrl: response.profileImageUrl,
+                })
+              );
+              // 최신 데이터 재요청
+              queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+            },
+            onError: () => {
+              alert("프로필 이미지를 업데이트하는 중 오류가 발생했습니다.");
+            },
+          }
+        );
+      } catch (error) {
+        console.error("프로필 이미지 업로드 오류:", error);
+        alert("프로필 이미지 업로드에 실패했습니다.");
+      }
+    }
+  };
+
+  /** 사이드바 메뉴 */
   const menuItems = [
     { label: "내 정보", link: "/profile", icon: "/image/profile.svg" },
     {
@@ -50,42 +90,52 @@ export default function UserProfileSidebar({
   return (
     <div className="w-full mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center min-h-screen">
       <div className="w-[38rem] h-[43.2rem] p-[2.4rem] mobile:mt-[7rem] bg-white border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md">
+        {/* 프로필 이미지 영역 */}
         <div className="flex flex-col items-center justify-center">
-          <div className="relative">
+          {/**
+           * 이미지 전체 클릭 시 파일 업로드
+           * 연필(펜) 아이콘은 단순 시각 표시
+           */}
+          <div
+            className="relative cursor-pointer"
+            onClick={() => {
+              document.getElementById("profile-upload")?.click();
+            }}
+          >
             <Image
-              src={profileImageUrl}
+              src={finalProfileImageUrl}
               alt="Profile"
               width={160}
               height={160}
               className="rounded-full object-cover border border-gray-200"
               style={{ width: "16rem", height: "16rem" }}
             />
-            <label
-              htmlFor="profile-upload"
-              className="absolute bottom-0 right-0 cursor-pointer"
-            >
+            <div className="absolute bottom-0 right-0 pointer-events-none">
               <Image
                 src="/image/btn.svg"
                 alt="프로필 이미지 변경"
                 width={44}
                 height={44}
               />
-              <input
-                type="file"
-                id="profile-upload"
-                accept="image/*"
-                onChange={onProfileImageChange}
-                className="hidden"
-              />
-            </label>
+            </div>
+            <input
+              type="file"
+              id="profile-upload"
+              accept="image/*"
+              onChange={handleProfileImageChange}
+              className="hidden"
+            />
           </div>
         </div>
+
+        {/* 사이드바 메뉴 */}
         <nav className="space-y-[0.8rem]">
           {menuItems.map((item) => (
             <Link
               href={item.link}
               key={item.label}
               onClick={(e) => {
+                // 모바일 환경에서 "내 정보" 클릭 시, 부모 컴포넌트가 상세 정보 열기
                 if (item.link === "/profile" && onNavigate) {
                   e.preventDefault();
                   onNavigate();

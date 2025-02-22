@@ -321,7 +321,7 @@ export default function ReservationModal({
                   <div className="flex justify-end gap-2 mt-3">
                     <button
                       onClick={() => handleConfirmReservation(reservation.id)}
-                      className="py-2 bg-nomad-black text-white rounded-md hover:bg-nomad-black w-[8.2rem] h-[3.8rem] text-center text-[1.4rem]"
+                      className="py-2 bg-nomad-black text-white rounded-2xl hover:bg-nomad-black w-[8.2rem] h-[3.8rem] text-center text-[1.4rem]"
                     >
                       승인하기
                     </button>

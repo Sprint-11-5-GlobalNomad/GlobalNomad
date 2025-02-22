@@ -1,119 +1,118 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import { useUpdateMyDetails, useMyDetails } from "../../react-query/user-state";
-import { uploadProfileImage } from "../api/user-api";
 import { useQueryClient } from "@tanstack/react-query";
-
-interface UserDetails {
-  profileImageUrl: string;
-}
 
 const currentPage = "/profile";
 
-interface UserDetails {
-  profileImageUrl: string;
-}
-
 export default function ProfilePage() {
-  const { data: userDetails, isLoading: isFetching } = useMyDetails();
+  const { data: userDetails, isLoading } = useMyDetails();
   const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
   const queryClient = useQueryClient();
 
+  // 상태
   const [nickname, setNickname] = useState("");
+  const [originalNickname, setOriginalNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState("");
+
+  // 비밀번호 표시/숨김 토글
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // 반응형 처리
   const [isMobileView, setIsMobileView] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
+  // 초기 닉네임 세팅
   useEffect(() => {
-    if (userDetails?.nickname) setNickname(userDetails.nickname);
-    if (userDetails?.profileImageUrl) {
-      setProfileImageUrl(userDetails.profileImageUrl);
+    if (userDetails?.nickname) {
+      setNickname(userDetails.nickname);
+      setOriginalNickname(userDetails.nickname);
     }
   }, [userDetails]);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 743);
-    };
-
+    const handleResize = () => setIsMobileView(window.innerWidth <= 743);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleProfileImageChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (event.target.files && event.target.files[0]) {
-      const imageFile = event.target.files[0];
-      try {
-        const response = await uploadProfileImage(imageFile);
+  // 새 비밀번호가 8자 이상인지
+  const isPasswordLengthValid = useMemo(() => {
+    if (!newPassword) return true; // 새 비밀번호가 비어있으면 검사 X
+    return newPassword.length >= 8;
+  }, [newPassword]);
 
-        setProfileImageUrl(response.profileImageUrl);
+  // 새 비밀번호 vs 재입력 비밀번호가 같은지
+  const isPasswordMatch = useMemo(() => {
+    return newPassword === confirmPassword;
+  }, [newPassword, confirmPassword]);
 
-        queryClient.setQueryData<UserDetails>(
-          ["userDetails"],
-          (oldData: UserDetails | undefined) => ({
-            ...oldData,
-            profileImageUrl: response.profileImageUrl,
-          })
-        );
+  // 닉네임 또는 비밀번호 중 하나라도 변경됐으면 저장 가능
+  const hasChanges = useMemo(() => {
+    const nicknameChanged = nickname !== originalNickname;
+    const passwordChanged =
+      newPassword.length > 0 || confirmPassword.length > 0;
+    return nicknameChanged || passwordChanged;
+  }, [nickname, originalNickname, newPassword, confirmPassword]);
 
-        updateMyDetails(
-          { profileImageUrl: response.profileImageUrl },
-          {
-            onSuccess: () => {
-              queryClient.invalidateQueries({ queryKey: ["userDetails"] });
-            },
-          }
-        );
-      } catch (error) {
-        console.error("프로필 이미지 업로드 오류:", error);
-        alert("프로필 이미지 업로드에 실패했습니다.");
-      }
-    }
-  };
-
+  /**
+   * 저장하기 버튼 클릭 시 로직
+   * → 각각 에러가 있으면 저장 중단
+   */
   const handleSave = () => {
-    if (newPassword && newPassword !== confirmPassword) {
-      setErrorMessage("비밀번호가 일치하지 않습니다.");
+    // 이 함수 내에서 오류가 있으면 return 하되, 아래 각각의 필드에 에러 메시지 표시
+    if (!isPasswordLengthValid || !isPasswordMatch) {
+      // 둘 중 하나라도 에러면 저장하지 않고 중단
       return;
     }
 
-    setErrorMessage("");
-
+    // 업데이트할 데이터
     const updateData: {
       nickname: string;
       newPassword?: string;
-      profileImageUrl?: string;
     } = { nickname };
-    if (newPassword) updateData.newPassword = newPassword;
-    if (profileImageUrl) updateData.profileImageUrl = profileImageUrl;
+
+    if (newPassword) {
+      updateData.newPassword = newPassword;
+    }
 
     updateMyDetails(updateData, {
       onSuccess: () => {
         alert("정보가 성공적으로 업데이트되었습니다.");
+
+        // 닉네임/프로필 갱신 → 사이드바/네비게이션 자동 반영
+        // ※ 아래처럼 { queryKey: ["userDetails"] } 형태로 넣어야 TS 오류 방지
         queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+
+        // 변경사항 감지 해제
+        setOriginalNickname(nickname);
+
+        // 비밀번호 입력창 초기화
+        setNewPassword("");
+        setConfirmPassword("");
       },
-      onError: () => alert("정보 업데이트 중 오류가 발생했습니다."),
+      onError: () => {
+        alert("정보 업데이트 중 오류가 발생했습니다.");
+      },
     });
   };
 
-  if (isFetching) return <p>로딩 중...</p>;
+  if (isLoading) return <p>로딩 중...</p>;
 
+  // 모바일: 상세 페이지 안 열었으면 사이드바만 노출
   if (isMobileView && !showDetails) {
     return (
       <UserProfileSidebar
         page={currentPage}
         onNavigate={() => setShowDetails(true)}
-        profileImageUrl={profileImageUrl || "/image/profile_default.svg"}
-        onProfileImageChange={handleProfileImageChange}
+        profileImageUrl={userDetails?.profileImageUrl}
       />
     );
   }
@@ -122,31 +121,29 @@ export default function ProfilePage() {
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center py-[7.2rem] mt-[7.2rem]">
         <div className="flex gap-[2.4rem]">
+          {/* 데스크톱: 사이드바 + 내 정보 페이지 동시 표시 */}
           {!isMobileView && (
-            <div>
-              <UserProfileSidebar
-                page={currentPage}
-                onProfileImageChange={handleProfileImageChange}
-                profileImageUrl={
-                  profileImageUrl || "/image/profile_default.svg"
-                }
-              />
-            </div>
+            <UserProfileSidebar
+              page={currentPage}
+              profileImageUrl={userDetails?.profileImageUrl}
+            />
           )}
 
           <div className="flex-1 rounded-[0.75rem] h-auto">
+            {/* 상단 영역: 제목, 저장 버튼 */}
             <div className="flex justify-between items-center w-[78rem] mb-[2.4rem] pb-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.3rem]">
               <h2 className="text-[3.2rem] font-bold">내 정보</h2>
               <Button
                 ButtonType="profileSave"
                 label={isPending ? "저장 중..." : "저장하기"}
                 onClick={handleSave}
-                disabled={isPending}
+                disabled={!hasChanges || isPending}
                 variant="default"
               />
             </div>
 
             <div className="space-y-[3.2rem]">
+              {/* 닉네임 */}
               <div>
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   닉네임
@@ -160,6 +157,7 @@ export default function ProfilePage() {
                 />
               </div>
 
+              {/* 이메일 (수정 불가) */}
               <div>
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   이메일
@@ -177,15 +175,44 @@ export default function ProfilePage() {
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   새 비밀번호
                 </label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className={`w-full h-[4.2rem] border ${
-                    errorMessage ? "border-red-500" : "border-gray-700"
-                  } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
-                  placeholder="8자 이상 입력해주세요"
-                />
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => {
+                      setNewPassword(e.target.value);
+                    }}
+                    className={`w-full h-[4.2rem] border ${
+                      // 빨간 테두리 조건: 새 비밀번호 존재하고, (8자 미만 or 재확인 불일치)
+                      !isPasswordLengthValid && newPassword
+                        ? "border-red-500"
+                        : "border-gray-700"
+                    } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
+                    placeholder="8자 이상 입력해주세요"
+                  />
+                  {/* 눈 아이콘 클릭 → 비밀번호 토글 */}
+                  <span
+                    className="absolute right-[1rem] top-[50%] -translate-y-1/2 cursor-pointer"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    <Image
+                      src={
+                        showNewPassword
+                          ? "/image/visibility_off.svg"
+                          : "/image/visibility_eye.svg"
+                      }
+                      alt="Toggle Password"
+                      width={24}
+                      height={24}
+                    />
+                  </span>
+                </div>
+                {/* 8자 미만 에러 표시 */}
+                {!isPasswordLengthValid && newPassword && (
+                  <p className="text-red-500 text-[1.2rem] mt-[0.5rem]">
+                    8자 이상 입력해주세요.
+                  </p>
+                )}
               </div>
 
               {/* 비밀번호 재입력 */}
@@ -193,25 +220,39 @@ export default function ProfilePage() {
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   비밀번호 재입력
                 </label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`w-full h-[4.2rem] border ${
-                    errorMessage ? "border-red-500" : "border-gray-700"
-                  } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
-                  placeholder="비밀번호를 한번 더 입력해주세요"
-                  onBlur={() => {
-                    if (newPassword && newPassword !== confirmPassword) {
-                      setErrorMessage("비밀번호가 일치하지 않습니다.");
-                    } else {
-                      setErrorMessage("");
-                    }
-                  }}
-                />
-                {errorMessage && (
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className={`w-full h-[4.2rem] border ${
+                      // 빨간 테두리 조건: (비밀번호가 있고) && (일치하지 않는 경우)
+                      !isPasswordMatch && confirmPassword
+                        ? "border-red-500"
+                        : "border-gray-700"
+                    } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
+                    placeholder="비밀번호를 한번 더 입력해주세요"
+                  />
+                  <span
+                    className="absolute right-[1rem] top-[50%] -translate-y-1/2 cursor-pointer"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    <Image
+                      src={
+                        showConfirmPassword
+                          ? "/image/visibility_off.svg"
+                          : "/image/visibility_eye.svg"
+                      }
+                      alt="Toggle Confirm Password"
+                      width={24}
+                      height={24}
+                    />
+                  </span>
+                </div>
+                {/* 비밀번호 일치하지 않을 때 에러 표시 */}
+                {!isPasswordMatch && confirmPassword && (
                   <p className="text-red-500 text-[1.2rem] mt-[0.5rem]">
-                    {errorMessage}
+                    비밀번호가 일치하지 않습니다.
                   </p>
                 )}
               </div>
