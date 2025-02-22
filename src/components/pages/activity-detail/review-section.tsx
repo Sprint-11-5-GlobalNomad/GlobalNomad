@@ -44,7 +44,7 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
                     className="object-cover w-full h-full rounded-full"
                   />
                 </div>
-                <div className="flex flex-col gap-[0.8rem] tablet:w-[36.8rem]">
+                <div className="flex flex-col gap-[0.8rem] desktop:w-[72.9rem] tablet:w-[36.8rem] mobile:w-full">
                   <div className="flex items-center gap-[0.8rem]">
                     <span className="text-lg font-semiBold">
                       {review.user.nickname}
