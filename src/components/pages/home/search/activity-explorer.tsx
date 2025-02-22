@@ -50,7 +50,7 @@ export default function ActivityExplorer() {
 
   const totalPages = Math.ceil((data?.totalCount || 0) / CONFIG.SIZE);
 
-  const suffix = isLastCharHasBatchim(searchQuery)
+  const suffix = isLastCharHasBatchim(submittedQuery)
     ? CONFIG.SUFFIX_WITH_BATCHIM
     : CONFIG.SUFFIX_WITHOUT_BATCHIM;
 
