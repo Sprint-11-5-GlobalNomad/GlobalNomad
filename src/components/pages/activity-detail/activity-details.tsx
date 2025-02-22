@@ -7,7 +7,6 @@ import Image from "next/image";
 import ReviewSection from "./review-section";
 import { useAuth } from "@/app/(primary)/api/use-auth";
 import KakaoMaps from "./kakomaps/kakaomaps";
-import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
 const getSatisfactionLevel = (rating?: number) => {
   if (rating === undefined || rating === 0) return "평가 없음";
@@ -131,14 +130,7 @@ export default function ActivityDetails() {
             </div>
           </div>
 
-          {isRated ? (
-            <ReviewSection />
-          ) : (
-            <EmptyContent
-              description="아직 등록한 리뷰가 없어요"
-              className="my-[10rem] w-[80rem] tablet:w-[46.9rem] mobile:w-[32.7rem]"
-            />
-          )}
+          <ReviewSection isRated={isRated} />
         </div>
       </div>
       {isOwner ? <></> : <BookingSection />}
