@@ -1,10 +1,9 @@
-"use client";
-
 import Button from "@/components/common/ui/button";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSubmitReservationReview } from "@/app/react-query/reservation-state";
+import { useQueryClient, InfiniteData } from "@tanstack/react-query";
 
 type ReviewModalProps = Pick<
   ReservationResponseDto,
@@ -17,6 +16,7 @@ type ReviewModalProps = Pick<
   | "headCount"
 > & {
   isOpen: boolean;
+  selectedStatus?: string | null;
 };
 
 type ReviewState = {
@@ -24,13 +24,19 @@ type ReviewState = {
   content: string;
 };
 
-export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
-  const [modalOpen, setModalOpen] = useState(isOpen);
-  const [review, setReview] = useState<ReviewState>({
-    rating: 0,
-    content: "",
-  });
+interface ReservationPage {
+  reservations: ReservationResponseDto[];
+  // 페이지 관련 추가 정보가 있다면 여기에 정의
+}
 
+export function ReviewModal({
+  isOpen,
+  selectedStatus,
+  ...props
+}: ReviewModalProps) {
+  const [modalOpen, setModalOpen] = useState(isOpen);
+  const [review, setReview] = useState<ReviewState>({ rating: 0, content: "" });
+  const queryClient = useQueryClient();
   const submitReviewMutation = useSubmitReservationReview();
 
   useEffect(() => {
@@ -58,16 +64,30 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
     submitReviewMutation.mutate(
       {
         reservationId: props.id,
-        reviewData: {
-          rating: review.rating,
-          content: review.content,
-        },
+        reviewData: { rating: review.rating, content: review.content },
       },
       {
         onSuccess: () => {
+          // 옵티미스틱 업데이트: 쿼리 키가 useInfiniteMyReservations에서 사용한 키와 일치해야 함
+          queryClient.setQueryData<InfiniteData<ReservationPage>>(
+            ["infiniteMyReservations", selectedStatus],
+            (oldData) => {
+              if (!oldData) return oldData;
+              return {
+                ...oldData,
+                pages: oldData.pages.map((page) => ({
+                  ...page,
+                  reservations: page.reservations.map((reservation) =>
+                    reservation.id === props.id
+                      ? { ...reservation, reviewSubmitted: true }
+                      : reservation
+                  ),
+                })),
+              };
+            }
+          );
           alert("리뷰가 성공적으로 작성되었습니다!");
           onClose();
-          window.location.reload();
         },
       }
     );
@@ -102,16 +122,16 @@ export function ReviewModal({ isOpen, ...props }: ReviewModalProps) {
               className="rounded-[1.2rem] mobile:w-[100px] mobile:h-[100px]"
             />
             <div className="flex flex-col gap-[1.2rem]">
-              <h2 className="text-[2rem] font-bol mobile:text-[16px]">
+              <h2 className="text-[2rem] font-bold mobile:text-[16px]">
                 {props.activity.title}
               </h2>
-              <p className="text-[1.8rem] font-normalmobile:text-[14px]">
+              <p className="text-[1.8rem] font-normal mobile:text-[14px]">
                 {props.date}ㆍ{props.startTime}-{props.endTime}ㆍ
                 {props.headCount}명
               </p>
               <hr className="mb-[0.4rem]" />
               <div className="text-left text-[3.2rem] font-bold mb-6 mobile:text-[20px]">
-                ₩{props.totalPrice}
+                ₩{props.totalPrice.toLocaleString()}
               </div>
             </div>
           </div>
