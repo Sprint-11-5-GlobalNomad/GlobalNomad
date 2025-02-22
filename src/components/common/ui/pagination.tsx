@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useCallback, useMemo } from "react";
 
 interface PaginationProps {
   totalPages: number;
@@ -12,18 +13,32 @@ export default function Pagination({
   currentPage,
   setPage,
 }: PaginationProps) {
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setPage(newPage);
-    }
-  };
-
-  const startPage = Math.max(1, currentPage - 2);
-  const endPage = Math.min(totalPages, startPage + 4);
-  const pages = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        setPage(newPage);
+      }
+    },
+    [setPage, totalPages]
   );
+
+  const pages = useMemo(() => {
+    const startPage = Math.max(1, currentPage - 2);
+
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    // 1 ~ 5페이지일 경우 정상적으로 표시
+    if (currentPage <= 3) {
+      return Array.from({ length: 5 }, (_, i) => i + 1);
+    }
+    // 마지막 페이지 근처일 경우
+    if (currentPage + 2 >= totalPages) {
+      return Array.from({ length: 5 }, (_, i) => totalPages - 4 + i);
+    }
+    // 나머지 페이지들
+    return Array.from({ length: 5 }, (_, i) => startPage + i);
+  }, [currentPage, totalPages]);
 
   return (
     <div className="mb-[22.2rem] flex-between gap-[1rem]">
