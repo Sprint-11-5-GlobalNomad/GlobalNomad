@@ -55,17 +55,17 @@ export const useMyActivities = (cursorId?: number | null, size = 20) =>
           switch (error.response?.status) {
             case 400:
               console.error(error.message);
-              alert(error.response?.data?.message);
+              alert(error.response?.data);
               break;
             case 401:
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
-              alert(error.response?.data?.message);
+              alert(error.response?.data);
               break;
             default:
               console.error("체험 리스트를 가져오는 중 오류가 발생했습니다.");
-              alert(error.response?.data?.message);
+              alert(error.response?.data);
           }
         }
         return { cursorId: null, totalCount: 0, activities: [] };
@@ -194,23 +194,23 @@ export const useReservationsBySchedule = (
           switch (error.response?.status) {
             case 400:
               console.error(error.message);
-              alert(error.response?.data?.message);
+              alert(error.response?.data);
               break;
             case 401:
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
-              alert(error.response?.data?.message);
+              alert(error.response?.data);
               break;
             case 403:
               console.error("본인의 체험만 조회할 수 있습니다.");
-              alert(error.response?.data?.message);
+              alert(error.response?.data);
               break;
             default:
               console.error(
                 "예약 시간대별 정보를 가져오는 중 오류가 발생했습니다."
               );
-              alert(error.response?.data?.message);
+              alert(error.response?.data);
           }
         }
         throw error;
@@ -245,25 +245,25 @@ export const useUpdateReservationStatus = () => {
         switch (error.response?.status) {
           case 400:
             console.error(error.message);
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 401:
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 403:
             console.error("본인의 체험만 예약 상태를 변경할 수 있습니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 404:
             console.error("존재하지 않는 체험입니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           default:
             console.error("예약 상태 업데이트 중 오류가 발생했습니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
         }
       }
     },
@@ -283,25 +283,25 @@ export const useDeleteMyActivity = () => {
         switch (error.response?.status) {
           case 400:
             console.error(error.message);
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 401:
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 403:
             console.error("본인의 체험만 삭제할 수 있습니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 404:
             console.error("존재하지 않는 체험입니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           default:
             console.error("체험 삭제 중 오류가 발생했습니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
         }
       }
     },
@@ -334,23 +334,23 @@ export const useUpdateMyActivity = () => {
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 403:
             console.error("본인의 체험만 수정할 수 있습니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 404:
             console.error("존재하지 않는 체험입니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           case 409:
             console.error("겹치는 예약 가능 시간대가 존재합니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
             break;
           default:
             console.error("체험 수정 중 오류가 발생했습니다.");
-            alert(error.response?.data?.message);
+            alert(error.response?.data);
         }
       }
     },
