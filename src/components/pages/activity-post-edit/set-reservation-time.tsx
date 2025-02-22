@@ -193,48 +193,55 @@ export default function ReservationTimeSelector({
         </div>
 
         {reservationTimes.length > 0 && <hr />}
-        {reservationTimes.map((reservationTime, index) => (
-          <div
-            className="flex flex-row gap-[2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]"
-            key={index}
-          >
-            <input
-              type="text"
-              className="w-[37.9rem] tablet:w-[14.9rem] mobile:w-[13rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-              disabled
-              value={
-                reservationTime.date
-                  ? reservationTime.date.slice(2).replace(/-/g, "/")
-                  : ""
-              }
-            />
-            <div className="flex flex-row gap-[1.2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
+        {reservationTimes.map((reservationTime, index) => {
+          const isPast =
+            new Date(
+              `${reservationTime.date}T${reservationTime.startTime}:00`
+            ) < new Date();
+          return (
+            <div
+              className="flex flex-row gap-[2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]"
+              key={index}
+            >
               <input
                 type="text"
-                className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                className="w-[37.9rem] tablet:w-[14.9rem] mobile:w-[13rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
                 disabled
-                value={reservationTime.startTime}
+                value={
+                  reservationTime.date
+                    ? reservationTime.date.slice(2).replace(/-/g, "/")
+                    : ""
+                }
               />
-              <div className="hidden desktop:block">
-                <div className="relative top-[1.6rem] font-pretendard text-[2rem] font-bold">
-                  ~
+              <div className="flex flex-row gap-[1.2rem] tablet:gap-[0.5rem] mobile:gap-[0.4rem]">
+                <input
+                  type="text"
+                  className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                  disabled
+                  value={reservationTime.startTime}
+                />
+                <div className="hidden desktop:block">
+                  <div className="relative top-[1.6rem] font-pretendard text-[2rem] font-bold">
+                    ~
+                  </div>
                 </div>
+                <input
+                  type="text"
+                  className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+                  disabled
+                  value={reservationTime.endTime}
+                />
               </div>
-              <input
-                type="text"
-                className="w-[14rem] tablet:w-[10.4rem] mobile:w-[7.9rem] h-[5.6rem] mobile:h-[4.4rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-                disabled
-                value={reservationTime.endTime}
+              <Button
+                ButtonType="reservationTime"
+                variant="reservationTimeDelete"
+                label="-"
+                disabled={isPast}
+                onClick={() => removeReservationTime(index)}
               />
             </div>
-            <Button
-              ButtonType="reservationTime"
-              variant="reservationTimeDelete"
-              label="-"
-              onClick={() => removeReservationTime(index)}
-            />
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
