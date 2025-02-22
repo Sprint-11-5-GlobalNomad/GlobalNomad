@@ -11,8 +11,8 @@ export default function AllActivities({ activities }: AllActivitiesProps) {
     <ul
       className="grid grid-cols-4 gap-[2rem] w-[120rem] mb-[6rem]
     tablet:w-[69.5rem] tablet:gap-[3.2rem] tablet:grid-cols-3
-    mobile:grid-cols-2 mobile:grid-rows-2 mobile:grid-auto-rows-[1fr]
-    mobile:w-[38.8rem] mobile:mb-[4.6rem] mobile:px-[2rem] mobile:gap-[1.6rem]"
+    mobile:grid-cols-2 mobile:grid-auto-rows-[1fr]
+    mobile:w-[34.3rem] mobile:mb-[4.6rem] mobile:gap-[1.6rem]"
     >
       {activities.map((activity) => (
         <li

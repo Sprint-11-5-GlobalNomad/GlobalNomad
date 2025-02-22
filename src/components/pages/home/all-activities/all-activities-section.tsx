@@ -15,9 +15,7 @@ export default function AllActivitiesSection() {
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState<CategoryType | undefined>(undefined);
   const [sort, setSort] = useState<SortType>(undefined);
-  const [size, setSize] = useState(4);
-
-  // const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [size, setSize] = useState(8);
 
   const { data, isLoading, isError } = useActivities({
     method: "offset",
