@@ -32,7 +32,7 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
           data?.reviews.map((review, index) => (
             <div key={review.id}>
               <li className="flex items-start gap-[1.6rem] mb-[2.4rem] tablet:ml-[2.4rem] mobile:w-full">
-                <div>
+                <div className="w-[4.5rem] h-[4.5rem]">
                   <Image
                     src={
                       review.user.profileImageUrl ||
@@ -41,7 +41,7 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
                     alt="유저 프로필 이미지"
                     width={45}
                     height={45}
-                    className="object-cover"
+                    className="object-cover w-full h-full rounded-full"
                   />
                 </div>
                 <div className="flex flex-col gap-[0.8rem] tablet:w-[36.8rem]">
@@ -79,11 +79,15 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
         )}
       </ul>
       <div className="flex justify-center gap-[1rem]">
-        <Pagination
-          totalPages={totlaPages}
-          currentPage={page}
-          setPage={setPage}
-        />
+        {data?.reviews.length === 0 ? (
+          ""
+        ) : (
+          <Pagination
+            totalPages={totlaPages}
+            currentPage={page}
+            setPage={setPage}
+          />
+        )}
       </div>
     </div>
   );

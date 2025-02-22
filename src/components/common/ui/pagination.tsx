@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 interface PaginationProps {
   totalPages: number;
@@ -40,6 +40,10 @@ export default function Pagination({
     return Array.from({ length: 5 }, (_, i) => startPage + i);
   }, [currentPage, totalPages]);
 
+  useEffect(() => {
+    window.history.pushState({}, "", `?page=${currentPage}`);
+  }, [currentPage]);
+
   return (
     <div className="mb-[22.2rem] flex-between gap-[1rem]">
       <Link
@@ -48,7 +52,6 @@ export default function Pagination({
         onClick={(e) => {
           e.preventDefault();
           handlePageChange(currentPage - 1);
-          window.history.pushState({}, "", `?page=${currentPage - 1}`);
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
           rounded-[1.5rem] border border-solid bg-white
@@ -78,7 +81,6 @@ export default function Pagination({
             onClick={(e) => {
               e.preventDefault();
               handlePageChange(page);
-              window.history.pushState({}, "", `?page=${page}`);
             }}
             className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
         flex items-center justify-center rounded-[1.5rem]
@@ -96,7 +98,6 @@ export default function Pagination({
         onClick={(e) => {
           e.preventDefault();
           handlePageChange(currentPage + 1);
-          window.history.pushState({}, "", `?page=${currentPage + 1}`);
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
       rounded-[1.5rem] border border-solid bg-white

@@ -30,13 +30,12 @@ export default function HeadcountSelectModal({
   return createPortal(
     <div
       ref={outsideClickRef}
-      className="w-[48rem] bg-white rounded-[2.4rem] z-[999] tablet:absolute
-      top-[62.4rem] left-[35vw] px-[2.4rem] pt-[2.8rem] pb-[3.2rem]
-      flex flex-col desktop:hidden mobile:w-full mobile:h-full
+      className="w-[48rem] bg-white rounded-[2.4rem] z-[999]
+      px-[2.4rem] pt-[2.8rem] pb-[3.2rem]
+      flex flex-col mobile:w-full mobile:h-full mobile:flex-column
       mobile:fixed mobile:top-0 mobile:left-0"
     >
-      {/* 날짜 선택 */}
-      <div className="flex-between">
+      <div className="flex-between mobile:w-[32.7rem]">
         <h2 className="text-2xl font-bold">인원</h2>
         <button onClick={onClose}>
           <Image
@@ -48,48 +47,50 @@ export default function HeadcountSelectModal({
         </button>
       </div>
 
-      <p className="text-xl mt-[3.2rem] mb-[2.4rem]">
-        예약할 인원을 선택해주세요.
-      </p>
+      <div className="mobile:flex mobile:flex-col mobile:items-start mobile:w-[32.7rem]">
+        <p className="text-xl mt-[3.2rem] mb-[2.4rem]">
+          예약할 인원을 선택해주세요.
+        </p>
 
-      <div
-        className="border border-solid border-gray-500 rounded-[0.6rem]
+        <div
+          className="border border-solid border-gray-500 rounded-[0.6rem]
                   w-[12rem] flex-between shadow-stepperInset"
-      >
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            handleDecrease();
-          }}
-          className="p-[1rem] rounded-tl-[0.6rem] rounded-bl-[0.6rem]"
         >
-          <Image
-            src="/image/Subtract.svg"
-            alt="참여 인원 수 빼기"
-            width={20}
-            height={20}
-          />
-        </button>
-        <input
-          value={headCount}
-          onChange={(e) => setHeadCount(Number(e.target.value) || 1)}
-          className="w-[4rem] p-[0.6rem] text-md text-gray-900
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleDecrease();
+            }}
+            className="p-[1rem] rounded-tl-[0.6rem] rounded-bl-[0.6rem]"
+          >
+            <Image
+              src="/image/Subtract.svg"
+              alt="참여 인원 수 빼기"
+              width={20}
+              height={20}
+            />
+          </button>
+          <input
+            value={headCount}
+            onChange={(e) => setHeadCount(Number(e.target.value) || 1)}
+            className="w-[4rem] p-[0.6rem] text-md text-gray-900
                     font-regular text-center focus:outline-none"
-        />
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            handleIncrease();
-          }}
-          className="p-[1rem] rounded-tr-[0.6rem] rounded-br-[0.6rem]"
-        >
-          <Image
-            src="/image/Add.svg"
-            alt="참여 인원 수 빼기"
-            width={20}
-            height={20}
           />
-        </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleIncrease();
+            }}
+            className="p-[1rem] rounded-tr-[0.6rem] rounded-br-[0.6rem]"
+          >
+            <Image
+              src="/image/Add.svg"
+              alt="참여 인원 수 빼기"
+              width={20}
+              height={20}
+            />
+          </button>
+        </div>
       </div>
 
       <Button
