@@ -1,4 +1,5 @@
 import { useReviews } from "@/app/react-query/activity-state";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 import Pagination from "@/components/common/ui/pagination";
 import { formatDate } from "@/utils/date-utils";
 import Image from "next/image";
@@ -7,7 +8,7 @@ import { useState } from "react";
 
 const SIZE = 3;
 
-export default function ReviewSection() {
+export default function ReviewSection({ isRated }: { isRated: boolean }) {
   const { id } = useParams();
   const { data, isLoading } = useReviews({
     filters: { activityId: Number(id), page: 1, size: SIZE },
@@ -27,7 +28,7 @@ export default function ReviewSection() {
             <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
             <div className="skeleton w-[79rem] h-[14rem] tablet:w-[43rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[25rem] rounded-[1.5rem]" />
           </div>
-        ) : (
+        ) : isRated ? (
           data?.reviews.map((review, index) => (
             <div key={review.id}>
               <li className="flex items-start gap-[1.6rem] mb-[2.4rem] tablet:ml-[2.4rem] mobile:w-full">
@@ -70,6 +71,11 @@ export default function ReviewSection() {
                   : null}
             </div>
           ))
+        ) : (
+          <EmptyContent
+            description="아직 등록한 리뷰가 없어요"
+            className="my-[10rem] w-[80rem] tablet:w-[49.3rem] mobile:w-[32.7rem]"
+          />
         )}
       </ul>
       <div className="flex gap-[1rem] tablet:translate-x-1/2">
