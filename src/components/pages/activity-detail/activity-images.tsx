@@ -117,7 +117,7 @@ export default function ActivityImages() {
                 alt={`${activity?.title} 이미지 ${currentIndex + 1}`}
                 width={595}
                 height={534}
-                className="rounded-[1.2rem] tablet:w-[40vw] tablet:h-[31rem]"
+                className="rounded-[1.2rem] tablet:w-1/2 tablet:h-[31rem]"
               />
 
               <div
