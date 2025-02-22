@@ -1,5 +1,6 @@
 import { useCancelReservation } from "@/app/react-query/reservation-state";
 import { useState, forwardRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
 import { ReviewModal } from "@/components/pages/profile-reservation/review-modal";
@@ -18,7 +19,9 @@ type ReservationCardProps = Pick<
   | "totalPrice"
   | "id"
   | "reviewSubmitted"
->;
+> & {
+  selectedStatus?: string;
+};
 
 export const MyReservationCard = forwardRef<
   HTMLDivElement,
@@ -35,20 +38,36 @@ export const MyReservationCard = forwardRef<
       totalPrice,
       id,
       reviewSubmitted,
+      selectedStatus,
     },
     ref
   ) => {
     const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const cancelReservationMutation = useCancelReservation();
+    const queryClient = useQueryClient();
 
     const handleCancelReservation = () => {
-      cancelReservationMutation.mutate({
-        reservationId: id,
-        status: { status: "canceled" },
-      });
-      setIsCancelModalOpen(false);
-      window.location.reload();
+      cancelReservationMutation.mutate(
+        {
+          reservationId: id,
+          status: { status: "canceled" },
+        },
+        {
+          onSuccess: () => {
+            setIsCancelModalOpen(false);
+            if (selectedStatus) {
+              queryClient.invalidateQueries({
+                queryKey: ["infiniteMyReservations", selectedStatus],
+              });
+            } else {
+              queryClient.invalidateQueries({
+                queryKey: ["infiniteMyReservations"],
+              });
+            }
+          },
+        }
+      );
     };
 
     const getStatusClasses = (status: string) => {
@@ -101,9 +120,7 @@ export const MyReservationCard = forwardRef<
             <div className="flex flex-col justify-between flex-1 desktop:pt-[2.1rem] desktop:pb-[2.6rem] desktop:px-[2.4rem] tablet:pt-[1.2rem] tablet:pb-[1.6rem] tablet:pl-[1.2rem] tablet:pr-[1.8rem] mobile:pt-[1.1rem] mobile:pb-[1rem] mobile:pl-[0.8rem] mobile:pr-[1.5rem]">
               <div className="flex flex-col desktop:gap-[0.8rem]">
                 <div
-                  className={`font-bold text-lg mobile:text-md ${getStatusClasses(
-                    status
-                  )}`}
+                  className={`font-bold text-[1.6rem] mobile:text-[1.4rem] ${getStatusClasses(status)}`}
                 >
                   {getStatusText(status)}
                 </div>
@@ -165,6 +182,7 @@ export const MyReservationCard = forwardRef<
           totalPrice={totalPrice}
           id={id}
           isOpen={isReviewModalOpen}
+          selectedStatus={selectedStatus}
         />
       </div>
     );

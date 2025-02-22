@@ -16,8 +16,9 @@ import {
 import { format, isValid } from "date-fns";
 import Image from "next/image";
 import "@/styles/fullcalendar.css";
+import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
-/** 스케줄 정보 타입 */
+/** 스케줄 정보 */
 type IDailyStat = {
   scheduleId: number;
   startTime: string;
@@ -30,7 +31,7 @@ type IDailyStat = {
   };
 };
 
-/** 월간 예약 통계 타입 */
+/** 월간 예약 */
 interface IMonthlyStat {
   date?: string;
   activityId?: number;
@@ -65,7 +66,6 @@ export default function ReservationPage() {
 
   const { data: myActivitiesData } = useMyActivities();
   const myActivities = myActivitiesData ?? { activities: [] };
-
   const currentYear = String(new Date().getFullYear());
   const currentMonth = (new Date().getMonth() + 1).toString().padStart(2, "0");
 
@@ -83,7 +83,7 @@ export default function ReservationPage() {
     getFormattedDate(selectedDate) ?? ""
   );
 
-  // 체험 바뀌면 월별 예약불러오기기
+  // 체험 바뀌면 월별 예약 불러오기
   useEffect(() => {
     if (selectedActivity) {
       refetchMonthlyStats();
@@ -139,6 +139,7 @@ export default function ReservationPage() {
     }
   };
 
+  // 이벤트 클릭 시 모달 오픈
   const handleEventClick = async (info: EventClickArg) => {
     if (!selectedActivity || !info.event.start) return;
 
@@ -164,6 +165,7 @@ export default function ReservationPage() {
     setModalOpen(true);
   };
 
+  // 달력 이동
   const handlePrev = () => {
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
@@ -178,6 +180,23 @@ export default function ReservationPage() {
       setCurrentDate(calendarApi.getDate());
     }
   };
+
+  // 등록된 체험이 전혀 없는 경우
+  if (myActivities?.activities?.length === 0) {
+    return (
+      <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem]">
+        <div>
+          <UserProfileSidebar page="/profile/activity/reservation" />
+        </div>
+        <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
+          <h1 className="text-[3.2rem] font-bold mb-[3.8rem]">예약 현황</h1>
+          <div className="flex flex-col items-center justify-center h-[30rem]">
+            <EmptyContent description="아직 등록한 체험이 없어요" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem]">
@@ -202,64 +221,75 @@ export default function ReservationPage() {
           </div>
         </div>
 
-        {/* 달력 */}
-        {events.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full">
+        {/* 아무 체험도 선택 안했을 때 */}
+        {selectedActivity === null && (
+          <div className="flex flex-col items-center justify-center h-[30rem]">
             <Image
               src="/image/empty.svg"
               alt="empty"
-              width={150}
-              height={150}
+              width={240}
+              height={240}
             />
-            <p className="text-gray-500 mt-4 text-[1.8rem]">
+            <p className="text-gray-500 mt-4 text-2xl">
               아직 선택한 체험이 없어요
             </p>
           </div>
-        ) : (
-          <>
-            <div className="flex justify-center items-center mb-6">
-              <button onClick={handlePrev} className="text-2xl mx-[9.6rem]">
-                «
-              </button>
-              <h2 className="text-[2rem] font-bold">
-                {currentDate.toLocaleDateString("ko-KR", {
-                  year: "numeric",
-                  month: "long",
-                })}
-              </h2>
-              <button onClick={handleNext} className="text-2xl mx-[9.6rem]">
-                »
-              </button>
-            </div>
+        )}
 
-            <FullCalendar
-              ref={calendarRef}
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              events={events}
-              height="auto"
-              locale="en"
-              headerToolbar={false}
-              dayMaxEventRows={true}
-              aspectRatio={1.35}
-              fixedWeekCount={false}
-              showNonCurrentDates={false}
-              eventClick={handleEventClick}
-              eventClassNames={(arg) => {
-                return ["fc-event", arg.event.extendedProps.className];
-              }}
-              dayCellClassNames={(arg) => {
-                if (
-                  events.some(
-                    (event) =>
-                      event.start === arg.date.toISOString().split("T")[0]
-                  )
-                ) {
-                  return ["has-event"];
-                }
-                return [];
-              }}
-            />
+        {/* 캘린더 */}
+        {selectedActivity !== null && (
+          <>
+            {events.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-[30rem]">
+                <EmptyContent description="아직 등록한 체험이 없어요" />
+              </div>
+            ) : (
+              <>
+                <div className="flex justify-center items-center mb-6">
+                  <button onClick={handlePrev} className="text-2xl mx-[9.6rem]">
+                    «
+                  </button>
+                  <h2 className="text-[2rem] font-bold">
+                    {currentDate.toLocaleDateString("ko-KR", {
+                      year: "numeric",
+                      month: "long",
+                    })}
+                  </h2>
+                  <button onClick={handleNext} className="text-2xl mx-[9.6rem]">
+                    »
+                  </button>
+                </div>
+
+                <FullCalendar
+                  ref={calendarRef}
+                  plugins={[dayGridPlugin, interactionPlugin]}
+                  initialView="dayGridMonth"
+                  events={events}
+                  height="auto"
+                  locale="en"
+                  headerToolbar={false}
+                  dayMaxEventRows
+                  aspectRatio={1.35}
+                  fixedWeekCount={false}
+                  showNonCurrentDates={false}
+                  eventClick={handleEventClick}
+                  eventClassNames={(arg) => {
+                    return ["fc-event", arg.event.extendedProps.className];
+                  }}
+                  dayCellClassNames={(arg) => {
+                    if (
+                      events.some(
+                        (event) =>
+                          event.start === arg.date.toISOString().split("T")[0]
+                      )
+                    ) {
+                      return ["has-event"];
+                    }
+                    return [];
+                  }}
+                />
+              </>
+            )}
           </>
         )}
       </div>
