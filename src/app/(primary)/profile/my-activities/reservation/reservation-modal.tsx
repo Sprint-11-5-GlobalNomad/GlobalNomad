@@ -7,6 +7,7 @@ import {
   useDailyReservationStats,
 } from "@/app/react-query/my-activity-state";
 import { format, parseISO, isValid } from "date-fns";
+import UseOutsideClick from "@/hooks/use-outside-click";
 
 interface DailyReservationStat {
   scheduleId: number;
@@ -54,12 +55,10 @@ export default function ReservationModal({
   const [activeTab, setActiveTab] = useState<
     "pending" | "confirmed" | "declined"
   >("pending");
-
-  //시간 드롭다운에서 선택된 스케줄 ID
   const [selectedScheduleId, setSelectedScheduleId] =
     useState<number>(scheduleId);
 
-  //날짜 변환환
+  // 날짜 변환
   const parsedDate = useMemo(
     () => (selectedDate ? parseISO(selectedDate) : null),
     [selectedDate]
@@ -78,7 +77,7 @@ export default function ReservationModal({
     refetch,
   } = useReservationsBySchedule(activityId, selectedScheduleId, activeTab);
 
-  //상세목록록
+  // 상세 목록
   const reservations: IReservation[] = useMemo(() => {
     if (!Array.isArray(reservationsData?.reservations)) {
       return [];
@@ -97,7 +96,7 @@ export default function ReservationModal({
     }));
   }, [reservationsData]);
 
-  //탭 계산산
+  // 탭 갯수
   const scheduleStat = useMemo(() => {
     if (!dailyStatsData || !Array.isArray(dailyStatsData)) {
       return null;
@@ -108,13 +107,13 @@ export default function ReservationModal({
   }, [dailyStatsData, selectedScheduleId]);
 
   const tabCounts = useMemo(() => {
-    if (!scheduleStat) {
+    if (!scheduleStat || !scheduleStat.count) {
       return { pending: 0, confirmed: 0, declined: 0 };
     }
     return {
-      pending: scheduleStat.count.pending || 0,
-      confirmed: scheduleStat.count.confirmed || 0,
-      declined: scheduleStat.count.declined || 0,
+      pending: scheduleStat.count.pending ?? 0,
+      confirmed: scheduleStat.count.confirmed ?? 0,
+      declined: scheduleStat.count.declined ?? 0,
     };
   }, [scheduleStat]);
 
@@ -123,7 +122,7 @@ export default function ReservationModal({
     return reservations.filter((res) => res.status === activeTab);
   }, [reservations, activeTab]);
 
-  // 무한스크롤 관련
+  // 무한 스크롤
   const listInnerRef = useRef<HTMLDivElement | null>(null);
   const [displayReservations, setDisplayReservations] = useState<
     IReservation[]
@@ -153,7 +152,6 @@ export default function ReservationModal({
       if (el) el.removeEventListener("scroll", handleScroll);
     };
   }, [hasMore]);
-  if (!isOpen) return null;
 
   // 예약 상태 업데이트 로직
   const handleUpdateStatus = async (
@@ -192,7 +190,7 @@ export default function ReservationModal({
     const isConfirmed = await handleUpdateStatus(reservationId, "confirmed");
     if (!isConfirmed) return;
 
-    // 다른 승인 거절
+    // 한 건을 승인하면 나머지 모두 거절절
     const latest = await refetch().then((r) => r.data?.reservations || []);
     const pendingList = (latest as IReservation[]).filter(
       (r) => r.id !== reservationId && r.status === "pending"
@@ -211,9 +209,19 @@ export default function ReservationModal({
     }
   };
 
+  // 모달 바깥 클릭 시 닫힘힘
+  const modalRef = UseOutsideClick(() => {
+    if (isOpen) onClose();
+  });
+
+  if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-10">
-      <div className="bg-white p-6 rounded-[2.4rem] w-[42.9rem] h-[69.7rem] shadow-xl">
+      <div
+        ref={modalRef}
+        className="bg-white p-6 rounded-[2.4rem] w-[42.9rem] h-[69.7rem] shadow-xl"
+      >
         {/* 모달 헤더 */}
         <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-3">
           <h1 className="text-[2.4rem] font-bold">예약 정보</h1>
@@ -316,12 +324,12 @@ export default function ReservationModal({
                   </div>
                 </div>
 
-                {/* 승인/거절 */}
+                {/* 승인/거절 버튼: pending 일 때만 */}
                 {activeTab === "pending" && (
                   <div className="flex justify-end gap-2 mt-3">
                     <button
                       onClick={() => handleConfirmReservation(reservation.id)}
-                      className="py-2 bg-nomad-black text-white rounded-md hover:bg-nomad-black w-[8.2rem] h-[3.8rem] text-center text-[1.4rem]"
+                      className="py-2 bg-nomad-black text-white rounded-2xl hover:bg-nomad-black w-[8.2rem] h-[3.8rem] text-center text-[1.4rem]"
                     >
                       승인하기
                     </button>

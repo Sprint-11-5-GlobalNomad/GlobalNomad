@@ -176,7 +176,13 @@ export default function ActivityEditPage() {
               type="text"
               placeholder="제목"
               className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-              {...register("title", { required: "제목을 입력해주세요." })}
+              {...register("title", {
+                required: "제목을 입력해주세요.",
+                maxLength: {
+                  value: 20,
+                  message: "제목은 최대 20자까지 입력할 수 있습니다.",
+                },
+              })}
             />
             {errors.title && (
               <p className="text-red-500 text-sm">{errors.title.message}</p>
@@ -207,7 +213,13 @@ export default function ActivityEditPage() {
             <textarea
               placeholder="설명"
               className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[34.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-              {...register("description", { required: "설명을 입력해주세요." })}
+              {...register("description", {
+                required: "설명을 입력해주세요.",
+                maxLength: {
+                  value: 200,
+                  message: "설명은 최대 200자까지 입력할 수 있습니다.",
+                },
+              })}
             />
             {errors.description && (
               <p className="text-red-500 text-sm">
@@ -224,7 +236,14 @@ export default function ActivityEditPage() {
               className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
               {...register("price", {
                 required: "가격을 입력해주세요.",
-                min: { value: 1, message: "가격은 1 이상이어야 합니다." },
+                min: {
+                  value: 1000,
+                  message: "가격은 1000원 이상이어야 합니다.",
+                },
+                max: {
+                  value: 1000000,
+                  message: "가격은 100만원 이하이어야 합니다.",
+                },
                 valueAsNumber: true,
               })}
             />
@@ -249,7 +268,6 @@ export default function ActivityEditPage() {
             />
           </div>
 
-          {/* 인트로 이미지 컴포넌트에 3개의 상태를 props로 전달 */}
           <IntroImagesUploader
             existingImages={existingIntroImages}
             setExistingImages={setExistingIntroImages}

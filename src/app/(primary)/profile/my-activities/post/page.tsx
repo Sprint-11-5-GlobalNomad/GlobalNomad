@@ -163,7 +163,13 @@ export default function ActivityPostPage() {
             <textarea
               placeholder="설명"
               className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[34.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-              {...register("description", { required: "설명을 입력해주세요." })}
+              {...register("description", {
+                required: "설명을 입력해주세요.",
+                maxLength: {
+                  value: 200,
+                  message: "설명은 최대 200자까지 입력할 수 있습니다.",
+                },
+              })}
             />
             {errors.description && (
               <p className="text-red-500 text-sm mt-2">

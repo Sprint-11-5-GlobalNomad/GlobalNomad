@@ -131,7 +131,7 @@ export default function PopularActivitiesSection() {
         </div>
       </div>
 
-      {isLoading || isFetchingNextPage ? (
+      {isLoading ? (
         <div
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
         tablet:w-[78rem] tablet:ml-[2.4rem] tablet:gap-[3.2rem]

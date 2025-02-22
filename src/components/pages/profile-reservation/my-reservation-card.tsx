@@ -117,7 +117,7 @@ export const MyReservationCard = forwardRef<
               />
             </div>
 
-            <div className="flex flex-col justify-between flex-1 desktop:pt-[2.1rem] desktop:pb-[2.6rem] desktop:px-[2.4rem] tablet:pt-[1.2rem] tablet:pb-[1.6rem] tablet:pl-[1.2rem] tablet:pr-[1.8rem] mobile:pt-[1.1rem] mobile:pb-[1.5rem] mobile:pl-[0.8rem] mobile:pr-[1.5rem]">
+            <div className="flex flex-col justify-between flex-1 desktop:pt-[2.1rem] desktop:pb-[2.6rem] desktop:px-[2.4rem] tablet:pt-[1.2rem] tablet:pb-[1.6rem] tablet:pl-[1.2rem] tablet:pr-[1.8rem] mobile:pt-[1.1rem] mobile:pb-[1rem] mobile:pl-[0.8rem] mobile:pr-[1.5rem]">
               <div className="flex flex-col desktop:gap-[0.8rem]">
                 <div
                   className={`font-bold text-[1.6rem] mobile:text-[1.4rem] ${getStatusClasses(status)}`}
@@ -125,16 +125,16 @@ export const MyReservationCard = forwardRef<
                   {getStatusText(status)}
                 </div>
                 <div className="flex flex-col desktop:gap-[1.2rem] tablet:gap-[0.4rem]">
-                  <div className="desktop:text-[2rem] tablet:text-[1.8rem] mobile:text-[1.4rem] font-bold">
+                  <div className="desktop:text-xl tablet:text-2lg mobile:text-md font-bold text-black">
                     {activity.title}
                   </div>
-                  <div className="desktop:text-[1.8rem] tablet:text-[1.4rem] mobile:text-[1.2rem]">
+                  <div className="desktop:text-2lg tablet:text-md mobile:text-xs text-regular text-nomad-black">
                     {date}ㆍ{startTime}~{endTime}ㆍ{headCount}명
                   </div>
                 </div>
               </div>
 
-              <div className="desktop:text-[2.4rem] tablet:text-[2rem] mobile:text-[1.6rem] font-medium text-left">
+              <div className="desktop:text-2xl tablet:text-xl mobile:text-lg font-medium text-left text-black">
                 ₩{totalPrice.toLocaleString()}
               </div>
             </div>

@@ -27,7 +27,7 @@ export default function EditDeleteDropdown({
   return (
     <div className="relative inline-block" ref={dropdownRef}>
       <button
-        className="hover:bg-gray-100 rounded-full mobile:w-[4rem] mobile:h-[4rem]"
+        className="hover:bg-gray-100 rounded-full mobile:w-[3.2rem] mobile:h-[3.2rem]"
         onClick={toggleDropdown}
       >
         <Image

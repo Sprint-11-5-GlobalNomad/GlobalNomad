@@ -19,7 +19,6 @@ const isLastCharHasBatchim = (text: string): boolean => {
 };
 
 const CONFIG = {
-  SIZE: 16,
   SUFFIX_WITH_BATCHIM: "으로 ",
   SUFFIX_WITHOUT_BATCHIM: "로 ",
 };
@@ -28,11 +27,12 @@ export default function ActivityExplorer() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [submittedQuery, setSubmittedQuery] = useState<string>("");
   const [page, setPage] = useState(1);
+  const [size, setSize] = useState(0);
 
   const { data, isLoading, isError } = useActivities({
     method: "offset",
     page,
-    size: CONFIG.SIZE,
+    size: size,
     ...(submittedQuery && { keyword: submittedQuery }),
   });
 
@@ -48,9 +48,9 @@ export default function ActivityExplorer() {
 
   const activities = data?.activities ?? [];
 
-  const totalPages = Math.ceil((data?.totalCount || 0) / CONFIG.SIZE);
+  const totalPages = Math.ceil((data?.totalCount || 0) / size);
 
-  const suffix = isLastCharHasBatchim(searchQuery)
+  const suffix = isLastCharHasBatchim(submittedQuery)
     ? CONFIG.SUFFIX_WITH_BATCHIM
     : CONFIG.SUFFIX_WITHOUT_BATCHIM;
 
@@ -59,6 +59,24 @@ export default function ActivityExplorer() {
       setSubmittedQuery("");
     }
   }, [searchQuery]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1200) {
+        setSize(16); // 화면이 넓으면 8개
+      } else if (window.innerWidth < 744) {
+        setSize(8); // 화면이 좁으면 4개
+      } else {
+        setSize(9); // 중간 화면 크기에는 6개
+      }
+    };
+    handleResize(); // 처음 로드 시 size 설정
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="flex-column desktop:w-[120rem]">
