@@ -26,8 +26,8 @@ export default {
         custom: "300% 100%",
       },
       screens: {
-        desktop: { min: "1024px" },
-        tablet: { min: "744px", max: "1023px" },
+        desktop: { min: "1200px" },
+        tablet: { min: "744px", max: "1199px" },
         mobile: { min: "344px", max: "743px" },
       },
       colors: {
