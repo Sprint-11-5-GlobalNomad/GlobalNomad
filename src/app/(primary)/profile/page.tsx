@@ -5,14 +5,12 @@ import Image from "next/image";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import { useUpdateMyDetails, useMyDetails } from "../../react-query/user-state";
-import { useQueryClient } from "@tanstack/react-query";
 
 const currentPage = "/profile";
 
 export default function ProfilePage() {
   const { data: userDetails, isLoading } = useMyDetails();
   const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
-  const queryClient = useQueryClient();
   const [nickname, setNickname] = useState("");
   const [originalNickname, setOriginalNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -22,6 +20,7 @@ export default function ProfilePage() {
   const [isMobileView, setIsMobileView] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
+  // 초기 닉네임 세팅
   useEffect(() => {
     if (userDetails?.nickname) {
       setNickname(userDetails.nickname);
@@ -42,12 +41,12 @@ export default function ProfilePage() {
     return newPassword.length >= 8;
   }, [newPassword]);
 
-  // 비밀번호 일치여부 확인
+  // 비밀번호 재입력 일치 여부
   const isPasswordMatch = useMemo(() => {
     return newPassword === confirmPassword;
   }, [newPassword, confirmPassword]);
 
-  // 저장하기버튼 활성화
+  // 닉네임/비밀번호 중 하나라도 변경 시 저장 가능
   const hasChanges = useMemo(() => {
     const nicknameChanged = nickname !== originalNickname;
     const passwordChanged =
@@ -55,6 +54,7 @@ export default function ProfilePage() {
     return nicknameChanged || passwordChanged;
   }, [nickname, originalNickname, newPassword, confirmPassword]);
 
+  // 저장하기 버튼 클릭
   const handleSave = () => {
     if (!isPasswordLengthValid || !isPasswordMatch) {
       return;
@@ -72,10 +72,7 @@ export default function ProfilePage() {
     updateMyDetails(updateData, {
       onSuccess: () => {
         alert("정보가 성공적으로 업데이트되었습니다.");
-        queryClient.invalidateQueries({ queryKey: ["userDetails"] });
-        setOriginalNickname(nickname);
-        setNewPassword("");
-        setConfirmPassword("");
+        window.location.href = window.location.href;
       },
       onError: () => {
         alert("정보 업데이트 중 오류가 발생했습니다.");
@@ -85,7 +82,7 @@ export default function ProfilePage() {
 
   if (isLoading) return <p>로딩 중...</p>;
 
-  // 모바일감지지
+  // 모바일
   if (isMobileView && !showDetails) {
     return (
       <UserProfileSidebar
@@ -100,7 +97,6 @@ export default function ProfilePage() {
     <div className="flex flex-col min-h-screen">
       <div className="flex justify-center py-[7.2rem] mt-[7.2rem]">
         <div className="flex gap-[2.4rem]">
-          {/* 데스크톱: 사이드바 + 내 정보 페이지 동시 표시 */}
           {!isMobileView && (
             <UserProfileSidebar
               page={currentPage}
@@ -109,7 +105,7 @@ export default function ProfilePage() {
           )}
 
           <div className="flex-1 rounded-[0.75rem] h-auto">
-            {/* 상단 영역: 제목, 저장 버튼 */}
+            {/* 상단 영역 */}
             <div className="flex justify-between items-center w-[78rem] mb-[2.4rem] pb-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.3rem]">
               <h2 className="text-[3.2rem] font-bold">내 정보</h2>
               <Button
@@ -121,8 +117,8 @@ export default function ProfilePage() {
               />
             </div>
 
+            {/* 닉네임 */}
             <div className="space-y-[3.2rem]">
-              {/* 닉네임 */}
               <div>
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   닉네임
@@ -136,7 +132,7 @@ export default function ProfilePage() {
                 />
               </div>
 
-              {/* 이메일 (수정 불가) */}
+              {/* 이메일 */}
               <div>
                 <label className="block text-[2.4rem] font-bold mb-[1.6rem]">
                   이메일
@@ -158,9 +154,7 @@ export default function ProfilePage() {
                   <input
                     type={showNewPassword ? "text" : "password"}
                     value={newPassword}
-                    onChange={(e) => {
-                      setNewPassword(e.target.value);
-                    }}
+                    onChange={(e) => setNewPassword(e.target.value)}
                     className={`w-full h-[4.2rem] border ${
                       !isPasswordLengthValid && newPassword
                         ? "border-red-500"
@@ -168,7 +162,6 @@ export default function ProfilePage() {
                     } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
                     placeholder="8자 이상 입력해주세요"
                   />
-                  {/* 비밀번호 토글 */}
                   <span
                     className="absolute right-[1rem] top-[50%] -translate-y-1/2 cursor-pointer"
                     onClick={() => setShowNewPassword(!showNewPassword)}
@@ -185,7 +178,6 @@ export default function ProfilePage() {
                     />
                   </span>
                 </div>
-                {/* 8자 미만 에러 표시 */}
                 {!isPasswordLengthValid && newPassword && (
                   <p className="text-red-500 text-[1.2rem] mt-[0.5rem]">
                     8자 이상 입력해주세요.
@@ -226,7 +218,6 @@ export default function ProfilePage() {
                     />
                   </span>
                 </div>
-                {/* 비밀번호 일치하지 않을 때 에러 표시 */}
                 {!isPasswordMatch && confirmPassword && (
                   <p className="text-red-500 text-[1.2rem] mt-[0.5rem]">
                     비밀번호가 일치하지 않습니다.

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMyDetails, useUpdateMyDetails } from "@/app/react-query/user-state";
 import { uploadProfileImage } from "@/app/(primary)/api/user-api";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface SidebarProps {
   page: string;
@@ -13,16 +12,11 @@ interface SidebarProps {
   onNavigate?: () => void;
 }
 
-interface UserDetails {
-  profileImageUrl: string;
-}
-
 export default function UserProfileSidebar({
   page,
   profileImageUrl,
   onNavigate,
 }: SidebarProps) {
-  const queryClient = useQueryClient();
   const { data: userDetails } = useMyDetails();
   const { mutate: updateMyDetails } = useUpdateMyDetails();
 
@@ -31,7 +25,7 @@ export default function UserProfileSidebar({
     profileImageUrl ||
     "/image/profile_default.svg";
 
-  // 프로필이미지변경
+  //프로필이미지변경
   const handleProfileImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -43,15 +37,7 @@ export default function UserProfileSidebar({
           { profileImageUrl: response.profileImageUrl },
           {
             onSuccess: () => {
-              queryClient.setQueryData<UserDetails>(
-                ["userDetails"],
-                (oldData: UserDetails | undefined) => ({
-                  ...oldData,
-                  profileImageUrl: response.profileImageUrl,
-                })
-              );
-
-              queryClient.invalidateQueries({ queryKey: ["userDetails"] });
+              window.location.href = window.location.href;
             },
             onError: () => {
               alert("프로필 이미지를 업데이트하는 중 오류가 발생했습니다.");
