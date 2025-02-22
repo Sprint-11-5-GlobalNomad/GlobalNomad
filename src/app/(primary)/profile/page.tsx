@@ -13,22 +13,15 @@ export default function ProfilePage() {
   const { data: userDetails, isLoading } = useMyDetails();
   const { mutate: updateMyDetails, isPending } = useUpdateMyDetails();
   const queryClient = useQueryClient();
-
-  // 상태
   const [nickname, setNickname] = useState("");
   const [originalNickname, setOriginalNickname] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  // 비밀번호 표시/숨김 토글
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // 반응형 처리
   const [isMobileView, setIsMobileView] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  // 초기 닉네임 세팅
   useEffect(() => {
     if (userDetails?.nickname) {
       setNickname(userDetails.nickname);
@@ -45,16 +38,16 @@ export default function ProfilePage() {
 
   // 새 비밀번호가 8자 이상인지
   const isPasswordLengthValid = useMemo(() => {
-    if (!newPassword) return true; // 새 비밀번호가 비어있으면 검사 X
+    if (!newPassword) return true;
     return newPassword.length >= 8;
   }, [newPassword]);
 
-  // 새 비밀번호 vs 재입력 비밀번호가 같은지
+  // 비밀번호 일치여부 확인
   const isPasswordMatch = useMemo(() => {
     return newPassword === confirmPassword;
   }, [newPassword, confirmPassword]);
 
-  // 닉네임 또는 비밀번호 중 하나라도 변경됐으면 저장 가능
+  // 저장하기버튼 활성화
   const hasChanges = useMemo(() => {
     const nicknameChanged = nickname !== originalNickname;
     const passwordChanged =
@@ -62,18 +55,11 @@ export default function ProfilePage() {
     return nicknameChanged || passwordChanged;
   }, [nickname, originalNickname, newPassword, confirmPassword]);
 
-  /**
-   * 저장하기 버튼 클릭 시 로직
-   * → 각각 에러가 있으면 저장 중단
-   */
   const handleSave = () => {
-    // 이 함수 내에서 오류가 있으면 return 하되, 아래 각각의 필드에 에러 메시지 표시
     if (!isPasswordLengthValid || !isPasswordMatch) {
-      // 둘 중 하나라도 에러면 저장하지 않고 중단
       return;
     }
 
-    // 업데이트할 데이터
     const updateData: {
       nickname: string;
       newPassword?: string;
@@ -86,15 +72,8 @@ export default function ProfilePage() {
     updateMyDetails(updateData, {
       onSuccess: () => {
         alert("정보가 성공적으로 업데이트되었습니다.");
-
-        // 닉네임/프로필 갱신 → 사이드바/네비게이션 자동 반영
-        // ※ 아래처럼 { queryKey: ["userDetails"] } 형태로 넣어야 TS 오류 방지
         queryClient.invalidateQueries({ queryKey: ["userDetails"] });
-
-        // 변경사항 감지 해제
         setOriginalNickname(nickname);
-
-        // 비밀번호 입력창 초기화
         setNewPassword("");
         setConfirmPassword("");
       },
@@ -106,7 +85,7 @@ export default function ProfilePage() {
 
   if (isLoading) return <p>로딩 중...</p>;
 
-  // 모바일: 상세 페이지 안 열었으면 사이드바만 노출
+  // 모바일감지지
   if (isMobileView && !showDetails) {
     return (
       <UserProfileSidebar
@@ -183,14 +162,13 @@ export default function ProfilePage() {
                       setNewPassword(e.target.value);
                     }}
                     className={`w-full h-[4.2rem] border ${
-                      // 빨간 테두리 조건: 새 비밀번호 존재하고, (8자 미만 or 재확인 불일치)
                       !isPasswordLengthValid && newPassword
                         ? "border-red-500"
                         : "border-gray-700"
                     } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
                     placeholder="8자 이상 입력해주세요"
                   />
-                  {/* 눈 아이콘 클릭 → 비밀번호 토글 */}
+                  {/* 비밀번호 토글 */}
                   <span
                     className="absolute right-[1rem] top-[50%] -translate-y-1/2 cursor-pointer"
                     onClick={() => setShowNewPassword(!showNewPassword)}
@@ -226,7 +204,6 @@ export default function ProfilePage() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className={`w-full h-[4.2rem] border ${
-                      // 빨간 테두리 조건: (비밀번호가 있고) && (일치하지 않는 경우)
                       !isPasswordMatch && confirmPassword
                         ? "border-red-500"
                         : "border-gray-700"
