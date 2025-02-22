@@ -116,7 +116,7 @@ export default function IntroImagesUploader({
           </div>
         ))}
       </div>
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-red-500">
         *이미지는 최대 4개까지 등록 가능합니다.
       </p>
     </div>

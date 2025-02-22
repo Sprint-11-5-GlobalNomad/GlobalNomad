@@ -63,7 +63,7 @@ export const MyActivityCard = forwardRef<HTMLDivElement, ActivityCardProps>(
     return (
       <div ref={ref} className="relative">
         <Link href={`/activity/${ActivityProps.id}`}>
-          <div className="flex flex-row mobile:w-[34.4rem] mobile:h-[12.8rem] desktop:w-[80rem] desktop:h-[20.4rem] tablet:w-[42.9rem] tablet:h-[15.6rem] rounded-[2.4rem] bg-white border border-gray-200 shadow-md desktop:gap-[2.4rem] tablet:gap-[1.2rem] mobile:gap-[0.8rem] p-[0.4rem]">
+          <div className="flex flex-row mobile:w-[34.4rem] mobile:h-[12.8rem] w-[80rem] h-[20.4rem] tablet:w-[42.9rem] tablet:h-[15.6rem] rounded-[2.4rem] bg-white border border-gray-200 shadow-md desktop:gap-[2.4rem] tablet:gap-[1.2rem] mobile:gap-[0.8rem] p-[0.4rem]">
             <div className="flex-shrink-0 w-full h-[12.8rem] mobile:w-[12rem] mobile:h-[12rem] tablet:w-[14.8rem] tablet:h-[14.8rem] desktop:w-[19.6rem] desktop:h-[19.6rem] rounded-[2.4rem] overflow-hidden">
               <Image
                 src={ActivityProps.bannerImageUrl}
@@ -74,25 +74,24 @@ export const MyActivityCard = forwardRef<HTMLDivElement, ActivityCardProps>(
               />
             </div>
             <div className="flex flex-1 flex-col justify-between py-[1.4rem]">
-              <div className="flex flex-col gap-[0.6rem]">
-                <div className="flex items-center gap-[0.4rem] text-[1.4rem] mobile:text-[1.4rem] tablet:text-[1.4rem] desktop:text-[1.6rem] leading-[2rem] mobile:leading-[2.4rem] desktop:leading-[2.6rem] font-pretendard-regular text-gray-800">
+              <div className="flex flex-col gap-[0.6rem] mobile:gap-0">
+                <div className="flex items-center gap-[0.4rem]">
                   <Image
                     src="/image/rating-star.svg"
                     alt="평균 별점"
                     width={16}
                     height={16}
                   />
-                  <span className="font-bold">{ActivityProps.rating}</span>
-                  <span className="text-gray-600">
-                    ({ActivityProps.reviewCount})
+                  <span className="mobile:text-md text-lg font-pretendard text-black font-regular">
+                    {ActivityProps.rating} ({ActivityProps.reviewCount})
                   </span>
                 </div>
-                <div className="mobile:text-[1.4rem] tablet:text-[1.8rem] desktop:text-[2rem] font-bold text-gray-900">
+                <div className="tablet:text-2lg text-xl mobile:text-md font-pretendard font-bold text-nomad-black">
                   {ActivityProps.title}
                 </div>
               </div>
-              <div className="flex justify-between items-center mt-[0.6rem]">
-                <div className="text-[1.6rem] mobile:text-[1.6rem] tablet:text-[2rem] desktop:text-[2rem] leading-[2.4rem] mobile:leading-[2.4rem] desktop:leading-[3.2rem] font-bold text-gray-900">
+              <div className="items-center mt-[0.6rem]">
+                <div className="mobile:text-lg tablet:text-xl text-2xl font-bold text-gray-900">
                   ₩{ActivityProps.price.toLocaleString()} / 인
                 </div>
               </div>
@@ -100,7 +99,7 @@ export const MyActivityCard = forwardRef<HTMLDivElement, ActivityCardProps>(
           </div>
         </Link>
 
-        <div className="absolute bottom-2 right-2">
+        <div className="absolute mobile:right-[1.4rem] mobile:bottom-[0.95rem] tablet:right-[1.7rem] tablet:bottom-[1.3rem] right-[2.3rem] bottom-[2rem]">
           <EditDeleteDropdown
             onDelete={handleModalOpen}
             EditRoute={`/profile/my-activities/${ActivityProps.id}/edit`}
