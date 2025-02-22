@@ -23,7 +23,6 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
     if (typeof window !== "undefined" && window.kakao) {
       window.kakao.maps.load(() => {
         const geocoder = new window.kakao.maps.services.Geocoder();
-        console.log("주소", address);
 
         geocoder.addressSearch(
           address,

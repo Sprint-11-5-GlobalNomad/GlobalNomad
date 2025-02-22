@@ -15,9 +15,11 @@ let refreshSubscribers: ((token: string) => void)[] = []; // 🔄 토큰 갱신 
 // ✅ 요청 인터셉터: 모든 요청에 accessToken 자동 포함
 instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("accessToken");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
     return config;
   },

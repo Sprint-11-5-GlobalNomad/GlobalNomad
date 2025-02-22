@@ -57,7 +57,10 @@ export default function UserNotifications() {
   };
 
   return (
-    <div ref={outsideClickRef} className="flex flex-col relative">
+    <div
+      ref={outsideClickRef}
+      className="flex flex-col relative cursor-pointer"
+    >
       <Image
         src="/image/notification.svg"
         alt="알림 버튼"
@@ -128,7 +131,9 @@ export default function UserNotifications() {
                 ))}
               </ul>
               {isFetchingNextPage && (
-                <div className="w-[32.8rem] h-[12.6rem] mobile:w-[33.5rem] mobile:h-[10.5rem] skeleton" />
+                <span className="text-md flex justify-center">
+                  🌀 데이터를 더 불러오는 중이에요
+                </span>
               )}
               <div ref={inViewRef}></div>
             </>

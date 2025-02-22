@@ -18,20 +18,20 @@ export const useMyReservations = (cursorId?: number, status?: string) =>
           switch (error.response?.status) {
             case 400:
               console.error(error.message);
-              alert(error.message);
+              alert(error.response?.data);
               break;
             case 401:
               console.error(
                 "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
               );
-              alert(error.message);
+              alert(error.response?.data);
               break;
             default:
               console.error(
                 "내 예약 리스트를 가져오는 중 알 수 없는 오류가 발생했습니다.",
                 error
               );
-              alert(error.message);
+              alert(error.response?.data);
           }
         }
         throw error;
@@ -58,24 +58,24 @@ export const useCancelReservation = () => {
         switch (error.response?.status) {
           case 400:
             console.error(error.message);
-            alert(error.message);
+            alert(error.response?.data);
             break;
           case 401:
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.message);
+            alert(error.response?.data);
             break;
           case 403:
             console.error("본인의 예약만 취소할 수 있습니다.");
-            alert(error.message);
+            alert(error.response?.data);
             break;
           default:
             console.error(
               "예약 취소 중 알 수 없는 오류가 발생했습니다.",
               error
             );
-            alert(error.message);
+            alert(error.response?.data);
         }
       }
     },
@@ -101,32 +101,32 @@ export const useSubmitReservationReview = () => {
         switch (error.response?.status) {
           case 400:
             console.error(error.message);
-            alert(error.message);
+            alert(error.response?.data);
             break;
           case 401:
             console.error(
               "인증되지 않은 요청입니다. 로그인 후 다시 시도하세요."
             );
-            alert(error.message);
+            alert(error.response?.data);
             break;
           case 403:
             console.error("본인의 예약만 리뷰를 작성할 수 있습니다.");
-            alert(error.message);
+            alert(error.response?.data);
             break;
           case 404:
             console.error("존재하지 않는 예약입니다.");
-            alert(error.message);
+            alert(error.response?.data);
             break;
           case 409:
             console.error("이미 리뷰를 작성했습니다.");
-            alert(error.message);
+            alert(error.response?.data);
             break;
           default:
             console.error(
               "리뷰 작성 중 알 수 없는 오류가 발생했습니다.",
               error
             );
-            alert(error.message);
+            alert(error.response?.data);
         }
       }
     },

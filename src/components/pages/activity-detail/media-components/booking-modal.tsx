@@ -28,9 +28,16 @@ export default function BookingModal({
   const outsideClickRef = UseOutsideClick(onClose);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    const isMobile = window.innerWidth <= 743;
+
+    if (isMobile) {
+      document.body.style.overflow = "hidden";
+    }
+
     return () => {
-      document.body.style.overflow = "auto";
+      if (isMobile) {
+        document.body.style.overflow = "auto";
+      }
     };
   }, []);
 
@@ -38,8 +45,8 @@ export default function BookingModal({
     <div
       ref={outsideClickRef}
       className="w-[48rem] bg-white rounded-[2.4rem] z-[999] tablet:absolute
-      top-[62.4rem] left-[35vw] px-[2.4rem] pt-[2.8rem] pb-[3.2rem]
-      flex flex-col desktop:hidden mobile:w-full mobile:h-full
+      top-[56.4rem] left-[37vw] px-[2.4rem] pt-[2.8rem] pb-[3.2rem] flex flex-col
+      desktop:hidden mobile:w-full mobile:h-full
       mobile:fixed mobile:top-0 mobile:left-0"
     >
       {/* 날짜 선택 */}
