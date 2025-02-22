@@ -72,6 +72,16 @@ export default function ReservationTimeSelector({
       return;
     }
 
+    const now = new Date();
+    const reservationDateTime = new Date(
+      `${newReservationTime.date}T${newReservationTime.startTime}:00`
+    );
+    if (reservationDateTime < now) {
+      setErrorMessage("지난 날짜 및 시간은 등록할 수 없습니다.");
+      setButtonDisable(false);
+      return;
+    }
+
     if (newReservationTime.startTime >= newReservationTime.endTime) {
       setErrorMessage("시작 시간은 종료 시간보다 이전이어야 합니다.");
       setButtonDisable(false);
