@@ -29,7 +29,7 @@ export default function ActivityInfoHeader() {
         <div>
           <div
             className="w-[120rem] flex-between mt-[14.8rem] mb-[2.5rem]
-    tablet:w-[72rem] tablet:mt-[9.4rem] tablet:mb-[1.5rem]
+    tablet:w-[69.6rem] tablet:mt-[9.4rem] tablet:mb-[1.5rem]
     mobile:w-full mobile:mt-[8.6rem] mobile:mb-0 mobile:mx-[1.6rem]"
           >
             <div className="flex flex-col justify-start gap-[1rem]">
@@ -63,7 +63,7 @@ export default function ActivityInfoHeader() {
       ) : (
         <div
           className="w-[120rem] flex-between mt-[14.8rem] mb-[2.5rem]
-    tablet:w-[72rem] tablet:mt-[9.4rem] tablet:mb-[1.5rem]
+    tablet:w-[69.6rem] tablet:mt-[9.4rem] tablet:mb-[1.5rem]
     mobile:w-full mobile:mt-[8.6rem] mobile:mb-0 mobile:mx-[1.6rem]"
         >
           <div className="flex flex-col justify-start gap-[1rem]">
