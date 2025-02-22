@@ -18,7 +18,9 @@ type ReservationCardProps = Pick<
   | "totalPrice"
   | "id"
   | "reviewSubmitted"
->;
+> & {
+  selectedStatus?: string;
+};
 
 export const MyReservationCard = forwardRef<
   HTMLDivElement,
@@ -35,6 +37,7 @@ export const MyReservationCard = forwardRef<
       totalPrice,
       id,
       reviewSubmitted,
+      selectedStatus,
     },
     ref
   ) => {
@@ -165,6 +168,7 @@ export const MyReservationCard = forwardRef<
           totalPrice={totalPrice}
           id={id}
           isOpen={isReviewModalOpen}
+          selectedStatus={selectedStatus}
         />
       </div>
     );
