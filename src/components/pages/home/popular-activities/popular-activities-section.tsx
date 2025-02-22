@@ -99,11 +99,11 @@ export default function PopularActivitiesSection() {
     <>
       <div
         className="flex-between w-[120rem] mt-[15.8rem] mb-[3.2rem]
-    tablet:w-[69.6rem] mobile:w-[34.3rem] mobile:mt-[9.4rem] mobile:mb-[1.6rem]"
+    tablet:w-[74.4rem] mobile:w-[37.5rem] mobile:mt-[9.4rem] mobile:mb-[1.6rem]"
       >
         <h2
-          className="text-3xl font-bold mobile:text-[1.8rem]
-      mobile:leading-[2.1rem]"
+          className="text-3xl font-bold tablet:ml-[2.4rem]
+          mobile:text-2lg mobile:ml-[1.6rem]"
         >
           🔥 인기 체험
         </h2>
@@ -131,11 +131,11 @@ export default function PopularActivitiesSection() {
         </div>
       </div>
 
-      {isLoading ? (
+      {isLoading || isFetchingNextPage ? (
         <div
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
-        tablet:w-full tablet:pl-[3rem] tablet:gap-[3.2rem]
-        mobile:w-full mobile:mb-[4rem] mobile:pl-[2rem] mobile:gap-[1.6rem]"
+        tablet:w-[78rem] tablet:ml-[2.4rem] tablet:gap-[3.2rem]
+        mobile:w-[37.5rem] mobile:mb-[4rem] mobile:ml-[1.6rem] mobile:gap-[1.6rem]"
         >
           <div
             className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
@@ -156,8 +156,8 @@ export default function PopularActivitiesSection() {
         <ul
           ref={scrollContainerRef}
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
-    tablet:w-full tablet:pl-[3rem] tablet:gap-[3.2rem]
-    mobile:w-full mobile:mb-[4rem] mobile:pl-[2rem] mobile:gap-[1.6rem]"
+    tablet:w-[74.4rem] tablet:ml-[2.4rem] tablet:gap-[3.2rem]
+    mobile:w-[37.5rem] mobile:mb-[4rem] mobile:ml-[1.6rem] mobile:gap-[1.6rem]"
         >
           {activities.map((activity, index) => {
             return (

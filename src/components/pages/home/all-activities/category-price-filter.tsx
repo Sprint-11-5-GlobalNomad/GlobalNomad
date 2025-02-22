@@ -96,7 +96,7 @@ export default function CategoryPriceFilter({
         ref={categoryContainerRef}
         onScroll={checkScrollPosition}
         className="flex-between gap-[2.4rem] tablet:w-[52.2rem]
-      tablet:gap-[1.4rem] tablet:pr-[2rem] tablet:overflow-x-auto hide-scrollbar
+      tablet:gap-[1.4rem] tablet:pr-[2rem] overflow-x-auto hide-scrollbar
       mobile:w-[25.6rem] mobile:gap-[0.8rem] mobile:bg-custom-gradient"
       >
         {CATEGORY_TYPES.map((category, index) => (

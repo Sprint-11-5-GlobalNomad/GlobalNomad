@@ -18,7 +18,7 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
   const totlaPages = Math.ceil((data?.totalCount || 0) / SIZE);
 
   return (
-    <div className="flex flex-col items-center mobile:w-[32.7rem]">
+    <div className="flex flex-col mobile:w-full">
       <ul className="flex flex-col gap-[2.4rem] mb-[7.2rem] mobile:w-full mobile:mb-[1.6rem]">
         {isLoading ? (
           <div className="flex flex-col gap-[2.4rem] mb-[7.2rem] mobile:w-full">
@@ -78,7 +78,7 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
           />
         )}
       </ul>
-      <div className="flex gap-[1rem] tablet:translate-x-1/2">
+      <div className="flex justify-center gap-[1rem]">
         <Pagination
           totalPages={totlaPages}
           currentPage={page}

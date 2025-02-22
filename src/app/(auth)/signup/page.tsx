@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { AxiosError } from "axios";
 import { useCreateUser } from "@/app/react-query/user-state";
-// import { useSignUpWithOauth } from "@/app/react-query/oauth-state";
 import Button from "@/components/common/ui/button";
 import MessageModal from "@/components/common/ui/modal/message-modal";
 
@@ -27,7 +26,6 @@ export default function SignupPage() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [isSignupSuccess, setIsSignupSuccess] = useState(false);
   const router = useRouter();
-  // const kakaoSignUp = useSignUpWithOauth("kakao");
   const [modalState, setModalState] = useState({
     isOpen: false,
     message: "",
@@ -35,7 +33,7 @@ export default function SignupPage() {
 
   const {
     register,
-    formState: { errors },
+    formState: { errors, isValid },
     watch,
     trigger,
     handleSubmit,
@@ -43,26 +41,9 @@ export default function SignupPage() {
     mode: "onBlur",
   });
 
-  React.useEffect(() => {
-    const email = watch("email");
-    const nickname = watch("nickname");
-    const password = watch("password");
-    const confirmPassword = watch("confirmPassword");
-
-    const isEmailValid = emailRegex.test(email);
-    const isNicknameValid = nickname.length <= 10;
-    const isPasswordValid = password.length >= 8;
-    const isConfirmPasswordValid = confirmPassword === password;
-
-    setIsButtonDisabled(
-      !(
-        isEmailValid &&
-        isNicknameValid &&
-        isPasswordValid &&
-        isConfirmPasswordValid
-      )
-    );
-  }, [watch]);
+  useEffect(() => {
+    setIsButtonDisabled(!isValid);
+  }, [isValid]);
 
   const password = watch("password");
 
@@ -114,60 +95,10 @@ export default function SignupPage() {
     window.location.href = KAKAO_AUTH_URL; // ✅ 카카오 로그인 페이지로 이동
   };
 
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const authCode = urlParams.get("code");
-
-  //   if (authCode) {
-  //     // 1️⃣ 인가 코드로 액세스 토큰 요청
-  //     axios
-  //       .post("https://kauth.kakao.com/oauth/token", {
-  //         grant_type: "authorization_code",
-  //         client_id: "YOUR_KAKAO_REST_API_KEY",
-  //         redirect_uri: "http://localhost:3000/auth/kakao/callback",
-  //         code: authCode,
-  //       })
-  //       .then((tokenResponse) => {
-  //         const accessToken = tokenResponse.data.access_token;
-
-  //         // 2️⃣ 액세스 토큰으로 사용자 정보 요청
-  //         return axios.get("https://kapi.kakao.com/v2/user/me", {
-  //           headers: { Authorization: `Bearer ${accessToken}` },
-  //         });
-  //       })
-  //       .then((userResponse) => {
-  //         const nickname = userResponse.data.kakao_account.profile.nickname;
-
-  //         // 3️⃣ 회원가입 API 호출
-  //         kakaoSignUp.mutate(
-  //           {
-  //             token: authCode,
-  //             redirectUri: "http://localhost:3000/auth/kakao/callback",
-  //             nickname: nickname, // ✅ 닉네임 추가
-  //           },
-  //           {
-  //             onSuccess: () => {
-  //               alert("카카오 회원가입 성공!");
-  //               router.push("/dashboard");
-  //             },
-  //             onError: (error) => {
-  //               console.error("회원가입 실패:", error);
-  //             },
-  //           }
-  //         );
-  //       })
-  //       .catch((error) => {
-  //         console.error("카카오 API 호출 중 오류 발생:", error);
-  //       });
-  //   } else {
-  //     console.error("카카오 로그인 실패");
-  //   }
-  // }, [kakaoSignUp, router]);
-
   return (
     <div>
       <div
-        className="flex flex-col items-center justify-center my-[11.8rem] py-[3.2rem]
+        className="flex flex-col items-center justify-center mt-[11.8rem]
       max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] sm:gap-[4rem] md:gap-[5.6rem]
       mobile:mt-[9rem] mobile:mb-[1.5rem] mobile:p-0"
       >
@@ -386,7 +317,7 @@ export default function SignupPage() {
               회원이신가요?{" "}
               <Link
                 href="/login"
-                className="text-[1.6rem] font-normal text-[var(--color-green-dark)] cursor-pointer underline"
+                className="text-[1.6rem] font-regular text-green-dark cursor-pointer underline"
               >
                 로그인하기
               </Link>

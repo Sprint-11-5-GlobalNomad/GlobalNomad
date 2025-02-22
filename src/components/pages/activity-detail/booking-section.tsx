@@ -120,14 +120,12 @@ export default function BookingSection() {
             </div>
             <button
               type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsCalendarOpen(true);
-              }}
+              onClick={() => setIsCalendarOpen(true)}
               className="desktop:hidden text-lg font-semiBold cursor-pointer mt-[0.5rem]"
             >
               {selectedTime > 0
-                ? `${formatTwoDigits(String(selectedDate))} ${selectedSchedule?.times[0].startTime} ~ ${selectedSchedule?.times[0].endTime}`
+                ? `${formatTwoDigits(String(selectedDate))} ${selectedSchedule?.times[0].startTime} 
+                ~ ${selectedSchedule?.times[0].endTime}`
                 : "날짜 선택하기"}
             </button>
           </div>
@@ -190,10 +188,8 @@ export default function BookingSection() {
                   w-[12rem] flex-between shadow-stepperInset"
                   >
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDecrease();
-                      }}
+                      type="button"
+                      onClick={() => handleDecrease()}
                       className="p-[1rem] rounded-tl-[0.6rem] rounded-bl-[0.6rem]"
                     >
                       <Image
@@ -212,10 +208,8 @@ export default function BookingSection() {
                     font-regular text-center focus:outline-none"
                     />
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleIncrease();
-                      }}
+                      type="button"
+                      onClick={() => handleIncrease()}
                       className="p-[1rem] rounded-tr-[0.6rem] rounded-br-[0.6rem]"
                     >
                       <Image
@@ -264,10 +258,8 @@ export default function BookingSection() {
             ₩ {Number(totalPrice).toLocaleString("ko-KR")}
             <span className="text-2lg font-semiBold"> / </span>
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                setIsHeadcountSelectModalOpen(true);
-              }}
+              type="button"
+              onClick={() => setIsHeadcountSelectModalOpen(true)}
               className="text-2lg text-green-dark font-medium"
             >
               {`${headCount > 1 ? `총 ${headCount} 인` : "1명"}`}
@@ -275,10 +267,7 @@ export default function BookingSection() {
           </span>
           <button
             type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsCalendarOpen(true);
-            }}
+            onClick={() => setIsCalendarOpen(true)}
             className="text-md font-semiBold cursor-pointer underline
             text-green-dark flex justify-start"
           >

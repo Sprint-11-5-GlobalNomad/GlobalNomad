@@ -25,23 +25,20 @@ export default function ActivityDetails() {
   const isRated = activity?.rating !== undefined && activity?.rating !== 0;
 
   return (
-    <div
-      className="w-[120rem] flex justify-center
-    tablet:w-full tablet:mr-[2rem] mobile:w-full"
-    >
-      <div className="tablet:w-[49.3rem] mobile:w-[32.7rem]">
+    <div className="w-[120rem] flex tablet:w-[72rem] tablet:mr-[2.4rem] mobile:w-full">
+      <div className="tablet:w-full mobile:w-full mobile:mx-[2.4rem]">
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mb-[4rem] tablet:w-[49.3rem] mobile:hidden"
+        opacity-25 mb-[4rem] tablet:w-[46.9rem] mobile:hidden"
         ></hr>
 
         <div
           className="w-[79rem] h-auto flex flex-col justify-start
-        tablet:w-[45.5rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
+        tablet:w-full tablet:ml-[2.4rem] mobile:w-full"
         >
           <h2 className="text-xl font-bold mb-[1.6rem]">체험 설명</h2>
           {isLoading ? (
-            <div className="skeleton w-[79rem] h-[15rem] tablet:w-[42.8rem] tablet:h-[20rem] mobile:w-[32.7rem] mobile:h-[30rem]" />
+            <div className="skeleton w-[79rem] h-[15rem] tablet:w-[42.8rem] tablet:h-[20rem] mobile:w-full mobile:h-[30rem]" />
           ) : (
             <p className="text-lg font-regular opacity-75 tablet:w-[42.8rem]">
               {activity?.description}
@@ -51,19 +48,19 @@ export default function ActivityDetails() {
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[49.3rem]
+        opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[46.9rem]
         mobile:w-full mobile:my-[1.6rem]"
         ></hr>
 
         {/* 지도 섹션 */}
         <div
           className="w-[80rem] flex flex-col gap-[0.8rem]
-        tablet:w-[42.9rem] tablet:ml-[2.4rem] mobile:w-[32.7rem]"
+        tablet:w-[42.9rem] tablet:ml-[2.4rem] mobile:w-full"
         >
           {isLoading ? (
             <div
               className="skeleton w-[79rem] h-[45rem] rounded-[1.6rem]
-      tablet:w-[42.9rem] tablet:h-[30.8rem] mobile:w-[32.7rem] mobile:h-[45rem]"
+      tablet:w-[42.9rem] tablet:h-[30.8rem] mobile:w-full mobile:h-[45rem]"
             />
           ) : (
             <KakaoMaps address={activity?.address} />
@@ -88,10 +85,10 @@ export default function ActivityDetails() {
 
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
-        opacity-25 mt-[4rem] mb-[4rem] tablet:w-[49.3rem] mobile:hidden"
+        opacity-25 mt-[4rem] mb-[4rem] tablet:w-[46.9rem] mobile:hidden"
         ></hr>
 
-        <div className="w-[80rem] tablet:w-[49.3rem] mobile:w-full mobile:mt-[4rem]">
+        <div className="w-[80rem] tablet:w-[46.9rem] mobile:w-full mobile:mt-[4rem]">
           <div
             className="flex flex-col gap-[2.4rem] mb-[2.4rem]
             tablet:gap-[1.8rem] tablet:ml-[2.4rem]"
