@@ -201,7 +201,7 @@ export default function ReservationPage() {
   return (
     <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem]">
       <div>
-        <UserProfileSidebar page="/profile/activity/reservation" />
+        <UserProfileSidebar page={"/profile/activity/reservation"} />
       </div>
       <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
         <h1 className="text-[3.2rem] font-bold mb-[3.8rem]">예약 현황</h1>
