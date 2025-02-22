@@ -35,6 +35,12 @@ export const useLogin = () =>
     mutationFn: (credentials) => login(credentials),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
+        const errorMessage =
+          typeof error.response?.data === "object" &&
+          error.response?.data?.message
+            ? error.response.data.message
+            : "알 수 없는 오류가 발생했습니다.";
+
         switch (error.response?.status) {
           case 400:
             console.error(error.message);
@@ -43,11 +49,11 @@ export const useLogin = () =>
             console.error(
               "존재하지 않는 유저입니다. 올바른 이메일을 입력했는지 확인하세요."
             );
-            alert(error.response?.data);
+            alert(errorMessage);
             break;
           default:
             console.error("로그인 중 알 수 없는 오류가 발생했습니다.", error);
-            alert(error.response?.data);
+            alert(errorMessage);
         }
       }
     },
@@ -63,8 +69,14 @@ export const useSignUpWithOauth = (provider: "google" | "kakao") =>
     mutationFn: (signUpData) => signUpWithOauth(provider, signUpData),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
+        const errorMessage =
+          typeof error.response?.data === "object" &&
+          error.response?.data?.message
+            ? error.response.data.message
+            : "알 수 없는 오류가 발생했습니다.";
+
         console.error("OAuth 회원가입 중 오류가 발생했습니다.", error);
-        alert(error.response?.data);
+        alert(errorMessage);
       }
     },
   });
@@ -79,8 +91,14 @@ export const useSignInWithOauth = (provider: "google" | "kakao") =>
     mutationFn: (signInData) => signInWithOauth(provider, signInData),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
+        const errorMessage =
+          typeof error.response?.data === "object" &&
+          error.response?.data?.message
+            ? error.response.data.message
+            : "알 수 없는 오류가 발생했습니다.";
+
         console.error("OAuth 로그인 중 오류가 발생했습니다.", error);
-        alert(error.response?.data);
+        alert(errorMessage);
       }
     },
   });
@@ -99,21 +117,27 @@ export const useRefreshToken = () =>
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
+        const errorMessage =
+          typeof error.response?.data === "object" &&
+          error.response?.data?.message
+            ? error.response.data.message
+            : "알 수 없는 오류가 발생했습니다.";
+
         switch (error.response?.status) {
           case 400:
             console.error(error.message);
-            alert(error.response?.data);
+            alert(errorMessage);
             break;
           case 401:
             console.error("인증되지 않은 요청입니다. 다시 로그인하세요.");
-            alert(error.response?.data);
+            alert(errorMessage);
             break;
           default:
             console.error(
               "토큰 갱신 중 알 수 없는 오류가 발생했습니다.",
               error
             );
-            alert(error.response?.data);
+            alert(errorMessage);
         }
       }
     },

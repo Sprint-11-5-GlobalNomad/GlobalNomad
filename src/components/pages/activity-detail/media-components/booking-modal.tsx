@@ -46,11 +46,11 @@ export default function BookingModal({
       ref={outsideClickRef}
       className="w-[48rem] bg-white rounded-[2.4rem] z-[999] tablet:absolute
       top-[56.4rem] left-[37vw] px-[2.4rem] pt-[2.8rem] pb-[3.2rem] flex flex-col
-      desktop:hidden mobile:w-full mobile:h-full
+      desktop:hidden mobile:w-full mobile:h-full mobile:flex-column
       mobile:fixed mobile:top-0 mobile:left-0"
     >
       {/* 날짜 선택 */}
-      <div className="flex-between">
+      <div className="flex-between mobile:w-[32.7rem]">
         <h2 className="text-2xl font-bold">날짜</h2>
         <button onClick={onClose}>
           <Image
@@ -73,10 +73,13 @@ export default function BookingModal({
       </div>
 
       {/* 예약 가능한 시간 */}
-      <div className="flex flex-col gap-[2.4rem]">
+      <div
+        className="flex flex-col gap-[2.4rem] mobile:w-[32.7rem]
+      mobile:flex moblie:flex-col mobile:items-start"
+      >
         <div
           className="flex flex-col gap-[2.4rem] w-[33.6rem]
-          tablet:w-full"
+          tablet:w-full mobile:w-full"
         >
           <div className="flex flex-col gap-[2.4rem]">
             <div className="flex flex-col gap-[1.2rem]">
@@ -84,7 +87,7 @@ export default function BookingModal({
                 className="flex flex-col gap-[0.8rem]
                 pb-[1.6rem] tablet:w-full"
               >
-                <div className="flex flex-col gap-[1.4rem] pt-[3.2rem]">
+                <div className="flex flex-col gap-[1.4rem] pt-[3.2rem] mobile:h-[11.8rem]">
                   <h3 className="text-2lg font-bold">예약 가능한 시간</h3>
                   <div className="flex gap-[1.2rem] overflow-x-auto hide-scrollbar">
                     {availableTimes && availableTimes.length > 0 ? (

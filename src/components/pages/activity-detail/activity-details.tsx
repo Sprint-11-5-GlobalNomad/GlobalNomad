@@ -25,7 +25,7 @@ export default function ActivityDetails() {
   const isRated = activity?.rating !== undefined && activity?.rating !== 0;
 
   return (
-    <div className="w-[120rem] flex tablet:w-[72rem] tablet:mr-[2.4rem] mobile:w-full">
+    <div className="w-[120rem] flex tablet:w-[72rem] tablet:mr-[2.4rem] mobile:w-full mobile:mx-auto">
       <div className="tablet:w-full mobile:w-full mobile:mx-[2.4rem]">
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
@@ -49,7 +49,7 @@ export default function ActivityDetails() {
         <hr
           className="w-[79rem] h-[0.1rem] bg-nomad-black
         opacity-25 mt-[3.4rem] mb-[4rem] tablet:w-[46.9rem]
-        mobile:w-full mobile:my-[1.6rem]"
+        mobile:hidden mobile:my-[1.6rem]"
         ></hr>
 
         {/* 지도 섹션 */}
