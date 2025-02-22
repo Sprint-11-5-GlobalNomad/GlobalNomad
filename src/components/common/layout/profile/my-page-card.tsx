@@ -39,12 +39,10 @@ export default function UserProfileSidebar({
       const imageFile = event.target.files[0];
       try {
         const response = await uploadProfileImage(imageFile);
-
         updateMyDetails(
           { profileImageUrl: response.profileImageUrl },
           {
             onSuccess: () => {
-              // 캐시 데이터 수정
               queryClient.setQueryData<UserDetails>(
                 ["userDetails"],
                 (oldData: UserDetails | undefined) => ({
@@ -52,7 +50,7 @@ export default function UserProfileSidebar({
                   profileImageUrl: response.profileImageUrl,
                 })
               );
-              // 최신 데이터 재요청
+
               queryClient.invalidateQueries({ queryKey: ["userDetails"] });
             },
             onError: () => {
@@ -67,7 +65,6 @@ export default function UserProfileSidebar({
     }
   };
 
-  /** 사이드바 메뉴 */
   const menuItems = [
     { label: "내 정보", link: "/profile", icon: "/image/profile.svg" },
     {
@@ -92,10 +89,6 @@ export default function UserProfileSidebar({
       <div className="w-[38rem] h-[43.2rem] p-[2.4rem] mobile:mt-[7rem] bg-white border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md">
         {/* 프로필 이미지 영역 */}
         <div className="flex flex-col items-center justify-center">
-          {/**
-           * 이미지 전체 클릭 시 파일 업로드
-           * 연필(펜) 아이콘은 단순 시각 표시
-           */}
           <div
             className="relative cursor-pointer"
             onClick={() => {
@@ -135,7 +128,6 @@ export default function UserProfileSidebar({
               href={item.link}
               key={item.label}
               onClick={(e) => {
-                // 모바일 환경에서 "내 정보" 클릭 시, 부모 컴포넌트가 상세 정보 열기
                 if (item.link === "/profile" && onNavigate) {
                   e.preventDefault();
                   onNavigate();
