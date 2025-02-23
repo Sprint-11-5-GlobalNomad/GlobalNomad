@@ -4,14 +4,15 @@ import ActivityInfoHeader from "@/components/pages/activity-detail/activity-info
 import { Metadata } from "next";
 import { fetchActivityDetail } from "../../api/activities-api";
 
-interface generateMetadataProps {
-  params: { id: string };
-}
+type generateMetadataProps = {
+  params: Promise<{ id: string }>;
+};
 
 export async function generateMetadata({
   params,
 }: generateMetadataProps): Promise<Metadata> {
-  const activity = await fetchActivityDetail(Number(params.id));
+  const activityParams = await params;
+  const activity = await fetchActivityDetail(Number(activityParams.id));
 
   return {
     title: activity ? `${activity.title} - GlobalNomad` : "GlobalNomad",

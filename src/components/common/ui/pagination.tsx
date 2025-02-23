@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useCallback, useEffect, useMemo } from "react";
 
 interface PaginationProps {
   totalPages: number;
@@ -12,18 +13,36 @@ export default function Pagination({
   currentPage,
   setPage,
 }: PaginationProps) {
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setPage(newPage);
-    }
-  };
-
-  const startPage = Math.max(1, currentPage - 2);
-  const endPage = Math.min(totalPages, startPage + 4);
-  const pages = Array.from(
-    { length: endPage - startPage + 1 },
-    (_, i) => startPage + i
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        setPage(newPage);
+      }
+    },
+    [setPage, totalPages]
   );
+
+  const pages = useMemo(() => {
+    const startPage = Math.max(1, currentPage - 2);
+
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    // 1 ~ 5페이지일 경우 정상적으로 표시
+    if (currentPage <= 3) {
+      return Array.from({ length: 5 }, (_, i) => i + 1);
+    }
+    // 마지막 페이지 근처일 경우
+    if (currentPage + 2 >= totalPages) {
+      return Array.from({ length: 5 }, (_, i) => totalPages - 4 + i);
+    }
+    // 나머지 페이지들
+    return Array.from({ length: 5 }, (_, i) => startPage + i);
+  }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    window.history.pushState({}, "", `?page=${currentPage}`);
+  }, [currentPage]);
 
   return (
     <div className="mb-[22.2rem] flex-between gap-[1rem]">
@@ -33,7 +52,6 @@ export default function Pagination({
         onClick={(e) => {
           e.preventDefault();
           handlePageChange(currentPage - 1);
-          window.history.pushState({}, "", `?page=${currentPage - 1}`);
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
           rounded-[1.5rem] border border-solid bg-white
@@ -63,7 +81,6 @@ export default function Pagination({
             onClick={(e) => {
               e.preventDefault();
               handlePageChange(page);
-              window.history.pushState({}, "", `?page=${page}`);
             }}
             className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
         flex items-center justify-center rounded-[1.5rem]
@@ -81,7 +98,6 @@ export default function Pagination({
         onClick={(e) => {
           e.preventDefault();
           handlePageChange(currentPage + 1);
-          window.history.pushState({}, "", `?page=${currentPage + 1}`);
         }}
         className={`w-[5.5rem] h-[5.5rem] px-[1.5rem] py-[1.5rem]
       rounded-[1.5rem] border border-solid bg-white
