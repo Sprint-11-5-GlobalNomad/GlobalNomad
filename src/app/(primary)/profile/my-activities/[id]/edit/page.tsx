@@ -1,20 +1,21 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useParams } from "next/navigation";
 import UserProfileSidebar from "@/components/common/layout/profile/my-page-card";
 import Button from "@/components/common/ui/button";
 import SelectDropdown from "@/components/common/ui/dropdown/select-dropdown";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import ReservationTimeSelector from "@/components/pages/activity-post-edit/set-reservation-time";
+import BannerImageUploader from "@/components/pages/activity-post-edit/banner-image-uploader";
+import IntroImagesUploader from "@/components/pages/activity-post-edit/intro-image-uploader";
+import MessageModal from "@/components/common/ui/modal/message-modal";
+import KakaoMapAddress from "@/components/pages/activity-post-edit/kakao-map-address";
 import {
   CATEGORY_TYPES,
   CreateActivityBodyDto,
   UpdateMyActivityBodyDto,
 } from "@/app/types/activity-schemas";
-import ReservationTimeSelector from "@/components/pages/activity-post-edit/set-reservation-time";
-import BannerImageUploader from "@/components/pages/activity-post-edit/banner-image-uploader";
-import IntroImagesUploader from "@/components/pages/activity-post-edit/intro-image-uploader";
-import { useParams } from "next/navigation";
 import { useActivityDetail } from "@/app/react-query/activity-state";
-import MessageModal from "@/components/common/ui/modal/message-modal";
 import { useUpdateMyActivity } from "@/app/react-query/my-activity-state";
 
 type ReservationAvailableTime = {
@@ -40,6 +41,14 @@ export default function ActivityEditPage() {
       address: "",
     },
   });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    watch,
+  } = methods;
+  const address = watch("address");
 
   const [existingReservationTimes, setExistingReservationTimes] = useState<
     ReservationAvailableTime[]
@@ -62,13 +71,6 @@ export default function ActivityEditPage() {
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = methods;
-
   useEffect(() => {
     if (activityDetail) {
       setValue("title", activityDetail.title);
@@ -78,7 +80,6 @@ export default function ActivityEditPage() {
       setValue("address", activityDetail.address);
       setBannerImage(activityDetail.bannerImageUrl);
 
-      // 기존 예약 시간 설정
       const initialReservationTimes = activityDetail.schedules.map(
         (schedule) => ({
           id: schedule.id,
@@ -88,8 +89,6 @@ export default function ActivityEditPage() {
         })
       );
       setExistingReservationTimes(initialReservationTimes);
-
-      // 서버에 있는 인트로 이미지는 id와 imageUrl로 관리 (서버 데이터에 id가 있다고 가정)
       setExistingIntroImages(activityDetail.subImages);
     }
   }, [activityDetail, setValue]);
@@ -250,6 +249,11 @@ export default function ActivityEditPage() {
             {errors.price && (
               <p className="text-red-500 text-sm">{errors.price.message}</p>
             )}
+          </label>
+
+          <label className="flex flex-col gap-[1.6rem]">
+            <div className="font-pretendard text-2xl font-bold">주소</div>
+            <KakaoMapAddress address={address} />
           </label>
 
           <div>
