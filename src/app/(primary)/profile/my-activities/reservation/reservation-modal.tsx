@@ -4,10 +4,16 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import {
   useReservationsBySchedule,
   useUpdateReservationStatus,
-  useDailyReservationStats,
 } from "@/app/react-query/my-activity-state";
 import { format, parseISO, isValid } from "date-fns";
 import UseOutsideClick from "@/hooks/use-outside-click";
+
+type ReservationStatus =
+  | "pending"
+  | "confirmed"
+  | "declined"
+  | "completed"
+  | "canceled";
 
 interface DailyReservationStat {
   scheduleId: number;
@@ -16,7 +22,6 @@ interface DailyReservationStat {
   count?: {
     pending?: number;
     confirmed?: number;
-    completed?: number;
     declined?: number;
   };
 }
@@ -24,7 +29,7 @@ interface DailyReservationStat {
 interface IReservation {
   id: number;
   nickname: string;
-  status: "pending" | "confirmed" | "declined";
+  status: ReservationStatus;
   headCount: number;
   startTime: string;
   endTime: string;
@@ -55,74 +60,61 @@ export default function ReservationModal({
   const [activeTab, setActiveTab] = useState<
     "pending" | "confirmed" | "declined"
   >("pending");
-  const [selectedScheduleId, setSelectedScheduleId] =
-    useState<number>(scheduleId);
 
-  // 날짜 변환
+  // 날짜 변환환
   const parsedDate = useMemo(
     () => (selectedDate ? parseISO(selectedDate) : null),
     [selectedDate]
   );
-  const formattedDate =
-    parsedDate && isValid(parsedDate)
+  const formattedDate = useMemo(() => {
+    return parsedDate && isValid(parsedDate)
       ? format(parsedDate, "yyyy-MM-dd")
       : "유효하지 않은 날짜";
+  }, [parsedDate]);
 
-  const { data: dailyStatsData, isLoading: isLoadingDaily } =
-    useDailyReservationStats(activityId, formattedDate);
+  // 모달내부상태
+  const [currentScheduleId, setCurrentScheduleId] = useState(scheduleId);
+  useEffect(() => {
+    setCurrentScheduleId(scheduleId);
+  }, [scheduleId]);
 
+  const [localDailyStats, setLocalDailyStats] = useState<
+    DailyReservationStat[]
+  >(dailyStatsForThisDate);
+  useEffect(() => {
+    setLocalDailyStats(dailyStatsForThisDate);
+  }, [dailyStatsForThisDate]);
+
+  // 날짜 전체 탭 갯수
+  const totalTabCounts = useMemo(() => {
+    if (!Array.isArray(localDailyStats)) {
+      return { pending: 0, confirmed: 0, declined: 0 };
+    }
+    return localDailyStats.reduce(
+      (acc, stat) => {
+        acc.pending += stat.count?.pending ?? 0;
+        acc.confirmed += stat.count?.confirmed ?? 0;
+        acc.declined += stat.count?.declined ?? 0;
+        return acc;
+      },
+      { pending: 0, confirmed: 0, declined: 0 }
+    );
+  }, [localDailyStats]);
+
+  // 예약 목록 요청
   const {
     data: reservationsData,
     isLoading,
     refetch,
-  } = useReservationsBySchedule(activityId, selectedScheduleId, activeTab);
+  } = useReservationsBySchedule(activityId, currentScheduleId, activeTab);
 
-  // 상세 목록
-  const reservations: IReservation[] = useMemo(() => {
-    if (!Array.isArray(reservationsData?.reservations)) {
-      return [];
-    }
-    const sorted = [...reservationsData.reservations].sort(
-      (a, b) => b.id - a.id
-    );
-    return sorted.map((res) => ({
-      id: res.id ?? 0,
-      nickname: res.nickname ?? "알 수 없음",
-      status: res.status as "pending" | "confirmed" | "declined",
-      headCount: res.headCount ?? 0,
-      startTime: res.startTime ?? "",
-      endTime: res.endTime ?? "",
-      scheduleId: res.scheduleId ?? 0,
-    }));
+  // 목록 정렬
+  const reservations = useMemo<IReservation[]>(() => {
+    if (!reservationsData?.reservations) return [];
+    return [...reservationsData.reservations].sort((a, b) => b.id - a.id);
   }, [reservationsData]);
 
-  // 탭 갯수
-  const scheduleStat = useMemo(() => {
-    if (!dailyStatsData || !Array.isArray(dailyStatsData)) {
-      return null;
-    }
-    return dailyStatsData.find(
-      (stat) => stat.scheduleId === selectedScheduleId
-    );
-  }, [dailyStatsData, selectedScheduleId]);
-
-  const tabCounts = useMemo(() => {
-    if (!scheduleStat || !scheduleStat.count) {
-      return { pending: 0, confirmed: 0, declined: 0 };
-    }
-    return {
-      pending: scheduleStat.count.pending ?? 0,
-      confirmed: scheduleStat.count.confirmed ?? 0,
-      declined: scheduleStat.count.declined ?? 0,
-    };
-  }, [scheduleStat]);
-
-  // 현재 탭에 해당하는 예약만
-  const filteredReservations = useMemo(() => {
-    return reservations.filter((res) => res.status === activeTab);
-  }, [reservations, activeTab]);
-
-  // 무한 스크롤
+  // 무한 스크롤롤
   const listInnerRef = useRef<HTMLDivElement | null>(null);
   const [displayReservations, setDisplayReservations] = useState<
     IReservation[]
@@ -132,10 +124,10 @@ export default function ReservationModal({
 
   useEffect(() => {
     const pageSize = 5;
-    const slice = filteredReservations.slice(0, page * pageSize);
+    const slice = reservations.slice(0, page * pageSize);
     setDisplayReservations(slice);
-    setHasMore(filteredReservations.length > slice.length);
-  }, [filteredReservations, page]);
+    setHasMore(reservations.length > slice.length);
+  }, [reservations, page]);
 
   const handleScroll = () => {
     if (!listInnerRef.current) return;
@@ -156,7 +148,7 @@ export default function ReservationModal({
   // 예약 상태 업데이트 로직
   const handleUpdateStatus = async (
     id: number,
-    status: "confirmed" | "declined"
+    newStatus: "confirmed" | "declined"
   ): Promise<boolean> => {
     try {
       const latest = await refetch().then(
@@ -175,9 +167,8 @@ export default function ReservationModal({
       await updateReservationStatus.mutateAsync({
         activityId,
         reservationId: id,
-        status,
+        status: newStatus,
       });
-
       return true;
     } catch (error) {
       console.error("예약 상태 변경 오류:", error);
@@ -186,34 +177,78 @@ export default function ReservationModal({
     }
   };
 
+  // 승인하기기
   const handleConfirmReservation = async (reservationId: number) => {
-    const isConfirmed = await handleUpdateStatus(reservationId, "confirmed");
-    if (!isConfirmed) return;
+    if (!confirm("예약을 승인하시겠습니까?")) return;
+    const success = await handleUpdateStatus(reservationId, "confirmed");
+    if (!success) return;
+    alert("승인되었습니다.");
 
-    // 한 건을 승인하면 나머지 모두 거절절
+    // 승인 시, 다른 대기중 예약 모두 거절
     const latest = await refetch().then((r) => r.data?.reservations || []);
-    const pendingList = (latest as IReservation[]).filter(
+    const restPending = (latest as IReservation[]).filter(
       (r) => r.id !== reservationId && r.status === "pending"
     );
-    for (const p of pendingList) {
+    for (const p of restPending) {
       await handleUpdateStatus(p.id, "declined");
     }
 
-    if (onUpdated) onUpdated();
+    // 탭 업데이트
+    setLocalDailyStats((prev) =>
+      prev.map((stat) => {
+        if (stat.scheduleId !== currentScheduleId) return stat;
+        const pendingCount = stat.count?.pending ?? 0;
+        if (pendingCount === 0) return stat;
+
+        const newConfirmed = (stat.count?.confirmed ?? 0) + 1;
+        const newDeclined = (stat.count?.declined ?? 0) + (pendingCount - 1);
+        return {
+          ...stat,
+          count: {
+            ...stat.count,
+            pending: 0,
+            confirmed: newConfirmed,
+            declined: newDeclined,
+          },
+        };
+      })
+    );
+
+    onUpdated?.();
   };
 
+  // 거절하기
   const handleDeclineReservation = async (reservationId: number) => {
-    const isDeclined = await handleUpdateStatus(reservationId, "declined");
-    if (isDeclined && onUpdated) {
-      onUpdated();
-    }
+    if (!confirm("예약을 거절하시겠습니까?")) return;
+    const success = await handleUpdateStatus(reservationId, "declined");
+    if (!success) return;
+    alert("거절되었습니다.");
+
+    // 탭 업데이트
+    setLocalDailyStats((prev) =>
+      prev.map((stat) => {
+        if (stat.scheduleId !== currentScheduleId) return stat;
+        const pendingCount = stat.count?.pending ?? 0;
+        if (pendingCount === 0) return stat;
+        return {
+          ...stat,
+          count: {
+            ...stat.count,
+            pending: pendingCount - 1,
+            declined: (stat.count?.declined ?? 0) + 1,
+          },
+        };
+      })
+    );
+
+    onUpdated?.();
   };
 
-  // 모달 바깥 클릭 시 닫힘힘
   const modalRef = UseOutsideClick(() => {
     if (isOpen) onClose();
   });
 
+  // 모달이 열려 있지 않으면 렌더링 X
   if (!isOpen) return null;
 
   return (
@@ -222,22 +257,34 @@ export default function ReservationModal({
         ref={modalRef}
         className="bg-white p-6 rounded-[2.4rem] w-[42.9rem] h-[69.7rem] shadow-xl"
       >
-        {/* 모달 헤더 */}
+        {/* 헤더 */}
         <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-3">
           <h1 className="text-[2.4rem] font-bold">예약 정보</h1>
-          <button onClick={onClose} className="text-gray-500 text-lg">
+          <button onClick={onClose} className="text-gray-900 text-[3rem]">
             ✖
           </button>
         </div>
 
-        {/* 탭 */}
+        {/* 탭  */}
         <div className="relative border-b border-gray-200 mb-4 text-lg font-semibold">
           <div className="flex">
             {(
               [
-                { key: "pending", label: "신청", count: tabCounts.pending },
-                { key: "confirmed", label: "승인", count: tabCounts.confirmed },
-                { key: "declined", label: "거절", count: tabCounts.declined },
+                {
+                  key: "pending",
+                  label: "신청",
+                  count: totalTabCounts.pending,
+                },
+                {
+                  key: "confirmed",
+                  label: "승인",
+                  count: totalTabCounts.confirmed,
+                },
+                {
+                  key: "declined",
+                  label: "거절",
+                  count: totalTabCounts.declined,
+                },
               ] as const
             ).map(({ key, label, count }) => (
               <button
@@ -276,14 +323,16 @@ export default function ReservationModal({
         {/* 시간 드롭다운 */}
         <div className="px-4 mb-4">
           <select
-            value={selectedScheduleId}
+            value={currentScheduleId}
             onChange={(e) => {
-              setSelectedScheduleId(Number(e.target.value));
+              const newId = Number(e.target.value);
+              setCurrentScheduleId(newId);
+              setActiveTab("pending");
               setPage(1);
             }}
-            className="w-full h-[5.6rem] p-2 border rounded-lg text-[1.6rem]"
+            className="w-full h-[5.6rem] p-2 border rounded-lg text-[1.6rem] border-solid border-nomad-black"
           >
-            {dailyStatsForThisDate.map((stat) => (
+            {localDailyStats.map((stat) => (
               <option key={stat.scheduleId} value={stat.scheduleId}>
                 {stat.startTime} ~ {stat.endTime}
               </option>
@@ -297,16 +346,16 @@ export default function ReservationModal({
             예약 내역
           </h2>
 
-          {isLoading || isLoadingDaily ? (
+          {isLoading ? (
             <p className="text-gray-500 text-center py-6">로딩 중...</p>
           ) : displayReservations.length > 0 ? (
-            displayReservations.map((reservation, idx) => (
+            displayReservations.map((reservation) => (
               <div
-                key={`${reservation.id}-${idx}`}
+                key={reservation.id}
                 className="border border-gray-300 border-solid p-4 rounded-lg mb-3 bg-white"
               >
                 <div>
-                  <div className="flex gap-2 items-baseline mb-2">
+                  <div className="flex gap-2 items-baseline mb-[1rem]">
                     <p className="text-[1.6rem] font-semi-bold text-gray-800">
                       닉네임
                     </p>
@@ -324,7 +373,7 @@ export default function ReservationModal({
                   </div>
                 </div>
 
-                {/* 승인/거절 버튼: pending 일 때만 */}
+                {/* 대기중 예약일 때만 승인/거절 버튼 노출 */}
                 {activeTab === "pending" && (
                   <div className="flex justify-end gap-2 mt-3">
                     <button
@@ -335,7 +384,7 @@ export default function ReservationModal({
                     </button>
                     <button
                       onClick={() => handleDeclineReservation(reservation.id)}
-                      className="py-2 bg-white text-black rounded-md border border-nomad-black hover:bg-gray-200 w-[8.2rem] h-[3.8rem] text-[1.4rem]"
+                      className="py-2 bg-white text-black rounded-md border border-solid border-nomad-black hover:bg-gray-200 w-[8.2rem] h-[3.8rem] text-[1.4rem]"
                     >
                       거절하기
                     </button>
@@ -345,7 +394,7 @@ export default function ReservationModal({
                 {/* 승인 상태 */}
                 {reservation.status === "confirmed" && (
                   <div className="flex justify-end mt-3">
-                    <div className="bg-[#FFF4E8] text-orange text-[1.4rem] text-center w-[8.2rem] h-[4.4rem] py-[1rem] px-[1.5rem] rounded-md font-bold flex items-center justify-center">
+                    <div className="bg-[#FFF4E8] text-orange text-[1.4rem] text-center w-[8.2rem] h-[4.4rem] py-[1rem] px-[1.5rem] rounded-[2.65rem] font-bold flex items-center justify-center">
                       예약 승인
                     </div>
                   </div>
@@ -354,7 +403,7 @@ export default function ReservationModal({
                 {/* 거절 상태 */}
                 {reservation.status === "declined" && (
                   <div className="flex justify-end mt-3">
-                    <div className="bg-[#FFE4E0] text-red text-[1.4rem] text-center w-[8.2rem] h-[4.4rem] py-[1rem] px-[1.5rem] rounded-md font-bold flex items-center justify-center">
+                    <div className="bg-[#FFE4E0] text-red text-[1.4rem] text-center w-[8.2rem] h-[4.4rem] py-[1rem] px-[1.5rem] rounded-[2.65rem] font-bold flex items-center justify-center">
                       예약 거절
                     </div>
                   </div>

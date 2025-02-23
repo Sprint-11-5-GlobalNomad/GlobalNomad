@@ -72,8 +72,7 @@ export default function UserProfileSidebar({
 
   return (
     <div className="w-full mobile:px-[1.6rem] mobile:mt-[7rem] flex justify-center min-h-screen">
-      <div className="w-[38rem] h-[43.2rem] p-[2.4rem] mobile:mt-[7rem] bg-white border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md">
-        {/* 프로필 이미지 영역 */}
+      <div className="w-[38rem] h-[43.2rem] tablet:w-[25.1rem] mobile:w-[34.4rem] p-[2.4rem] mobile:mt-[7rem] bg-white border border-gray-300 rounded-[1.2rem] space-y-[2.4rem] shadow-md">
         <div className="flex flex-col items-center justify-center">
           <div
             className="relative cursor-pointer"
