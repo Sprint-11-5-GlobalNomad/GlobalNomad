@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 // Kakao API 관련 타입 선언
 type LatLng = { lat: number; lng: number };
@@ -41,12 +41,12 @@ declare global {
 }
 
 interface AddressData {
-  address: string;
+  address?: string;
 }
 
-export default function KakaoMapAddress() {
+export default function KakaoMapAddress({ address }: AddressData) {
   const {
-    register,
+    control,
     setValue,
     formState: { errors },
   } = useFormContext();
@@ -74,26 +74,26 @@ export default function KakaoMapAddress() {
     new window.daum.Postcode({
       oncomplete: (data: AddressData) => {
         const addr = data.address;
-        setValue("address", addr, { shouldValidate: true });
-        if (window.kakaoMapsAPI && window.kakaoMapsAPI.maps) {
-          // undefined 체크
-          const geocoder = new window.kakaoMapsAPI.maps.services.Geocoder();
+        setValue("address", addr || "", { shouldValidate: true });
+        if (addr && window.kakaoMapsAPI && window.kakaoMapsAPI.maps) {
+          // 로컬 변수에 할당해서 타입 확정을 명시
+          const kakaoAPI = window.kakaoMapsAPI;
+          const geocoder = new kakaoAPI.maps.services.Geocoder();
           geocoder.addressSearch(addr, (results, status) => {
-            if (status === window.kakaoMapsAPI!.maps.services.Status.OK) {
-              // Non-null 단언
+            if (status === kakaoAPI.maps.services.Status.OK) {
               const result = results[0];
-              const coords = new window.kakaoMapsAPI!.maps.LatLng(
+              const coords = new kakaoAPI.maps.LatLng(
                 Number(result.y),
                 Number(result.x)
               );
               const mapContainer = document.getElementById(
                 "map"
               ) as HTMLElement;
-              const map = new window.kakaoMapsAPI!.maps.Map(mapContainer, {
+              const map = new kakaoAPI.maps.Map(mapContainer, {
                 center: coords,
                 level: 5,
               });
-              const marker = new window.kakaoMapsAPI!.maps.Marker({
+              const marker = new kakaoAPI.maps.Marker({
                 position: coords,
                 map: map,
               });
@@ -122,13 +122,21 @@ export default function KakaoMapAddress() {
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="주소를 입력해주세요."
-        className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
-        {...register("address", { required: "주소를 입력해주세요." })}
-        onClick={loadPostcode}
-        readOnly
+      <Controller
+        name="address"
+        control={control}
+        defaultValue={address || ""}
+        rules={{ required: "주소를 입력해주세요." }}
+        render={({ field }) => (
+          <input
+            {...field}
+            type="text"
+            placeholder="주소를 입력해주세요."
+            className="w-[79.2rem] tablet:w-[42.9rem] mobile:w-[34.3rem] h-[5.6rem] rounded-[0.4rem] border-black border-[0.1rem] p-[1.6rem] text-lg font-normal"
+            onClick={loadPostcode}
+            readOnly
+          />
+        )}
       />
       {typeof errors.address?.message === "string" && (
         <p className="text-red-500 text-sm mt-2">{errors.address.message}</p>
