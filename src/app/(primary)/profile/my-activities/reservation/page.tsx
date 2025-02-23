@@ -18,7 +18,6 @@ import Image from "next/image";
 import "@/styles/fullcalendar.css";
 import { EmptyContent } from "@/components/common/layout/profile/empty-content";
 
-/** 스케줄 정보 */
 type IDailyStat = {
   scheduleId: number;
   startTime: string;
@@ -26,21 +25,10 @@ type IDailyStat = {
   count?: {
     pending?: number;
     confirmed?: number;
-    completed?: number;
     declined?: number;
+    completed?: number;
   };
 };
-
-/** 월간 예약 */
-interface IMonthlyStat {
-  date?: string;
-  activityId?: number;
-  reservations: {
-    confirmed: number;
-    pending: number;
-    completed: number;
-  };
-}
 
 export default function ReservationPage() {
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -57,8 +45,6 @@ export default function ReservationPage() {
     []
   );
   const [currentDate, setCurrentDate] = useState(new Date());
-  const getSafeActivityId = () => selectedActivity ?? undefined;
-
   const getFormattedDate = (date: string | null) =>
     date && isValid(new Date(date))
       ? format(new Date(date), "yyyy-MM-dd")
@@ -72,58 +58,60 @@ export default function ReservationPage() {
   // 월간 예약 통계
   const { data: monthlyStats, refetch: refetchMonthlyStats } =
     useMonthlyReservationStats(
-      getSafeActivityId() ?? 0,
+      selectedActivity ?? 0,
       currentYear,
       currentMonth
     );
 
-  // 일별 스케줄 조회
+  // 날짜별 스케줄 조회
   const { refetch: refetchDailyStats } = useDailyReservationStats(
-    getSafeActivityId() ?? 0,
+    selectedActivity ?? 0,
     getFormattedDate(selectedDate) ?? ""
   );
 
-  // 체험 바뀌면 월별 예약 불러오기
+  // 체험 바뀔 때 월별 예약 다시 불러오기
   useEffect(() => {
     if (selectedActivity) {
       refetchMonthlyStats();
     }
   }, [selectedActivity, refetchMonthlyStats]);
 
-  // 월별 예약
-  const getEventLabel = (stat: IMonthlyStat) => {
-    if (stat.reservations.confirmed > 0) {
-      return {
-        label: `승인 ${stat.reservations.confirmed}`,
-        className: "confirmed-event",
-      };
-    }
-    if (stat.reservations.pending > 0) {
-      return {
-        label: `예약 ${stat.reservations.pending}`,
-        className: "pending",
-      };
-    }
-    if (stat.reservations.completed > 0) {
-      return {
-        label: `완료 ${stat.reservations.completed}`,
-        className: "completed",
-      };
-    }
-    return { label: "", className: "" };
-  };
-
+  // 예약,승인,완료 각각 나타내기기
   useEffect(() => {
     if (Array.isArray(monthlyStats) && monthlyStats.length > 0) {
-      const newEvents = monthlyStats.map((stat) => {
-        const { label, className } = getEventLabel(stat);
-        return {
-          title: label,
-          start: stat.date ? format(new Date(stat.date), "yyyy-MM-dd") : "",
-          classNames: ["fc-event", className],
-          extendedProps: { activityId: stat.activityId },
-        };
+      const newEvents: EventInput[] = [];
+
+      monthlyStats.forEach((stat) => {
+        const dateStr = stat.date
+          ? format(new Date(stat.date), "yyyy-MM-dd")
+          : "";
+
+        if (stat.reservations.pending > 0) {
+          newEvents.push({
+            title: `예약 ${stat.reservations.pending}`,
+            start: dateStr,
+            classNames: ["fc-event", "pending"],
+            extendedProps: { activityId: stat.activityId },
+          });
+        }
+        if (stat.reservations.confirmed > 0) {
+          newEvents.push({
+            title: `승인 ${stat.reservations.confirmed}`,
+            start: dateStr,
+            classNames: ["fc-event", "confirmed-event"],
+            extendedProps: { activityId: stat.activityId },
+          });
+        }
+        if (stat.reservations.completed > 0) {
+          newEvents.push({
+            title: `완료 ${stat.reservations.completed}`,
+            start: dateStr,
+            classNames: ["fc-event", "completed"],
+            extendedProps: { activityId: stat.activityId },
+          });
+        }
       });
+
       setEvents(newEvents);
     } else {
       setEvents([]);
@@ -139,29 +127,31 @@ export default function ReservationPage() {
     }
   };
 
-  // 이벤트 클릭 시 모달 오픈
+  // 달력의 이벤트 클릭
   const handleEventClick = async (info: EventClickArg) => {
     if (!selectedActivity || !info.event.start) return;
-
     const clickedDate = format(info.event.start, "yyyy-MM-dd");
     setSelectedDate(clickedDate);
 
+    // 해당 날짜의 스케줄 가져오기
     const updatedDailyStats =
       ((await refetchDailyStats().then((res) => res?.data)) as IDailyStat[]) ||
       [];
 
-    const matched = updatedDailyStats.find(
+    // 스케줄 찾기
+    const firstPendingOrConfirmed = updatedDailyStats.find(
       (stat) =>
         (stat.count?.pending ?? 0) > 0 || (stat.count?.confirmed ?? 0) > 0
     );
-    if (matched) {
-      setSelectedScheduleId(matched.scheduleId);
+    if (firstPendingOrConfirmed) {
+      setSelectedScheduleId(firstPendingOrConfirmed.scheduleId);
     } else if (updatedDailyStats.length > 0) {
       setSelectedScheduleId(updatedDailyStats[0].scheduleId);
     } else {
       setSelectedScheduleId(null);
     }
     setDailyStatsForModal(updatedDailyStats);
+
     setModalOpen(true);
   };
 
@@ -181,14 +171,14 @@ export default function ReservationPage() {
     }
   };
 
-  // 등록된 체험이 전혀 없는 경우
+  // 등록된 체험 자체가 없는 경우
   if (myActivities?.activities?.length === 0) {
     return (
-      <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem]">
+      <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem] ">
         <div>
           <UserProfileSidebar page="/profile/activity/reservation" />
         </div>
-        <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
+        <div className="w-[80rem] h-[81.3rem] ml-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.2rem]">
           <h1 className="text-[3.2rem] font-bold mb-[3.8rem]">예약 현황</h1>
           <div className="flex flex-col items-center justify-center h-[30rem]">
             <EmptyContent description="아직 등록한 체험이 없어요" />
@@ -200,11 +190,11 @@ export default function ReservationPage() {
 
   return (
     <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem]">
-      <div>
+      <div className="mobile:hidden">
         <UserProfileSidebar page="/profile/activity/reservation" />
       </div>
-      <div className="w-[80rem] h-[81.3rem] ml-[2.4rem]">
-        <h1 className="text-[3.2rem] font-bold mb-[3.8rem]">예약 현황</h1>
+      <div className="w-[80rem] h-[81.3rem] ml-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.2rem]">
+        <h1 className="text-[3.2rem] font-bold mb-[3.8rem] mt-0">예약 현황</h1>
 
         {/* 체험 드롭다운 */}
         <div className="mb-[3rem] relative w-full">
@@ -221,7 +211,7 @@ export default function ReservationPage() {
           </div>
         </div>
 
-        {/* 아무 체험도 선택 안했을 때 */}
+        {/* 아무 체험도 안 고른 경우 */}
         {selectedActivity === null && (
           <div className="flex flex-col items-center justify-center h-[30rem]">
             <Image
@@ -236,25 +226,25 @@ export default function ReservationPage() {
           </div>
         )}
 
-        {/* 캘린더 */}
+        {/* 달력 표시 */}
         {selectedActivity !== null && (
           <>
             {events.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-[30rem]">
-                <EmptyContent description="아직 등록한 체험이 없어요" />
+                <EmptyContent description="아직 등록된 예약이 없어요" />
               </div>
             ) : (
               <>
-                <div className="flex justify-center items-center mb-6">
+                <div className="flex justify-center items-center mb-[1.8rem] mt-[3rem]">
                   <button onClick={handlePrev} className="text-2xl mx-[9.6rem]">
                     «
                   </button>
-                  <h2 className="text-[2rem] font-bold">
+                  <h1 className="text-[2rem] font-bold  whitespace-nowrap">
                     {currentDate.toLocaleDateString("ko-KR", {
                       year: "numeric",
                       month: "long",
                     })}
-                  </h2>
+                  </h1>
                   <button onClick={handleNext} className="text-2xl mx-[9.6rem]">
                     »
                   </button>
@@ -279,8 +269,8 @@ export default function ReservationPage() {
                   dayCellClassNames={(arg) => {
                     if (
                       events.some(
-                        (event) =>
-                          event.start === arg.date.toISOString().split("T")[0]
+                        (ev) =>
+                          ev.start === arg.date.toISOString().split("T")[0]
                       )
                     ) {
                       return ["has-event"];
