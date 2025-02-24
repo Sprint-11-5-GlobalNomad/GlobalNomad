@@ -19,7 +19,6 @@ export default function Footer() {
         <span className="text-lg font-regular">©codeit - 2025</span>
         <div className="flex gap-[3rem]">
           <span className="text-lg font-regular">Privacy Policy</span>
-          {/* modal 로 바꿀 계획 */}
           <Link
             href="https://www.codeit.kr/faq"
             target="_blank"
