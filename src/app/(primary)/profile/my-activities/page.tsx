@@ -20,25 +20,19 @@ export default function MyActivities() {
     router.push("/profile/my-activities/post");
   }
 
-  // ✅ 콘솔 로그 추가하여 API 응답 확인
-  console.log("Fetched Data:", data);
-
-  // ✅ 마지막 아이템이 보이면 다음 페이지 데이터 불러오기
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
-      console.log("Fetching next page..."); // ✅ fetchNextPage 호출 확인
       fetchNextPage();
     }
   }, [inView, hasNextPage, fetchNextPage, isFetchingNextPage]);
 
-  // ✅ 안전한 `isEmpty` 판별 로직
   const isEmpty =
-    !data || // 데이터가 없거나
-    !data.pages || // pages 배열이 없거나
-    data.pages.length === 0 || // 페이지가 하나도 없거나
+    !data ||
+    !data.pages ||
+    data.pages.length === 0 ||
     data.pages.every(
       (page) => !page.activities || page.activities.length === 0
-    ); // activities가 비어 있음
+    );
 
   return (
     <div className="flex flex-row justify-center gap-[2.4rem] mt-[14.4rem] mobile:mt-[9rem] mb-[18.3rem] mobile:mb-[10rem]">
@@ -84,7 +78,7 @@ export default function MyActivities() {
                     title={activity.title}
                     price={activity.price}
                     id={activity.id}
-                    ref={isLastItem ? ref : null} // ✅ 무한 스크롤 적용
+                    ref={isLastItem ? ref : null}
                   />
                 );
               })

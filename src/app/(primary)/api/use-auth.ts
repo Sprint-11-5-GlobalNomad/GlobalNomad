@@ -12,13 +12,13 @@ interface User {
   updatedAt: string;
 }
 
-// ✅ useAuth 훅 (React Query 적용)
+// ✅ useAuth 훅
 export const useAuth = () => {
   const queryClient = useQueryClient();
 
   const getAccessToken = () => localStorage.getItem("accessToken");
 
-  // ✅ 유저 정보 가져오기 (React Query 활용)
+  // ✅ 유저 정보 가져오기
   const {
     data: user,
     isFetching,
@@ -29,25 +29,22 @@ export const useAuth = () => {
     queryKey: ["user"],
     queryFn: async () => {
       const token = getAccessToken();
-      if (!token) return null; // ✅ 기존 코드처럼 토큰 없으면 `null` 반환
+      if (!token) return null;
       return fetchMyDetails();
     },
-    staleTime: 1000 * 60 * 15, // ✅ 5분 동안 캐싱 유지
-    retry: false, // ✅ 에러 발생 시 재시도하지 않음
+    staleTime: 1000 * 60 * 15,
+    retry: false,
   });
 
   const login = () => {
     refetch();
   };
 
-  // ✅ 로그아웃 (토큰 삭제 & React Query 캐시 무효화)
   const logout = () => {
-    console.log("🔴 로그아웃 실행");
     removeTokens();
 
-    queryClient.removeQueries({ queryKey: ["user"] }); // ✅ 캐시 제거
+    queryClient.removeQueries({ queryKey: ["user"] });
 
-    // ✅ 메인 페이지 이동 (기존 코드 유지)
     window.location.href = "/";
   };
 

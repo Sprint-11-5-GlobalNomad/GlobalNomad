@@ -1,6 +1,6 @@
 import Button from "@/components/common/ui/button";
 import { ReservationResponseDto } from "@/app/types/reservation-schemas";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useSubmitReservationReview } from "@/app/react-query/reservation-state";
 import { useQueryClient, InfiniteData } from "@tanstack/react-query";
@@ -17,6 +17,7 @@ type ReviewModalProps = Pick<
 > & {
   isOpen: boolean;
   selectedStatus?: string | null;
+  onClose: () => void;
 };
 
 type ReviewState = {
@@ -26,26 +27,17 @@ type ReviewState = {
 
 interface ReservationPage {
   reservations: ReservationResponseDto[];
-  // 페이지 관련 추가 정보가 있다면 여기에 정의
 }
 
 export function ReviewModal({
   isOpen,
+  onClose,
   selectedStatus,
   ...props
 }: ReviewModalProps) {
-  const [modalOpen, setModalOpen] = useState(isOpen);
   const [review, setReview] = useState<ReviewState>({ rating: 0, content: "" });
   const queryClient = useQueryClient();
   const submitReviewMutation = useSubmitReservationReview();
-
-  useEffect(() => {
-    setModalOpen(isOpen);
-  }, [isOpen]);
-
-  function onClose() {
-    setModalOpen(false);
-  }
 
   function onChangeContent(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setReview((prev) => ({ ...prev, content: e.target.value }));
@@ -93,7 +85,7 @@ export function ReviewModal({
     );
   }
 
-  if (!modalOpen) return null;
+  if (!isOpen) return null;
 
   return (
     <div
@@ -101,7 +93,7 @@ export function ReviewModal({
       onClick={onClose}
     >
       <div
-        className="bg-white flex flex-col tablet:rounded-[2.4rem] font-pretendard desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]"
+        className="bg-white flex flex-col tablet:rounded-[2.4rem] desktop:rounded-[2.4rem] w-[48rem] h-[75rem] tablet:w-[48rem] tablet:h-[75rem] mobile:w-[375px] mobile:h-[777px] desktop:p-[2.4rem] tablet:p-[2.4rem] mobile:p-[1.2rem]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-[4.1rem]">
@@ -135,7 +127,6 @@ export function ReviewModal({
               </div>
             </div>
           </div>
-
           <div className="flex justify-center gap-2 w-[432px] h-[100px] mobile:w-[351px] mobile:h-[100px] items-center">
             {[...Array(5)].map((_, index) => (
               <div key={index} className="w-[54px] h-[50px]">

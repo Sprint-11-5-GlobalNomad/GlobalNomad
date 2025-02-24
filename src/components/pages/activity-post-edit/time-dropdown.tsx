@@ -46,13 +46,13 @@ export default function TimeDropdown({
           {options.map((option) => (
             <li
               key={option}
-              className="group px-8 py-6 text-lg rounded-[0.6rem] flex items-center hover:bg-green-dark hover:text-white"
+              className="group desktop:px-8 desktop:py-6 text-lg tablet:w-[8rem] tablet:h-[4rem] mobile:w-[5.5rem] mobile:h-[4rem] rounded-[0.6rem] flex items-center hover:bg-green-dark hover:text-white"
               onClick={() => {
                 onSelect(option);
                 setIsOpen(false);
               }}
             >
-              <span className="opacity-0 group-hover:opacity-100 ml-[-10px] mr-4">
+              <span className="opacity-0 group-hover:opacity-100 ml-[-1rem] tablet:ml-3 mr-3 mobile:hidden mobile:ml-1 mobile:mr-[-1rem]">
                 <DropdownCheckIcon />
               </span>
               {option}
