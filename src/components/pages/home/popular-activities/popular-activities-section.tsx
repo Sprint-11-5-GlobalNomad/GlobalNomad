@@ -157,7 +157,7 @@ export default function PopularActivitiesSection() {
           ref={scrollContainerRef}
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
     tablet:w-[74.4rem] tablet:ml-[2.4rem] tablet:gap-[3.2rem]
-    mobile:w-[37.5rem] mobile:mb-[4rem] mobile:ml-[1.6rem] mobile:gap-[1.6rem]"
+    mobile:w-[37.5rem] mobile:mb-[4rem] mobile:pl-[1.6rem] mobile:gap-[1.6rem]"
         >
           {activities.map((activity, index) => {
             return (
@@ -193,7 +193,7 @@ export default function PopularActivitiesSection() {
                       </p>
                     </div>
                     <p
-                      className="w-[25.1rem] text-3xl font-bold break-keep
+                      className="text-3xl font-bold break-keep
               mobile:text-[1.8rem] mobile:leading-[2.6rem]"
                     >
                       {activity.title}

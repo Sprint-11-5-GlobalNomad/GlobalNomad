@@ -21,6 +21,8 @@ export default {
       backgroundImage: {
         "gradient-custom":
           "linear-gradient(to right, #D9D9D9 0%, #EDEEF1 50%, #D9D9D9 100%)",
+        "gradient-dark":
+          "linear-gradient(180deg, rgba(0, 0, 0, 0) 33.33%, rgba(0, 0, 0, 0.8) 91.67%)",
       },
       backgroundSize: {
         custom: "300% 100%",

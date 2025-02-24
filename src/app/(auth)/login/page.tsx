@@ -82,9 +82,9 @@ export default function LoginPage() {
   }, [router]);
 
   return (
-    <div className="mt-[11.8rem] mobile:w-[35rem] mobile:flex-column mobile:translate-x-1/2">
+    <div>
       <div
-        className="flex flex-col items-center justify-center my-[2rem] py-[3.2rem]
+        className="flex flex-col items-center justify-center my-[2rem] py-[3.2rem] mt-[11.8rem]
       max-w-[64rem] min-w-[35rem] w-full mx-auto gap-[2.4rem] mobile:gap-[4rem] md:gap-[5.6rem]
       mobile:p-0 mobile:m-0 mobile:h-full mobile:mt-[9rem]"
       >

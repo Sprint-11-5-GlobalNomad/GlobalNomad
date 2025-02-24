@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 interface PaginationProps {
   totalPages: number;
@@ -13,14 +13,16 @@ export default function Pagination({
   currentPage,
   setPage,
 }: PaginationProps) {
-  const handlePageChange = useCallback(
+  const handlePageChange =
+    // useCallback(
     (newPage: number) => {
       if (newPage >= 1 && newPage <= totalPages) {
         setPage(newPage);
+        window.history.replaceState({}, "", `?page=${currentPage}`);
       }
-    },
-    [setPage, totalPages]
-  );
+    };
+  // [setPage, totalPages]
+  // );
 
   const pages = useMemo(() => {
     const startPage = Math.max(1, currentPage - 2);
@@ -41,7 +43,7 @@ export default function Pagination({
   }, [currentPage, totalPages]);
 
   useEffect(() => {
-    window.history.pushState({}, "", `?page=${currentPage}`);
+    window.history.replaceState({}, "", `?page=${currentPage}`);
   }, [currentPage]);
 
   return (
