@@ -127,7 +127,7 @@ export default function ProfilePage() {
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="w-full h-[4.2rem] border border-gray-700 rounded-[0.5rem] px-[1.2rem] text-[1.2rem]"
+                  className="w-full h-[4.2rem] border border-gray-700 rounded-[0.5rem] px-[1.2rem] text-[1.6rem]"
                   placeholder="닉네임을 입력하세요"
                 />
               </div>
@@ -141,7 +141,7 @@ export default function ProfilePage() {
                   type="email"
                   value={userDetails?.email || ""}
                   disabled
-                  className="w-full h-[4.2rem] border border-gray-700 rounded-[0.5rem] px-[1.2rem] text-[1.2rem] bg-gray-100"
+                  className="w-full h-[4.2rem] border border-gray-700 rounded-[0.5rem] px-[1.2rem] text-[1.6rem] bg-gray-100"
                 />
               </div>
 
@@ -159,7 +159,7 @@ export default function ProfilePage() {
                       !isPasswordLengthValid && newPassword
                         ? "border-red-500"
                         : "border-gray-700"
-                    } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
+                    } rounded-[0.5rem] px-[1.2rem] text-[1.6rem]`}
                     placeholder="8자 이상 입력해주세요"
                   />
                   <span
@@ -199,7 +199,7 @@ export default function ProfilePage() {
                       !isPasswordMatch && confirmPassword
                         ? "border-red-500"
                         : "border-gray-700"
-                    } rounded-[0.5rem] px-[1.2rem] text-[1.2rem]`}
+                    } rounded-[0.5rem] px-[1.2rem] text-[1.6rem]`}
                     placeholder="비밀번호를 한번 더 입력해주세요"
                   />
                   <span

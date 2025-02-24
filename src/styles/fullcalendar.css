@@ -125,36 +125,3 @@
   border-radius: 5px !important;
   position: relative !important;
 }
-
-/* 요일 옆에 원 추가 - 오늘 날짜 */
-.fc-daygrid-day.fc-day-today::before {
-  content: "" !important;
-  position: absolute !important;
-  top: 10px !important;
-  left: 35px !important;
-  width: 6px !important;
-  height: 6px !important;
-  background-color: #1976d2 !important;
-  border-radius: 50% !important;
-}
-
-/* 날짜 셀에 "has-event" 클래스가 붙으면 원을 찍는다 */
-.fc-daygrid-day.has-event {
-  position: relative; /* 절대 배치 기준점 */
-}
-
-.fc-daygrid-day.has-event::before {
-  content: "";
-  position: absolute;
-  top: 12px; /* 날짜 숫자와 겹치지 않도록 적절히 조정 */
-  left: 36px; /* 왼쪽 간격도 조정 */
-  width: 6px;
-  height: 6px;
-  background-color: #1976d2; /* 원 색상 */
-  border-radius: 50%;
-  z-index: 5;
-}
-/* 완료된 날짜 옆에 원 색상 #4B4B4B */
-.fc-daygrid-day.has-event.completed::before {
-  background-color: #4b4b4b !important;
-}
