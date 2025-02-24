@@ -27,11 +27,7 @@ interface AuthResponse {
 
 // 로그인
 export const useLogin = () =>
-  useMutation<
-    AuthResponse, // 반환 타입
-    unknown, // 에러 타입
-    { email: string; password: string } // 입력 변수 타입
-  >({
+  useMutation<AuthResponse, unknown, { email: string; password: string }>({
     mutationFn: (credentials) => login(credentials),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -61,11 +57,7 @@ export const useLogin = () =>
 
 // 간편 회원가입
 export const useSignUpWithOauth = (provider: "google" | "kakao") =>
-  useMutation<
-    AuthResponse, // 반환 타입
-    unknown, // 에러 타입
-    SignUpWithOauthRequestBody // 입력 변수 타입
-  >({
+  useMutation<AuthResponse, unknown, SignUpWithOauthRequestBody>({
     mutationFn: (signUpData) => signUpWithOauth(provider, signUpData),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -83,11 +75,7 @@ export const useSignUpWithOauth = (provider: "google" | "kakao") =>
 
 // 간편 로그인
 export const useSignInWithOauth = (provider: "google" | "kakao") =>
-  useMutation<
-    AuthResponse, // 반환 타입
-    unknown, // 에러 타입
-    SignInWithOauthRequestBody // 입력 변수 타입
-  >({
+  useMutation<AuthResponse, unknown, SignInWithOauthRequestBody>({
     mutationFn: (signInData) => signInWithOauth(provider, signInData),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -105,15 +93,10 @@ export const useSignInWithOauth = (provider: "google" | "kakao") =>
 
 // 토큰 갱신
 export const useRefreshToken = () =>
-  useMutation<
-    { refreshToken: string; accessToken: string }, // 반환 타입
-    unknown, // 에러 타입
-    void // 입력 변수 없음
-  >({
+  useMutation<{ refreshToken: string; accessToken: string }, unknown, void>({
     mutationFn: () => refreshToken(),
     onSuccess: (data) => {
       console.log("토큰 갱신 성공:", data);
-      // 예: 새로운 토큰을 저장하는 로직 추가 가능
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {

@@ -132,9 +132,8 @@ export const useDailyReservationStats = (activityId: number, date: string) =>
       }
 
       try {
-        console.log("API 요청 실행: activityId =", activityId, "date =", date);
         const response = await fetchDailyReservationStats(activityId, date);
-        console.log("📡 API 응답 데이터:", response);
+
         return response;
       } catch (error) {
         if (error instanceof AxiosError) {
