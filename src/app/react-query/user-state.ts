@@ -33,7 +33,6 @@ export const useCreateUser = () => {
             break;
           case 409:
             console.error("중복된 이메일입니다.");
-            alert(errorMessage);
             break;
           default:
             console.error("회원가입 중 알 수 없는 오류가 발생했습니다.");
