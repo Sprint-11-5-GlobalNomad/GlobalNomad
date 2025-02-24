@@ -10,11 +10,12 @@ const SIZE = 3;
 
 export default function ReviewSection({ isRated }: { isRated: boolean }) {
   const { id } = useParams();
+  const [page, setPage] = useState(1);
+
   const { data, isLoading } = useReviews({
-    filters: { activityId: Number(id), page: 1, size: SIZE },
+    filters: { activityId: Number(id), page, size: SIZE },
   });
 
-  const [page, setPage] = useState(1);
   const totlaPages = Math.ceil((data?.totalCount || 0) / SIZE);
 
   return (
@@ -60,15 +61,9 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
                   <p className="text-lg font-regular">{review.content}</p>
                 </div>
               </li>
-              {data?.reviews.length === 2
-                ? index === 0 && (
-                    <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
-                  )
-                : data?.reviews.length > 2
-                  ? index % 3 !== 0 && (
-                      <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
-                    )
-                  : null}
+              {index !== data.reviews.length - 1 && (
+                <hr className="w-[80rem] h-[0.1rem] bg-nomad-black opacity-25 tablet:w-[46.9rem] mobile:w-full" />
+              )}
             </div>
           ))
         ) : (

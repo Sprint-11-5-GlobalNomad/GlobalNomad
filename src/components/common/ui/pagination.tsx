@@ -13,20 +13,14 @@ export default function Pagination({
   currentPage,
   setPage,
 }: PaginationProps) {
-  const handlePageChange =
-    // useCallback(
-    (newPage: number) => {
-      if (newPage >= 1 && newPage <= totalPages) {
-        setPage(newPage);
-        window.history.replaceState({}, "", `?page=${currentPage}`);
-      }
-    };
-  // [setPage, totalPages]
-  // );
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+      window.history.replaceState({}, "", `?page=${currentPage}`);
+    }
+  };
 
   const pages = useMemo(() => {
-    const startPage = Math.max(1, currentPage - 2);
-
     if (totalPages <= 5) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
@@ -38,8 +32,8 @@ export default function Pagination({
     if (currentPage + 2 >= totalPages) {
       return Array.from({ length: 5 }, (_, i) => totalPages - 4 + i);
     }
-    // 나머지 페이지들
-    return Array.from({ length: 5 }, (_, i) => startPage + i);
+    // 중간 페이지
+    return Array.from({ length: 5 }, (_, i) => currentPage - 2 + i);
   }, [currentPage, totalPages]);
 
   useEffect(() => {
