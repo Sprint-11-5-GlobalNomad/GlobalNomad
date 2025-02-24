@@ -182,6 +182,7 @@ export const MyReservationCard = forwardRef<
           totalPrice={totalPrice}
           id={id}
           isOpen={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
           selectedStatus={selectedStatus}
         />
       </div>
