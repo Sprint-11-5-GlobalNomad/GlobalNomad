@@ -96,6 +96,11 @@ export default function BookingCalendar({
     onSelectDate(newDate);
   };
 
+  // 📌 과거 날짜 체크 함수
+  const isPastDate = (date: Date) => {
+    return date < today; // 오늘 날짜 이전이면 과거 날짜
+  };
+
   return (
     <div
       className="border border-solid border-gray-200 rounded-[0.8rem]
@@ -157,6 +162,7 @@ export default function BookingCalendar({
           const isSelected =
             selectedDate &&
             selectedDate.toDateString() === dateObj.toDateString();
+          const isPast = isAvailable && isPastDate(dateObj);
 
           return (
             <button
@@ -170,7 +176,8 @@ export default function BookingCalendar({
                     : isAvailable
                       ? "hover:bg-green-light hover:text-green-dark"
                       : ""
-                }`}
+                }
+                ${isPast ? "line-through bg-gray-100" : ""}`}
               onClick={(e) => {
                 e.preventDefault();
                 if (day.isCurrentMonth) {
