@@ -43,7 +43,7 @@ export default function SearchForm({
             onChange={onChange}
             value={value}
             className="placeholder:text-gray-700 text-lg font-regular
-          w-full rounded-[0.4rem] outline-none
+          w-full rounded-[0.4rem] outline-none bg-white
           mobile:text-md"
           />
         </div>

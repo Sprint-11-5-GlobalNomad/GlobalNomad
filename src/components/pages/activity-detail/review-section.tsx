@@ -31,8 +31,8 @@ export default function ReviewSection({ isRated }: { isRated: boolean }) {
         ) : isRated ? (
           data?.reviews.map((review, index) => (
             <div key={review.id}>
-              <li className="flex items-start gap-[1.6rem] mb-[2.4rem] tablet:ml-[2.4rem] mobile:w-full">
-                <div className="w-[4.5rem] h-[4.5rem]">
+              <li className="flex items-start gap-[1.6rem] mb-[2.4rem] tablet:ml-[2.4rem]">
+                <div className="w-[4.5rem] h-[4.5rem] mobile:flex-shrink-0">
                   <Image
                     src={
                       review.user.profileImageUrl ||

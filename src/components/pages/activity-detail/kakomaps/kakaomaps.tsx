@@ -1,5 +1,5 @@
 import Script from "next/script";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MarkerInfo from "./markerInfo";
 import ReactDOMServer from "react-dom/server";
 
@@ -17,8 +17,10 @@ interface KakaoMapsProps {
 }
 
 export default function KakaoMaps({ address }: KakaoMapsProps) {
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
   useEffect(() => {
-    if (!address) return;
+    if (!address || !scriptLoaded) return;
 
     if (typeof window !== "undefined" && window.kakao) {
       window.kakao.maps.load(() => {
@@ -72,14 +74,17 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
         );
       });
     }
-  }, [address]);
+  }, [address, scriptLoaded]);
 
   return (
     <>
       <Script
         type="text/javascript"
         src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
-        onLoad={() => console.log("카카오 맵 스크립트 로드 완료")}
+        onLoad={() => {
+          console.log("카카오 맵 스크립트 로드 완료");
+          setScriptLoaded(true);
+        }}
       />
       <div
         id="map"
