@@ -167,43 +167,45 @@ export default function PopularActivitiesSection() {
                 className="relative h-[38.4rem] w-[38.4rem] border rounded-[2rem] flex-shrink-0 flex-grow-0
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
               >
-                <Link href={`/activity/${activity.id}`}>
-                  <Image
-                    src={activity.bannerImageUrl}
-                    alt={activity.title}
-                    width={384}
-                    height={384}
-                    className="absolute inset-0 w-full h-full rounded-[2rem] object-cover"
-                  />
+                <Link href={`/activity/${activity.id}`} className="">
                   <div
-                    className="flex-column items-start w-full gap-[2rem] px-[2rem] py-[3rem]
+                    className="h-full w-full bg-center bg-cover"
+                    style={{
+                      backgroundImage: `url(${activity.bannerImageUrl})`,
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black opacity-25 rounded-[2rem]" />
+                    <div
+                      className="flex-column items-start w-full gap-[2rem] px-[2rem] py-[3rem]
           absolute transform -translate-x-1/2 translate-y-0 bottom-0 left-1/2 text-white
           mobile:pt-[3rem] mobile:pr-[2rem] mobile:pb-[1.2rem] mobile:gap-[0.5rem]"
-                  >
-                    <div className="flex-between gap-[0.5rem]">
-                      <Image
-                        src="/image/rating-star.svg"
-                        alt="평균 별점 아이콘"
-                        width={18}
-                        height={18}
-                      />
-                      <p className="text-md font-semiBold">
-                        {activity.rating} (
-                        {Number(activity.reviewCount).toLocaleString("ko-KR")})
+                    >
+                      <div className="flex-between gap-[0.5rem]">
+                        <Image
+                          src="/image/rating-star.svg"
+                          alt="평균 별점 아이콘"
+                          width={18}
+                          height={18}
+                        />
+                        <p className="text-md font-semiBold">
+                          {activity.rating} (
+                          {Number(activity.reviewCount).toLocaleString("ko-KR")}
+                          )
+                        </p>
+                      </div>
+                      <p
+                        className="text-3xl font-bold break-keep
+              mobile:text-[1.8rem] mobile:leading-[2.6rem]"
+                      >
+                        {activity.title}
+                      </p>
+                      <p className="text-xl font-bold flex-between gap-[0.5rem]">
+                        ₩ {Number(activity.price).toLocaleString("ko-KR")}
+                        <span className="text-md font-regular text-gray-700">
+                          /인
+                        </span>
                       </p>
                     </div>
-                    <p
-                      className="text-3xl font-bold break-keep
-              mobile:text-[1.8rem] mobile:leading-[2.6rem]"
-                    >
-                      {activity.title}
-                    </p>
-                    <p className="text-xl font-bold flex-between gap-[0.5rem]">
-                      ₩ {Number(activity.price).toLocaleString("ko-KR")}
-                      <span className="text-md font-regular text-gray-700">
-                        /인
-                      </span>
-                    </p>
                   </div>
                 </Link>
               </li>
