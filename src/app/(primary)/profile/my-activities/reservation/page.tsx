@@ -45,6 +45,7 @@ export default function ReservationPage() {
     []
   );
   const [currentDate, setCurrentDate] = useState(new Date());
+
   const getFormattedDate = (date: string | null) =>
     date && isValid(new Date(date))
       ? format(new Date(date), "yyyy-MM-dd")
@@ -76,7 +77,7 @@ export default function ReservationPage() {
     }
   }, [selectedActivity, refetchMonthlyStats]);
 
-  // 예약,승인,완료 각각 나타내기기
+  // 예약,승인,완료 각각 나타내기
   useEffect(() => {
     if (Array.isArray(monthlyStats) && monthlyStats.length > 0) {
       const newEvents: EventInput[] = [];
@@ -127,22 +128,24 @@ export default function ReservationPage() {
     }
   };
 
-  // 달력의 이벤트 클릭
+  // 달력의 이벤트 클릭 모달 열기
   const handleEventClick = async (info: EventClickArg) => {
     if (!selectedActivity || !info.event.start) return;
+
     const clickedDate = format(info.event.start, "yyyy-MM-dd");
     setSelectedDate(clickedDate);
 
-    // 해당 날짜의 스케줄 가져오기
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
     const updatedDailyStats =
       ((await refetchDailyStats().then((res) => res?.data)) as IDailyStat[]) ||
       [];
 
-    // 스케줄 찾기
     const firstPendingOrConfirmed = updatedDailyStats.find(
       (stat) =>
         (stat.count?.pending ?? 0) > 0 || (stat.count?.confirmed ?? 0) > 0
     );
+
     if (firstPendingOrConfirmed) {
       setSelectedScheduleId(firstPendingOrConfirmed.scheduleId);
     } else if (updatedDailyStats.length > 0) {
@@ -150,8 +153,8 @@ export default function ReservationPage() {
     } else {
       setSelectedScheduleId(null);
     }
-    setDailyStatsForModal(updatedDailyStats);
 
+    setDailyStatsForModal(updatedDailyStats);
     setModalOpen(true);
   };
 
@@ -171,12 +174,12 @@ export default function ReservationPage() {
     }
   };
 
-  // 등록된 체험 자체가 없는 경우
+  // 등록된 체험이 없는 경우
   if (myActivities?.activities?.length === 0) {
     return (
       <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem] ">
         <div>
-          <UserProfileSidebar page="/profile/activity/reservation" />
+          <UserProfileSidebar page={"/profile/my-activities/reservation"} />
         </div>
         <div className="w-[80rem] h-[81.3rem] ml-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.2rem]">
           <h1 className="text-[3.2rem] font-bold mb-[3.8rem]">예약 현황</h1>
@@ -191,7 +194,7 @@ export default function ReservationPage() {
   return (
     <div className="relative flex min-h-screen bg-gray-100 justify-center mt-[14.2rem] pb-[30rem]">
       <div className="mobile:hidden">
-        <UserProfileSidebar page="/profile/activity/reservation" />
+        <UserProfileSidebar page={"/profile/my-activities/reservation"} />
       </div>
       <div className="w-[80rem] h-[81.3rem] ml-[2.4rem] tablet:w-[42.9rem] mobile:w-[34.2rem]">
         <h1 className="text-[3.2rem] font-bold mb-[3.8rem] mt-0">예약 현황</h1>
@@ -239,7 +242,7 @@ export default function ReservationPage() {
                   <button onClick={handlePrev} className="text-2xl mx-[9.6rem]">
                     «
                   </button>
-                  <h1 className="text-[2rem] font-bold  whitespace-nowrap">
+                  <h1 className="text-[2rem] font-bold whitespace-nowrap">
                     {currentDate.toLocaleDateString("ko-KR", {
                       year: "numeric",
                       month: "long",
@@ -264,7 +267,7 @@ export default function ReservationPage() {
                   showNonCurrentDates={false}
                   eventClick={handleEventClick}
                   eventClassNames={(arg) => {
-                    return ["fc-event", arg.event.extendedProps.className];
+                    return arg.event.classNames || [];
                   }}
                   dayCellClassNames={(arg) => {
                     if (
@@ -284,7 +287,7 @@ export default function ReservationPage() {
         )}
       </div>
 
-      {/* 모달 */}
+      {/* 모달: 스케줄이 있는 경우에만 표시 */}
       {modalOpen && selectedActivity && selectedScheduleId !== null && (
         <ReservationModal
           isOpen={modalOpen}

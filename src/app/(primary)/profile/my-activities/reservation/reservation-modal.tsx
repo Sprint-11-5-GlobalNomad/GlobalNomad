@@ -61,14 +61,14 @@ export default function ReservationModal({
     "pending" | "confirmed" | "declined"
   >("pending");
 
-  // 날짜 변환환
+  // 날짜 변환
   const parsedDate = useMemo(
     () => (selectedDate ? parseISO(selectedDate) : null),
     [selectedDate]
   );
   const formattedDate = useMemo(() => {
     return parsedDate && isValid(parsedDate)
-      ? format(parsedDate, "yyyy-MM-dd")
+      ? format(parsedDate, "yyyy년 MM월 dd일")
       : "유효하지 않은 날짜";
   }, [parsedDate]);
 
@@ -114,7 +114,7 @@ export default function ReservationModal({
     return [...reservationsData.reservations].sort((a, b) => b.id - a.id);
   }, [reservationsData]);
 
-  // 무한 스크롤롤
+  // 무한 스크롤
   const listInnerRef = useRef<HTMLDivElement | null>(null);
   const [displayReservations, setDisplayReservations] = useState<
     IReservation[]
@@ -177,7 +177,7 @@ export default function ReservationModal({
     }
   };
 
-  // 승인하기기
+  // 승인하기
   const handleConfirmReservation = async (reservationId: number) => {
     if (!confirm("예약을 승인하시겠습니까?")) return;
     const success = await handleUpdateStatus(reservationId, "confirmed");
@@ -327,7 +327,6 @@ export default function ReservationModal({
             onChange={(e) => {
               const newId = Number(e.target.value);
               setCurrentScheduleId(newId);
-              setActiveTab("pending");
               setPage(1);
             }}
             className="w-full h-[5.6rem] p-2 border rounded-lg text-[1.6rem] border-solid border-nomad-black"
@@ -378,7 +377,7 @@ export default function ReservationModal({
                   <div className="flex justify-end gap-2 mt-3">
                     <button
                       onClick={() => handleConfirmReservation(reservation.id)}
-                      className="py-2 bg-nomad-black text-white rounded-2xl hover:bg-nomad-black w-[8.2rem] h-[3.8rem] text-center text-[1.4rem]"
+                      className="py-2 bg-nomad-black text-white rounded-md hover:bg-nomad-black w-[8.2rem] h-[3.8rem] text-center text-[1.4rem]"
                     >
                       승인하기
                     </button>
