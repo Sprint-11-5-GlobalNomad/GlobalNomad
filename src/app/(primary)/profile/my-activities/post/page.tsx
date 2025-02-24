@@ -166,8 +166,8 @@ export default function ActivityPostPage() {
               {...register("description", {
                 required: "설명을 입력해주세요.",
                 maxLength: {
-                  value: 200,
-                  message: "설명은 최대 200자까지 입력할 수 있습니다.",
+                  value: 600,
+                  message: "설명은 최대 600자까지 입력할 수 있습니다.",
                 },
               })}
             />
