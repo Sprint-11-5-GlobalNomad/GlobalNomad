@@ -120,10 +120,10 @@ export default function ActivityDetails() {
                   {isLoading ? (
                     <div className="skeleton w-[7.4rem] h-[2.4rem] rounded-[0.5rem]" />
                   ) : (
-                    <div>
+                    <span className="text-md font-regular">
                       {Number(activity?.reviewCount).toLocaleString("ko-KR")}개
                       후기
-                    </div>
+                    </span>
                   )}
                 </span>
               </div>
