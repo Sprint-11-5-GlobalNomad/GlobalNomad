@@ -108,7 +108,7 @@ export default function ActivityImages() {
           ) : (
             <div
               className="w-[119.8rem] h-[53.4rem] flex gap-[0.8rem] mb-[8.5rem]
-        tablet:w-[69.6rem] tablet:h-[31rem] tablet:mb-[3.2rem]"
+        tablet:w-[69.6rem] tablet:h-[31rem] mobile:w-full tablet:mb-[3.2rem]"
             >
               <Image
                 src={activity!.bannerImageUrl}
