@@ -17,7 +17,7 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
   useEffect(() => {
     if (!address) return;
 
-    if (typeof window !== "undefined" && window.kakao) {
+    if (typeof window !== "undefined" && window.kakao && window.kakao.maps) {
       window.kakao.maps.load(() => {
         const geocoder = new window.kakao.maps.services.Geocoder();
 
