@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import MarkerInfo from "./markerInfo";
 import ReactDOMServer from "react-dom/server";
-// import Script from "next/script";
-
-// const KAKAO_MAP = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
 
 interface GeocodeResult {
   x: string;
@@ -80,10 +77,6 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
 
   return (
     <>
-      {/* <Script
-        type="text/javascript"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
-      /> */}
       <div
         id="map"
         className="w-[79rem] h-[45rem] rounded-[1.6rem]
