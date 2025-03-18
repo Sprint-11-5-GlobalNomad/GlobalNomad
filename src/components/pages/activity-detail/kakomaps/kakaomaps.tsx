@@ -1,9 +1,6 @@
-import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MarkerInfo from "./markerInfo";
 import ReactDOMServer from "react-dom/server";
-
-const KAKAO_MAP = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
 
 interface GeocodeResult {
   x: string;
@@ -17,10 +14,8 @@ interface KakaoMapsProps {
 }
 
 export default function KakaoMaps({ address }: KakaoMapsProps) {
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
   useEffect(() => {
-    if (!address || !scriptLoaded) return;
+    if (!address) return;
 
     if (typeof window !== "undefined" && window.kakao) {
       window.kakao.maps.load(() => {
@@ -74,18 +69,10 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
         );
       });
     }
-  }, [address, scriptLoaded]);
+  }, [address]);
 
   return (
     <>
-      <Script
-        type="text/javascript"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
-        onLoad={() => {
-          console.log("카카오 맵 스크립트 로드 완료");
-          setScriptLoaded(true);
-        }}
-      />
       <div
         id="map"
         className="w-[79rem] h-[45rem] rounded-[1.6rem]
