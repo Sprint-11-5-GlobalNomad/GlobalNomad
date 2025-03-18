@@ -5,6 +5,8 @@ import QueryProvider from "../react-query/query-provider";
 import Navbar from "@/components/common/layout/navbar";
 import Script from "next/script";
 
+const KAKAO_MAP = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
+
 export const metadata: Metadata = {
   title: "GlobalNomad",
   description: "당신의 일상을 특별하게 만드는 한 번의 클릭",
@@ -24,8 +26,8 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <Script
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY}&libraries=services`}
-        strategy="beforeInteractive"
+        type="text/javascript"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
       />
       <body>
         <QueryProvider>

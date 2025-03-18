@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 import MarkerInfo from "./markerInfo";
 import ReactDOMServer from "react-dom/server";
+// import Script from "next/script";
+
+// const KAKAO_MAP = process.env.NEXT_PUBLIC_KAKAO_MAP_APP_KEY;
 
 interface GeocodeResult {
   x: string;
@@ -62,6 +65,7 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
                 yAnchor: 1,
               });
               customOverlay.setMap(map);
+              console.log("카카오맵 로드 완료");
             } else {
               console.error("주소 변환 실패:", status);
             }
@@ -69,10 +73,17 @@ export default function KakaoMaps({ address }: KakaoMapsProps) {
         );
       });
     }
+    return () => {
+      console.log("컴포넌트 언마운트: 카카오맵 클린업");
+    };
   }, [address]);
 
   return (
     <>
+      {/* <Script
+        type="text/javascript"
+        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
+      /> */}
       <div
         id="map"
         className="w-[79rem] h-[45rem] rounded-[1.6rem]
