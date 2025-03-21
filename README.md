@@ -22,21 +22,23 @@
 
 ### 기술 스택
 
-- Frontend : `JavaScript` `TypeScript` `React` `Next.js(App Router)`
-- State Management & Data Fetching : `react-query`
-- Styling : `HTML` `CSS` `TailwindCSS`
-- Code Quality: `ESLint` `Prettier`
-- Communication & Project Management: `GitHub` `Notion` `Discord`
-- Version Control & Collaboration : `Git` `GitHub`
-- API Integration : `RESTful API` `카카오맵 API`
-- Deployment : `Vercel`
-- Code Quality & Formatting: `ESLint` `Prettier`
+- **Frontend:** `JavaScript(ES6+)` `TypeScript` `React` `Next.js`
+- **State Management & Data Fetching** : `react-query`
+- **Styling** : `HTML` `CSS` `TailwindCSS`
+- **Code Quality & Formatting** : `ESLint` `Prettier`
+- **Communication & Project Management**: `GitHub` `Notion` `Discord`
+- **Version Control & Collaboration** : `Git` `GitHub`
+- **API Integration** : `RESTful API` `카카오맵 API`
 
 *Backend는 코드잇 측에서 지원해줬으며, API 연동 과정에서 Swagger 활용했습니다.
 
 ## **3. 개발 기간: 29일(설 연휴, 일요일 제외)**
 
 - 2025.01.17(금) ~ 2025.02.22(토)
+- [프로젝트 수행 단계별 계획(세부)](https://github.com/orgs/Sprint-11-5-GlobalNomad/projects/1/views/1)
+- 프로젝트 수행 일정표(종합)
+<img width="902" alt="image" src="https://github.com/user-attachments/assets/a750fbdb-db22-495c-9ae3-5bde6a564486" />
+
 
 ## **4. 프로젝트 구조**
 
@@ -69,6 +71,27 @@ project-root/
 └── tsconfig.json             # TypeScript 설정
 ```
 
+## 5. 활용 방안 및 기대 효과
+
 ## 6. 프로젝트 팀 구성 및 역할
 
 ![image](https://github.com/user-attachments/assets/3b1a0581-d446-466a-aa73-8089b85d57e9)
+
+## 7. 자체 평가
+
+- **React Query 활용한 전역 상태 관리 숙련도 향상**
+- **복잡한 반응형 UI 구현 경험**
+- **캘린더 등 라이브러리 활용 경험**
+- **카카오맵, 우편 번호 등 API 연동 경험**
+
+1️⃣ **기획 의도와의 부합 정도**
+
+✅ 반응형 디자인 등 복잡한 UI, 예약 시스템, 지도 기능 구현 100%
+
+2️⃣ **실무 활용 가능 정도**
+
+✅ 리뷰 수정 삭제만 추가한다면 프로토타입으로 가능하지 않을까 기대
+
+3️⃣ **완성도 95%**
+
+✅ 간편 회원가입 미구현 외에는 요구사항 100% 충족
