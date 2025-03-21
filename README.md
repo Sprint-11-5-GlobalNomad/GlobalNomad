@@ -1,6 +1,6 @@
 # 🛤️ **체험형 상품 중개 및 예약 사이트** [ GlobalNomad ]
 
-![image.png](attachment:754d324b-fc46-41ce-ac86-2b34781f816e:720590d5-57f3-46f6-9342-ce90fbfa2c6a.png)
+![image](https://github.com/user-attachments/assets/2ef1874d-48ed-4ca1-8247-6e2d5b7c9819)
 
 - 배포 주소 : https://global-nomad-11-5.vercel.app/
 
