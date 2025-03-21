@@ -1,18 +1,16 @@
 # 🛤️ **체험형 상품 중개 및 예약 사이트** [ GlobalNomad ]
 
-![image](https://github.com/user-attachments/assets/2ef1874d-48ed-4ca1-8247-6e2d5b7c9819)
+![image](https://github.com/user-attachments/assets/83bb1998-fd22-41c2-914f-1b4f97eb2a33)
 
 - 배포 주소 : https://global-nomad-11-5.vercel.app/
+- 메타 데이터 슬로건: 당신의 일상을 특별하게 만드는 한 번의 클릭
 
-체험 등록하고 관리하는 공급자 입장
+|  | **Test ID** | **Test PW** |
+| --- | --- | --- |
+| **🧑🏻‍🏭 (체험 등록 & 관리) 판매자** | admin@globalnomad.com | 12341234@ |
+| **🤳🏻 (체험 예약 & 리뷰) 체험자** | user@globalnomad.com | 12341234@ |
 
-- 테스트 아이디 : [admin@globalnomad.com](mailto:admin@globalnomad.com)
-- 비밀번호 : 12341234@
-
-체험 예약하고 리뷰 남기는 소비자 입장
-
-- 테스트 아이디 : [user@globalnomad.com](mailto:user@globalnomad.com)
-- 비밀번호 : 12341234@
+---
 
 
 ### 개발 기간: 29일
