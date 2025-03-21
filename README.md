@@ -3,7 +3,7 @@
 ![image](https://github.com/user-attachments/assets/83bb1998-fd22-41c2-914f-1b4f97eb2a33)
 
 - 배포 주소 : https://global-nomad-11-5.vercel.app/
-- 메타 데이터 슬로건: 당신의 일상을 특별하게 만드는 한 번의 클릭
+**- 메타 데이터 슬로건: 당신의 일상을 특별하게 만드는 한 번의 클릭**
 
 |  | **Test ID** | **Test PW** |
 | --- | --- | --- |
@@ -22,17 +22,17 @@
 
 ### 기술 스택
 
-- **Frontend :** `JavaScript` `TypeScript` `React` `Next.js(App Router)`
-- **State Management & Data Fetching :** `react-query`
-- **Styling :** `HTML` `CSS` `TailwindCSS`
-- **Code Quality:** `ESLint` `Prettier`
-- **Communication & Project Management:** `GitHub` `Notion` `Discord`
-- **Version Control & Collaboration :** `Git` `GitHub`
-- **API Integration :** `RESTful API` `카카오맵 API`
-- **Deployment :** `Vercel`
-- **Code Quality & Formatting:** `ESLint` `Prettier`
+- Frontend : `JavaScript` `TypeScript` `React` `Next.js(App Router)`
+- State Management & Data Fetching : `react-query`
+- Styling : `HTML` `CSS` `TailwindCSS`
+- Code Quality: `ESLint` `Prettier`
+- Communication & Project Management: `GitHub` `Notion` `Discord`
+- Version Control & Collaboration : `Git` `GitHub`
+- API Integration : `RESTful API` `카카오맵 API`
+- Deployment : `Vercel`
+- Code Quality & Formatting: `ESLint` `Prettier`
 
-* Backend는 코드잇 측에서 지원해줬으며, API 연동 과정에서 Swagger 활용했습니다.
+*Backend는 코드잇 측에서 지원해줬으며, API 연동 과정에서 Swagger 활용했습니다.
 
 ## **3. 개발 기간: 29일(**설 연휴, 일요일 제외)
 
@@ -42,25 +42,29 @@
 
 ```jsx
 project-root/
-├── public/               # 정적 파일 (이미지, 폰트 등)
-├── src/                  # 소스 코드
-│   ├── app/              # Next.js app 라우트
-│   │   ├── api/          # API 라우트
-│   │   │   ├── auth/     # /api/auth/
-│   │   │   │   └── route.ts
-│   │   │   ├── users/    # /api/users/
-│   │   │   │   └── route.ts
-│   │   ├── auth/         # 인증 관련 페이지 (로그인, 회원가입)
-│   │   ├── layout.tsx    # 모든 페이지의 공통 레이아웃
-│   │   ├── page.tsx      # 메인 페이지
-│   ├── components/       # 재사용 가능한 컴포넌트(css 파일 포함)
-│   ├── hooks/            # 커스텀 훅
-│   ├── contexts/         # Context API 관련
-│   ├── lib/              # 유틸리티 함수, API 호출 로직
-│   ├── styles/           # 전역 스타일 또는 컴포넌트 스타일
-│   ├── types/            # TypeScript 타입 정의
-│   └── store/            # 전역 상태 관리 (Recoil, Redux 등)
-├── .env.local            # 환경 변수
-├── next.config.js        # Next.js 설정 파일
-└── tsconfig.json         # TypeScript 설정 파일
+├── public/                   # 정적 파일 (이미지, 폰트 등)
+├── src/                      # 소스 코드
+│   ├── app/                  # Next.js app 라우트
+│   │   ├── (auth)/           # 인증 관련 페이지 (로그인, 회원가입)
+│   │   │   ├── layout.tsx    # 인증 관련 페이지 레이아웃
+│   │   ├── (primary)/        # 인증 외 모든 페이지
+│   │   │   ├── api/          # API 라우트
+│   │   │   ├── activity/[id] # 체험 상세 페이지
+│   │   │   ├── profile/      # 프로필 및 체험&예약 관리 페이지
+│   │   │   ├── layout.tsx    # 인증 외 공통 레이아웃
+│   │   │   ├── page.tsx      # 메인 페이지
+│   │   ├── react-query/      # React Query 설정 및 훅
+│   │   ├── types/            # API 관련 타입 정의
+│   ├── components/           # 재사용 컴포넌트
+│   │   ├── common/           # 2개 페이지 이상 적용되는 컴포넌트
+│   │   │   ├── icons         # SVG 아이콘 컴포넌트
+│   │   │   ├── layout        # 네비게이션 바, 푸터 등 레이아웃 컴포넌트
+│   │   │   ├── ui            # 버튼, 드롭다운 등 UI 컴포넌트
+│   │   ├── page/             # 1개 페이지에만 적용되는 컴포넌트
+│   ├── hooks/                # 커스텀 훅
+│   ├── styles/               # 스타일 관련 파일
+│   ├── utils/                # 유틸리티 함수
+├── .env.local                # 환경 변수
+├── next.config.js            # Next.js 설정
+└── tsconfig.json             # TypeScript 설정
 ```
