@@ -1,12 +1,19 @@
-# GlobalNomad
+# 🛤️ **체험형 상품 중개 및 예약 사이트** [ GlobalNomad ]
 
-## 프로젝트 소개
+![image.png](attachment:754d324b-fc46-41ce-ac86-2b34781f816e:720590d5-57f3-46f6-9342-ce90fbfa2c6a.png)
 
-> [GlobalNomad]는 캘린더 뷰 SDK와 지도 뷰 SDK를 활용해 예약 가능한 날짜를 설정하고, 체험 상품을 예약하는 기능을 구현하는 것을 목표로 합니다. 외부 SDK를 직접 리서치하고 이를 활용하여 캘린더, 지도, 주소 관련 기능을 구현해 보며 SDK 리서치 능력과 응용 능력을 기를 수 있습니다.
-또한, 'GlobalNomad' 프로젝트처럼 사용자가 판매자와 체험자 모두 될 수 있는 플랫폼의 특성을 반영하여, 복잡한 UI와 기능들을 구현합니다. 체험 상품의 브라우징, 상세 확인, 관리, 예약 등 여러 페이지와 세부 기능을 동시에 처리해야 하므로, UI 관리 경험을 쌓고, 서비스 운영 과정에서 발생하는 문제를 해결하며 실무에 가까운 경험을 얻을 수 있습니다.
-이 프로젝트는 예약 시스템, 지도 기능, UI/UX 개선에 관심이 있거나 SDK 활용을 통해 복잡한 기능을 구현해보고자 하는 개발자에게 적합합니다.
+- 배포 주소 : https://global-nomad-11-5.vercel.app/
 
-[프로젝트 소개 노션](https://codeit.notion.site/_-GlobalNomad-1766fd228e8d815997b5c8c54a5cf78f)
+체험 등록하고 관리하는 공급자 입장
+
+- 테스트 아이디 : [admin@globalnomad.com](mailto:admin@globalnomad.com)
+- 비밀번호 : 12341234@
+
+체험 예약하고 리뷰 남기는 소비자 입장
+
+- 테스트 아이디 : [user@globalnomad.com](mailto:user@globalnomad.com)
+- 비밀번호 : 12341234@
+
 
 ### 개발 기간: 29일
 * 설 연휴, 일요일 제외
