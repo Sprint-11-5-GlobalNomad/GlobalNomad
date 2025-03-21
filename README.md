@@ -37,8 +37,7 @@
 - 2025.01.17(금) ~ 2025.02.22(토)
 - [프로젝트 수행 단계별 계획(세부)](https://github.com/orgs/Sprint-11-5-GlobalNomad/projects/1/views/1)
 - 프로젝트 수행 일정표(종합)
-<img width="902" alt="image" src="https://github.com/user-attachments/assets/a750fbdb-db22-495c-9ae3-5bde6a564486" />
-
+<img width="680" alt="image" src="https://github.com/user-attachments/assets/3d0f5de7-b84c-4bc1-9cbf-d0921ad05eae" />
 
 ## **4. 프로젝트 구조**
 
