@@ -34,11 +34,11 @@
 
 *Backend는 코드잇 측에서 지원해줬으며, API 연동 과정에서 Swagger 활용했습니다.
 
-## **3. 개발 기간: 29일(**설 연휴, 일요일 제외)
+## **3. 개발 기간: 29일(설 연휴, 일요일 제외)**
 
 - 2025.01.17(금) ~ 2025.02.22(토)
 
-## 4. 프로젝트 구조
+## **4. 프로젝트 구조**
 
 ```jsx
 project-root/
@@ -68,3 +68,7 @@ project-root/
 ├── next.config.js            # Next.js 설정
 └── tsconfig.json             # TypeScript 설정
 ```
+
+## 6. 프로젝트 팀 구성 및 역할
+
+![image](https://github.com/user-attachments/assets/3b1a0581-d446-466a-aa73-8089b85d57e9)
