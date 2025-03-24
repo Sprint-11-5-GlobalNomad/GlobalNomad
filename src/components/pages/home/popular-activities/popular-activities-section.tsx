@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useDebounce } from "use-debounce";
 
 const SIZE = 9;
 
@@ -35,6 +36,18 @@ export default function PopularActivitiesSection() {
     triggerOnce: true,
   });
 
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const scrollContainer = scrollContainerRef.current;
+      const itemWidth = itemRefs.current[0]?.offsetWidth || 0;
+      const newStartIndex = Math.floor(scrollContainer.scrollLeft / itemWidth);
+
+      setStartIndex(newStartIndex);
+    }
+  };
+
+  const [debouncedHandleScroll] = useDebounce(handleScroll, 200);
+
   useEffect(() => {
     if (inView && hasNextPage && !isLoading) {
       fetchNextPage();
@@ -42,25 +55,13 @@ export default function PopularActivitiesSection() {
   }, [inView, fetchNextPage, hasNextPage, isLoading]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (scrollContainerRef.current) {
-        const scrollContainer = scrollContainerRef.current;
-        const itemWidth = itemRefs.current[0]?.offsetWidth || 0;
-        const newStartIndex = Math.floor(
-          scrollContainer.scrollLeft / itemWidth
-        );
-
-        setStartIndex(newStartIndex);
-      }
-    };
-
     const scrollContainer = scrollContainerRef.current;
-    scrollContainer?.addEventListener("scroll", handleScroll);
+    scrollContainer?.addEventListener("scroll", debouncedHandleScroll);
 
     return () => {
-      scrollContainer?.removeEventListener("scroll", handleScroll);
+      scrollContainer?.removeEventListener("scroll", debouncedHandleScroll);
     };
-  }, [activities]);
+  }, [debouncedHandleScroll]);
 
   const scrollToIndex = (index: number) => {
     const targetElement = itemRefs.current[index];
