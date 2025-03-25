@@ -1,7 +1,5 @@
 # 🛤️ **체험형 상품 중개 및 예약 사이트** [ GlobalNomad ]
 
-![image](https://github.com/user-attachments/assets/83bb1998-fd22-41c2-914f-1b4f97eb2a33)
-
 - 배포 주소 : https://global-nomad-11-5.vercel.app/
 **- 메타 데이터 슬로건: 당신의 일상을 특별하게 만드는 한 번의 클릭**
 
@@ -70,7 +68,183 @@ project-root/
 └── tsconfig.json             # TypeScript 설정
 ```
 
-## 5. 활용 방안 및 기대 효과
+## 5. 트러블 슈팅
+## `스크롤 이벤트 발생 시 연산 로직 속도 개선(퍼포먼스 13점 개선)`
+
+### ✅ 문제 상황 및 원인 분석
+
+1. **무한 스크롤과 페이지네이션을 동시에 유지해야 하는 상황**에서, 사용자가 스크롤할 때 **현재 인덱스(목록에서 몇 번째 항목인지)를 계산**
+2. 기존에는 **스크롤할 때마다 연산이 실행**되어 **불필요한 성능 저하**가 발생
+
+### 🛠 해결 방법
+
+1. **디바운싱을 적용**해 **사용자가 스크롤을 멈춘 후에만 연산이 실행**되도록 최적화
+- 쓰로틀링 대신 디바운싱을 선택한 이유
+    - 스크롤 멈추고 이전, 다음 버튼 누르기 때문에 연속된 이벤트에 대해 신경을 아예 안 쓰는 게 효율적이라고 판단
+- `use-debounce` 라이브러리 사용 이유
+    - 직접 구현하면 불필요한 로직 추가
+    - 가벼운 용량: `lodash` 라이브러리 약 24KB vs `use-debounce` 약 1KB
+
+### 💻 코드
+
+```jsx
+export default function PopularActivitiesSection() {
+  const [startIndex, setStartIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLUListElement | null>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  
+  ...
+  
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const scrollContainer = scrollContainerRef.current;
+      const itemWidth = itemRefs.current[0]?.offsetWidth || 0;
+      const newStartIndex = Math.floor(scrollContainer.scrollLeft / itemWidth);
+
+      setStartIndex(newStartIndex);
+    }
+  };
+
+  const [debouncedHandleScroll] = useDebounce(handleScroll, 200);
+
+  ...
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer?.addEventListener("scroll", debouncedHandleScroll);
+
+    return () => {
+      scrollContainer?.removeEventListener("scroll", debouncedHandleScroll);
+    };
+  }, [debouncedHandleScroll]);
+```
+
+### **🎯 결과**
+
+- 퍼포먼스 13점 개선: 86점 → 99점(라이트하우스 기준)
+
+[ as-is ]
+![image](https://github.com/user-attachments/assets/9b6716e4-746c-46d3-bf77-acc7fc496914)
+
+[ to-be ]
+![image](https://github.com/user-attachments/assets/1a86f770-4bb8-46dd-9f4d-4d814275febd)
+
+---
+
+## `무한 스크롤 + 페이지네이션`
+
+### ✅ 문제 상황
+
+1. 무한 스크롤을 이용하여 체험 목록을 로드하는 방식으로 구현됨
+2. 사용자가 스크롤을 내려 더 많은 데이터를 불러온 후, 페이지네이션(이전/다음 버튼)을 눌러서 이동하면 **현재 보던 위치가 아닌 맨 처음으로 돌아가 버리는 문제**가 발생함
+    1. 무한 스크롤로 이동해 네번째 목록까지 보이는 상황 → 페이지네이션 버튼 클릭 시 다섯번째 목록부터 보여야 함
+    2. 하지만 버튼 클릭 시 첫번째 목록으로 이동
+
+### 🚨 원인 분석
+
+1. **스크롤 위치 미저장**
+- 무한 스크롤이 동작할 때는 `fetchNextPage`가 호출되면서 새로운 데이터가 추가됨
+- 하지만 **페이지네이션 버튼을 클릭하면, 현재 스크롤 위치를 저장하지 않아 UI가 초기화되는 문제**가 발생
+
+### 🛠 해결 방법
+
+1. **현재 사용자가 보고 있는 위치를 추적**
+    - `useInView`를 사용하여 사용자가 보고 있는 요소를 감지.
+    - 특정 `threshold`(0.25) 이상 화면에 보이면 다음 페이지 데이터를 가져옴.
+2. **스크롤 위치를 저장 및 복원**
+    - `useRef`를 활용하여 `scrollContainerRef`를 저장하고, 현재 위치를 추적
+    - **스크롤 이벤트가 발생하면** `handleScroll` 실행
+    - **스크롤 컨테이너의 현재 스크롤 위치(`scrollLeft`) 확인**
+    - **첫 번째 아이템의 가로 크기(`offsetWidth`)를 가져옴**
+    - **현재 스크롤 위치를 기준으로 첫 번째 보이는 아이템의 인덱스를 계산**
+    - `useEffect`를 사용하여 **스크롤 이벤트 발생 시, 현재 보고 있는 아이템의 인덱스를 `startIndex`로 저장**
+3. **페이지네이션 버튼 클릭 시, `scrollToIndex` 함수 사용**
+    - `handleNext` 및 `handlePrev` 함수에서 `startIndex`를 기반으로 **현재 보고 있던 위치를 유지하면서 이동**
+    - `scrollToIndex` 함수를 활용해 **목록을 부드럽게 스크롤하면서 이동하도록 설정**
+    - `block: "nearest", inline: "start"` 옵션을 설정해 **사용자가 현재 보던 위치를 유지하면서 페이지네이션이 적용되도록 변경**
+
+### 💻 코드
+
+```jsx
+export default function PopularActivitiesSection() {
+  const [startIndex, setStartIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLUListElement | null>(null);
+  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
+  
+  ...
+  
+    const { ref, inView } = useInView({
+    threshold: 0.25,
+    triggerOnce: true,
+  });
+  
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const scrollContainer = scrollContainerRef.current;
+      const itemWidth = itemRefs.current[0]?.offsetWidth || 0;
+      const newStartIndex = Math.floor(scrollContainer.scrollLeft / itemWidth);
+
+      setStartIndex(newStartIndex);
+    }
+  };
+
+  const [debouncedHandleScroll] = useDebounce(handleScroll, 200);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isLoading) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage, isLoading]);
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer?.addEventListener("scroll", debouncedHandleScroll);
+
+    return () => {
+      scrollContainer?.removeEventListener("scroll", debouncedHandleScroll);
+    };
+  }, [debouncedHandleScroll]);
+
+  const scrollToIndex = (index: number) => {
+    const targetElement = itemRefs.current[index];
+
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
+  };
+
+  const handleNext = () => {
+    if (scrollContainerRef.current && startIndex < activities.length - 1) {
+      const nextIndex = startIndex + 1;
+      setStartIndex(nextIndex);
+      scrollToIndex(nextIndex);
+    }
+  };
+
+  const handlePrev = () => {
+    if (scrollContainerRef.current && startIndex > 0) {
+      const prevIndex = startIndex - 1;
+      setStartIndex(prevIndex);
+      scrollToIndex(prevIndex);
+    }
+  };
+
+  const setCombinedRef = (index: number, el: HTMLLIElement | null) => {
+    itemRefs.current[index] = el;
+    ref(el);
+  };
+```
+
+### **🎯 결과**
+
+- 사용자가 무한 스크롤을 통해 데이터를 불러오고, **페이지네이션 버튼을 눌러도 기존 위치를 유지하며 이동 가능**하게 됨
+- 즉, **사용자가 이전/다음 버튼을 눌러도 현재 탐색 중인 위치를 유지한 채 이동**할 수 있도록 개선됨
+
+---
 
 ## 6. 프로젝트 팀 구성 및 역할
 
