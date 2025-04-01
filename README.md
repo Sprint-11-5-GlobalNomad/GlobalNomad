@@ -1,7 +1,7 @@
 # 🛤️ **체험형 상품 중개 및 예약 사이트** [ GlobalNomad ]
 
-- 배포 주소 : https://global-nomad-11-5.vercel.app/
-**- 메타 데이터 슬로건: 당신의 일상을 특별하게 만드는 한 번의 클릭**
+- 배포 주소: https://global-nomad-11-5.vercel.app/ <br>
+- **메타 데이터 슬로건: 당신의 일상을 특별하게 만드는 한 번의 클릭**
 
 |  | **Test ID** | **Test PW** |
 | --- | --- | --- |
