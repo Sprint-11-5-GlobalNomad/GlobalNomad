@@ -9,11 +9,11 @@ export default function HeroBanner() {
     >
       <div className="relative w-full h-full bg-gradient-to-r from-black/60 to-black/40">
         <Image
-          src="/image/main_banner.jpg"
+          src="/image/main_banner.webp"
           alt="히어로(메인) 배너 이미지"
-          quality={100}
           layout="fill"
           objectFit="cover"
+          priority
           className="z-[-1]"
         />
       </div>
