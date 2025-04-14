@@ -169,12 +169,14 @@ export default function PopularActivitiesSection() {
           mobile:w-[18.4rem] mobile:h-[18.4rem]"
               >
                 <Link href={`/activity/${activity.id}`}>
-                  <div
-                    className="h-full w-full bg-center bg-cover rounded-[2rem]"
-                    style={{
-                      backgroundImage: `url(${activity.bannerImageUrl})`,
-                    }}
-                  >
+                  <div className="relative h-full w-full rounded-[2rem] overflow-hidden">
+                    <Image
+                      src={activity.bannerImageUrl}
+                      alt={activity.title}
+                      fill
+                      className="object-cover"
+                      priority={index < 3}
+                    />
                     <div className="absolute inset-0 bg-black opacity-20 rounded-[2rem]" />
                     <div
                       className="flex-column items-start w-full gap-[2rem] px-[2rem] py-[3rem]

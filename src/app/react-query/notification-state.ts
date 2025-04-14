@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  InfiniteData,
+} from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import {
   fetchNotifications,
@@ -51,7 +56,36 @@ export const useNotifications = (cursorId?: number) =>
 export const useDeleteNotification = () => {
   const queryClient = useQueryClient();
   return useMutation<void, AxiosError, number>({
-    mutationFn: (notificationId: number) => deleteNotification(notificationId),
+    mutationFn: deleteNotification,
+
+    // ✅ 낙관적 업데이트
+    onMutate: async (notificationId) => {
+      await queryClient.cancelQueries({ queryKey: ["notifications"] });
+
+      const previousData = queryClient.getQueryData<
+        InfiniteData<FetchNotificationsReturnType>
+      >(["notifications"]);
+
+      if (!previousData) return;
+
+      // ✅ pageParams도 새 배열로 복사해서 "진짜 새 객체"로 만듦
+      const updatedData: InfiniteData<FetchNotificationsReturnType> = {
+        pageParams: [...previousData.pageParams],
+        pages: previousData.pages.map((page) => ({
+          ...page,
+          notifications: page.notifications.filter(
+            (n) => n.id !== notificationId
+          ),
+          totalCount: page.totalCount - 1,
+        })),
+      };
+
+      // ✅ React Query가 변경을 감지할 수 있도록 철저하게 새 객체로 교체
+      queryClient.setQueryData(["notifications"], updatedData);
+
+      return { previousData };
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
       alert("알림이 삭제되었습니다.");

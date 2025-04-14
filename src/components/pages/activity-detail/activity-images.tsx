@@ -78,6 +78,7 @@ export default function ActivityImages() {
               alt={`${activity?.title} 이미지 ${currentIndex + 1}`}
               width={595}
               height={310}
+              priority
               className="w-full h-[31rem] object-cover"
             />
           </div>
@@ -103,6 +104,7 @@ export default function ActivityImages() {
               alt={`${activity?.title} 배너 이미지`}
               width={1198}
               height={534}
+              priority
               className="rounded-[1.2rem] w-full h-[53.4rem] tablet:h-[31rem] object-cover"
             />
           ) : (
@@ -115,6 +117,7 @@ export default function ActivityImages() {
                 alt={`${activity?.title} 이미지 ${currentIndex + 1}`}
                 width={595}
                 height={534}
+                priority
                 className="rounded-[1.2rem] tablet:w-1/2 tablet:h-[31rem]"
               />
 
@@ -138,6 +141,7 @@ export default function ActivityImages() {
                       alt={`${activity.title} 이미지 ${currentIndex + 1}`}
                       width={isThirdImageWithFullWidth ? 595 : 293.5}
                       height={263}
+                      priority
                       className={`${isThirdImageWithFullWidth ? "col-span-2 w-full" : "w-full h-full"}
                   w-full h-full object-cover rounded-[1.2rem]`}
                     />

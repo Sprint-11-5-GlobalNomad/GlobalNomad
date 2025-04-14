@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="ko">
       <Script
         type="text/javascript"
-        src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
+        src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP}&autoload=false&libraries=services`}
       />
       <body>
         <QueryProvider>
