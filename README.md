@@ -69,67 +69,6 @@ project-root/
 ```
 
 ## 5. 트러블 슈팅
-## `스크롤 이벤트 발생 시 연산 로직 속도 개선(퍼포먼스 13점 개선)`
-
-### ✅ 문제 상황 및 원인 분석
-
-1. **무한 스크롤과 페이지네이션을 동시에 유지해야 하는 상황**에서, 사용자가 스크롤할 때 **현재 인덱스(목록에서 몇 번째 항목인지)를 계산**
-2. 기존에는 **스크롤할 때마다 연산이 실행**되어 **불필요한 성능 저하**가 발생
-
-### 🛠 해결 방법
-
-1. **디바운싱을 적용**해 **사용자가 스크롤을 멈춘 후에만 연산이 실행**되도록 최적화
-- 쓰로틀링 대신 디바운싱을 선택한 이유
-    - 스크롤 멈추고 이전, 다음 버튼 누르기 때문에 연속된 이벤트에 대해 신경을 아예 안 쓰는 게 효율적이라고 판단
-- `use-debounce` 라이브러리 사용 이유
-    - 직접 구현하면 불필요한 로직 추가
-    - 가벼운 용량: `lodash` 라이브러리 약 24KB vs `use-debounce` 약 1KB
-
-### 💻 코드
-
-```jsx
-export default function PopularActivitiesSection() {
-  const [startIndex, setStartIndex] = useState(0);
-  const scrollContainerRef = useRef<HTMLUListElement | null>(null);
-  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
-  
-  ...
-  
-  const handleScroll = () => {
-    if (scrollContainerRef.current) {
-      const scrollContainer = scrollContainerRef.current;
-      const itemWidth = itemRefs.current[0]?.offsetWidth || 0;
-      const newStartIndex = Math.floor(scrollContainer.scrollLeft / itemWidth);
-
-      setStartIndex(newStartIndex);
-    }
-  };
-
-  const [debouncedHandleScroll] = useDebounce(handleScroll, 200);
-
-  ...
-
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    scrollContainer?.addEventListener("scroll", debouncedHandleScroll);
-
-    return () => {
-      scrollContainer?.removeEventListener("scroll", debouncedHandleScroll);
-    };
-  }, [debouncedHandleScroll]);
-```
-
-### **🎯 결과**
-
-- 퍼포먼스 13점 개선: 86점 → 99점(라이트하우스 기준)
-
-[ as-is ]
-![image](https://github.com/user-attachments/assets/9b6716e4-746c-46d3-bf77-acc7fc496914)
-
-[ to-be ]
-![image](https://github.com/user-attachments/assets/1a86f770-4bb8-46dd-9f4d-4d814275febd)
-
----
 
 ## `무한 스크롤 + 페이지네이션`
 
