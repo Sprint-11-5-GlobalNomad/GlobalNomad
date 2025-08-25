@@ -3,7 +3,7 @@ import { useInfiniteActivities } from "@/app/react-query/use-infinite-scroll";
 import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 const SIZE = 9;
@@ -27,9 +27,7 @@ export default function PopularActivitiesSection() {
     sort: "most_reviewed",
   });
 
-  const activities = useMemo(() => {
-    return data?.pages.flatMap((page) => page.activities) || [];
-  }, [data]);
+  const activities = data?.pages.flatMap((page) => page.activities) || [];
 
   const { ref, inView } = useInView({
     threshold: 0.25,
