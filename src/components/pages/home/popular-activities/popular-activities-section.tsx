@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useRef, useState } from "react";
-import { useDebounce } from "use-debounce";
+import { useDebouncedCallback } from "use-debounce";
 
 const SIZE = 9;
 
@@ -41,25 +41,17 @@ export default function PopularActivitiesSection() {
       const newStartIndex = Math.floor(scrollContainer.scrollLeft / itemWidth);
 
       setStartIndex(newStartIndex);
+      console.count("디바운싱 적용할 함수");
     }
   };
 
-  const [debouncedHandleScroll] = useDebounce(handleScroll, 200);
+  const debouncedHandleScroll = useDebouncedCallback(handleScroll, 200);
 
   useEffect(() => {
     if (inView && hasNextPage && !isLoading) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage, isLoading]);
-
-  useEffect(() => {
-    const scrollContainer = scrollContainerRef.current;
-    scrollContainer?.addEventListener("scroll", debouncedHandleScroll);
-
-    return () => {
-      scrollContainer?.removeEventListener("scroll", debouncedHandleScroll);
-    };
-  }, [debouncedHandleScroll]);
 
   const scrollToIndex = (index: number) => {
     const targetElement = itemRefs.current[index];
@@ -154,6 +146,7 @@ export default function PopularActivitiesSection() {
       ) : (
         <ul
           ref={scrollContainerRef}
+          onScroll={debouncedHandleScroll}
           className="flex flex-nowrap gap-[2.4rem] w-[120rem] mb-[6rem] overflow-x-auto hide-scrollbar
     tablet:w-[74.4rem] tablet:ml-[2.4rem] tablet:gap-[3.2rem]
     mobile:w-[37.5rem] mobile:mb-[4rem] mobile:pl-[1.6rem] mobile:gap-[1.6rem]"
