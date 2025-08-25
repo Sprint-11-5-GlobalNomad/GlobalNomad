@@ -63,11 +63,11 @@ export default function ActivityExplorer() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1200) {
-        setSize(16); // 화면이 넓으면 8개
+        setSize(16);
       } else if (window.innerWidth < 744) {
-        setSize(8); // 화면이 좁으면 4개
+        setSize(8);
       } else {
-        setSize(9); // 중간 화면 크기에는 6개
+        setSize(9);
       }
     };
     handleResize(); // 처음 로드 시 size 설정
